@@ -40,18 +40,47 @@
 ## Current Milestone
 
 - **Active milestone:** **M2 — Application Shell and
-  Navigation** (planned; not started).
+  Navigation** (planned).
 - **M2 first slice:** **M2.1 — Application Shell
-  Skeleton** (plan in
+  Foundation** (revised plan in
   [`.ai/plans/M2.1-application-shell-skeleton.md`](./../../.ai/plans/M2.1-application-shell-skeleton.md),
-  status `Awaiting Approval`).
+  status `Awaiting Approval`). The plan
+  revision (2026-07-10, M2 delivery-
+  reconciliation session) scopes M2.1 to the
+  shell foundation only: two layouts
+  (`AppLayout`, `AppEmptyLayout`), two
+  placeholder shell components
+  (`AppSidebarSlot`, `AppTopBarSlot`), one
+  presentational helper (`AppShellRegion`),
+  and the migration of the M1.1 chrome. The
+  sidebar items, top bar, breadcrumb,
+  navigation registry, route metadata, page
+  redesigns, and self-awareness dashboard are
+  explicitly deferred to M2.2, M2.3, M2.4,
+  and M2.5.
+- **M2.2 / M2.3 / M2.4 plan stubs:** created
+  2026-07-10. Each is a concise plan stub
+  (objective, why separate, dependencies,
+  included scope, excluded scope, acceptance
+  criteria); promoted to a full plan when
+  the previous slice closes.
+  - `.ai/plans/M2.2-navigation-registry-sidebar.md`
+    (status `Draft`).
+  - `.ai/plans/M2.3-topbar-breadcrumbs.md`
+    (status `Draft`).
+  - `.ai/plans/M2.4-project-intelligence-dashboard.md`
+    (status `Draft`).
+- **M2.5 / M2.6:** summary entries in the
+  task board; planned in detail after M2.4 /
+  M2.5 close.
 - **M0.5 — Architecture Refinement and Project
-  Intelligence:** **Done (closed 2026-07-10).**
-  M0.5 is the refinement that lands between M1
-  and M2. It is not a product milestone. The
-  ten M0.5 improvements are landed; the
-  architecture score is 23 → 42 (+19) on
-  five dimensions. See
+  Intelligence:** **Done (closed 2026-07-10;
+  coherent commit `1d98acd`).** M0.5 is the
+  refinement that lands between M1 and M2. It
+  is not a product milestone. The ten M0.5
+  improvements are landed; the architecture
+  score is 23 → 42 (+19) on five dimensions.
+  See
   [`implementation-report-m0.5-architecture-refinement.md`](./../../implementation-report-m0.5-architecture-refinement.md)
   and
   [`.ai/handoffs/2026-07-10-m0.5-architecture-refinement.md`](./../../.ai/handoffs/2026-07-10-m0.5-architecture-refinement.md).
@@ -59,14 +88,19 @@
 ## Current Slice
 
 - **Active slice:** **M2.1 — Application Shell
-  Skeleton**.
+  Foundation** (revised plan, 2026-07-10).
 - **Plan status:** `Awaiting Approval`.
 - **Implementation status:** not started; no code
-  changes have been authored for M2.1.
+  changes have been authored for M2.1. The
+  session that delivered the M2
+  delivery-reconciliation revision has not
+  implemented M2.1 (per the brief: "Stop
+  after reconciliation. Do not implement
+  M2.1.").
 - **M0.5 closeout:** the M0.5 refinement is
-  closed in the M0.5 commit (per Rule 17 in
-  `AGENTS.md`); the state files are reconciled
-  with the repository; the
+  closed in the M0.5 commit `1d98acd` (per
+  Rule 17 in `AGENTS.md`); the state files
+  are reconciled with the repository; the
   `.ai/handoffs/2026-07-10-m0.5-architecture-refinement.md`
   handoff is written; the
   `implementation-report-m0.5-architecture-refinement.md`
@@ -79,12 +113,15 @@
 - **M1 — Design System Core:** **Done (closed
   2026-07-10).**
 - **M0.5 — Architecture Refinement and Project
-  Intelligence:** **Done (closed 2026-07-10).**
+  Intelligence:** **Done (closed 2026-07-10;
+  commit `1d98acd`).**
   Documentation-only refinement; the ten
   improvements are landed. The architecture
   score is 23 → 42 (+19).
 - **M2 — Application Shell and Navigation:**
-  **Planned (M2.1 in plan, Awaiting Approval).**
+  **Planned (M2.1 in revised plan, Awaiting
+  Approval; M2.2 / M2.3 / M2.4 plan stubs in
+  Draft).**
 - **M3 through M8:** Planned; no evidence yet.
 
 ## Last Completed Milestone
@@ -103,16 +140,60 @@
 
 ## Last Completed Task
 
+- The M2 delivery-reconciliation session
+  (2026-07-10), which:
+  - Closed M0.5 with the coherent commit
+    `1d98acd`
+    (`docs(m0.5): add project intelligence and
+    structured delivery state`).
+  - Revised the M2.1 plan to remove
+    overlapping scope (no
+    `INavigationRegistry`, no
+    `RouteMetadata`, no `AppSidebar`, no
+    `AppNavItem`, no `AppTopBar`, no
+    `AppBreadcrumb`, no `RouteRegistry`, no
+    `Pages_AreReachable_Through_Registry`
+    architecture test, no final page
+    redesigns, no reconnect-modal changes,
+    no self-awareness dashboard). M2.1 now
+    scopes the **shell foundation** only.
+  - Created M2.2, M2.3, M2.4 plan stubs at
+    `.ai/plans/M2.2-navigation-registry-sidebar.md`,
+    `.ai/plans/M2.3-topbar-breadcrumbs.md`,
+    `.ai/plans/M2.4-project-intelligence-dashboard.md`.
+    Each stub is `Draft`; promoted to a
+    full plan when the previous slice
+    closes.
+  - Documented the **Progressive Coding
+    Rule** at
+    `.ai/workflows/progressive-coding.md`:
+    the AI may select only the first
+    `Ready` task whose dependencies are
+    complete and whose plan is `Approved`;
+    the AI does not automatically begin
+    the next task in the same session
+    unless the user explicitly authorises
+    grouped execution. The 13-step task
+    lifecycle is the per-task contract.
+  - Updated the delivery system: ROADMAP,
+    master-delivery-plan, task-board,
+    current.md, milestones.json,
+    features.json, capabilities.json,
+    tasks.json, session.json,
+    handoffs/latest.md.
+  - Produced the M2 reconciliation report
+    at
+    `reconciliation-report-m2-task-breakdown.md`.
 - The M0.5 architecture refinement session
-  (2026-07-10), which produced `VISION.md`,
-  the `.ai/backlog/`, the decision log, the
-  capability mapping, the structured state
-  (six JSON files + six schemas), the
+  (2026-07-10) is the prior task; it
+  produced `VISION.md`, the `.ai/backlog/`,
+  the decision log, the capability
+  mapping, the structured state, the
   self-awareness state, the dashboard
   definition, the improved dogfooding
   workflow, the documentation architecture
   map, the architecture review, and the
-  coherent commit.
+  M0.5 commit `1d98acd`.
 
 ## Active Branch
 
@@ -120,23 +201,32 @@
 
 ## Last Stable Commit
 
-- The M0.5 commit is produced at session
-  end (per Rule 17 in `AGENTS.md`). At
-  the start of the M0.5 session the head
-  of `master` was
-  **`8fae9517d2c10dceb90c6b3475f1635d5f86a8bd`** —
-  the M2 product-definition commit. The
+- **`1d98acd`** — the M0.5 architecture
+  refinement commit
+  (`docs(m0.5): add project intelligence and
+  structured delivery state`); head of
+  `master` at the close of the M0.5
+  closeout session (2026-07-10). The
   parent commit
-  `2ba1fad3cc45bee513ba38c7269e024bf8667ef9` is
-  the M1 closeout follow-up commit
-  (`chore(m1-closeout): finalise
-  project-continuity state after first commit`).
+  `8fae9517d2c10dceb90c6b3475f1635d5f86a8bd`
+  is the M2 product-definition commit
+  (`docs(product): add product vision,
+  master delivery plan, and rule updates`).
   The grandparent commit
-  `1722bd235830cfd8b180191953116c058c92edef` is
-  the first commit of the repository
-  (`chore(m1-closeout): close M1 milestone and
-  prepare M2.1 plan`). The M0.5 commit supersedes
-  all three on `master`.
+  `2ba1fad3cc45bee513ba38c7269e024bf8667ef9`
+  is the M1 closeout follow-up commit
+  (`chore(m1-closeout): finalise
+  project-continuity state after first
+  commit`). The great-grandparent commit
+  `1722bd235830cfd8b180191953116c058c92edef`
+  is the first commit of the repository
+  (`chore(m1-closeout): close M1 milestone
+  and prepare M2.1 plan`). The M2
+  delivery-reconciliation session is
+  documentation-only; no commit is
+  produced in this session (the M2
+  reconciliation is a plan revision,
+  not an implementation).
 
 ## Application Status
 
@@ -228,7 +318,7 @@ Plus the supporting infrastructure:
   [`.ai/state/task-board.md`](./task-board.md) adds
   a Toolbar example to the doc page.
 - **No git remote.** The repository has no
-  configured remote. The first two commits are
+  configured remote. The first three commits are
   local-only. Adding a remote is a separate
   decision.
 
@@ -242,55 +332,103 @@ Plus the supporting infrastructure:
   [`.ai/reviews/M1-design-system-lavish-axi-review.md`](./../../.ai/reviews/M1-design-system-lavish-axi-review.md)
   and the `Blocked` section of
   [`.ai/state/task-board.md`](./task-board.md).
+- **M2 plan stubs are `Draft`.** The M2.2 /
+  M2.3 / M2.4 plan stubs are concise
+  summaries; the full plans land when the
+  previous slice closes. The Progressive
+  Coding Rule
+  (`.ai/workflows/progressive-coding.md`) is
+  the operating rule that governs task
+  selection; each task in the group moves
+  through the 13-step task lifecycle, no
+  step is optional.
 
 ## Active Plan
 
 - [`.ai/plans/M2.1-application-shell-skeleton.md`](./../../.ai/plans/M2.1-application-shell-skeleton.md)
-  — M2.1, status `Awaiting Approval`. The plan
-  details the scope, the M1 components to reuse,
-  the files expected to change, the tests, the
-  validation, and the acceptance criteria. **This
-  plan is not implemented in this session.**
+  — M2.1, status `Awaiting Approval`
+  (revised 2026-07-10 per the M2
+  delivery-reconciliation brief). The
+  revised plan scopes M2.1 to the shell
+  foundation only (two layouts, two
+  placeholder shell components, one
+  presentational helper, MainLayout
+  migration). **This plan is not
+  implemented in this session.**
+- [`.ai/plans/M2.2-navigation-registry-sidebar.md`](./../../.ai/plans/M2.2-navigation-registry-sidebar.md)
+  — M2.2 plan stub, status `Draft`.
+- [`.ai/plans/M2.3-topbar-breadcrumbs.md`](./../../.ai/plans/M2.3-topbar-breadcrumbs.md)
+  — M2.3 plan stub, status `Draft`.
+- [`.ai/plans/M2.4-project-intelligence-dashboard.md`](./../../.ai/plans/M2.4-project-intelligence-dashboard.md)
+  — M2.4 plan stub, status `Draft`.
 
 ## Last Implementation Report
 
 - [`implementation-report-m0.5-architecture-refinement.md`](./../../implementation-report-m0.5-architecture-refinement.md)
   — the M0.5 architecture refinement report
   (the closing receipt for M0.5).
+- [`reconciliation-report-m2-task-breakdown.md`](./../../reconciliation-report-m2-task-breakdown.md)
+  — the M2 delivery-reconciliation report
+  (the closing receipt for the M2
+  reconciliation session, 2026-07-10).
 - [`implementation-report-m1-closeout.md`](./../../implementation-report-m1-closeout.md)
-  — the M1 closeout report (the closing
-  receipt for M1, preceding M0.5; M0.5
-  preserves M1 evidence).
+  — the M1 closeout report (preceding
+  milestone; M0.5 and the M2
+  reconciliation preserve M1 evidence).
 
 ## Next Recommended Task
 
-> **M2.1 — Application Shell Skeleton.** Read
+> **M2.1 — Application Shell Foundation.**
+> Read
 > [`.ai/plans/M2.1-application-shell-skeleton.md`](./../../.ai/plans/M2.1-application-shell-skeleton.md).
-> The plan is `Awaiting Approval`; the first
-> action is to either approve the plan (and
-> start M2.1 implementation) or amend the plan
-> and re-submit it.
+> The plan is `Awaiting Approval` (revised
+> 2026-07-10); the first action is to
+> either approve the plan (and start M2.1
+> implementation per the 15-step order in
+> § 16) or amend the plan and re-submit it.
+> The next session follows the **Progressive
+> Coding Rule** in
+> [`.ai/workflows/progressive-coding.md`](./../../.ai/workflows/progressive-coding.md):
+> one task per session; 13-step lifecycle;
+> stop after the coherent commit.
 
-The detailed breakdown of the M2 slices is in
-[`.ai/state/task-board.md`](./task-board.md). The
+The detailed breakdown of the M2 slices is
+in
+[`.ai/state/task-board.md`](./task-board.md)
+and the M2 plan stubs in
+[`.ai/plans/`](./../../.ai/plans/). The
 next three actionable items are:
 
-1. **M2.1 — Application Shell Skeleton**
-   (awaiting approval of the plan).
-2. **M2.2 — Sidebar and navigation registry**
-   (summary; will be planned in detail after
-   M2.1 is closed).
-3. **M1 follow-up — Add `AppToolbar` example to
-   `/design-system`** (cosmetic; the work is small
-   and can be folded into M2.1 if appropriate).
+1. **M2.1 — Application Shell Foundation**
+   (awaiting approval of the revised
+   plan; implementation follows § 16 of
+   the plan).
+2. **M2.2 — Navigation Registry and
+   Sidebar** (plan stub `Draft`;
+   promoted to a full plan when M2.1
+   closes).
+3. **M1 follow-up — Add `AppToolbar`
+   example to `/design-system`**
+   (cosmetic; the work is small and can
+   be folded into M2.1 if appropriate).
 
 ## Last Updated
 
-- **2026-07-10** (M0.5 architecture refinement
-  closeout; this version supersedes the
-  post-M2-product-definition version; the
-  M0.5 closeout produces the M0.5 commit
-  per Rule 17 in `AGENTS.md`).
+- **2026-07-10** (M2
+  delivery-reconciliation closeout;
+  this version supersedes the M0.5
+  closeout version). The M2
+  reconciliation session is
+  documentation-only; the session
+  revises the M2.1 plan, creates the
+  M2.2 / M2.3 / M2.4 plan stubs,
+  documents the Progressive Coding
+  Rule, updates the delivery
+  system, and produces the M2
+  reconciliation report. No
+  application code is modified; the
+  M0.5 commit `1d98acd` is the
+  most recent commit on `master`.
 
 ## Linked Artefacts
 
@@ -298,22 +436,29 @@ next three actionable items are:
   permanent vision document (M0.5;
   tier 1 of the document hierarchy).
 - [`.ai/state/task-board.md`](./task-board.md) —
-  the live work queue.
+  the live work queue (M2.1 revised; M2.2 /
+  M2.3 / M2.4 in `Draft`).
 - [`.ai/handoffs/latest.md`](./../../.ai/handoffs/latest.md) —
-  the most recent handoff (the M0.5
-  closeout handoff).
+  the most recent handoff.
 - [`.ai/handoffs/2026-07-10-m0.5-architecture-refinement.md`](./../../.ai/handoffs/2026-07-10-m0.5-architecture-refinement.md)
   — the M0.5 closeout session handoff.
 - [`.ai/handoffs/2026-07-10-m1-closeout.md`](./../../.ai/handoffs/2026-07-10-m1-closeout.md) —
   the M1 closeout session handoff.
 - [`.ai/plans/M2.1-application-shell-skeleton.md`](./../../.ai/plans/M2.1-application-shell-skeleton.md) —
-  the M2.1 plan (Awaiting Approval).
+  the revised M2.1 plan (Awaiting
+  Approval, 2026-07-10).
+- [`.ai/plans/M2.2-navigation-registry-sidebar.md`](./../../.ai/plans/M2.2-navigation-registry-sidebar.md) —
+  the M2.2 plan stub (Draft, 2026-07-10).
+- [`.ai/plans/M2.3-topbar-breadcrumbs.md`](./../../.ai/plans/M2.3-topbar-breadcrumbs.md) —
+  the M2.3 plan stub (Draft, 2026-07-10).
+- [`.ai/plans/M2.4-project-intelligence-dashboard.md`](./../../.ai/plans/M2.4-project-intelligence-dashboard.md) —
+  the M2.4 plan stub (Draft, 2026-07-10).
 - [`.ai/plans/master-delivery-plan.md`](./../../.ai/plans/master-delivery-plan.md) —
-  the master delivery plan (this session).
+  the master delivery plan.
 - [`.ai/reviews/M1-design-system-lavish-axi-review.md`](./../../.ai/reviews/M1-design-system-lavish-axi-review.md) —
   the deferred `lavish-axi` review record.
 - [`PRODUCT.md`](./../../PRODUCT.md) — the product
-  definition (this session).
+  definition.
 - [`ROADMAP.md`](./../../ROADMAP.md) — the
   milestone plan (source of truth for milestone
   ordering and scope).
@@ -325,12 +470,20 @@ next three actionable items are:
   § 6 includes the M0.5 tiered hierarchy).
 - [`.ai/session-start.md`](./../../.ai/session-start.md) —
   the operational sequence.
+- [`.ai/workflows/progressive-coding.md`](./../../.ai/workflows/progressive-coding.md) —
+  the Progressive Coding Rule
+  (M2 delivery-reconciliation, 2026-07-10).
 - [`implementation-report-m0.5-architecture-refinement.md`](./../../implementation-report-m0.5-architecture-refinement.md)
   — the M0.5 architecture review (the
   closing receipt for M0.5).
+- [`reconciliation-report-m2-task-breakdown.md`](./../../reconciliation-report-m2-task-breakdown.md)
+  — the M2 delivery-reconciliation
+  report (the closing receipt for the
+  M2 reconciliation session, 2026-07-10).
 - [`implementation-report-m1-closeout.md`](./../../implementation-report-m1-closeout.md)
   — the M1 closeout report (preceding
-  milestone; M0.5 preserves M1 evidence).
+  milestone; M0.5 and the M2
+  reconciliation preserve M1 evidence).
 - [`docs/dashboard.md`](./../../docs/dashboard.md)
   — the product dashboard definition (M0.5).
 - [`.ai/backlog/`](./../../.ai/backlog/) —

@@ -37,157 +37,214 @@
 
 ## Ready
 
-### M2.1 — Application Shell Skeleton
+### M2.1 — Application Shell Foundation
 
 - **Task ID:** `M2.1`
 - **Milestone:** M2 — Application Shell and
   Navigation
-- **Title:** Application shell skeleton
-- **Why it matters:** The application shell is the
-  prerequisite for every later milestone. Every
-  project-registration, worktree, launch, review,
-  and disposition surface is reached through the
-  shell. Without the shell, the M1.2 design system
-  has no honest consumer.
+- **Title:** Application shell foundation
+- **Why it matters:** The application shell is
+  the prerequisite for every later milestone.
+  Every project-registration, worktree, launch,
+  review, and disposition surface is reached
+  through the shell. Without the shell, the
+  M1.2 design system has no honest consumer.
+  M2.1 is the smallest slice that makes the
+  rest of M2 possible; the larger slices (M2.2
+  sidebar items, M2.3 top bar and breadcrumb,
+  M2.4 dashboard) all consume the shell
+  regions M2.1 ships.
 - **Objective:** Replace the M1.1 chrome
-  (`MainLayout.razor`, `NavMenu.razor`) with the
-  M2 application shell — `AppSidebar`,
-  `AppTopBar`, `AppBreadcrumb`, `AppNavItem`,
-  `AppLayout`, `AppEmptyLayout` — composed from
-  the M1.2 design-system primitives. Introduce
-  `INavigationRegistry` and the route-metadata
-  data model. Redesign the five M1 template pages
-  to compose the new shell.
+  (`MainLayout.razor`, `NavMenu.razor`) with
+  the M2 layout shell — `AppLayout` and
+  `AppEmptyLayout` — composed from the M1.2
+  design-system primitives. Introduce two
+  placeholder shell components
+  (`AppSidebarSlot`, `AppTopBarSlot`) and the
+  `AppShellRegion` presentational helper that
+  reserve the sidebar and top-bar regions for
+  M2.2 / M2.3 to populate. The five M1 template
+  pages and the `/design-system` page migrate
+  from the M1.1 chrome to the new layout root
+  in place; the migration is only the layout
+  wrapper change.
 - **Acceptance criteria:**
-  - The six M2.1 components ship with bUnit
-    tests.
-  - The five template pages reach a meaningful
-    empty state that uses the design system.
-  - The architecture test
-    `Pages_AreReachable_Through_Registry` is
-    in place and green.
+  - The two layouts and the two placeholder
+    shell components ship with bUnit tests.
+  - The five M1 template pages and the
+    `/design-system` page render the same
+    content as before (only the wrapper
+    changes; no fake data, no M3 work).
+  - The M2.1 placeholder slots render their
+    "lands in M2.2 / M2.3" messages and the
+    placeholders are removed by M2.2 / M2.3.
   - `dotnet build` → 0 warnings, 0 errors.
   - `dotnet test` → all tests pass; no new
-    failures.
-  - `dotnet format --verify-no-changes` → clean.
-  - `npm run css:build` → clean; new component
+    failures; at least 81 passing tests
+    (77 M1.2 + 4 M2.1).
+  - `dotnet format --verify-no-changes` →
+    clean.
+  - `npm run css:build` → clean; new layout
     classes present in the compiled CSS.
   - The app starts on `http://localhost:5286`
-    and every route returns 200.
-  - Light and dark themes render correctly; the
-    theme toggle in the top bar flips the theme.
-  - The keyboard smoke test passes: Tab through
-    the shell; every interactive element is
-    reachable; focus is visible; the breadcrumb
-    is reachable.
+    and every M1 route returns 200.
+  - Light and dark themes render correctly.
+  - The keyboard smoke test passes: Tab
+    through the shell; every interactive
+    element is reachable; focus is visible.
 - **Dependencies:** M1 — Design System Core
   (closed 2026-07-10). M1.2 supplies the 19
   design-system components the M2.1 shell
   composes.
 - **Expected affected areas:**
-  - `src/AiEng.Platform.App/Components/`
-    (new `Components/Navigation/` folder; new
-    `Layouts/` folder; redesigned
-    `Pages/`).
-  - `src/AiEng.Platform.Application/Navigation/`
-    (new `INavigationRegistry`,
-    `RouteMetadata`,
-    `RouteMetadataAttribute`,
-    `RouteRegistry`).
-  - `src/AiEng.Platform.App/Composition/`
-    (new
-    `NavigationServiceCollectionExtensions`).
-  - `src/AiEng.Platform.App/Program.cs`
-    (DI registration of the navigation
-    registry).
-  - `docs/design-system.md` (catalogue updates,
-    version bump to 0.3.0 per ADR-015).
-  - `docs/component-guidelines.md` (new
-    component documentation; the
-    `INavigationRegistry` contract).
-  - `ROADMAP.md` (M2 row updates).
+  - `src/AiEng.Platform.App/Layouts/`
+    (new `AppLayout.razor`,
+    `AppEmptyLayout.razor`).
+  - `src/AiEng.Platform.App/Components/Shell/`
+    (new `AppShellRegion.razor`,
+    `AppSidebarSlot.razor`,
+    `AppTopBarSlot.razor`).
+  - `src/AiEng.Platform.App/Components/_Imports.razor`.
+  - `src/AiEng.Platform.App/Components/App.razor`
+    (Router pointed at `AppLayout`).
+  - `src/AiEng.Platform.App/Components/Pages/DesignSystem.razor`
+    (wrapped in `AppEmptyLayout`).
+  - `tests/AiEng.Platform.ComponentTests/Layouts/`
+    (2 new bUnit test files).
+  - `tests/AiEng.Platform.ComponentTests/Shell/`
+    (2 new bUnit test files).
+  - `ROADMAP.md` (M2.1 row marked
+    Delivered after the implementation
+    lands).
+  - `.ai/state/*.json` (state updates per
+    Rule 15).
+- **Out of scope (deferred to other M2
+  slices):**
+  - `INavigationRegistry`, `RouteMetadata`,
+    `RouteMetadataAttribute`, `RouteRegistry`
+    → M2.2.
+  - `AppSidebar`, `AppSidebarItem`,
+    `AppNavItem` → M2.2.
+  - `AppTopBar`, `AppBreadcrumb` → M2.3.
+  - Application of `[RouteMetadata]` to
+    every page → M2.2.
+  - `Pages_AreReachable_Through_Registry`
+    architecture test → M2.2.
+  - Final page redesigns → M2.5.
+  - Self-awareness dashboard (live data) →
+    M2.4.
+  - Reconnect-modal changes (the M1
+    template's `ReconnectModal.razor*` stays
+    as-is).
 - **Validation:** `dotnet build` clean;
   `dotnet test` all green; `dotnet format
   --verify-no-changes` clean; `npm run
   css:build` clean; visual smoke test on
-  `http://localhost:5286`; keyboard smoke test.
+  `http://localhost:5286`; keyboard smoke
+  test.
 - **Approved plan path:**
   [`.ai/plans/M2.1-application-shell-skeleton.md`](./../../.ai/plans/M2.1-application-shell-skeleton.md)
-- **Status:** Ready (plan `Awaiting Approval`).
+  (the revised plan, 2026-07-10).
+- **Status:** Ready (plan `Awaiting
+  Approval`).
 
-### M2.2 — Sidebar and navigation registry
+### M2.2 — Navigation Registry and Sidebar
 
 - **Task ID:** `M2.2`
 - **Milestone:** M2 — Application Shell and
   Navigation
-- **Title:** Sidebar and navigation registry
-- **Why it matters:** The sidebar is the primary
-  navigation surface; the navigation registry is
-  the data model M3+ consume. A registry-driven
-  sidebar ensures the M3 project-registration
-  page and every later page are reachable through
-  a single source of truth.
-- **Objective:** Land the `INavigationRegistry`
-  and the route-metadata data model. Wire the
-  registry into `AppSidebar`. Validate that every
-  page in `Components/Pages/` has a
-  `[RouteMetadata]` attribute and is reachable
-  through the registry.
-- **Acceptance criteria:** the registry is the
-  data source for the sidebar; every page is
-  routable through the registry; the
+- **Title:** Navigation registry and
+  sidebar
+- **Why it matters:** The sidebar is the
+  primary navigation surface; the
+  navigation registry is the data model
+  M3+ consume. A registry-driven sidebar
+  ensures the M3 project-registration page
+  and every later page are reachable through
+  a single source of truth. The
+  `Pages_AreReachable_Through_Registry`
+  architecture test belongs with the slice
+  that introduces the registry.
+- **Objective:** Land `INavigationRegistry`,
+  `RouteMetadata`,
+  `RouteMetadataAttribute`, `RouteRegistry`.
+  Land `AppSidebar`, `AppSidebarItem`,
+  `AppNavItem`. Apply `[RouteMetadata]` to
+  every page in `Components/Pages/`.
+  Activate the
+  `Pages_AreReachable_Through_Registry`
+  architecture test.
+- **Acceptance criteria:** the registry is
+  the data source for the sidebar; every
+  page is routable through the registry; the
   `Pages_AreReachable_Through_Registry`
   architecture test is active and green.
 - **Dependencies:** M2.1.
 - **Expected affected areas:**
   `src/AiEng.Platform.Application/Navigation/`,
-  `src/AiEng.Platform.App/Components/Navigation/AppSidebar*`,
+  `src/AiEng.Platform.App/Components/Shell/AppSidebar*`
+  (replaces `AppSidebarSlot`),
+  `src/AiEng.Platform.App/Components/Navigation/`
+  (new),
+  `src/AiEng.Platform.App/Composition/NavigationServiceCollectionExtensions.cs`,
   `src/AiEng.Platform.App/Components/Pages/*`,
+  `tests/AiEng.Platform.ComponentTests/`,
   `tests/AiEng.Platform.ArchitectureTests/`.
-- **Validation:** `dotnet build`, `dotnet test`,
-  `dotnet format --verify-no-changes`, visual
-  smoke test.
-- **Approved plan path:** (not yet planned in
-  detail; will be drafted after M2.1 closes).
-- **Status:** Ready (summary; details to be
-  planned after M2.1).
+- **Validation:** `dotnet build`, `dotnet
+  test`, `dotnet format
+  --verify-no-changes`, visual smoke test.
+- **Approved plan path:**
+  [`.ai/plans/M2.2-navigation-registry-sidebar.md`](./../../.ai/plans/M2.2-navigation-registry-sidebar.md)
+  (the plan stub, 2026-07-10).
+- **Status:** Draft (plan stub; promoted
+  to a full plan when M2.1 closes).
 
-### M2.3 — Top bar and page header integration
+### M2.3 — Top bar, breadcrumbs, and page
+  headers
 
 - **Task ID:** `M2.3`
 - **Milestone:** M2 — Application Shell and
   Navigation
-- **Title:** Top bar and page header
-  integration
+- **Title:** Top bar, breadcrumbs, and page
+  header integration
 - **Why it matters:** The top bar hosts the
   theme toggle, the user avatar, and the
   application-level actions; the page header
-  is the consistent first line of every page.
-  Both are reached on every route; both must
-  compose the M1.2 design system.
+  is the consistent first line of every page;
+  the breadcrumb follows the M2.2 registry's
+  `Parent` chain. Both are reached on every
+  route; both must compose the M1.2 design
+  system.
 - **Objective:** Land `AppTopBar` with its
   `Leading` and `Trailing` slots. Move the
   theme toggle (M1.1) into the `Trailing`
-  slot. Land the `AppBreadcrumb` component and
-  wire it into `AppPageHeader`'s `Breadcrumbs`
-  parameter (M1.2 placeholder).
-- **Acceptance criteria:** the top bar composes
-  `AppToolbar`; the breadcrumb follows the
-  current route's `Parent` chain; the theme
-  toggle flips light/dark; the `AppPageHeader`
-  `Breadcrumbs` placeholder is no longer a
-  placeholder.
+  slot. Land `AppBreadcrumb` and wire it into
+  `AppPageHeader`'s `Breadcrumbs` parameter
+  (M1.2 placeholder).
+- **Acceptance criteria:** the top bar
+  composes `AppToolbar`; the breadcrumb
+  follows the current route's `Parent` chain
+  (from the M2.2 registry); the theme toggle
+  flips light/dark and persists; the
+  `AppPageHeader.Breadcrumbs` placeholder is
+  no longer a placeholder.
 - **Dependencies:** M2.1, M2.2.
 - **Expected affected areas:**
-  `src/AiEng.Platform.App/Components/Navigation/AppTopBar*`,
-  `src/AiEng.Platform.App/Components/Navigation/AppBreadcrumb*`,
-  `src/AiEng.Platform.App/Components/Pages/*`.
-- **Validation:** `dotnet build`, `dotnet test`,
-  `dotnet format --verify-no-changes`, visual
-  smoke test, theme-toggle smoke test.
-- **Approved plan path:** (not yet planned in
-  detail; will be drafted after M2.2 closes).
-- **Status:** Ready (summary).
+  `src/AiEng.Platform.App/Components/Shell/AppTopBar*`
+  (replaces `AppTopBarSlot`),
+  `src/AiEng.Platform.App/Components/Navigation/AppBreadcrumb*`
+  (new),
+  `src/AiEng.Platform.App/Components/Pages/*`
+  (page header integration).
+- **Validation:** `dotnet build`, `dotnet
+  test`, `dotnet format
+  --verify-no-changes`, visual smoke test,
+  theme-toggle smoke test.
+- **Approved plan path:**
+  [`.ai/plans/M2.3-topbar-breadcrumbs.md`](./../../.ai/plans/M2.3-topbar-breadcrumbs.md)
+  (the plan stub, 2026-07-10).
+- **Status:** Draft (plan stub; promoted
+  to a full plan when M2.2 closes).
 
 ### M1 follow-up — Add `AppToolbar` example to `/design-system`
 
@@ -334,31 +391,46 @@ task board does not become a speculative
 backlog. Each summary task is fleshed out into
 detailed tasks when the milestone approaches.
 
-### M2.4 — Empty application routes (summary)
+### M2.4 — Project Intelligence Dashboard
+  (summary)
+
+- **Milestone:** M2.
+- **Why deferred:** the dashboard is the M2
+  landing page; the contract is in
+  `docs/dashboard.md`. The M2.4 slice
+  implements the **read-only** dashboard:
+  `IProjectIntelligenceReader` reads
+  `.ai/state/*.json` and produces a
+  `ProjectIntelligenceSnapshot`; the
+  dashboard renders the M0.5-data sections in
+  the Populated state and the M3+-data
+  sections in the Empty state.
+- **First action (later):** draft
+  `.ai/plans/M2.4-project-intelligence-dashboard.md`
+  (the plan stub already exists; promote it
+  to a full plan after M2.3 closes).
+
+### M2.5 — Empty routes, responsive, and
+  accessibility (summary)
 
 - **Milestone:** M2.
 - **Why deferred:** every M2.1 / M2.2 / M2.3
   page reaches an empty state; the
-  full-coverage pass over every route is
-  natural after the shell is wired.
+  full-coverage pass over every route, the
+  responsive matrix, and the full keyboard
+  smoke test are natural after the shell,
+  sidebar, top bar, breadcrumb, and dashboard
+  are wired.
 - **First action (later):** enumerate every
   route in `Components/Pages/`; verify each
   renders an `AppEmptyState` that names the
-  page and links back to the design system.
-
-### M2.5 — Responsive and keyboard validation (summary)
-
-- **Milestone:** M2.
-- **Why deferred:** the validation pass over
-  the shell at the 1280x720 minimum and the
-  full keyboard smoke test is the last M2
-  task before the M2 closeout.
-- **First action (later):** define the
-  responsive matrix in
+  page and links back to the design system;
+  define the responsive matrix in
   `docs/ui-principles.md` § 10.1; run the
   keyboard smoke test across every route.
 
-### M2.6 — M2 closeout and external Treehouse dogfooding checkpoint (summary)
+### M2.6 — M2 closeout and external Treehouse
+  dogfooding checkpoint (summary)
 
 - **Milestone:** M2.
 - **Why deferred:** the M2 closeout is the

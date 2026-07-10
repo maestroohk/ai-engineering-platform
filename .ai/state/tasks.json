@@ -1,33 +1,60 @@
 {
   "schema_version": "1.0.0",
   "updated_at": "2026-07-10T00:00:00Z",
-  "updated_by_session": "m0.5-architecture-refinement",
+  "updated_by_session": "m2-delivery-reconciliation",
   "tasks": [
     {
       "id": "T-001",
-      "title": "M2.1 — Application Shell Skeleton",
+      "title": "M2.1 — Application Shell Foundation",
       "status": "Ready",
       "milestone": "M2",
       "slice": "M2.1",
       "created_at": "2026-07-10T00:00:00Z",
       "plan": ".ai/plans/M2.1-application-shell-skeleton.md",
-      "notes": "Plan Awaiting Approval. The first action is to approve the plan and start implementation, or amend the plan and re-submit."
+      "notes": "Plan Awaiting Approval (revised 2026-07-10 per the M2 delivery-reconciliation brief). M2.1 is now focused on the shell foundation: two layouts (AppLayout, AppEmptyLayout), two placeholder shell components (AppSidebarSlot, AppTopBarSlot), one presentational helper (AppShellRegion), and the migration of the M1.1 chrome. The sidebar items, top bar, breadcrumb, navigation registry, route metadata, page redesigns, and self-awareness dashboard are explicitly deferred to M2.2 / M2.3 / M2.4 / M2.5. The first action is to approve the revised plan and start M2.1 implementation, or amend the plan and re-submit it."
     },
     {
       "id": "T-002",
-      "title": "M2.2 — Sidebar and navigation registry",
-      "status": "Deferred",
+      "title": "M2.2 — Navigation Registry and Sidebar",
+      "status": "Draft",
       "milestone": "M2",
       "slice": "M2.2",
-      "notes": "Summary entry. Will be planned in detail after M2.1 is closed."
+      "plan": ".ai/plans/M2.2-navigation-registry-sidebar.md",
+      "notes": "Plan stub (2026-07-10). Introduces INavigationRegistry, RouteMetadata, RouteMetadataAttribute, RouteRegistry, AppSidebar, AppSidebarItem, AppNavItem. Applies [RouteMetadata] to every page; activates the Pages_AreReachable_Through_Registry architecture test. Promoted to a full plan when M2.1 closes."
     },
     {
       "id": "T-003",
-      "title": "M2.3 — AppLayout, EmptyLayout, AppDialog, AppTabs",
-      "status": "Deferred",
+      "title": "M2.3 — Top Bar, Breadcrumbs, and Page Headers",
+      "status": "Draft",
       "milestone": "M2",
       "slice": "M2.3",
-      "notes": "Summary entry. Will be planned in detail after M2.2 is closed."
+      "plan": ".ai/plans/M2.3-topbar-breadcrumbs.md",
+      "notes": "Plan stub (2026-07-10). Populates the M2.1 AppTopBarSlot with the real top bar (theme toggle, user avatar) and the breadcrumb (composed into AppPageHeader.Breadcrumbs from the M2.2 registry's Parent chain). Promoted to a full plan when M2.2 closes."
+    },
+    {
+      "id": "T-014",
+      "title": "M2.4 — Project Intelligence Dashboard",
+      "status": "Draft",
+      "milestone": "M2",
+      "slice": "M2.4",
+      "plan": ".ai/plans/M2.4-project-intelligence-dashboard.md",
+      "notes": "Plan stub (2026-07-10). Implements the read-only /dashboard page (the M2 landing page per docs/dashboard.md). Introduces IProjectIntelligenceReader that reads .ai/state/*.json. Renders M0.5-data sections in the Populated state; M3+-data sections in the Empty state. Promoted to a full plan when M2.3 closes."
+    },
+    {
+      "id": "T-015",
+      "title": "M2.5 — Empty Routes, Responsive, and Accessibility",
+      "status": "Deferred",
+      "milestone": "M2",
+      "slice": "M2.5",
+      "notes": "Summary entry. Full-coverage pass over every route; responsive matrix at the 1280x720 minimum; full keyboard smoke test. Will be planned in detail after M2.4 closes."
+    },
+    {
+      "id": "T-016",
+      "title": "M2.6 — M2 Closeout and Treehouse Dogfooding",
+      "status": "Deferred",
+      "milestone": "M2",
+      "slice": "M2.6",
+      "notes": "Summary entry. M2 closeout per the M1 closeout template (verification, gap-fixing, deferred-review record, handoff, project-continuity update, M3 plan preparation) plus the external Treehouse dogfooding checkpoint per ROADMAP.md M2. Will be planned in detail after M2.5 closes."
     },
     {
       "id": "T-004",
@@ -97,14 +124,18 @@
     },
     {
       "id": "T-013",
-      "title": "M0.5 — Architecture Refinement and Project Intelligence (summary)",
-      "status": "In Progress",
+      "title": "M0.5 — Architecture Refinement and Project Intelligence",
+      "status": "Done",
       "milestone": "M0.5",
       "owner": "m0.5-architecture-refinement session",
       "created_at": "2026-07-10T00:00:00Z",
       "claimed_at": "2026-07-10T00:00:00Z",
-      "implementation_report": "implementation-report-m0.5-architecture-refinement.md (this session)",
-      "notes": "The 10 required improvements: VISION.md, .ai/backlog/, structured state, decision log, capability mapping, dashboard definition, self-awareness state, dogfooding evolution, doc architecture validation, architecture review."
+      "completed_at": "2026-07-10T00:00:00Z",
+      "implementation_report": "implementation-report-m0.5-architecture-refinement.md",
+      "evidence": {
+        "commits": ["1d98acd"]
+      },
+      "notes": "The 10 required improvements landed: VISION.md, .ai/backlog/, structured state, decision log, capability mapping, dashboard definition, self-awareness state, dogfooding evolution, doc architecture validation, architecture review. Closed 2026-07-10 with the coherent commit 1d98acd (docs(m0.5): add project intelligence and structured delivery state)."
     }
   ]
 }

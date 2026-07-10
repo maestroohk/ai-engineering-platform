@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "updated_at": "2026-07-10T00:00:00Z",
-  "updated_by_session": "m0.5-architecture-refinement",
+  "updated_by_session": "m2-delivery-reconciliation",
   "milestones": [
     {
       "id": "M0",
@@ -33,13 +33,16 @@
     {
       "id": "M0.5",
       "name": "Architecture Refinement and Project Intelligence",
-      "status": "In Progress",
+      "status": "Done",
+      "closed_at": "2026-07-10",
       "primary_outcome": "Strengthen the long-term engineering foundation: introduce VISION.md, the engineering backlog, structured state, decision log, capability mapping, dashboard definition, self-awareness state, and the dogfooding evolution. Validate the documentation architecture.",
       "delivers_capabilities": ["C-020", "C-019"],
       "consumes_capabilities": ["C-020"],
       "enables_milestones": ["M2"],
       "evidence": {
-        "implementation_report": "implementation-report-m0.5-architecture-refinement.md (this session)"
+        "implementation_report": "implementation-report-m0.5-architecture-refinement.md",
+        "handoff": ".ai/handoffs/2026-07-10-m0.5-architecture-refinement.md",
+        "commits": ["1d98acd"]
       }
     },
     {

@@ -55,9 +55,11 @@ M0 is the milestone that ends with this document. The rest are sequenced
 in [`docs/architecture-principles.md`](./docs/architecture-principles.md)
 and detailed below. **As of 2026-07-10, M1 is also done** (see
 `implementation-report-m1-closeout.md`); M2 is the next active milestone
-and M2.1 ("Application Shell Skeleton") is the planned first slice
-(plan in `.ai/plans/M2.1-application-shell-skeleton.md`, status:
-`Awaiting Approval`).
+and is divided into six sequential slices. M2.1 ("Application Shell
+Foundation") is the planned first slice (plan in
+`.ai/plans/M2.1-application-shell-skeleton.md`, status:
+`Awaiting Approval`); M2.2, M2.3, and M2.4 are plan stubs in
+`Draft`; M2.5 and M2.6 are summary entries in the task board.
 
 The sequence is deliberate. M1 builds the design system because every
 later milestone composes its components. M2 builds the shell because
@@ -263,16 +265,29 @@ professional developer tool.
 **Enables:** Every later milestone (all features are reached through
 navigation).
 
-**Reusable components introduced:**
+**Slice breakdown (M2 is delivered as six sequential slices):**
 
-- `AppSidebar`, `AppSidebarItem`
-- `AppTopBar`
-- `AppBreadcrumb`
-- `AppLayout`, `EmptyLayout`
-- `AppDialog` (modal)
-- `AppTabs`, `AppTab`
+| Slice | Title                                         | Status         | Major outcome                                                            |
+| ----- | --------------------------------------------- | -------------- | ------------------------------------------------------------------------ |
+| M2.1  | Application Shell Foundation                  | Awaiting Approval | Two layouts (`AppLayout`, `AppEmptyLayout`), two placeholder shell components (`AppSidebarSlot`, `AppTopBarSlot`), one presentational helper (`AppShellRegion`), and the M1.1 chrome migration. |
+| M2.2  | Navigation Registry and Sidebar               | Plan stub Draft | `INavigationRegistry`, `RouteMetadata`, `RouteMetadataAttribute`, `RouteRegistry`, `AppSidebar`, `AppSidebarItem`, `AppNavItem`, the `Pages_AreReachable_Through_Registry` architecture test. |
+| M2.3  | Top Bar, Breadcrumbs, and Page Headers        | Plan stub Draft | `AppTopBar`, `AppBreadcrumb`, theme toggle relocation to the top bar, user avatar slot, page-header integration with the navigation registry. |
+| M2.4  | Project Intelligence Dashboard                | Plan stub Draft | A read-only `/dashboard` page backed by `IProjectIntelligenceReader` that consumes `.ai/state/*.json`. No new abstractions beyond the reader. |
+| M2.5  | Empty Routes, Responsive, and Accessibility   | Summary entry  | All routes reach an `AppEmptyState`; the shell is usable down to 1280x720 (per ADR-005); keyboard navigation works across the sidebar. |
+| M2.6  | M2 Closeout and Treehouse Dogfooding          | Summary entry  | The M2 implementation report, the Treehouse dogfooding checkpoint (per `.ai/workflows/tool-dogfooding.md`), and the closeout commit. |
 
-**Services introduced:** `INavigationService` (route-aware).
+**Reusable components introduced (across all six slices):**
+
+- `AppSidebar`, `AppSidebarItem`, `AppNavItem` (M2.2)
+- `AppTopBar`, `AppBreadcrumb` (M2.3)
+- `AppLayout`, `AppEmptyLayout`, `AppSidebarSlot`, `AppTopBarSlot`, `AppShellRegion` (M2.1)
+- `AppDialog` (modal; deferred to a later M2 slice or removed if unused)
+- `AppTabs`, `AppTab` (deferred to a later M2 slice or removed if unused)
+
+**Services introduced:** `INavigationRegistry`, `RouteMetadata`,
+`RouteRegistry` (M2.2). M2.4 introduces
+`IProjectIntelligenceReader` as the only M2-introduced read-side
+service.
 
 **Providers introduced:** None.
 
@@ -284,16 +299,28 @@ The architecture test
 if a page file contains a literal `<button>`, `<input>`, or
 inline-style attribute (Tailwind class names are
 acceptable; raw HTML is not). Sidebar items are data-driven
-from a route registry, not hard-coded in the layout.
+from a route registry (M2.2), not hard-coded in the layout.
+M2.4 reads `.ai/state/*.json` through `IProjectIntelligenceReader`;
+no page reads the JSON directly.
 
 **Definition of done:**
 
-- Sidebar items are data-driven from a registry, not hard-coded.
-- All routes are reachable; each renders an `AppEmptyState` that
-  names the page and links back to the design system.
-- Keyboard navigation works across the sidebar.
-- The shell is usable down to a 1280x720 window (per
-  `docs/ui-principles.md` § 10.1 and ADR-005).
+- M2.1 is closed: the shell foundation renders; the existing
+  M1.1 chrome is migrated to `AppLayout`.
+- M2.2 is closed: sidebar items are data-driven from a registry,
+  not hard-coded; the `Pages_AreReachable_Through_Registry`
+  architecture test passes.
+- M2.3 is closed: the top bar, breadcrumb, and page header are
+  integrated; the theme toggle is relocated to the top bar.
+- M2.4 is closed: the `/dashboard` page renders the current
+  milestone, the active slice, the test status, and the
+  self-awareness state read through `IProjectIntelligenceReader`.
+- M2.5 is closed: all routes reach an `AppEmptyState`; the shell
+  is usable down to 1280x720; keyboard navigation works.
+- M2.6 is closed: the M2 implementation report is written; the
+  Treehouse dogfooding checkpoint has been exercised (or
+  explicitly deferred, recorded, and reasoned); the closeout
+  commit is coherent.
 
 **Dogfooding checkpoint (M2):** When Git worktrees are useful
 for an isolated task on the shell, the development team may
@@ -1302,7 +1329,8 @@ using its own abstractions.
 | Project boundary between `App` / `Application` and `Providers.Abstractions` (M1) | M3+ | `App` or `Application` importing a `Providers.<X>` project directly | Registry resolution at runtime | `App_DoesNotReference_Providers_Implementations` (active in M1+); `Only_CompositionRoot_MayReference_ConcreteProviders`, `Pages_DoNotReference_ConcreteProviders`, `Application_DoesNotReference_ConcreteProviders`, `Components_DoNotInject_ConcreteProviders` (registered but disabled in M1–M4-C, **delivered in M1 closeout**; activate in M4-D per ADR-016) |
 | Composition root (per ADR-016) | M3+ | A page, component, application service, view model, DTO, or domain type that imports a `Providers.<X>` project directly | Composition root is the only registration site; everything else resolves through the registry | `Only_CompositionRoot_MayReference_ConcreteProviders`, `Pages_DoNotReference_ConcreteProviders`, `Application_DoesNotReference_ConcreteProviders`, `Components_DoNotInject_ConcreteProviders` (delivered as registered-but-disabled in the M1 closeout; activate in M4-D) |
 | Design-system components catalogue (M1) | M2+ | A page that uses raw `<button>`, `<input>`, or inline-style attribute | Pages compose `App*` components only | `Pages_Use_DesignSystem_Components_Not_DOM` |
-| Application shell, sidebar, navigation, route registry (M2) | M3+ | A page that is not routable through the sidebar registry | All pages reachable through `INavigationService` | `Pages_AreReachable_Through_Registry` |
+| Application shell, sidebar, navigation, route registry (M2.1–M2.3) | M3+ | A page that is not routable through the sidebar registry | All pages reachable through `INavigationRegistry` (M2.2) | `Pages_AreReachable_Through_Registry` (M2.2) |
+| Project intelligence state (M2.4, read-only, `.ai/state/*.json`) | M3+ | A page that reads `.ai/state/*.json` directly | Pages read through `IProjectIntelligenceReader` (M2.4) | `Pages_Resolve_State_Through_Reader` (M2.4) |
 | Project entity, `IProjectService`, `IProjectStore` (M3 in-memory, M4-A durable) | M4, M5, M6, M7, M8 | A provider that re-implements project loading inline | Providers resolve the project through `IProjectService` | `Providers_Resolve_Project_Through_Service` |
 | `IProcessRunner` in `AiEng.Platform.Infrastructure/Process/` (M4-A) | M4-A, M4-D, M5, M6, M7, M8 | Any source file outside `Infrastructure/Process/` containing the literal `Process.Start` | Every shell call routed through `IProcessRunner` | `No_DirectProcessStart_OutsideInfrastructure` (registered but disabled in M1–M4-C; activates in M4-D) |
 | `ICredentialVault` in `AiEng.Platform.Infrastructure/Credentials/` (M4-A) | M4-A, M4-D, M5, M6, M7, M8 | A secret read from `appsettings.json`; a secret logged at any level | All secrets routed through `ICredentialVault` | `No_Secrets_In_Logs`, `No_Secrets_In_Configuration` |

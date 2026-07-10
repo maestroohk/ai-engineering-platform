@@ -89,8 +89,10 @@ Process execution boundary (M4-A)
   `AGENTS.md` and the documents it references and understand
   what to do next.
 - **Major capabilities delivered.**
-  - `AGENTS.md` — the constitution (15 non-negotiable rules
-    after the M1 closeout).
+  - `AGENTS.md` — the constitution (17 non-negotiable rules
+    after the M0.5 architecture refinement; the M0.5
+    refinement added the structured-state rule and the
+    coherent-commit rule).
   - `ARCHITECTURE.md` — the layered architecture.
   - `ROADMAP.md` — the ordered milestone map.
   - `STYLEGUIDE.md`, `CONTRIBUTING.md`, `DECISIONS.md`.
@@ -154,39 +156,71 @@ Process execution boundary (M4-A)
   and a route-aware navigation registry. Every later
   milestone is reached through this shell; the shell is the
   prerequisite for the M3 project-registration page and
-  beyond.
+  beyond. M2 is delivered as six sequential slices; each
+  slice is a reasonable unit of work for one to two focused
+  sessions; the slices are non-overlapping by design.
 - **User-visible outcome.** The application is a navigable
   professional developer tool on Windows desktop. Every
   navigation target renders an `AppEmptyState` that uses the
   design system. Sidebar items are data-driven from a route
   registry, not hard-coded. Keyboard navigation works across
   the sidebar. The shell is usable down to a 1280x720
-  window.
+  window. A read-only `/dashboard` page exposes the current
+  milestone, the active slice, the test status, and the
+  self-awareness state, all read through a single
+  `IProjectIntelligenceReader` abstraction that consumes
+  `.ai/state/*.json`.
 - **Major capabilities delivered.**
-  - `AppSidebar`, `AppSidebarItem`, `AppTopBar`,
-    `AppBreadcrumb`.
-  - `AppLayout`, `EmptyLayout`.
-  - `AppDialog` (modal), `AppTabs`, `AppTab`.
-  - `INavigationService` (route-aware).
+  - `AppLayout`, `AppEmptyLayout`, `AppShellRegion`,
+    `AppSidebarSlot`, `AppTopBarSlot` (M2.1 — the shell
+    foundation; no new design-system primitives).
+  - `AppSidebar`, `AppSidebarItem`, `AppNavItem` (M2.2 —
+    the navigation registry and the sidebar items
+    rendered from the registry).
+  - `AppTopBar`, `AppBreadcrumb` (M2.3 — the top bar,
+    breadcrumb, theme toggle relocation, and page-header
+    integration).
+  - `IProjectIntelligenceReader` (M2.4 — the only
+    read-side service the M2 milestone introduces; the
+    `/dashboard` page is the only consumer).
   - The architecture test
-    `Pages_AreReachable_Through_Registry` (active).
-- **Dependencies.** M1.
-- **Completion status.** **Planned** (M2.1 in plan,
-  `Awaiting Approval`).
-- **Evidence.** `.ai/plans/M2.1-application-shell-skeleton.md`.
+    `Pages_AreReachable_Through_Registry` (M2.2, active).
+  - The architecture test
+    `Pages_Resolve_State_Through_Reader` (M2.4, active).
+- **Dependencies.** M1, M0.5 (the M2.4 reader consumes the
+  structured state introduced in M0.5).
+- **Completion status.** **Planned** (M2.1 in revised
+  plan, `Awaiting Approval`; M2.2, M2.3, M2.4 in `Draft`
+  plan stubs; M2.5, M2.6 summary entries in the task
+  board).
+- **Evidence.**
+  - `.ai/plans/M2.1-application-shell-skeleton.md` (revised
+    2026-07-10; `Awaiting Approval`).
+  - `.ai/plans/M2.2-navigation-registry-sidebar.md` (Draft,
+    2026-07-10).
+  - `.ai/plans/M2.3-topbar-breadcrumbs.md` (Draft,
+    2026-07-10).
+  - `.ai/plans/M2.4-project-intelligence-dashboard.md`
+    (Draft, 2026-07-10).
+  - `.ai/workflows/progressive-coding.md` (the
+    Progressive Coding Rule that governs task selection
+    across the six slices).
+  - `reconciliation-report-m2-task-breakdown.md` (the
+    closing receipt for the M2 delivery-reconciliation
+    session).
 - **Next milestone enabled.** M3 (project-registration page
   composes the M2 shell).
 
-#### M2 slice breakdown (per the immediate-next task brief)
+#### M2 slice breakdown (per the M2 delivery-reconciliation, 2026-07-10)
 
-| Slice | Title                                  | Status             |
-| ----- | -------------------------------------- | ------------------ |
-| M2.1  | Application shell skeleton             | Awaiting Approval. |
-| M2.2  | Sidebar and navigation registry        | Ready (summary).   |
-| M2.3  | Top bar and page header integration    | Ready (summary).   |
-| M2.4  | Empty application routes               | Ready (summary).   |
-| M2.5  | Responsive and keyboard validation     | Ready (summary).   |
-| M2.6  | M2 closeout and external Treehouse dogfooding checkpoint | Ready (summary). |
+| Slice | Title                                                    | Status                |
+| ----- | -------------------------------------------------------- | --------------------- |
+| M2.1  | Application Shell Foundation                             | Plan `Awaiting Approval`. |
+| M2.2  | Navigation Registry and Sidebar                          | Plan stub `Draft`.    |
+| M2.3  | Top Bar, Breadcrumbs, and Page Headers                   | Plan stub `Draft`.    |
+| M2.4  | Project Intelligence Dashboard (read-only, `.ai/state`)  | Plan stub `Draft`.    |
+| M2.5  | Empty Routes, Responsive, and Accessibility              | Summary entry.        |
+| M2.6  | M2 Closeout and Treehouse Dogfooding                     | Summary entry.        |
 
 ### M3 — Project Registration
 

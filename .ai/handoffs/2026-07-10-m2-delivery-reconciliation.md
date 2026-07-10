@@ -2,7 +2,7 @@
 
 > **Format follows `.ai/templates/session-handoff.md`.**
 > **This file is also available as
-> `.ai/handoffs/2026-07-10-m2-delivery-reconciliation.md`.**
+> `.ai/handoffs/latest.md`.**
 > **This handoff supersedes the M0.5
 > architecture refinement handoff for any
 > "where are we now?" question; the M0.5

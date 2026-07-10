@@ -1,33 +1,34 @@
 {
   "schema_version": "1.0.0",
   "updated_at": "2026-07-10T00:00:00Z",
-  "session_id": "m0.5-architecture-refinement",
-  "session_type": "architecture",
+  "session_id": "m2-delivery-reconciliation",
+  "session_type": "documentation",
   "scope": {
-    "milestone": "M0.5",
-    "task_id": "T-013",
-    "plan": null,
+    "milestone": "M2",
+    "task_id": "T-001",
+    "plan": ".ai/plans/M2.1-application-shell-skeleton.md",
     "out_of_scope": [
       "Application code (no changes to AiEng.Platform.App, Application, Domain, Providers.Abstractions, tests)",
-      "Completed milestones (M0 and M1 must not be invalidated)",
+      "Completed milestones (M0, M0.5, M1 must not be invalidated)",
       "Architecture rules (no changes to AGENTS.md rules, ARCHITECTURE.md boundaries, DECISIONS.md ADRs)",
       "Milestone ordering (no reordering of M2 through M8)",
+      "M2.1 implementation (the plan is revised but not implemented)",
       "External tools (no tool invocations during this session)"
     ]
   },
   "current_understanding": {
-    "active_milestone": "M0.5",
-    "last_completed_milestone": "M1",
-    "last_stable_commit": "8fae9517d2c10dceb90c6b3475f1635d5f86a8bd",
+    "active_milestone": "M2",
+    "last_completed_milestone": "M0.5",
+    "last_stable_commit": "1d98acd",
     "build_status": "passing",
     "test_status": "80 passed, 4 skipped, 0 failed"
   },
   "last_action": {
     "at": "2026-07-10T00:00:00Z",
-    "kind": "created file",
-    "target": ".ai/backlog/{epics,features,capabilities,ideas}.md",
-    "outcome": "Backlog structure created with 5 epics, 14 features, 21 capabilities, 15 ideas. All derived from existing ADRs and ROADMAP.md; no architectural rule changed."
+    "kind": "rewrote file",
+    "target": ".ai/plans/M2.1-application-shell-skeleton.md",
+    "outcome": "Revised M2.1 plan to scope the shell foundation only (two layouts, two placeholder shell components, one presentational helper, MainLayout migration). Removed from scope: INavigationRegistry, RouteMetadata, RouteRegistry, AppSidebar, AppNavItem, AppTopBar, AppBreadcrumb, page-route metadata, Pages_AreReachable_Through_Registry architecture test, final page redesigns, reconnect behaviour changes, self-awareness dashboard. Status: Awaiting Approval."
   },
-  "intended_next_action": "Write docs/dashboard.md (Product Dashboard Definition) — the operational home page the application renders as its landing page in M2.",
-  "session_notes": "The M0.5 refinement is an architecture-only change. The 10 required improvements are landing in this session: VISION.md, .ai/backlog/, structured state, decision log, capability mapping, dashboard definition, self-awareness state, dogfooding evolution, doc architecture validation, architecture review. The session does not modify application code, completed milestones, or architecture rules. The session ends with .ai/state/current.md and .ai/state/task-board.md updated, an implementation report, and a coherent commit."
+  "intended_next_action": "Read the revised M2.1 plan (.ai/plans/M2.1-application-shell-skeleton.md) and approve it. Then start M2.1 implementation per the 15-step order in section 16 of the plan.",
+  "session_notes": "The M2 delivery-reconciliation session closes M0.5 (commit 1d98acd) and reconciles the M2 task breakdown into six non-overlapping slices. The session revises the M2.1 plan to remove overlapping scope; creates M2.2 / M2.3 / M2.4 plan stubs; documents the Progressive Coding Rule (.ai/workflows/progressive-coding.md); updates the delivery system (ROADMAP, master-delivery-plan, task-board, current.md, milestones.json, features.json, capabilities.json, tasks.json, session.json, handoffs/latest.md). The session does not modify application code, completed milestones, architecture rules, or milestone ordering. The session does not implement M2.1. The next session approves the revised M2.1 plan and starts M2.1 implementation per Rule 17 in AGENTS.md."
 }

@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "updated_at": "2026-07-10T00:00:00Z",
-  "updated_by_session": "m0.5-architecture-refinement",
+  "updated_by_session": "m2-delivery-reconciliation",
   "capabilities": [
     {
       "id": "C-001",

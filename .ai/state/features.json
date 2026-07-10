@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "updated_at": "2026-07-10T00:00:00Z",
-  "updated_by_session": "m0.5-architecture-refinement",
+  "updated_by_session": "m2-delivery-reconciliation",
   "features": [
     { "id": "F-001", "title": "Register a Git repository", "status": "Accepted", "product_capability_index": 1, "delivered_by_milestones": ["M3", "M4-A"], "depends_on_capabilities": ["C-016", "C-019", "C-020"], "user_journey_step": 1 },
     { "id": "F-002", "title": "Create a coding task for a registered project", "status": "Proposed", "product_capability_index": 2, "delivered_by_milestones": ["TBD"], "depends_on_capabilities": ["F-001", "C-019", "C-020"], "user_journey_step": 2 },
