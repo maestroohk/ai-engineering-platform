@@ -59,20 +59,15 @@
 ### M1 follow-up — Re-anchor the four composition-root architecture tests in `ROADMAP.md` matrix
 
 - **Source:** PART 1 verification confirmed the four
-  composition-root tests are now in place (registered-but-disabled) per ADR-016, but the
-  `ROADMAP.md` "Architecture tests" matrix predates the
-  M1 closeout and may still list them as "registered
-  but disabled" without a delivery milestone anchor.
-- **Status:** Ready (docs-only, not a code change).
-- **Owner:** (none).
-- **Why Ready:** the tests are in the code; the
-  matrix needs to match.
-- **Definition of done:** the matrix lists the four
-  composition-root tests as `Delivered (M1 closeout) —
-  Active in M4-D`.
-- **First action:** read `ROADMAP.md` § 4
-  ("Progressive self-dogfooding matrix"); update the
-  row for the composition-root tests.
+  composition-root tests are now in place
+  (registered-but-disabled) per ADR-016.
+- **Status:** **Done (M1 closeout)** — the
+  `ROADMAP.md` § 4 "Progressive self-dogfooding
+  matrix" row for the composition-root tests was
+  updated during the M1 closeout session to list
+  the four tests as `Delivered in M1 closeout —
+  Active in M4-D`. See the M1 closeout report's
+  "Files Modified" entry for `ROADMAP.md`.
 
 ## In Progress
 
@@ -117,8 +112,10 @@
   `implementation-report-m1-1-frontend-foundation.md`,
   `implementation-report-m1-2-design-system-core.md`.
 - **Handoff:** `.ai/handoffs/2026-07-10-m1-closeout.md`.
-- **Git:** no commit yet (the closeout session's
-  PART 7 was completed commit-only per user
-  direction; the first commit is staged in the
-  closeout session's working tree but not yet
-  applied).
+- **Git:** first commit `1722bd235830cfd8b180191953116c058c92edef`
+  applied on `master` at the end of the closeout
+  session. 166 files committed. Working tree clean.
+  No remote is configured; the commit is local-only
+  per user direction. The commit subject is
+  `chore(m1-closeout): close M1 milestone and prepare
+  M2.1 plan`.

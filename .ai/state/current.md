@@ -14,15 +14,15 @@
 
 ## Milestone
 
-- **Active milestone:** M1.3 — Application Shell.
-- **Last closed milestone:** M1 — Design System Core (closed 2026-07-10).
-- **Next planned milestone:** M2.1 — Application Shell Skeleton (plan in `.ai/plans/M2.1-application-shell-skeleton.md`, status: Awaiting Approval).
+- **Active milestone:** M2.1 — Application Shell Skeleton (plan Awaiting Approval; no implementation started).
+- **Last closed milestone:** M1 — Design System Core (closed 2026-07-10; first commit `1722bd2`).
+- **Next planned milestone:** M2.2 — (not yet planned; will follow M2.1).
 
 ## Branch and Git State
 
 - **Branch:** `master`.
-- **Last commit hash:** (no commits yet — the repository was initialised during the M1 closeout session but the first commit is staged for PART 7).
-- **Working tree:** clean of uncommitted changes from the M1 closeout session; the new architecture tests and `.ai/state/` + `.ai/handoffs/` directories are untracked.
+- **Last commit hash:** `1722bd235830cfd8b180191953116c058c92edef` — the first commit of the repository. Subject: `chore(m1-closeout): close M1 milestone and prepare M2.1 plan`. 166 files committed.
+- **Working tree:** clean (no untracked files, no modified files).
 - **Remote:** **none configured.** PART 7 was completed commit-only per user direction. Adding a remote is a separate decision.
 
 ## Last Validation Result
@@ -71,8 +71,8 @@ follow-up), the task board contains those as separate
 
 ## Documents the Next Session Must Read
 
-1. `AGENTS.md` — the constitution (14 rules, precedence hierarchy).
-2. `.ai/session-start.md` — the 13-step session-start procedure.
+1. `AGENTS.md` — the constitution (15 rules, precedence hierarchy).
+2. `.ai/session-start.md` — the 15-step session-start procedure.
 3. `.ai/state/current.md` — this file.
 4. `.ai/state/task-board.md` — the live work queue.
 5. `.ai/handoffs/latest.md` — the most recent session handoff.
