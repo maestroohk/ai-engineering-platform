@@ -1,34 +1,54 @@
 {
   "schema_version": "1.0.0",
-  "updated_at": "2026-07-10T00:00:00Z",
-  "session_id": "m2-delivery-reconciliation",
-  "session_type": "documentation",
+  "updated_at": "2026-07-11T00:00:00Z",
+  "session_id": "m2-1-application-shell-foundation",
+  "session_type": "implementation",
   "scope": {
     "milestone": "M2",
     "task_id": "T-001",
+    "slice": "M2.1",
     "plan": ".ai/plans/M2.1-application-shell-skeleton.md",
+    "branch": "feature/m2-1-application-shell",
+    "in_scope": [
+      "AppLayout and AppEmptyLayout (two layouts)",
+      "AppSidebarSlot and AppTopBarSlot (two placeholder shell components)",
+      "AppShellRegion (one presentational helper)",
+      "M1.1 chrome migration (MainLayout.razor and NavMenu.razor retirement)",
+      "Four bUnit test files (AppLayoutTests, AppEmptyLayoutTests, AppSidebarSlotTests, AppTopBarSlotTests)",
+      "Project-continuity state updates (current.md, task-board.md, tasks.json, milestones.json, session.json, handoffs/latest.md, ROADMAP.md)",
+      "Implementation report implementation-report-m2-1-application-shell-foundation.md"
+    ],
     "out_of_scope": [
-      "Application code (no changes to AiEng.Platform.App, Application, Domain, Providers.Abstractions, tests)",
-      "Completed milestones (M0, M0.5, M1 must not be invalidated)",
-      "Architecture rules (no changes to AGENTS.md rules, ARCHITECTURE.md boundaries, DECISIONS.md ADRs)",
-      "Milestone ordering (no reordering of M2 through M8)",
-      "M2.1 implementation (the plan is revised but not implemented)",
-      "External tools (no tool invocations during this session)"
+      "INavigationRegistry, RouteMetadata, RouteMetadataAttribute, RouteRegistry (M2.2)",
+      "AppSidebar, AppSidebarItem, AppNavItem (M2.2)",
+      "AppTopBar, AppBreadcrumb (M2.3)",
+      "[RouteMetadata] application to pages (M2.2)",
+      "Pages_AreReachable_Through_Registry architecture test (M2.2)",
+      "Final page redesigns (M2.5)",
+      "Self-awareness dashboard live data (M2.4)",
+      "Reconnect-modal changes (the M1 template's ReconnectModal.razor* stays as-is)",
+      "New design-system primitives (none; M2.1 composes M1.2 only)",
+      "AGENTS.md rule changes",
+      "ARCHITECTURE.md or DECISIONS.md changes",
+      "M2.2, M2.3, M2.4, M2.5, M2.6 implementation"
     ]
   },
   "current_understanding": {
     "active_milestone": "M2",
+    "active_slice": "M2.2 (Awaiting Approval)",
+    "active_task": "T-002 (next session)",
     "last_completed_milestone": "M0.5",
-    "last_stable_commit": "1d98acd",
+    "last_completed_task": "T-001 (M2.1 closeout, 2026-07-11)",
+    "last_stable_commit": "feat(m2.1): add application shell foundation (on feature/m2-1-application-shell)",
     "build_status": "passing",
-    "test_status": "80 passed, 4 skipped, 0 failed"
+    "test_status": "102 passed, 4 skipped, 0 failed (component tests); 3 passed, 4 skipped, 0 failed (architecture tests)"
   },
   "last_action": {
-    "at": "2026-07-10T00:00:00Z",
-    "kind": "rewrote file",
-    "target": ".ai/plans/M2.1-application-shell-skeleton.md",
-    "outcome": "Revised M2.1 plan to scope the shell foundation only (two layouts, two placeholder shell components, one presentational helper, MainLayout migration). Removed from scope: INavigationRegistry, RouteMetadata, RouteRegistry, AppSidebar, AppNavItem, AppTopBar, AppBreadcrumb, page-route metadata, Pages_AreReachable_Through_Registry architecture test, final page redesigns, reconnect behaviour changes, self-awareness dashboard. Status: Awaiting Approval."
+    "at": "2026-07-11T00:00:00Z",
+    "kind": "committed M2.1 closeout",
+    "target": "feature/m2-1-application-shell",
+    "outcome": "M2.1 — Application Shell Foundation delivered. Two layouts (AppLayout, AppEmptyLayout), two placeholder shell components (AppSidebarSlot, AppTopBarSlot), one presentational helper (AppShellRegion), the M1.1 chrome migration, four bUnit test files (25 new tests, 102 total component tests passing), the Tailwind content path update to include Layouts/, the Layouts/_Imports.razor, the wrap of /design-system and /not-found in AppEmptyLayout, and the Routes.razor DefaultLayout change to AppLayout. The M1.2 components and tests are preserved. Branch: feature/m2-1-application-shell. Commit: feat(m2.1): add application shell foundation. Push skipped (no remote configured). Project-continuity state updated per Rule 15. T-001 (M2.1) marked Done; T-002 (M2.2) promoted to Ready; M2.2 plan expanded to Awaiting Approval."
   },
-  "intended_next_action": "Read the revised M2.1 plan (.ai/plans/M2.1-application-shell-skeleton.md) and approve it. Then start M2.1 implementation per the 15-step order in section 16 of the plan.",
-  "session_notes": "The M2 delivery-reconciliation session closes M0.5 (commit 1d98acd) and reconciles the M2 task breakdown into six non-overlapping slices. The session revises the M2.1 plan to remove overlapping scope; creates M2.2 / M2.3 / M2.4 plan stubs; documents the Progressive Coding Rule (.ai/workflows/progressive-coding.md); updates the delivery system (ROADMAP, master-delivery-plan, task-board, current.md, milestones.json, features.json, capabilities.json, tasks.json, session.json, handoffs/latest.md). The session does not modify application code, completed milestones, architecture rules, or milestone ordering. The session does not implement M2.1. The next session approves the revised M2.1 plan and starts M2.1 implementation per Rule 17 in AGENTS.md."
+  "intended_next_action": "The next session reads the M2.2 plan (.ai/plans/M2.2-navigation-registry-sidebar.md) and either approves it (and starts M2.2 implementation) or amends it and re-submits. The Progressive Coding Rule applies: one task per session, 13-step lifecycle, stop after the coherent commit. M2.2 implementation is NOT started in this session.",
+  "session_notes": "M2.1 — Application Shell Foundation closeout session. The revised M2.1 plan was approved 2026-07-11 and implementation followed § 16 (15-step order). The 5 new components (2 layouts + 2 placeholder shell components + 1 presentational helper) ship with 25 new bUnit tests. The M1.1 chrome is removed. The Tailwind content path includes the new Layouts/ directory. The /design-system and /not-found pages wrap in AppEmptyLayout. The visual smoke test confirms all five M1 routes return 200 and the new shell structure renders correctly with the data-app-region attributes. Per AGENTS.md Rule 15 (project continuity) and Rule 17 (evidence of completion), the session produced the implementation report, updated the state and handoff files, and produced the closeout commit. The session promotes T-002 (M2.2) to Ready and expands the M2.2 plan stub to a full plan in Awaiting Approval. The session does NOT implement M2.2 (per the Progressive Coding Rule)."
 }

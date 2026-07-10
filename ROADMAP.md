@@ -39,7 +39,7 @@ A milestone is **complete** only when:
 | --- | ----------------------------------------------------- | ---------- | -------------------------------------------------------------------------- |
 | M0  | Doc foundation                                        | Done       | This document set exists.                                                  |
 | M1  | Design System Core                                    | **Done (closed 2026-07-10)** | A runnable Blazor shell with the base design-system components.            |
-| M2  | Application Shell and Navigation                      | Planned    | A navigable app shell on Windows desktop; pages reach an empty state.      |
+| M2  | Application Shell and Navigation                      | Active (M2.1 delivered 2026-07-11) | A navigable app shell on Windows desktop; pages reach an empty state.      |
 | M3  | Project Registration                                  | Planned    | A user can register a project; the platform owns a `Project` entity.       |
 | M4  | Process Execution, Capability Detection, Provider Registry | Planned | The platform spawns processes safely, detects capabilities, registers providers. Divided into four slices: |
 |     | &nbsp;&nbsp;M4-A: Infrastructure / Process Execution   | Planned    | `AiEng.Platform.Infrastructure` lands; `IProcessRunner`, `ICredentialVault`, `IClock`, on-disk `IProjectStore`. |
@@ -53,13 +53,15 @@ A milestone is **complete** only when:
 
 M0 is the milestone that ends with this document. The rest are sequenced
 in [`docs/architecture-principles.md`](./docs/architecture-principles.md)
-and detailed below. **As of 2026-07-10, M1 is also done** (see
-`implementation-report-m1-closeout.md`); M2 is the next active milestone
+and detailed below. **As of 2026-07-10, M1 is done** (see
+`implementation-report-m1-closeout.md`); M2 is the active milestone
 and is divided into six sequential slices. M2.1 ("Application Shell
-Foundation") is the planned first slice (plan in
-`.ai/plans/M2.1-application-shell-skeleton.md`, status:
-`Awaiting Approval`); M2.2, M2.3, and M2.4 are plan stubs in
-`Draft`; M2.5 and M2.6 are summary entries in the task board.
+Foundation") is **Delivered** (see
+`implementation-report-m2-1-application-shell-foundation.md`); M2.2
+("Navigation Registry and Sidebar") is the next active slice (plan
+in `.ai/plans/M2.2-navigation-registry-sidebar.md`); M2.3, M2.4
+remain plan stubs in `Draft`; M2.5 and M2.6 are summary entries in
+the task board.
 
 The sequence is deliberate. M1 builds the design system because every
 later milestone composes its components. M2 builds the shell because
@@ -269,7 +271,7 @@ navigation).
 
 | Slice | Title                                         | Status         | Major outcome                                                            |
 | ----- | --------------------------------------------- | -------------- | ------------------------------------------------------------------------ |
-| M2.1  | Application Shell Foundation                  | Awaiting Approval | Two layouts (`AppLayout`, `AppEmptyLayout`), two placeholder shell components (`AppSidebarSlot`, `AppTopBarSlot`), one presentational helper (`AppShellRegion`), and the M1.1 chrome migration. |
+| M2.1  | Application Shell Foundation                  | Delivered (M2.1, 2026-07-11) | Two layouts (`AppLayout`, `AppEmptyLayout`), two placeholder shell components (`AppSidebarSlot`, `AppTopBarSlot`), one presentational helper (`AppShellRegion`), and the M1.1 chrome migration. |
 | M2.2  | Navigation Registry and Sidebar               | Plan stub Draft | `INavigationRegistry`, `RouteMetadata`, `RouteMetadataAttribute`, `RouteRegistry`, `AppSidebar`, `AppSidebarItem`, `AppNavItem`, the `Pages_AreReachable_Through_Registry` architecture test. |
 | M2.3  | Top Bar, Breadcrumbs, and Page Headers        | Plan stub Draft | `AppTopBar`, `AppBreadcrumb`, theme toggle relocation to the top bar, user avatar slot, page-header integration with the navigation registry. |
 | M2.4  | Project Intelligence Dashboard                | Plan stub Draft | A read-only `/dashboard` page backed by `IProjectIntelligenceReader` that consumes `.ai/state/*.json`. No new abstractions beyond the reader. |
@@ -1329,7 +1331,7 @@ using its own abstractions.
 | Project boundary between `App` / `Application` and `Providers.Abstractions` (M1) | M3+ | `App` or `Application` importing a `Providers.<X>` project directly | Registry resolution at runtime | `App_DoesNotReference_Providers_Implementations` (active in M1+); `Only_CompositionRoot_MayReference_ConcreteProviders`, `Pages_DoNotReference_ConcreteProviders`, `Application_DoesNotReference_ConcreteProviders`, `Components_DoNotInject_ConcreteProviders` (registered but disabled in M1–M4-C, **delivered in M1 closeout**; activate in M4-D per ADR-016) |
 | Composition root (per ADR-016) | M3+ | A page, component, application service, view model, DTO, or domain type that imports a `Providers.<X>` project directly | Composition root is the only registration site; everything else resolves through the registry | `Only_CompositionRoot_MayReference_ConcreteProviders`, `Pages_DoNotReference_ConcreteProviders`, `Application_DoesNotReference_ConcreteProviders`, `Components_DoNotInject_ConcreteProviders` (delivered as registered-but-disabled in the M1 closeout; activate in M4-D) |
 | Design-system components catalogue (M1) | M2+ | A page that uses raw `<button>`, `<input>`, or inline-style attribute | Pages compose `App*` components only | `Pages_Use_DesignSystem_Components_Not_DOM` |
-| Application shell, sidebar, navigation, route registry (M2.1–M2.3) | M3+ | A page that is not routable through the sidebar registry | All pages reachable through `INavigationRegistry` (M2.2) | `Pages_AreReachable_Through_Registry` (M2.2) |
+| Application shell, sidebar, navigation, route registry (M2.1–M2.3) | M3+ | A page that is not routable through the sidebar registry | All pages reachable through `INavigationRegistry` (M2.2) | `Pages_AreReachable_Through_Registry` (M2.2). M2.1 delivers the shell foundation (`AppLayout`, `AppEmptyLayout`, `AppSidebarSlot`, `AppTopBarSlot`, `AppShellRegion`); the placeholder slots are populated by M2.2 / M2.3. |
 | Project intelligence state (M2.4, read-only, `.ai/state/*.json`) | M3+ | A page that reads `.ai/state/*.json` directly | Pages read through `IProjectIntelligenceReader` (M2.4) | `Pages_Resolve_State_Through_Reader` (M2.4) |
 | Project entity, `IProjectService`, `IProjectStore` (M3 in-memory, M4-A durable) | M4, M5, M6, M7, M8 | A provider that re-implements project loading inline | Providers resolve the project through `IProjectService` | `Providers_Resolve_Project_Through_Service` |
 | `IProcessRunner` in `AiEng.Platform.Infrastructure/Process/` (M4-A) | M4-A, M4-D, M5, M6, M7, M8 | Any source file outside `Infrastructure/Process/` containing the literal `Process.Start` | Every shell call routed through `IProcessRunner` | `No_DirectProcessStart_OutsideInfrastructure` (registered but disabled in M1–M4-C; activates in M4-D) |

@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
-  "updated_at": "2026-07-10T00:00:00Z",
-  "updated_by_session": "m2-delivery-reconciliation",
+  "updated_at": "2026-07-11T00:00:00Z",
+  "updated_by_session": "m2-1-application-shell-foundation",
   "milestones": [
     {
       "id": "M0",
@@ -48,12 +48,50 @@
     {
       "id": "M2",
       "name": "Application Shell and Navigation",
-      "status": "Planned",
+      "status": "Active",
       "primary_outcome": "The shell has a sidebar, a top bar, and a content panel. The platform is navigable; every navigation target renders an empty state that uses the design system.",
       "delivers_capabilities": ["C-019"],
       "consumes_capabilities": ["C-020"],
       "enables_milestones": ["M3", "M4-A", "M4-B", "M4-C", "M4-D", "M5", "M6", "M7", "M8"],
-      "evidence": {}
+      "slices": {
+        "M2.1": {
+          "title": "Application Shell Foundation",
+          "status": "delivered",
+          "delivered_at": "2026-07-11",
+          "session": "m2-1-application-shell-foundation",
+          "branch": "feature/m2-1-application-shell",
+          "summary": "Two layouts (AppLayout, AppEmptyLayout), two placeholder shell components (AppSidebarSlot, AppTopBarSlot), one presentational helper (AppShellRegion). The M1.1 chrome is retired. 25 new bUnit tests ship; 102 total component tests pass.",
+          "implementation_report": "implementation-report-m2-1-application-shell-foundation.md",
+          "plan": ".ai/plans/M2.1-application-shell-skeleton.md",
+          "commit_message": "feat(m2.1): add application shell foundation"
+        },
+        "M2.2": {
+          "title": "Navigation Registry and Sidebar",
+          "status": "plan approved",
+          "plan": ".ai/plans/M2.2-navigation-registry-sidebar.md"
+        },
+        "M2.3": {
+          "title": "Top Bar, Breadcrumbs, and Page Headers",
+          "status": "stub"
+        },
+        "M2.4": {
+          "title": "Project Intelligence Dashboard",
+          "status": "stub"
+        },
+        "M2.5": {
+          "title": "Empty Routes, Responsive, and Accessibility",
+          "status": "deferred"
+        },
+        "M2.6": {
+          "title": "M2 Closeout and Treehouse Dogfooding",
+          "status": "deferred"
+        }
+      },
+      "evidence": {
+        "slices": ["M2.1"],
+        "implementation_report": "implementation-report-m2-1-application-shell-foundation.md",
+        "handoff": ".ai/handoffs/2026-07-11-m2-1-application-shell-foundation.md"
+      }
     },
     {
       "id": "M3",

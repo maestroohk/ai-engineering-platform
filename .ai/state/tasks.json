@@ -1,26 +1,77 @@
 {
   "schema_version": "1.0.0",
-  "updated_at": "2026-07-10T00:00:00Z",
-  "updated_by_session": "m2-delivery-reconciliation",
+  "updated_at": "2026-07-11T00:00:00Z",
+  "updated_by_session": "m2-1-application-shell-foundation",
   "tasks": [
     {
       "id": "T-001",
       "title": "M2.1 — Application Shell Foundation",
-      "status": "Ready",
+      "status": "Done",
       "milestone": "M2",
       "slice": "M2.1",
       "created_at": "2026-07-10T00:00:00Z",
+      "claimed_at": "2026-07-11T00:00:00Z",
+      "completed_at": "2026-07-11T00:00:00Z",
+      "owner": "m2-1-application-shell-foundation session",
       "plan": ".ai/plans/M2.1-application-shell-skeleton.md",
-      "notes": "Plan Awaiting Approval (revised 2026-07-10 per the M2 delivery-reconciliation brief). M2.1 is now focused on the shell foundation: two layouts (AppLayout, AppEmptyLayout), two placeholder shell components (AppSidebarSlot, AppTopBarSlot), one presentational helper (AppShellRegion), and the migration of the M1.1 chrome. The sidebar items, top bar, breadcrumb, navigation registry, route metadata, page redesigns, and self-awareness dashboard are explicitly deferred to M2.2 / M2.3 / M2.4 / M2.5. The first action is to approve the revised plan and start M2.1 implementation, or amend the plan and re-submit it."
+      "implementation_report": "implementation-report-m2-1-application-shell-foundation.md",
+      "evidence": {
+        "branch": "feature/m2-1-application-shell",
+        "files_added": [
+          "src/AiEng.Platform.App/Layouts/AppLayout.razor",
+          "src/AiEng.Platform.App/Layouts/AppLayout.razor.css",
+          "src/AiEng.Platform.App/Layouts/AppEmptyLayout.razor",
+          "src/AiEng.Platform.App/Layouts/AppEmptyLayout.razor.css",
+          "src/AiEng.Platform.App/Layouts/_Imports.razor",
+          "src/AiEng.Platform.App/Components/Shell/AppShellRegion.razor",
+          "src/AiEng.Platform.App/Components/Shell/AppSidebarSlot.razor",
+          "src/AiEng.Platform.App/Components/Shell/AppTopBarSlot.razor",
+          "tests/AiEng.Platform.ComponentTests/Layouts/AppLayoutTests.cs",
+          "tests/AiEng.Platform.ComponentTests/Layouts/AppEmptyLayoutTests.cs",
+          "tests/AiEng.Platform.ComponentTests/Shell/AppSidebarSlotTests.cs",
+          "tests/AiEng.Platform.ComponentTests/Shell/AppTopBarSlotTests.cs"
+        ],
+        "files_modified": [
+          "src/AiEng.Platform.App/Components/_Imports.razor",
+          "src/AiEng.Platform.App/Components/Routes.razor",
+          "src/AiEng.Platform.App/Components/Pages/DesignSystem.razor",
+          "src/AiEng.Platform.App/Components/Pages/NotFound.razor",
+          "tailwind.config.js",
+          "ROADMAP.md",
+          ".ai/state/current.md",
+          ".ai/state/task-board.md",
+          ".ai/state/session.json",
+          ".ai/state/milestones.json",
+          ".ai/handoffs/latest.md"
+        ],
+        "files_deleted": [
+          "src/AiEng.Platform.App/Components/Layout/MainLayout.razor",
+          "src/AiEng.Platform.App/Components/Layout/MainLayout.razor.css",
+          "src/AiEng.Platform.App/Components/Layout/NavMenu.razor",
+          "src/AiEng.Platform.App/Components/Layout/NavMenu.razor.css"
+        ],
+        "tests": {
+          "component_tests_added": 25,
+          "component_tests_total": 102,
+          "component_tests_passing": 102,
+          "component_tests_failed": 0,
+          "architecture_tests_passing": 3,
+          "architecture_tests_skipped": 4,
+          "build_warnings": 0,
+          "build_errors": 0
+        }
+      },
+      "notes": "Delivered 2026-07-11. M2.1 scope landed per the revised plan: two layouts (AppLayout, AppEmptyLayout), two placeholder shell components (AppSidebarSlot, AppTopBarSlot), one presentational helper (AppShellRegion), four bUnit test files, and the M1.1 chrome migration. The M1.2 components are preserved. Branch: feature/m2-1-application-shell. Commit: feat(m2.1): add application shell foundation. Push skipped (no remote configured)."
     },
     {
       "id": "T-002",
       "title": "M2.2 — Navigation Registry and Sidebar",
-      "status": "Draft",
+      "status": "Ready",
       "milestone": "M2",
       "slice": "M2.2",
+      "created_at": "2026-07-10T00:00:00Z",
       "plan": ".ai/plans/M2.2-navigation-registry-sidebar.md",
-      "notes": "Plan stub (2026-07-10). Introduces INavigationRegistry, RouteMetadata, RouteMetadataAttribute, RouteRegistry, AppSidebar, AppSidebarItem, AppNavItem. Applies [RouteMetadata] to every page; activates the Pages_AreReachable_Through_Registry architecture test. Promoted to a full plan when M2.1 closes."
+      "notes": "Plan expanded 2026-07-11 (in the M2.1 closeout session) from a `Draft` stub to a full plan in `Awaiting Approval` state. T-001 (M2.1) is Done, so the dependency is satisfied. The next session either approves the plan and starts M2.2 implementation, or amends the plan and re-submits. The M2.1 closeout session does NOT implement M2.2 (per the Progressive Coding Rule)."
     },
     {
       "id": "T-003",

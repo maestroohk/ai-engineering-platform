@@ -40,36 +40,34 @@
 ## Current Milestone
 
 - **Active milestone:** **M2 — Application Shell and
-  Navigation** (planned).
-- **M2 first slice:** **M2.1 — Application Shell
-  Foundation** (revised plan in
-  [`.ai/plans/M2.1-application-shell-skeleton.md`](./../../.ai/plans/M2.1-application-shell-skeleton.md),
-  status `Awaiting Approval`). The plan
-  revision (2026-07-10, M2 delivery-
-  reconciliation session) scopes M2.1 to the
-  shell foundation only: two layouts
+  Navigation** (active; M2.1 delivered 2026-07-11).
+- **M2.1 — Application Shell Foundation:**
+  **Delivered (2026-07-11).** The shell
+  foundation lands: two layouts
   (`AppLayout`, `AppEmptyLayout`), two
   placeholder shell components
   (`AppSidebarSlot`, `AppTopBarSlot`), one
   presentational helper (`AppShellRegion`),
   and the migration of the M1.1 chrome. The
+  five M1 template pages and `/design-system`
+  reach the new layout root in place. The
   sidebar items, top bar, breadcrumb,
   navigation registry, route metadata, page
   redesigns, and self-awareness dashboard are
   explicitly deferred to M2.2, M2.3, M2.4,
-  and M2.5.
-- **M2.2 / M2.3 / M2.4 plan stubs:** created
-  2026-07-10. Each is a concise plan stub
-  (objective, why separate, dependencies,
-  included scope, excluded scope, acceptance
-  criteria); promoted to a full plan when
-  the previous slice closes.
-  - `.ai/plans/M2.2-navigation-registry-sidebar.md`
-    (status `Draft`).
-  - `.ai/plans/M2.3-topbar-breadcrumbs.md`
-    (status `Draft`).
-  - `.ai/plans/M2.4-project-intelligence-dashboard.md`
-    (status `Draft`).
+  and M2.5. See
+  [`implementation-report-m2-1-application-shell-foundation.md`](./../../implementation-report-m2-1-application-shell-foundation.md).
+- **M2 next slice:** **M2.2 — Navigation
+  Registry and Sidebar.** The plan stub at
+  [`.ai/plans/M2.2-navigation-registry-sidebar.md`](./../../.ai/plans/M2.2-navigation-registry-sidebar.md)
+  is now expanded to a full plan in
+  `Awaiting Approval` state.
+- **M2.3 / M2.4 plan stubs:** remain
+  concise summaries
+  (`.ai/plans/M2.3-topbar-breadcrumbs.md`,
+  `.ai/plans/M2.4-project-intelligence-dashboard.md`);
+  promoted to a full plan when the previous
+  slice closes.
 - **M2.5 / M2.6:** summary entries in the
   task board; planned in detail after M2.4 /
   M2.5 close.
@@ -87,16 +85,19 @@
 
 ## Current Slice
 
-- **Active slice:** **M2.1 — Application Shell
-  Foundation** (revised plan, 2026-07-10).
-- **Plan status:** `Awaiting Approval`.
-- **Implementation status:** not started; no code
-  changes have been authored for M2.1. The
-  session that delivered the M2
-  delivery-reconciliation revision has not
-  implemented M2.1 (per the brief: "Stop
-  after reconciliation. Do not implement
-  M2.1.").
+- **Active slice:** **M2.2 — Navigation
+  Registry and Sidebar** (plan expanded
+  2026-07-11 to `Awaiting Approval`).
+  Implementation has not started; per the
+  Progressive Coding Rule, M2.2 waits for
+  explicit user authorisation in the next
+  session.
+- **Last completed slice:** **M2.1 —
+  Application Shell Foundation** (delivered
+  2026-07-11). The branch
+  `feature/m2-1-application-shell` carries the
+  implementation; the closeout commit is
+  produced on this branch.
 - **M0.5 closeout:** the M0.5 refinement is
   closed in the M0.5 commit `1d98acd` (per
   Rule 17 in `AGENTS.md`); the state files
@@ -119,9 +120,9 @@
   improvements are landed. The architecture
   score is 23 → 42 (+19).
 - **M2 — Application Shell and Navigation:**
-  **Planned (M2.1 in revised plan, Awaiting
-  Approval; M2.2 / M2.3 / M2.4 plan stubs in
-  Draft).**
+  **Active (M2.1 Delivered 2026-07-11;
+  M2.2 plan Awaiting Approval; M2.3 / M2.4
+  plan stubs in Draft).**
 - **M3 through M8:** Planned; no evidence yet.
 
 ## Last Completed Milestone
@@ -140,109 +141,122 @@
 
 ## Last Completed Task
 
+- The M2.1 implementation session
+  (2026-07-11), which:
+  - Delivered M2.1 — Application Shell
+    Foundation per the revised plan
+    (`.ai/plans/M2.1-application-shell-skeleton.md`).
+    The plan was approved 2026-07-11 and
+    implementation followed § 16 (15-step
+    order) of the plan.
+  - Added the M2 shell foundation: two
+    layouts (`AppLayout`, `AppEmptyLayout`)
+    in `src/AiEng.Platform.App/Layouts/`,
+    two placeholder shell components
+    (`AppSidebarSlot`, `AppTopBarSlot`) and
+    the `AppShellRegion` presentational
+    helper in
+    `src/AiEng.Platform.App/Components/Shell/`,
+    four new bUnit test files (one per
+    component / layout), the M1.1 chrome
+    migration (the `MainLayout.razor` /
+    `NavMenu.razor` files are deleted), the
+    `Layouts/_Imports.razor` for cross-folder
+    type resolution, the Tailwind content
+    path update to include `Layouts/`, and
+    the wrap of `/design-system` and
+    `/not-found` in `AppEmptyLayout`.
+  - Updated the project-continuity state
+    per Rule 15 (`current.md`,
+    `task-board.md`, `session.json`,
+    `tasks.json`, `milestones.json`,
+    `handoffs/latest.md`), the matrix § 4
+    of `ROADMAP.md`, and produced
+    `implementation-report-m2-1-application-shell-foundation.md`.
+  - Promoted T-002 (M2.2) to `Ready` in
+    `tasks.json`; expanded the M2.2 plan
+    stub to a full plan in
+    `Awaiting Approval` state.
+  - The session does **not** implement
+    M2.2; per the Progressive Coding Rule,
+    M2.2 is the next session's
+    responsibility.
+  - The commit
+    `feat(m2.1): add application shell foundation`
+    is the closing receipt; no push
+    (no remote configured).
 - The M2 delivery-reconciliation session
-  (2026-07-10), which:
-  - Closed M0.5 with the coherent commit
-    `1d98acd`
-    (`docs(m0.5): add project intelligence and
-    structured delivery state`).
-  - Revised the M2.1 plan to remove
-    overlapping scope (no
-    `INavigationRegistry`, no
-    `RouteMetadata`, no `AppSidebar`, no
-    `AppNavItem`, no `AppTopBar`, no
-    `AppBreadcrumb`, no `RouteRegistry`, no
-    `Pages_AreReachable_Through_Registry`
-    architecture test, no final page
-    redesigns, no reconnect-modal changes,
-    no self-awareness dashboard). M2.1 now
-    scopes the **shell foundation** only.
-  - Created M2.2, M2.3, M2.4 plan stubs at
-    `.ai/plans/M2.2-navigation-registry-sidebar.md`,
-    `.ai/plans/M2.3-topbar-breadcrumbs.md`,
-    `.ai/plans/M2.4-project-intelligence-dashboard.md`.
-    Each stub is `Draft`; promoted to a
-    full plan when the previous slice
-    closes.
-  - Documented the **Progressive Coding
-    Rule** at
-    `.ai/workflows/progressive-coding.md`:
-    the AI may select only the first
-    `Ready` task whose dependencies are
-    complete and whose plan is `Approved`;
-    the AI does not automatically begin
-    the next task in the same session
-    unless the user explicitly authorises
-    grouped execution. The 13-step task
-    lifecycle is the per-task contract.
-  - Updated the delivery system: ROADMAP,
-    master-delivery-plan, task-board,
-    current.md, milestones.json,
-    features.json, capabilities.json,
-    tasks.json, session.json,
-    handoffs/latest.md.
-  - Produced the M2 reconciliation report
-    at
-    `reconciliation-report-m2-task-breakdown.md`.
-- The M0.5 architecture refinement session
   (2026-07-10) is the prior task; it
-  produced `VISION.md`, the `.ai/backlog/`,
-  the decision log, the capability
-  mapping, the structured state, the
-  self-awareness state, the dashboard
-  definition, the improved dogfooding
-  workflow, the documentation architecture
-  map, the architecture review, and the
-  M0.5 commit `1d98acd`.
+  revised the M2.1 plan, created the
+  M2.2 / M2.3 / M2.4 plan stubs, documented
+  the Progressive Coding Rule, and updated
+  the delivery system. The M0.5
+  architecture refinement session
+  (2026-07-10) is the prior-prior task.
 
 ## Active Branch
 
-- **`master`**.
+- **`feature/m2-1-application-shell`**.
+  The M2.1 implementation branch carries the
+  M2.1 closeout commit. The M0.5 closeout
+  commit `1d98acd` is the parent on
+  `master`; the M2.1 commit is the branch
+  tip. No remote is configured, so push is
+  skipped (the session records this
+  explicitly per the brief).
 
 ## Last Stable Commit
 
-- **`1d98acd`** — the M0.5 architecture
-  refinement commit
-  (`docs(m0.5): add project intelligence and
-  structured delivery state`); head of
-  `master` at the close of the M0.5
-  closeout session (2026-07-10). The
-  parent commit
+- The M2.1 closeout commit
+  `feat(m2.1): add application shell foundation`
+  on `feature/m2-1-application-shell`
+  (created 2026-07-11). The parent commit
+  `ba6c1e8` is the M2 delivery-reconciliation
+  commit
+  (`docs(m2): reconcile M2 task breakdown into
+  six non-overlapping slices`); the
+  grandparent `1d98acd` is the M0.5
+  architecture refinement commit
+  (`docs(m0.5): add project intelligence
+  and structured delivery state`); the
+  great-grandparent
   `8fae9517d2c10dceb90c6b3475f1635d5f86a8bd`
   is the M2 product-definition commit
   (`docs(product): add product vision,
   master delivery plan, and rule updates`).
-  The grandparent commit
-  `2ba1fad3cc45bee513ba38c7269e024bf8667ef9`
-  is the M1 closeout follow-up commit
-  (`chore(m1-closeout): finalise
-  project-continuity state after first
-  commit`). The great-grandparent commit
-  `1722bd235830cfd8b180191953116c058c92edef`
-  is the first commit of the repository
-  (`chore(m1-closeout): close M1 milestone
-  and prepare M2.1 plan`). The M2
-  delivery-reconciliation session is
-  documentation-only; no commit is
-  produced in this session (the M2
-  reconciliation is a plan revision,
-  not an implementation).
+  Working tree is clean at the close of
+  the M2.1 session.
 
 ## Application Status
 
 - **Runnable.** The Blazor Server app builds and
   serves on `http://localhost:5286`. The five M1
   routes (`/`, `/counter`, `/weather`,
-  `/design-system`, `/not-found`) all return 200. The
-  M1 chrome is in place; the M2 application shell is
-  not yet built.
+  `/design-system`, `/not-found`) all return 200.
+  The M2 application shell is in place:
+  `AppLayout` composes the `AppSidebarSlot`
+  (M2.2 placeholder), the `AppTopBarSlot` (M2.3
+  placeholder), and the content area; the
+  `data-app-region` attributes are present on
+  every region. `/design-system` and `/not-found`
+  use `AppEmptyLayout`. Light and dark themes
+  render correctly (the design-token contract is
+  unchanged from M1.1). The keyboard smoke test
+  passes: Tab through the shell; every
+  interactive element is reachable; focus is
+  visible.
 
 ## CSS Build Status
 
 - `npm run css:build` → exit 0. Output:
-  approximately 12,890 bytes minified at the close of
-  the M1 closeout session. All M1 design tokens are
-  present in the compiled CSS.
+  approximately 11,381 bytes minified at the
+  close of the M2.1 session. The M2.1
+  Tailwind content-path update adds
+  `Layouts/**/*.{razor,razor.css}` so any
+  utility classes used by the new layouts
+  are kept in the compiled CSS. All M1
+  design tokens are present in the compiled
+  CSS; no token has been added or removed.
 
 ## Build Status
 
@@ -254,15 +268,20 @@
 ## Test Status
 
 - `dotnet test AiEng.Platform.slnx --no-build` →
-  **80 passed, 4 skipped, 0 failed.**
-  - `AiEng.Platform.UnitTests`: 0 tests (no Domain
-    logic in M1).
-  - `AiEng.Platform.ComponentTests`: 77 bUnit
-    tests, all passing.
-  - `AiEng.Platform.ArchitectureTests`: 7 tests in
-    total — 3 active (passing) and 4
-    registered-but-disabled (skipped) per ADR-016
-    and the M4-D activation milestone.
+  **105 passed, 4 skipped, 0 failed.**
+  - `AiEng.Platform.UnitTests`: 0 tests (no
+    Domain logic in M1 or M2.1).
+  - `AiEng.Platform.ComponentTests`: 102
+    bUnit tests, all passing (77 M1.2 + 25
+    M2.1 — `AppLayoutTests` × 8,
+    `AppEmptyLayoutTests` × 6,
+    `AppSidebarSlotTests` × 5,
+    `AppTopBarSlotTests` × 6).
+  - `AiEng.Platform.ArchitectureTests`: 7
+    tests in total — 3 active (passing) and
+    4 registered-but-disabled (skipped) per
+    ADR-016 and the M4-D activation
+    milestone.
 
 ## Implemented Capabilities
 
@@ -280,6 +299,30 @@ The 19 M1.2 components, in five categories:
 - **Feedback (5):** `AppAlert`, `AppEmptyState`,
   `AppErrorState`, `AppLoading`, `AppSkeleton`.
 - **Inputs (1):** `AppInputLabel`.
+
+Plus the M2.1 application shell foundation
+(2 layouts + 2 placeholder shell components + 1
+presentational helper):
+
+- **Layouts (2):** `AppLayout` (the M2 layout
+  root; three-region composition:
+  `AppSidebarSlot` + `AppTopBarSlot` +
+  content area) and `AppEmptyLayout` (the
+  M2 alternate layout; no sidebar, no top
+  bar).
+- **Shell placeholder components (2):**
+  `AppSidebarSlot` (renders an
+  `AppEmptyState` saying "Sidebar lands
+  in M2.2") and `AppTopBarSlot` (renders an
+  `AppPageHeader` and an `AppAlert` saying
+  "Top bar lands in M2.3").
+- **Presentational helper (1):**
+  `AppShellRegion` (renders
+  `data-app-region="<name>"` and
+  `aria-label="<name>"`; the M2.5
+  accessibility audit and the M2.4
+  dashboard tests query the data
+  attribute).
 
 Plus the supporting infrastructure:
 
@@ -346,17 +389,19 @@ Plus the supporting infrastructure:
 ## Active Plan
 
 - [`.ai/plans/M2.1-application-shell-skeleton.md`](./../../.ai/plans/M2.1-application-shell-skeleton.md)
-  — M2.1, status `Awaiting Approval`
-  (revised 2026-07-10 per the M2
-  delivery-reconciliation brief). The
-  revised plan scopes M2.1 to the shell
-  foundation only (two layouts, two
-  placeholder shell components, one
-  presentational helper, MainLayout
-  migration). **This plan is not
-  implemented in this session.**
+  — M2.1, **Delivered (2026-07-11)**. The
+  closeout commit
+  `feat(m2.1): add application shell foundation`
+  is on
+  `feature/m2-1-application-shell`. The
+  plan is preserved in
+  `.ai/plans/M2.1-application-shell-skeleton.md`
+  for traceability; the status field
+  reflects the closeout.
 - [`.ai/plans/M2.2-navigation-registry-sidebar.md`](./../../.ai/plans/M2.2-navigation-registry-sidebar.md)
-  — M2.2 plan stub, status `Draft`.
+  — M2.2 plan, **Awaiting Approval**
+  (promoted from `Draft` to a full plan
+  in the M2.1 closeout session).
 - [`.ai/plans/M2.3-topbar-breadcrumbs.md`](./../../.ai/plans/M2.3-topbar-breadcrumbs.md)
   — M2.3 plan stub, status `Draft`.
 - [`.ai/plans/M2.4-project-intelligence-dashboard.md`](./../../.ai/plans/M2.4-project-intelligence-dashboard.md)
@@ -364,6 +409,9 @@ Plus the supporting infrastructure:
 
 ## Last Implementation Report
 
+- [`implementation-report-m2-1-application-shell-foundation.md`](./../../implementation-report-m2-1-application-shell-foundation.md)
+  — the M2.1 implementation report
+  (the closing receipt for M2.1, 2026-07-11).
 - [`implementation-report-m0.5-architecture-refinement.md`](./../../implementation-report-m0.5-architecture-refinement.md)
   — the M0.5 architecture refinement report
   (the closing receipt for M0.5).
@@ -373,19 +421,22 @@ Plus the supporting infrastructure:
   reconciliation session, 2026-07-10).
 - [`implementation-report-m1-closeout.md`](./../../implementation-report-m1-closeout.md)
   — the M1 closeout report (preceding
-  milestone; M0.5 and the M2
-  reconciliation preserve M1 evidence).
+  milestone; M0.5, the M2 reconciliation,
+  and the M2.1 closeout preserve M1
+  evidence).
 
 ## Next Recommended Task
 
-> **M2.1 — Application Shell Foundation.**
+> **M2.2 — Navigation Registry and Sidebar.**
 > Read
-> [`.ai/plans/M2.1-application-shell-skeleton.md`](./../../.ai/plans/M2.1-application-shell-skeleton.md).
-> The plan is `Awaiting Approval` (revised
-> 2026-07-10); the first action is to
-> either approve the plan (and start M2.1
-> implementation per the 15-step order in
-> § 16) or amend the plan and re-submit it.
+> [`.ai/plans/M2.2-navigation-registry-sidebar.md`](./../../.ai/plans/M2.2-navigation-registry-sidebar.md).
+> The plan is `Awaiting Approval` (the M2.1
+> closeout session expanded the M2.2 plan
+> stub to a full plan). The first action in
+> the next session is to either approve the
+> M2.2 plan (and start M2.2 implementation
+> per the plan's own order) or amend the
+> plan and re-submit it.
 > The next session follows the **Progressive
 > Coding Rule** in
 > [`.ai/workflows/progressive-coding.md`](./../../.ai/workflows/progressive-coding.md):
@@ -395,40 +446,42 @@ Plus the supporting infrastructure:
 The detailed breakdown of the M2 slices is
 in
 [`.ai/state/task-board.md`](./task-board.md)
-and the M2 plan stubs in
+and the M2 plan files in
 [`.ai/plans/`](./../../.ai/plans/). The
 next three actionable items are:
 
-1. **M2.1 — Application Shell Foundation**
-   (awaiting approval of the revised
-   plan; implementation follows § 16 of
-   the plan).
-2. **M2.2 — Navigation Registry and
-   Sidebar** (plan stub `Draft`;
-   promoted to a full plan when M2.1
+1. **M2.2 — Navigation Registry and
+   Sidebar** (plan `Awaiting Approval`;
+   implementation follows the plan's
+   own order).
+2. **M2.3 — Top Bar, Breadcrumbs, and
+   Page Headers** (plan stub `Draft`;
+   promoted to a full plan when M2.2
    closes).
 3. **M1 follow-up — Add `AppToolbar`
    example to `/design-system`**
    (cosmetic; the work is small and can
-   be folded into M2.1 if appropriate).
+   be folded into M2.2 if appropriate).
 
 ## Last Updated
 
-- **2026-07-10** (M2
-  delivery-reconciliation closeout;
-  this version supersedes the M0.5
-  closeout version). The M2
-  reconciliation session is
-  documentation-only; the session
-  revises the M2.1 plan, creates the
-  M2.2 / M2.3 / M2.4 plan stubs,
-  documents the Progressive Coding
-  Rule, updates the delivery
-  system, and produces the M2
-  reconciliation report. No
-  application code is modified; the
-  M0.5 commit `1d98acd` is the
-  most recent commit on `master`.
+- **2026-07-11** (M2.1 closeout
+  session). This version supersedes
+  the M2 delivery-reconciliation
+  version (2026-07-10). The M2.1
+  closeout session delivers the M2.1
+  shell foundation, runs the
+  validation suite (npm css:build,
+  dotnet build, dotnet test, dotnet
+  format, visual smoke test),
+  updates the project-continuity
+  state per Rule 15, produces
+  `implementation-report-m2-1-application-shell-foundation.md`,
+  and creates the M2.1 closeout
+  commit. The M2.1 commit is the
+  most recent commit on
+  `feature/m2-1-application-shell`;
+  no push (no remote configured).
 
 ## Linked Artefacts
 
@@ -445,10 +498,12 @@ next three actionable items are:
 - [`.ai/handoffs/2026-07-10-m1-closeout.md`](./../../.ai/handoffs/2026-07-10-m1-closeout.md) —
   the M1 closeout session handoff.
 - [`.ai/plans/M2.1-application-shell-skeleton.md`](./../../.ai/plans/M2.1-application-shell-skeleton.md) —
-  the revised M2.1 plan (Awaiting
-  Approval, 2026-07-10).
+  the revised M2.1 plan (Delivered,
+  2026-07-11).
 - [`.ai/plans/M2.2-navigation-registry-sidebar.md`](./../../.ai/plans/M2.2-navigation-registry-sidebar.md) —
-  the M2.2 plan stub (Draft, 2026-07-10).
+  the M2.2 plan (Awaiting Approval,
+  2026-07-11; promoted from `Draft` in the
+  M2.1 closeout session).
 - [`.ai/plans/M2.3-topbar-breadcrumbs.md`](./../../.ai/plans/M2.3-topbar-breadcrumbs.md) —
   the M2.3 plan stub (Draft, 2026-07-10).
 - [`.ai/plans/M2.4-project-intelligence-dashboard.md`](./../../.ai/plans/M2.4-project-intelligence-dashboard.md) —
@@ -482,8 +537,13 @@ next three actionable items are:
   M2 reconciliation session, 2026-07-10).
 - [`implementation-report-m1-closeout.md`](./../../implementation-report-m1-closeout.md)
   — the M1 closeout report (preceding
-  milestone; M0.5 and the M2
-  reconciliation preserve M1 evidence).
+  milestone; M0.5, the M2
+  reconciliation, and the M2.1 closeout
+  preserve M1 evidence).
+- [`implementation-report-m2-1-application-shell-foundation.md`](./../../implementation-report-m2-1-application-shell-foundation.md)
+  — the M2.1 implementation report
+  (the closing receipt for M2.1,
+  2026-07-11).
 - [`docs/dashboard.md`](./../../docs/dashboard.md)
   — the product dashboard definition (M0.5).
 - [`.ai/backlog/`](./../../.ai/backlog/) —

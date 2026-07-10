@@ -27,6 +27,8 @@ module.exports = {
     "./src/AiEng.Platform.App/Components/**/*.razor.css",
     "./src/AiEng.Platform.App/Components/**/*.cs",
     "./src/AiEng.Platform.App/Components/**/*.html",
+    "./src/AiEng.Platform.App/Layouts/**/*.razor",
+    "./src/AiEng.Platform.App/Layouts/**/*.razor.css",
     "./src/AiEng.Platform.App/Styles/**/*.css"
   ],
   theme: {

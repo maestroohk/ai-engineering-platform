@@ -1,0 +1,16 @@
+@namespace AiEng.Platform.App.Components.Shell
+
+<section class="app-region" data-app-region="@Name.ToLowerInvariant()" aria-label="@Name" @attributes="AdditionalAttributes">
+    @ChildContent
+</section>
+
+@code {
+    [Parameter]
+    public string Name { get; set; } = string.Empty;
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
+}

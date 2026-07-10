@@ -1,0 +1,21 @@
+@namespace AiEng.Platform.App.Layouts
+
+@inherits LayoutComponentBase
+
+<div class="app-shell-empty">
+    <main class="app-shell-empty-content">
+        <AppShellRegion Name="content">
+            <AppContainer>
+                <AppStack Gap="AppStackGap.Medium">
+                    @Body
+                </AppStack>
+            </AppContainer>
+        </AppShellRegion>
+    </main>
+</div>
+
+<div id="blazor-error-ui" data-nosnippet>
+    An unhandled error has occurred.
+    <a href="." class="reload">Reload</a>
+    <span class="dismiss">🗙</span>
+</div>
