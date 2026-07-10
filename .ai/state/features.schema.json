@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "$id": "https://aieng.platform/schemas/features.json",
+  "title": "AI Engineering Platform — Features",
+  "description": "The canonical machine-readable list of user-facing features. Derived from .ai/backlog/features.md and PRODUCT.md. When the two disagree, this JSON wins; the Markdown is regenerated.",
+  "type": "object",
+  "required": ["schema_version", "updated_at", "features"],
+  "properties": {
+    "schema_version": { "type": "string" },
+    "updated_at": { "type": "string", "format": "date-time" },
+    "features": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "status"],
+        "properties": {
+          "id": { "type": "string", "description": "F-NNN (matches .ai/backlog/features.md)" },
+          "title": { "type": "string" },
+          "status": { "enum": ["Done", "Accepted", "Proposed", "Deferred", "Rejected"] },
+          "product_capability_index": { "type": "integer", "description": "Index in PRODUCT.md 'Final Product Capabilities' list" },
+          "delivered_by_milestones": { "type": "array", "items": { "type": "string" } },
+          "depends_on_capabilities": { "type": "array", "items": { "type": "string" }, "description": "Capability IDs the feature requires" },
+          "user_journey_step": { "type": "integer", "description": "Step in the Core User Journey (PRODUCT.md)" }
+        }
+      }
+    }
+  }
+}

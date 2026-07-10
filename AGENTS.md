@@ -480,8 +480,29 @@ Fix the rule, not the codebase.
 
 ## 6. Document Map
 
+The project's documentation has a hierarchy. The
+destination is the most permanent; the live state is the
+most mutable. A document lower in the list may elaborate
+but never override a document higher in the list.
+
+| Tier | Document | Mutability | Purpose |
+| ---- | -------- | ---------- | ------- |
+| 1 (destination) | [`VISION.md`](./VISION.md) | Almost never changes. Project-founding changes only. | Why the project exists, what success looks like, the principles that never change. |
+| 2 (constitution) | [`AGENTS.md`](./AGENTS.md) | Changes only via ADR. | The non-negotiable rules every change must satisfy. |
+| 3 (architecture) | [`ARCHITECTURE.md`](./ARCHITECTURE.md) | Changes via PR review. | Layered architecture, boundaries, data flow, dependency rules. |
+| 4 (decisions) | [`DECISIONS.md`](./DECISIONS.md) | Append-only. | Architecture Decision Records. |
+| 5 (product) | [`PRODUCT.md`](./PRODUCT.md) | Changes via PR review (Rule 16). | The product as it is today: purpose, users, principles, journey. |
+| 6 (roadmap / delivery) | [`ROADMAP.md`](./ROADMAP.md), [`.ai/plans/master-delivery-plan.md`](./.ai/plans/master-delivery-plan.md) | Changes via PR review. | Milestones, slices, and the ordered delivery plan. |
+| 7 (standards) | `docs/*`, `STYLEGUIDE.md`, `CONTRIBUTING.md` | Changes via PR review. | The detailed engineering standards. |
+| 8 (operating layer) | `.ai/workflows/*`, `.ai/prompts/*`, `.ai/templates/*`, `.ai/state/*`, `.ai/handoffs/*`, `.ai/backlog/*` | Changes via PR review. | The AI operating layer: workflows, prompts, templates, state, handoffs, backlog. |
+| 9 (evidence / history) | `implementation-report-*.md`, git log | Append-only. | The receipt of every implementation, the project's history. |
+
+The full document map:
+
 | Document                                           | Purpose                                                            |
 | -------------------------------------------------- | ------------------------------------------------------------------ |
+| [`VISION.md`](./VISION.md)                         | The destination. The "why" that almost never changes.              |
+| [`AGENTS.md`](./AGENTS.md)                         | The constitution. The non-negotiable rules.                         |
 | [`ARCHITECTURE.md`](./ARCHITECTURE.md)             | Layered architecture, boundaries, data flow, dependency rules      |
 | [`ROADMAP.md`](./ROADMAP.md)                       | Ordered milestones, current focus, what is intentionally deferred   |
 | [`STYLEGUIDE.md`](./STYLEGUIDE.md)                 | Code style, C# conventions, Razor conventions, Tailwind discipline  |

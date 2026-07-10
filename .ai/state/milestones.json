@@ -1,0 +1,146 @@
+{
+  "schema_version": "1.0.0",
+  "updated_at": "2026-07-10T00:00:00Z",
+  "updated_by_session": "m0.5-architecture-refinement",
+  "milestones": [
+    {
+      "id": "M0",
+      "name": "Documentation Foundation",
+      "status": "Done",
+      "primary_outcome": "The repository contains the engineering standards, architecture foundation, and reusable development rules.",
+      "delivers_capabilities": [],
+      "consumes_capabilities": [],
+      "enables_milestones": ["M0.5", "M1", "M2", "M3", "M4-A", "M4-B", "M4-C", "M4-D", "M5", "M6", "M7", "M8"],
+      "evidence": {
+        "implementation_report": "implementation-report-m1-bootstrap.md"
+      }
+    },
+    {
+      "id": "M1",
+      "name": "Design System Core",
+      "status": "Done",
+      "closed_at": "2026-07-10",
+      "primary_outcome": "A runnable Blazor shell on .NET 10 that renders the design system documentation page. The base primitive components exist and are used by the documentation page.",
+      "delivers_capabilities": ["C-020"],
+      "consumes_capabilities": [],
+      "enables_milestones": ["M2", "M3", "M4-A", "M4-B", "M4-C", "M4-D", "M5", "M6", "M7", "M8"],
+      "evidence": {
+        "implementation_report": "implementation-report-m1-closeout.md",
+        "handoff": ".ai/handoffs/2026-07-10-m1-closeout.md",
+        "commits": ["1722bd235830cfd8b180191953116c058c92edef", "2ba1fad3cc45bee513ba38c7269e024bf8667ef9"]
+      }
+    },
+    {
+      "id": "M0.5",
+      "name": "Architecture Refinement and Project Intelligence",
+      "status": "In Progress",
+      "primary_outcome": "Strengthen the long-term engineering foundation: introduce VISION.md, the engineering backlog, structured state, decision log, capability mapping, dashboard definition, self-awareness state, and the dogfooding evolution. Validate the documentation architecture.",
+      "delivers_capabilities": ["C-020", "C-019"],
+      "consumes_capabilities": ["C-020"],
+      "enables_milestones": ["M2"],
+      "evidence": {
+        "implementation_report": "implementation-report-m0.5-architecture-refinement.md (this session)"
+      }
+    },
+    {
+      "id": "M2",
+      "name": "Application Shell and Navigation",
+      "status": "Planned",
+      "primary_outcome": "The shell has a sidebar, a top bar, and a content panel. The platform is navigable; every navigation target renders an empty state that uses the design system.",
+      "delivers_capabilities": ["C-019"],
+      "consumes_capabilities": ["C-020"],
+      "enables_milestones": ["M3", "M4-A", "M4-B", "M4-C", "M4-D", "M5", "M6", "M7", "M8"],
+      "evidence": {}
+    },
+    {
+      "id": "M3",
+      "name": "Project Registration",
+      "status": "Planned",
+      "primary_outcome": "A user can register a project (a folder on disk) and the platform owns a Project entity in the application layer.",
+      "delivers_capabilities": ["C-016"],
+      "consumes_capabilities": ["C-019", "C-020"],
+      "enables_milestones": ["M4-A", "M4-B", "M4-C", "M4-D", "M5", "M6", "M7", "M8"],
+      "evidence": {}
+    },
+    {
+      "id": "M4-A",
+      "name": "Infrastructure / Process Execution",
+      "status": "Planned",
+      "primary_outcome": "AiEng.Platform.Infrastructure is created. IProcessRunner, ICredentialVault, IClock, and the on-disk IProjectStore land. M3 in-memory store is replaced.",
+      "delivers_capabilities": ["C-012", "C-013", "C-014"],
+      "consumes_capabilities": ["C-016", "C-019", "C-020"],
+      "enables_milestones": ["M4-B", "M4-C", "M4-D", "M5", "M6", "M7", "M8"],
+      "evidence": {}
+    },
+    {
+      "id": "M4-B",
+      "name": "Capability Detection",
+      "status": "Planned",
+      "primary_outcome": "The host detects git, ollama, powershell.exe, wsl.exe, wt.exe, bash.exe through IProcessRunner and produces a typed HostCapabilities report.",
+      "delivers_capabilities": ["C-015"],
+      "consumes_capabilities": ["C-012", "C-013", "C-014", "C-019", "C-020"],
+      "enables_milestones": ["M4-C", "M4-D", "M5", "M6", "M7", "M8"],
+      "evidence": {}
+    },
+    {
+      "id": "M4-C",
+      "name": "Provider Registry Foundation",
+      "status": "Planned",
+      "primary_outcome": "IProviderRegistry and the family-scoped registries are introduced with fake providers; the composition root pattern is in place.",
+      "delivers_capabilities": ["C-001", "C-010", "C-011", "C-018"],
+      "consumes_capabilities": ["C-012", "C-013", "C-014", "C-015", "C-019", "C-020"],
+      "enables_milestones": ["M4-D", "M5", "M6", "M7", "M8"],
+      "evidence": {}
+    },
+    {
+      "id": "M4-D",
+      "name": "First Concrete Process Providers",
+      "status": "Planned",
+      "primary_outcome": "GitProvider and OllamaLaunchProvider land as concrete process-boundary providers; the contract test framework is established; the four composition-root architecture tests activate; the No_DirectProcessStart_OutsideInfrastructure test activates.",
+      "delivers_capabilities": ["C-002", "C-003"],
+      "consumes_capabilities": ["C-001", "C-010", "C-011", "C-012", "C-013", "C-014", "C-015", "C-018", "C-019", "C-020"],
+      "enables_milestones": ["M5", "M6", "M7", "M8"],
+      "evidence": {}
+    },
+    {
+      "id": "M5",
+      "name": "Native Git Worktrees",
+      "status": "Planned",
+      "primary_outcome": "A user can create a native Git worktree from a registered project; the worktree is the unit of work for later milestones.",
+      "delivers_capabilities": ["C-005"],
+      "consumes_capabilities": ["C-001", "C-002", "C-003", "C-010", "C-011", "C-012", "C-013", "C-014", "C-016", "C-018", "C-019", "C-020"],
+      "enables_milestones": ["M6", "M7", "M8"],
+      "evidence": {}
+    },
+    {
+      "id": "M6",
+      "name": "Agent Runtime Launching",
+      "status": "Planned",
+      "primary_outcome": "A user can launch an agent runtime against a registered project's worktree; the launch is cancellable mid-stream; the terminal output is rendered; the execution history is persisted.",
+      "delivers_capabilities": ["C-004", "C-017", "C-021"],
+      "consumes_capabilities": ["C-001", "C-002", "C-003", "C-005", "C-010", "C-011", "C-012", "C-013", "C-014", "C-016", "C-018", "C-019", "C-020"],
+      "enables_milestones": ["M7", "M8"],
+      "evidence": {}
+    },
+    {
+      "id": "M7",
+      "name": "Review and Quality Gates",
+      "status": "Planned",
+      "primary_outcome": "A launched run can be reviewed (IReviewProvider) and gated (IQualityGateProvider). The native baselines are the first implementations; external tools (Lavish Axi, No Mistakes) are added through the registry when the user opts in.",
+      "delivers_capabilities": ["C-006", "C-007"],
+      "consumes_capabilities": ["C-001", "C-002", "C-003", "C-005", "C-010", "C-011", "C-012", "C-013", "C-014", "C-016", "C-017", "C-018", "C-019", "C-020", "C-021"],
+      "enables_milestones": ["M8"],
+      "evidence": {}
+    },
+    {
+      "id": "M8",
+      "name": "Autonomous Loops, Orchestration, Production Hardening",
+      "status": "Planned",
+      "primary_outcome": "The platform ships its remaining provider families (IAutonomousLoopProvider, IOrchestrationProvider) through native baselines, and the production-hardening work lands.",
+      "delivers_capabilities": ["C-008", "C-009"],
+      "consumes_capabilities": ["C-001", "C-002", "C-003", "C-004", "C-005", "C-006", "C-007", "C-010", "C-011", "C-012", "C-013", "C-014", "C-015", "C-016", "C-017", "C-018", "C-019", "C-020", "C-021"],
+      "enables_milestones": [],
+      "evidence": {}
+    }
+  ]
+}

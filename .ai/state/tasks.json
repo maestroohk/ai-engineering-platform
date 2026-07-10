@@ -1,0 +1,110 @@
+{
+  "schema_version": "1.0.0",
+  "updated_at": "2026-07-10T00:00:00Z",
+  "updated_by_session": "m0.5-architecture-refinement",
+  "tasks": [
+    {
+      "id": "T-001",
+      "title": "M2.1 — Application Shell Skeleton",
+      "status": "Ready",
+      "milestone": "M2",
+      "slice": "M2.1",
+      "created_at": "2026-07-10T00:00:00Z",
+      "plan": ".ai/plans/M2.1-application-shell-skeleton.md",
+      "notes": "Plan Awaiting Approval. The first action is to approve the plan and start implementation, or amend the plan and re-submit."
+    },
+    {
+      "id": "T-002",
+      "title": "M2.2 — Sidebar and navigation registry",
+      "status": "Deferred",
+      "milestone": "M2",
+      "slice": "M2.2",
+      "notes": "Summary entry. Will be planned in detail after M2.1 is closed."
+    },
+    {
+      "id": "T-003",
+      "title": "M2.3 — AppLayout, EmptyLayout, AppDialog, AppTabs",
+      "status": "Deferred",
+      "milestone": "M2",
+      "slice": "M2.3",
+      "notes": "Summary entry. Will be planned in detail after M2.2 is closed."
+    },
+    {
+      "id": "T-004",
+      "title": "M1 follow-up — Add AppToolbar example to /design-system",
+      "status": "Ready",
+      "milestone": "M1",
+      "created_at": "2026-07-10T00:00:00Z",
+      "notes": "Cosmetic; the AppToolbar component ships and is unit-tested, but the DesignSystem.razor page does not include a Toolbar section. 18/19 component CSS classes appear in the rendered HTML. The work is small and can be folded into M2.1 if appropriate."
+    },
+    {
+      "id": "T-005",
+      "title": "M1 dogfooding — lavish-axi design-system review",
+      "status": "Blocked",
+      "milestone": "M1",
+      "created_at": "2026-07-10T00:00:00Z",
+      "blocker": "lavish-axi is not installed on the host. The only artefact on the filesystem is agent-workbench/tools/lavish-axi.md, a spec for an event-bus daemon, not a review tool. See .ai/reviews/M1-design-system-lavish-axi-review.md.",
+      "notes": "Defer indefinitely; resume when lavish-axi is installed or when an alternative review tool is available."
+    },
+    {
+      "id": "T-006",
+      "title": "M2 — Application Shell and Navigation (summary)",
+      "status": "Deferred",
+      "milestone": "M2",
+      "notes": "M2.1, M2.2, M2.3, M2.4, M2.5, M2.6 in the master delivery plan. Awaiting T-001 (M2.1)."
+    },
+    {
+      "id": "T-007",
+      "title": "M3 — Project Registration (summary)",
+      "status": "Deferred",
+      "milestone": "M3",
+      "notes": "Awaits M2."
+    },
+    {
+      "id": "T-008",
+      "title": "M4 — Process Execution, Capability Detection, Provider Registry (summary)",
+      "status": "Deferred",
+      "milestone": "M4",
+      "notes": "Slices M4-A, M4-B, M4-C, M4-D in the master delivery plan. Awaits M3."
+    },
+    {
+      "id": "T-009",
+      "title": "M5 — Native Git Worktrees (summary)",
+      "status": "Deferred",
+      "milestone": "M5",
+      "notes": "Awaits M4-D."
+    },
+    {
+      "id": "T-010",
+      "title": "M6 — Agent Runtime Launching (summary)",
+      "status": "Deferred",
+      "milestone": "M6",
+      "notes": "Awaits M5."
+    },
+    {
+      "id": "T-011",
+      "title": "M7 — Review and Quality Gates (summary)",
+      "status": "Deferred",
+      "milestone": "M7",
+      "notes": "Awaits M6."
+    },
+    {
+      "id": "T-012",
+      "title": "M8 — Autonomous Loops, Orchestration, Production Hardening (summary)",
+      "status": "Deferred",
+      "milestone": "M8",
+      "notes": "Awaits M7."
+    },
+    {
+      "id": "T-013",
+      "title": "M0.5 — Architecture Refinement and Project Intelligence (summary)",
+      "status": "In Progress",
+      "milestone": "M0.5",
+      "owner": "m0.5-architecture-refinement session",
+      "created_at": "2026-07-10T00:00:00Z",
+      "claimed_at": "2026-07-10T00:00:00Z",
+      "implementation_report": "implementation-report-m0.5-architecture-refinement.md (this session)",
+      "notes": "The 10 required improvements: VISION.md, .ai/backlog/, structured state, decision log, capability mapping, dashboard definition, self-awareness state, dogfooding evolution, doc architecture validation, architecture review."
+    }
+  ]
+}

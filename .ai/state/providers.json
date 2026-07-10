@@ -1,0 +1,211 @@
+{
+  "schema_version": "1.0.0",
+  "updated_at": "2026-07-10T00:00:00Z",
+  "updated_by_session": "m0.5-architecture-refinement",
+  "providers": [
+    {
+      "id": "git",
+      "display_name": "Git",
+      "family": "C-003",
+      "kind": "external",
+      "external_tool_name": "Git for Windows",
+      "binary": "git.exe",
+      "lifecycle_state": "Compiled-in",
+      "lifecycle_event": "not-yet-registered",
+      "delivered_by_milestone": "M4-D"
+    },
+    {
+      "id": "ollama-launch",
+      "display_name": "Ollama Launch",
+      "family": "C-002",
+      "kind": "external",
+      "external_tool_name": "Ollama",
+      "binary": "ollama.exe launch",
+      "lifecycle_state": "Compiled-in",
+      "lifecycle_event": "not-yet-registered",
+      "delivered_by_milestone": "M4-D"
+    },
+    {
+      "id": "claude",
+      "display_name": "Claude",
+      "family": "C-002",
+      "kind": "external",
+      "external_tool_name": "Anthropic Claude",
+      "binary": "claude",
+      "lifecycle_state": "Compiled-in",
+      "lifecycle_event": "not-yet-registered",
+      "delivered_by_milestone": "M8"
+    },
+    {
+      "id": "openai",
+      "display_name": "OpenAI",
+      "family": "C-002",
+      "kind": "external",
+      "external_tool_name": "OpenAI",
+      "binary": "openai",
+      "lifecycle_state": "Compiled-in",
+      "lifecycle_event": "not-yet-registered",
+      "delivered_by_milestone": "M8"
+    },
+    {
+      "id": "codex",
+      "display_name": "Codex",
+      "family": "C-002",
+      "kind": "external",
+      "external_tool_name": "OpenAI Codex",
+      "binary": "codex",
+      "lifecycle_state": "Compiled-in",
+      "lifecycle_event": "not-yet-registered",
+      "delivered_by_milestone": "M8"
+    },
+    {
+      "id": "powershell",
+      "display_name": "PowerShell",
+      "family": "C-004",
+      "kind": "external",
+      "external_tool_name": "PowerShell",
+      "binary": "powershell.exe",
+      "lifecycle_state": "Compiled-in",
+      "lifecycle_event": "not-yet-registered",
+      "delivered_by_milestone": "M6"
+    },
+    {
+      "id": "windows-terminal",
+      "display_name": "Windows Terminal",
+      "family": "C-004",
+      "kind": "external",
+      "external_tool_name": "Windows Terminal",
+      "binary": "wt.exe",
+      "lifecycle_state": "Compiled-in",
+      "lifecycle_event": "not-yet-registered",
+      "delivered_by_milestone": "M6"
+    },
+    {
+      "id": "wsl",
+      "display_name": "WSL",
+      "family": "C-004",
+      "kind": "external",
+      "external_tool_name": "Windows Subsystem for Linux",
+      "binary": "wsl.exe",
+      "lifecycle_state": "Compiled-in",
+      "lifecycle_event": "not-yet-registered",
+      "delivered_by_milestone": "M6"
+    },
+    {
+      "id": "git-bash",
+      "display_name": "Git Bash",
+      "family": "C-004",
+      "kind": "external",
+      "external_tool_name": "Git Bash",
+      "binary": "bash.exe",
+      "lifecycle_state": "Compiled-in",
+      "lifecycle_event": "not-yet-registered",
+      "delivered_by_milestone": "M6"
+    },
+    {
+      "id": "native-worktree",
+      "display_name": "Native Git Worktree",
+      "family": "C-005",
+      "kind": "native-baseline",
+      "implementation": "AiEng.Platform.Application/Worktrees/NativeWorktreeProvider (concrete provider project added in M5)",
+      "lifecycle_state": "Compiled-in",
+      "lifecycle_event": "not-yet-registered",
+      "delivered_by_milestone": "M5"
+    },
+    {
+      "id": "treehouse",
+      "display_name": "Treehouse",
+      "family": "C-005",
+      "kind": "external",
+      "external_tool_name": "Treehouse",
+      "binary": "treehouse",
+      "lifecycle_state": "Compiled-in",
+      "lifecycle_event": "not-yet-registered",
+      "delivered_by_milestone": "M5-dogfood-only"
+    },
+    {
+      "id": "no-mistakes",
+      "display_name": "No Mistakes",
+      "family": "C-006",
+      "kind": "external",
+      "external_tool_name": "No Mistakes",
+      "binary": "no-mistakes",
+      "lifecycle_state": "Compiled-in",
+      "lifecycle_event": "not-yet-registered",
+      "delivered_by_milestone": "M7"
+    },
+    {
+      "id": "native-quality-gate",
+      "display_name": "Native Quality Gate",
+      "family": "C-006",
+      "kind": "native-baseline",
+      "implementation": "AiEng.Platform.Application/QualityGates/NativeQualityGateProvider",
+      "lifecycle_state": "Compiled-in",
+      "lifecycle_event": "not-yet-registered",
+      "delivered_by_milestone": "M7"
+    },
+    {
+      "id": "lavish-axi",
+      "display_name": "Lavish Axi",
+      "family": "C-007",
+      "kind": "external",
+      "external_tool_name": "Lavish Axi",
+      "binary": "lavish-axi",
+      "lifecycle_state": "Compiled-in",
+      "lifecycle_event": "not-yet-registered",
+      "delivered_by_milestone": "M7"
+    },
+    {
+      "id": "native-review",
+      "display_name": "Native Review",
+      "family": "C-007",
+      "kind": "native-baseline",
+      "implementation": "AiEng.Platform.Application/Review/NativeReviewProvider",
+      "lifecycle_state": "Compiled-in",
+      "lifecycle_event": "not-yet-registered",
+      "delivered_by_milestone": "M7"
+    },
+    {
+      "id": "gnhf",
+      "display_name": "GNHF",
+      "family": "C-008",
+      "kind": "external",
+      "external_tool_name": "GNHF",
+      "binary": "gnhf",
+      "lifecycle_state": "Compiled-in",
+      "lifecycle_event": "not-yet-registered",
+      "delivered_by_milestone": "M8"
+    },
+    {
+      "id": "native-autonomous-loop",
+      "display_name": "Native Autonomous Loop",
+      "family": "C-008",
+      "kind": "native-baseline",
+      "implementation": "AiEng.Platform.Application/AutonomousLoop/NativeAutonomousLoopProvider",
+      "lifecycle_state": "Compiled-in",
+      "lifecycle_event": "not-yet-registered",
+      "delivered_by_milestone": "M8"
+    },
+    {
+      "id": "firstmate",
+      "display_name": "Firstmate",
+      "family": "C-009",
+      "kind": "external",
+      "external_tool_name": "Firstmate",
+      "binary": "firstmate (through WSL)",
+      "lifecycle_state": "Compiled-in",
+      "lifecycle_event": "not-yet-registered",
+      "delivered_by_milestone": "M8"
+    },
+    {
+      "id": "native-orchestration",
+      "display_name": "Native Orchestration",
+      "family": "C-009",
+      "kind": "native-baseline",
+      "implementation": "AiEng.Platform.Application/Orchestration/NativeOrchestrationProvider",
+      "lifecycle_state": "Compiled-in",
+      "lifecycle_event": "not-yet-registered",
+      "delivered_by_milestone": "M8"
+    }
+  ]
+}

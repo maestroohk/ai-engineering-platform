@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "$id": "https://aieng.platform/schemas/tasks.json",
+  "title": "AI Engineering Platform — Tasks",
+  "description": "The canonical machine-readable live work queue. Mirrors .ai/state/task-board.md. When the two disagree, this JSON wins; the Markdown is regenerated.",
+  "type": "object",
+  "required": ["schema_version", "updated_at", "tasks"],
+  "properties": {
+    "schema_version": { "type": "string" },
+    "updated_at": { "type": "string", "format": "date-time" },
+    "tasks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "status", "milestone"],
+        "properties": {
+          "id": { "type": "string", "description": "T-NNN" },
+          "title": { "type": "string" },
+          "status": { "enum": ["Ready", "In Progress", "Blocked", "Review", "Done", "Deferred"] },
+          "milestone": { "type": "string", "description": "Milestone ID the task belongs to" },
+          "slice": { "type": "string", "description": "Slice within the milestone (e.g. M2.1)" },
+          "owner": { "type": "string", "description": "Session or human that claimed the task" },
+          "created_at": { "type": "string", "format": "date-time" },
+          "claimed_at": { "type": "string", "format": "date-time" },
+          "completed_at": { "type": "string", "format": "date-time" },
+          "plan": { "type": "string", "description": "Path to the plan in .ai/plans/" },
+          "implementation_report": { "type": "string" },
+          "blocker": { "type": "string", "description": "Why the task is Blocked" },
+          "notes": { "type": "string" }
+        }
+      }
+    }
+  }
+}

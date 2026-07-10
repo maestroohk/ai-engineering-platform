@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "$id": "https://aieng.platform/schemas/milestones.json",
+  "title": "AI Engineering Platform — Milestones",
+  "description": "The canonical machine-readable list of milestones. Derived from ROADMAP.md and master-delivery-plan.md. When the two disagree, this JSON wins; the Markdown is regenerated.",
+  "type": "object",
+  "required": ["schema_version", "updated_at", "milestones"],
+  "properties": {
+    "schema_version": { "type": "string" },
+    "updated_at": { "type": "string", "format": "date-time" },
+    "milestones": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "status", "primary_outcome"],
+        "properties": {
+          "id": { "type": "string", "description": "M0, M1, M2, M3, M4-A, M4-B, M4-C, M4-D, M5, M6, M7, M8, M0.5" },
+          "name": { "type": "string" },
+          "status": { "enum": ["Done", "Planned", "In Progress", "Blocked"] },
+          "closed_at": { "type": "string", "format": "date", "description": "ISO date when the milestone was closed" },
+          "primary_outcome": { "type": "string" },
+          "delivers_capabilities": { "type": "array", "items": { "type": "string" }, "description": "Capability IDs (from capabilities.json) the milestone delivers" },
+          "consumes_capabilities": { "type": "array", "items": { "type": "string" }, "description": "Capability IDs the milestone consumes from earlier milestones" },
+          "enables_milestones": { "type": "array", "items": { "type": "string" }, "description": "Milestone IDs the milestone unblocks" },
+          "evidence": {
+            "type": "object",
+            "properties": {
+              "implementation_report": { "type": "string" },
+              "handoff": { "type": "string" },
+              "commits": { "type": "array", "items": { "type": "string" } }
+            }
+          },
+          "active_plan": { "type": "string", "description": "Path to the plan in .ai/plans/, when the milestone is in progress" }
+        }
+      }
+    }
+  }
+}

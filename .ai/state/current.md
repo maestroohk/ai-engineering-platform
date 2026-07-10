@@ -6,6 +6,19 @@
 > reflect the actual state of the repository; the
 > repository wins when the two disagree (see
 > `.ai/session-start.md` step 6 — state reconciliation).
+>
+> **State architecture (M0.5).** This file is the
+> human-readable projection. The canonical machine-readable
+> state is in `.ai/state/*.json` (the JSON files are the
+> source of truth; this file is regenerated from them).
+> The capability model is in
+> [`.ai/state/capabilities.json`](./capabilities.json);
+> the human-readable projection is in
+> [`.ai/state/capability-mapping.md`](./capability-mapping.md).
+> Small in-flight decisions are in
+> [`.ai/state/decision-log.md`](./decision-log.md).
+> The self-awareness state is in
+> [`.ai/state/session.json`](./session.json).
 
 ## Product
 
@@ -32,6 +45,16 @@
   Skeleton** (plan in
   [`.ai/plans/M2.1-application-shell-skeleton.md`](./../../.ai/plans/M2.1-application-shell-skeleton.md),
   status `Awaiting Approval`).
+- **M0.5 — Architecture Refinement and Project
+  Intelligence:** **Done (closed 2026-07-10).**
+  M0.5 is the refinement that lands between M1
+  and M2. It is not a product milestone. The
+  ten M0.5 improvements are landed; the
+  architecture score is 23 → 42 (+19) on
+  five dimensions. See
+  [`implementation-report-m0.5-architecture-refinement.md`](./../../implementation-report-m0.5-architecture-refinement.md)
+  and
+  [`.ai/handoffs/2026-07-10-m0.5-architecture-refinement.md`](./../../.ai/handoffs/2026-07-10-m0.5-architecture-refinement.md).
 
 ## Current Slice
 
@@ -40,30 +63,56 @@
 - **Plan status:** `Awaiting Approval`.
 - **Implementation status:** not started; no code
   changes have been authored for M2.1.
+- **M0.5 closeout:** the M0.5 refinement is
+  closed in the M0.5 commit (per Rule 17 in
+  `AGENTS.md`); the state files are reconciled
+  with the repository; the
+  `.ai/handoffs/2026-07-10-m0.5-architecture-refinement.md`
+  handoff is written; the
+  `implementation-report-m0.5-architecture-refinement.md`
+  report is written. M0.5 does not modify
+  application code or completed milestones.
 
 ## Status
 
+- **M0 — Documentation Foundation:** **Done.**
 - **M1 — Design System Core:** **Done (closed
   2026-07-10).**
-- **M0 — Documentation Foundation:** **Done.**
+- **M0.5 — Architecture Refinement and Project
+  Intelligence:** **Done (closed 2026-07-10).**
+  Documentation-only refinement; the ten
+  improvements are landed. The architecture
+  score is 23 → 42 (+19).
 - **M2 — Application Shell and Navigation:**
   **Planned (M2.1 in plan, Awaiting Approval).**
 - **M3 through M8:** Planned; no evidence yet.
 
 ## Last Completed Milestone
 
-- **M1 — Design System Core**, closed **2026-07-10**.
-  See
+- **M0.5 — Architecture Refinement and Project
+  Intelligence**, closed **2026-07-10**. See
+  [`implementation-report-m0.5-architecture-refinement.md`](./../../implementation-report-m0.5-architecture-refinement.md)
+  and
+  [`.ai/handoffs/2026-07-10-m0.5-architecture-refinement.md`](./../../.ai/handoffs/2026-07-10-m0.5-architecture-refinement.md).
+- **M1 — Design System Core**, closed
+  **2026-07-10** (preceding milestone). The M1
+  evidence is unchanged by M0.5; see
   [`implementation-report-m1-closeout.md`](./../../implementation-report-m1-closeout.md)
   and
   [`.ai/handoffs/2026-07-10-m1-closeout.md`](./../../.ai/handoffs/2026-07-10-m1-closeout.md).
 
 ## Last Completed Task
 
-- The M1 closeout session (2026-07-10), which produced
-  the M1 closeout report, the project-continuity
-  system (Rule 15 in `AGENTS.md`), the M2.1 plan, and
-  the first two commits on `master`.
+- The M0.5 architecture refinement session
+  (2026-07-10), which produced `VISION.md`,
+  the `.ai/backlog/`, the decision log, the
+  capability mapping, the structured state
+  (six JSON files + six schemas), the
+  self-awareness state, the dashboard
+  definition, the improved dogfooding
+  workflow, the documentation architecture
+  map, the architecture review, and the
+  coherent commit.
 
 ## Active Branch
 
@@ -71,26 +120,23 @@
 
 ## Last Stable Commit
 
-- **`2ba1fad3cc45bee513ba38c7269e024bf8667ef9`** —
-  `chore(m1-closeout): finalise project-continuity
-  state after first commit`. This is the head of
-  `master`; the parent commit
-  `1722bd235830cfd8b180191953116c058c92edef` is the
-  first commit of the repository
-  (`chore(m1-closeout): close M1 milestone and prepare
-  M2.1 plan`).
-- **Note on state reconciliation:** the previous
-  version of this file recorded only
-  `1722bd2...` as the last commit. The repository now
-  has two commits. The previous version of this file
-  was updated at the end of the M1 closeout session to
-  reflect the single-commit state, but the closeout
-  session also produced a follow-up commit
-  (`2ba1fad`) before exiting. This state file is
-  reconciled with the repository as the first action of
-  the current session (2026-07-10). The reconciliation
-  is recorded in the new handoff
-  [`.ai/handoffs/latest.md`](./../../.ai/handoffs/latest.md).
+- The M0.5 commit is produced at session
+  end (per Rule 17 in `AGENTS.md`). At
+  the start of the M0.5 session the head
+  of `master` was
+  **`8fae9517d2c10dceb90c6b3475f1635d5f86a8bd`** —
+  the M2 product-definition commit. The
+  parent commit
+  `2ba1fad3cc45bee513ba38c7269e024bf8667ef9` is
+  the M1 closeout follow-up commit
+  (`chore(m1-closeout): finalise
+  project-continuity state after first commit`).
+  The grandparent commit
+  `1722bd235830cfd8b180191953116c058c92edef` is
+  the first commit of the repository
+  (`chore(m1-closeout): close M1 milestone and
+  prepare M2.1 plan`). The M0.5 commit supersedes
+  all three on `master`.
 
 ## Application Status
 
@@ -208,9 +254,13 @@ Plus the supporting infrastructure:
 
 ## Last Implementation Report
 
+- [`implementation-report-m0.5-architecture-refinement.md`](./../../implementation-report-m0.5-architecture-refinement.md)
+  — the M0.5 architecture refinement report
+  (the closing receipt for M0.5).
 - [`implementation-report-m1-closeout.md`](./../../implementation-report-m1-closeout.md)
-  — the M1 closeout report (the closing receipt
-  for M1).
+  — the M1 closeout report (the closing
+  receipt for M1, preceding M0.5; M0.5
+  preserves M1 evidence).
 
 ## Next Recommended Task
 
@@ -236,18 +286,24 @@ next three actionable items are:
 
 ## Last Updated
 
-- **2026-07-10** (state reconciliation; this
-  version supersedes the previous
-  post-closeout version which recorded only the
-  first commit; see the reconciliation note under
-  "Last Stable Commit").
+- **2026-07-10** (M0.5 architecture refinement
+  closeout; this version supersedes the
+  post-M2-product-definition version; the
+  M0.5 closeout produces the M0.5 commit
+  per Rule 17 in `AGENTS.md`).
 
 ## Linked Artefacts
 
+- [`VISION.md`](./../../VISION.md) — the
+  permanent vision document (M0.5;
+  tier 1 of the document hierarchy).
 - [`.ai/state/task-board.md`](./task-board.md) —
   the live work queue.
 - [`.ai/handoffs/latest.md`](./../../.ai/handoffs/latest.md) —
-  the most recent handoff.
+  the most recent handoff (the M0.5
+  closeout handoff).
+- [`.ai/handoffs/2026-07-10-m0.5-architecture-refinement.md`](./../../.ai/handoffs/2026-07-10-m0.5-architecture-refinement.md)
+  — the M0.5 closeout session handoff.
 - [`.ai/handoffs/2026-07-10-m1-closeout.md`](./../../.ai/handoffs/2026-07-10-m1-closeout.md) —
   the M1 closeout session handoff.
 - [`.ai/plans/M2.1-application-shell-skeleton.md`](./../../.ai/plans/M2.1-application-shell-skeleton.md) —
@@ -265,6 +321,21 @@ next three actionable items are:
   index (ADR-011 through ADR-016 are the
   relevant ones for M1 / M2).
 - [`AGENTS.md`](./../../AGENTS.md) — the
-  constitution (15 rules after the M1 closeout).
+  constitution (17 rules; Document Map in
+  § 6 includes the M0.5 tiered hierarchy).
 - [`.ai/session-start.md`](./../../.ai/session-start.md) —
   the operational sequence.
+- [`implementation-report-m0.5-architecture-refinement.md`](./../../implementation-report-m0.5-architecture-refinement.md)
+  — the M0.5 architecture review (the
+  closing receipt for M0.5).
+- [`implementation-report-m1-closeout.md`](./../../implementation-report-m1-closeout.md)
+  — the M1 closeout report (preceding
+  milestone; M0.5 preserves M1 evidence).
+- [`docs/dashboard.md`](./../../docs/dashboard.md)
+  — the product dashboard definition (M0.5).
+- [`.ai/backlog/`](./../../.ai/backlog/) —
+  the engineering backlog (M0.5).
+- [`.ai/state/decision-log.md`](./decision-log.md)
+  — the decision log (M0.5).
+- [`.ai/state/capability-mapping.md`](./capability-mapping.md)
+  — the capability mapping (M0.5).

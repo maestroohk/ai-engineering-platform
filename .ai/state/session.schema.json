@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "$id": "https://aieng.platform/schemas/session.json",
+  "title": "AI Engineering Platform — Session Self-Awareness",
+  "description": "The current AI session's self-awareness. Captures the session's id, type, scope, last action, current understanding, and intended next action. Updated at the start and end of every session. A future tool (or the platform itself) reads this file to know what the current session is doing.",
+  "type": "object",
+  "required": ["schema_version", "updated_at", "session_id", "session_type", "scope", "current_understanding", "intended_next_action"],
+  "properties": {
+    "schema_version": { "type": "string" },
+    "updated_at": { "type": "string", "format": "date-time" },
+    "session_id": { "type": "string", "description": "Unique session identifier (e.g. UUID or human-readable slug like 'm0.5-architecture-refinement')" },
+    "session_type": { "enum": ["bootstrap", "feature", "ui", "provider", "bugfix", "refactor", "testing", "architecture", "review", "release", "documentation"] },
+    "scope": {
+      "type": "object",
+      "properties": {
+        "milestone": { "type": "string", "description": "Milestone ID (e.g. M0.5, M2.1)" },
+        "task_id": { "type": "string", "description": "Task ID (e.g. T-001)" },
+        "plan": { "type": "string", "description": "Path to the active plan" },
+        "out_of_scope": { "type": "array", "items": { "type": "string" }, "description": "What this session is explicitly NOT doing" }
+      }
+    },
+    "current_understanding": {
+      "type": "object",
+      "description": "What the session believes about the project right now.",
+      "properties": {
+        "active_milestone": { "type": "string" },
+        "last_completed_milestone": { "type": "string" },
+        "last_stable_commit": { "type": "string" },
+        "build_status": { "enum": ["unknown", "passing", "failing"] },
+        "test_status": { "type": "string" }
+      }
+    },
+    "last_action": {
+      "type": "object",
+      "description": "The most recent action this session took.",
+      "properties": {
+        "at": { "type": "string", "format": "date-time" },
+        "kind": { "type": "string", "description": "e.g. 'created file', 'updated state', 'read document'" },
+        "target": { "type": "string", "description": "Path or identifier of the action's target" },
+        "outcome": { "type": "string" }
+      }
+    },
+    "intended_next_action": {
+      "type": "string",
+      "description": "The single most concrete next thing the session will do (per Rule 17 in AGENTS.md: tests, implementation report, project state updates, Git commit)."
+    },
+    "session_notes": {
+      "type": "string",
+      "description": "Free-form notes the session wants to leave for itself or the next session."
+    }
+  }
+}

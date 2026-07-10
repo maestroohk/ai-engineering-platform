@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "$id": "https://aieng.platform/schemas/providers.json",
+  "title": "AI Engineering Platform — Providers",
+  "description": "The canonical machine-readable list of concrete provider implementations and the lifecycle state of each (Compiled-in, Registered, Enabled, Healthy, Selected). See ARCHITECTURE.md § 4.5 and DECISIONS.md ADR-016 for the lifecycle state model.",
+  "type": "object",
+  "required": ["schema_version", "updated_at", "providers"],
+  "properties": {
+    "schema_version": { "type": "string" },
+    "updated_at": { "type": "string", "format": "date-time" },
+    "providers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "display_name", "family", "lifecycle_state", "delivered_by_milestone"],
+        "properties": {
+          "id": { "type": "string", "description": "Stable ProviderId (e.g. 'git', 'ollama-launch', 'claude')" },
+          "display_name": { "type": "string" },
+          "family": { "type": "string", "description": "Capability ID (e.g. C-003 for IGitProvider)" },
+          "implementation": { "type": "string", "description": "Project name (e.g. 'AiEng.Platform.Providers.Git')" },
+          "kind": { "enum": ["native-baseline", "external", "stub"] },
+          "lifecycle_state": { "enum": ["Compiled-in", "Registered", "Enabled", "Healthy", "Selected"] },
+          "lifecycle_event": { "type": "string", "description": "Last lifecycle event (compile, register, enable, health-check, select)" },
+          "lifecycle_at": { "type": "string", "format": "date-time" },
+          "delivered_by_milestone": { "type": "string" },
+          "external_tool_name": { "type": "string", "description": "When kind=external, the tool's product name" },
+          "binary": { "type": "string", "description": "The binary or URL the provider invokes" }
+        }
+      }
+    }
+  }
+}

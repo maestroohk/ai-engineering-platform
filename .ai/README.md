@@ -249,3 +249,117 @@ review rules as any other change:
   tool invocation; the workflow is the *permission* to use a
   tool under stated conditions, not an instruction to use one
   unprompted.
+
+---
+
+## 10. Documentation Architecture
+
+The repository holds more than code; it holds the
+documents that *define* what the code does, why it
+exists, how it is built, and what it will become.
+These documents are organised into **nine tiers**.
+Each tier has a single purpose, a single canonical
+file (or set of files), and a single
+mutation rule. The map below is the source of
+truth for "what document owns what kind of
+information" — when in doubt, walk the map from
+the top and place the new information at the
+lowest tier that can hold it.
+
+| #  | Tier                       | Canonical file(s)                                                                                       | Owns                                                                                | Mutation rule                                                    |
+| -- | -------------------------- | ------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| 1  | **Vision**                 | [`VISION.md`](../VISION.md)                                                                              | The destination. Why this project exists. What success looks like. The principles that never change. | Changes only when the destination changes; reviewed by humans. |
+| 2  | **Constitution**           | [`AGENTS.md`](../AGENTS.md)                                                                               | The 17 non-negotiable rules every contributor and AI follows.                       | Changes only via ADR (ADR is itself in tier 4).                  |
+| 3  | **Architecture**           | [`ARCHITECTURE.md`](../ARCHITECTURE.md), [`STYLEGUIDE.md`](../STYLEGUIDE.md)                              | The layered architecture, the boundaries, the dependency direction, the style.      | Changes via ADR; reviewed by humans.                             |
+| 4  | **Decisions**              | [`DECISIONS.md`](../DECISIONS.md)                                                                         | The accepted ADRs. The *why* behind every architectural or constitutional change.  | Append-only; a new ADR is added for every new decision. An ADR is rejected by superseding, never by deletion. |
+| 5  | **Product**                | [`PRODUCT.md`](../PRODUCT.md)                                                                             | The product definition. Who is the user. What problem is solved. What does success mean at the product level. | Changes via PR review; reviewed against Vision.                  |
+| 6  | **Roadmap / Delivery**     | [`ROADMAP.md`](../ROADMAP.md), [`.ai/plans/master-delivery-plan.md`](../.ai/plans/master-delivery-plan.md) | The milestone plan (M0-M8) and the master delivery plan that ties the backlog to the milestones. | Changes via PR review; reviewed against Product.                 |
+| 7  | **Standards**              | [`docs/`](./..) (folder)                                                                                 | Engineering standards: design system, component guidelines, UI principles, provider guidelines, coding standards, architecture principles, folder structure, dashboard definition. | Changes via PR review; per-document versioning.                  |
+| 8  | **Operating layer**        | [`.ai/`](./)                                                                                              | The AI collaboration hub: prompts, workflows, templates, handoffs, state, backlog, decision log, capability mapping. The instructions an AI follows *while* doing the work. | Changes via PR review; reviewed against Constitution (tier 2) and Standards (tier 7). |
+| 9  | **Evidence / History**     | [`.ai/handoffs/`](../.ai/handoffs/), implementation reports, review reports                              | The *record* of what happened. Every session leaves a handoff. Every milestone leaves an implementation report. Every review leaves a review report. | Append-only. Older evidence archives by handoff; nothing is rewritten. |
+
+### 10.1 Direction of Authority
+
+Authority flows **down** the tiers: Vision informs
+Constitution; Constitution constrains
+Architecture; Architecture constrains
+Standards; Standards inform the Operating layer;
+Evidence records what the Operating layer did
+under those constraints.
+
+The direction is one-way. Evidence never informs
+Vision; the Operating layer never overrides the
+Constitution; a Standard never contradicts the
+Architecture. A document at a lower tier that
+contradicts a document at a higher tier is a bug
+in the lower tier; the lower tier is fixed or
+removed, never the higher.
+
+### 10.2 Anti-Drift Rules
+
+| Drift                                                                  | Tier it would put out of order                      | Rule                                                                                |
+| ---------------------------------------------------------------------- | --------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| Re-stating a rule from `AGENTS.md` in a prompt                          | Operating layer duplicates Constitution             | A prompt that re-states a rule is treated as a bug; the prompt references the rule by its AGENTS.md number instead. |
+| Putting "what success looks like" in a roadmap row                      | Roadmap duplicates Vision / Product                 | The roadmap row links to the Vision section and the Product section; it does not re-state them. |
+| Putting "the architecture has four layers" in a workflow               | Operating layer duplicates Architecture              | The workflow references `ARCHITECTURE.md` by section number; it does not re-state the layer names. |
+| Putting a per-tool decision (e.g. "we will use Treehouse") in `AGENTS.md` | Constitution is asked to absorb a per-tool choice  | Per-tool choices go in the per-tool profile in `.ai/workflows/tool-dogfooding.md` § 4, or in an ADR, or in `.ai/state/providers.json`. The constitution stays generic. |
+| Putting the current implementation status in a design document         | Standards is asked to absorb the Evidence tier      | The current status lives in `.ai/state/current.md` and in the implementation report. The design document links to it. |
+| Putting a session handoff in `AGENTS.md`                                | Evidence leaks into Constitution                    | Handoffs live in `.ai/handoffs/`. The constitution has no per-session content.      |
+| Writing a rule in a workflow that contradicts `AGENTS.md`              | Operating layer overrides Constitution              | The workflow is rejected. The rule belongs in `AGENTS.md` (with an ADR) or in the workflow, but not both with disagreement. |
+
+The seven rows above are the only
+anti-drift rules this document maintains. A new
+rule is added when a real drift happens; the
+rule cites the drift.
+
+### 10.3 The Map in One Sentence
+
+> **Vision → Constitution → Architecture → Decisions
+> → Product → Roadmap/Delivery → Standards →
+> Operating layer → Evidence/History.**
+
+The map is the order in which an AI reads the
+repository's documents when starting a session
+(the first six are mandatory per
+[`.ai/session-start.md`](../.ai/session-start.md);
+the remaining three are read on demand). The map
+is also the order in which a new document is
+*placed* in the repository when it is created —
+a "what success looks like" sentence is placed
+in `VISION.md`; a "how do I run this" sentence
+is placed in `docs/`.
+
+### 10.4 Validation Status
+
+This map was added in the M0.5 architecture
+refinement (2026-07-10). The validation pass
+found that:
+
+- The 17 `AGENTS.md` rules are restated in zero
+  other documents (verified by a manual review of
+  `.ai/prompts/*.md`, `.ai/workflows/*.md`, and
+  `docs/*.md` for verbatim overlap with the
+  numbered rules).
+- The M0 / M1 / M1.1 / M1.2 implementation
+  reports do not contradict `PRODUCT.md`'s
+  product definition (verified by reading the
+  reports end-to-end).
+- The M2.1 plan does not contradict
+  `ARCHITECTURE.md` § 6 (the application-shell
+  layers) or `DECISIONS.md` ADR-005 (the
+  accessibility principle).
+- The per-tool decisions in
+  `.ai/state/providers.json` (the
+  `external_tool_name` and `binary` fields)
+  match the per-tool profiles in
+  `.ai/workflows/tool-dogfooding.md` § 4.
+
+A repeat of the validation pass is required
+whenever a new tier is added, when a new
+document is added that does not have a clear
+home in the map, or when an existing document
+changes tier (e.g. an architecture document
+becomes a standard). The validation pass is
+recorded in the implementation report of the
+session that performed it.
+

@@ -8,6 +8,17 @@
 > disagree (see `.ai/session-start.md` step 6 —
 > state reconciliation).
 >
+> **State architecture (M0.5).** This file is the
+> human-readable projection. The canonical machine-readable
+> work queue is in
+> [`.ai/state/tasks.json`](./tasks.json). The
+> capability graph is in
+> [`.ai/state/capabilities.json`](./capabilities.json);
+> the milestone list is in
+> [`.ai/state/milestones.json`](./milestones.json). The
+> two layers are kept in sync by every session that
+> changes the work queue.
+>
 > **Status codes:**
 >
 > - **Ready** — task is defined, no blocker, no owner.

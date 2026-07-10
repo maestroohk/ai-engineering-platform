@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "$id": "https://aieng.platform/schemas/capabilities.json",
+  "title": "AI Engineering Platform — Capabilities",
+  "description": "The canonical machine-readable capability graph. See .ai/state/capability-mapping.md for the human-readable projection. The 'depends_on' and 'consumed_by' arrays are the dependency model. The 'layer' is 0 (Infrastructure), 1 (Provider Model), 2 (Domain Orchestration), or 3 (User Surface).",
+  "type": "object",
+  "required": ["schema_version", "updated_at", "capabilities"],
+  "properties": {
+    "schema_version": { "type": "string" },
+    "updated_at": { "type": "string", "format": "date-time" },
+    "capabilities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "status", "layer", "category", "delivered_by_milestone"],
+        "properties": {
+          "id": { "type": "string", "description": "C-NNN (matches .ai/backlog/capabilities.md)" },
+          "title": { "type": "string" },
+          "status": { "enum": ["Done", "Accepted", "Proposed", "Deferred", "Rejected"] },
+          "layer": { "enum": [0, 1, 2, 3] },
+          "category": { "enum": ["Infrastructure", "ProviderModel", "DomainOrchestration", "UserSurface"] },
+          "description": { "type": "string" },
+          "depends_on": { "type": "array", "items": { "type": "string" } },
+          "consumed_by": { "type": "array", "items": { "type": "string" } },
+          "delivered_by_milestone": { "type": "string" },
+          "consumed_by_milestones": { "type": "array", "items": { "type": "string" } },
+          "adr": { "type": "string", "description": "ADR-NNN, or null if not graduated" },
+          "architecture_tests": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    }
+  }
+}

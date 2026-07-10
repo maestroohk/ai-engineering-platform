@@ -1,0 +1,30 @@
+{
+  "name": "AI Engineering Platform",
+  "version": "0.5.0",
+  "schema_version": "1.0.0",
+  "updated_at": "2026-07-10T00:00:00Z",
+  "updated_by_session": "m0.5-architecture-refinement",
+  "repository": "C:\\Users\\hkasozi\\source\\repos\\ai-engineering-platform",
+  "stack": {
+    "runtime": ".NET 10",
+    "language": "C# 14",
+    "ui_framework": "Blazor (Server)",
+    "styling": "Tailwind CSS v3 (semantic @apply classes)",
+    "test_runner": "xUnit 2.9.3",
+    "component_testing": "bUnit 2.7.2"
+  },
+  "deployment_target": "Windows 10/11 (desktop-first)",
+  "audience": "Professional developers, AI engineers, platform operators",
+  "documentation_root": "./",
+  "documents": {
+    "vision": "VISION.md",
+    "constitution": "AGENTS.md",
+    "architecture": "ARCHITECTURE.md",
+    "decisions": "DECISIONS.md",
+    "product": "PRODUCT.md",
+    "roadmap": "ROADMAP.md",
+    "master_delivery_plan": ".ai/plans/master-delivery-plan.md",
+    "standards_root": "docs/",
+    "ai_layer_root": ".ai/"
+  }
+}
