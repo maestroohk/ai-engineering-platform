@@ -80,20 +80,25 @@ In the order they must be read.
 
 1. `AGENTS.md`
 2. `.ai/session-start.md`
-3. `.ai/state/current.md` — the one-page snapshot
-4. `.ai/state/task-board.md` — the live work queue
-5. `.ai/handoffs/latest.md` — the most recent
+3. `PRODUCT.md` — the product definition; the
+   next session reads this to understand why
+   the project exists and what the final
+   product is.
+4. `.ai/state/current.md` — the one-page snapshot
+5. `.ai/state/task-board.md` — the live work queue
+6. `.ai/handoffs/latest.md` — the most recent
    handoff (this file, or its mirror)
-6. `.ai/prompts/<matching prompt>.md`
-7. The matching `task-brief.md`
-8. The matching `implementation-plan.md`
-9. Any ADR referenced in the plan
-10. Any other document the next session needs
+7. `.ai/prompts/<matching prompt>.md`
+8. The matching `task-brief.md`
+9. The matching `implementation-plan.md`
+10. Any ADR referenced in the plan
+11. Any other document the next session needs
 
 ## Linked Artefacts
 
 - `task-brief.md`
 - `implementation-plan.md`
+- `PRODUCT.md` — the product definition
 - The current commit hash: `git rev-parse HEAD`
 - The current branch: `git branch --show-current`
 - Any in-flight worktree or stash: `git worktree list`,

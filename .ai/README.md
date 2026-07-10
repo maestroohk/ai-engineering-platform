@@ -153,6 +153,36 @@ A human who wants an AI to *continue* work should paste the
 most recent `session-handoff.md` first, then the original
 `task-brief.md`, then the matching prompt.
 
+The first six files a new AI session reads, in order, are:
+
+1. `AGENTS.md` — the constitution.
+2. `.ai/session-start.md` — the operational sequence.
+3. [`PRODUCT.md`](../PRODUCT.md) — the product definition.
+4. [`.ai/state/current.md`](../.ai/state/current.md) — the
+   one-page snapshot.
+5. [`.ai/state/task-board.md`](../.ai/state/task-board.md) —
+   the live work queue.
+6. [`.ai/handoffs/latest.md`](../.ai/handoffs/latest.md) —
+   the most recent session handoff.
+
+The full session cycle is:
+
+```
+Read product and current state
+→ select one Ready task
+→ load or create its plan
+→ request approval
+→ mark task In Progress
+→ implement
+→ validate
+→ update documentation
+→ update state
+→ write implementation report
+→ commit
+→ push when authorised
+→ update latest handoff
+```
+
 ---
 
 ## 7. Closing an AI Session
@@ -170,11 +200,19 @@ An AI session ends correctly when:
    `.ai/state/task-board.md` are updated, and a handoff is
    written to `.ai/handoffs/YYYY-MM-DD-<slug>.md` and
    mirrored to `.ai/handoffs/latest.md`.
-6. A short message confirms what was done, what was not, and
+6. **The session's work is committed** (Rule 17 in
+   `AGENTS.md`): a single coherent commit per task (or per
+   task slice) that includes the implementation, the
+   documentation, the implementation report, the state
+   updates, and the handoff. The commit is local; pushing
+   requires explicit authorisation and is a separate
+   step.
+7. A short message confirms what was done, what was not, and
    what to read next.
 
 A session that ends silently — no implementation report, no
-handoff, no state update — is a session that did not end.
+handoff, no state update, no commit — is a session that did
+not end.
 
 ---
 

@@ -1,4 +1,4 @@
-# Session Handoff — 2026-07-10 — M1 Closeout
+# Session Handoff — 2026-07-10 — M2 Product Definition
 
 > **Format follows `.ai/templates/session-handoff.md`.**
 > **This file is also available as
@@ -6,311 +6,302 @@
 
 ## Task
 
-Close M1 (Design System Core) as a validated, committed
-milestone and introduce the project-continuity system
-(`.ai/state/` + `.ai/handoffs/`) so future AI sessions
-can determine where the project stopped and what task
-comes next.
+Define the product vision, create a master delivery plan,
+reconcile the project-continuity state with the actual
+repository, write a detailed M2.1 plan, update the AI
+operating rules to reflect the new session cycle, and
+update the handoff. **No application code was written
+in this session.** The session is planning-only; M2
+implementation is the next session's work.
 
-## Branch
+## Where the Project Currently Stands
 
-`master`. **First commit applied at the end of the
-session:** `1722bd235830cfd8b180191953116c058c92edef`
-— subject `chore(m1-closeout): close M1 milestone and
-prepare M2.1 plan`. 166 files committed. Working tree
-clean. No remote is configured; PART 7 was completed
-commit-only per user direction.
+- **Product defined.** `PRODUCT.md` is the root-level
+  product definition. It names the product, the
+  problem, the target user, the principles, the core
+  user journey, the final product capabilities, the
+  capability map, what the product is not, the
+  success criteria, the current delivery stage, and
+  the link to the delivery state.
+- **Master delivery plan written.**
+  `.ai/plans/master-delivery-plan.md` is the
+  delivery view of `ROADMAP.md` and covers every
+  milestone from M0 (Done) through M8 (Planned)
+  with a uniform structure: purpose, user-visible
+  outcome, major capabilities, dependencies,
+  completion status, evidence, and next milestone
+  enabled.
+- **Project-continuity state reconciled.** The
+  state files (`.ai/state/current.md`,
+  `.ai/state/task-board.md`) are now consistent
+  with the actual repository state (two commits
+  on `master`; the previous version of `current.md`
+  recorded only the first commit). The
+  reconciliation is recorded in this handoff.
+- **M2.1 plan updated.** The existing
+  `.ai/plans/M2.1-application-shell-skeleton.md`
+  plan is the canonical detailed plan for the
+  next task. A new front matter § 0 was added
+  to align the plan's structure with the
+  immediate-next-task brief; the existing 17
+  sections are unchanged. Status remains
+  `Awaiting Approval`.
+- **AI operating rules updated.** `AGENTS.md`,
+  `.ai/session-start.md`, `.ai/README.md`,
+  `.ai/workflows/feature-lifecycle.md`, and
+  the two templates
+  (`.ai/templates/implementation-report.md`,
+  `.ai/templates/session-handoff.md`) now
+  reflect the new session cycle and the new
+  rules.
+- **No application code touched.** No code
+  files were added, modified, or deleted.
 
-## Current Status
+## What Was Just Completed (this session)
 
-**M1 — Design System Core — CLOSED.**
-
-All seven ROADMAP M1 DoD items are satisfied. The M1.2
-session's known limitation — the missing
-`App_DoesNotReference_Providers_Implementations`
-architecture test and the four registered-but-disabled
-composition-root architecture tests — was closed by the
-M1 closeout session, which added all five tests to
-`tests/AiEng.Platform.ArchitectureTests/Boundaries/`.
-
-The M2.1 plan is drafted in
-`.ai/plans/M2.1-application-shell-skeleton.md` with
-status `Awaiting Approval`. The plan is referenced from
-`.ai/state/task-board.md` (Ready).
-
-## Work Completed
-
-### Part 1 — Verify M1 implementation
-
-- Ran the full validation suite: `npm run css:build`,
-  `dotnet restore`, `dotnet build`, `dotnet test`,
-  `dotnet format --verify-no-changes`. All green:
-  - `npm run css:build` → exit 0, 12,890 bytes.
-  - `dotnet build` → 0 warnings, 0 errors.
-  - `dotnet test` → 80 passed, 4 skipped, 0 failed.
-  - `dotnet format --verify-no-changes` → exit 0.
-- Started the Blazor app and probed the five
-  navigable routes: `/`, `/counter`, `/weather`,
-  `/design-system`, `/not-found` — all 200.
-- Verified 18/19 M1.2 component CSS classes appear in
-  the `/design-system` HTML. The missing one is
-  `app-toolbar` (cosmetic, not a DoD failure; the
-  component ships and is unit-tested).
-- Compared to the ROADMAP M1 DoD and found that two
-  DoD items were not satisfied by the shipped M1.2
-  work:
-  - `App_DoesNotReference_Providers_Implementations` —
-    not present.
-  - The four composition-root architecture tests
-    (`Only_CompositionRoot_MayReference_ConcreteProviders`,
-    `Pages_DoNotReference_ConcreteProviders`,
-    `Application_DoesNotReference_ConcreteProviders`,
-    `Components_DoNotInject_ConcreteProviders`) — not
-    present (the M1 DoD required them as
-    "registered but disabled").
-- Asked the user how to proceed. User chose "Add the
-  missing architecture tests first; keep it strictly
-  within the architecture-test project."
-
-### Part 1 follow-up — Add the five missing architecture tests
-
-- Added `AppDoesNotReferenceProvidersImplementationsTests.cs`
-  to `tests/AiEng.Platform.ArchitectureTests/Boundaries/`.
-  The test is **active**: it scans
-  `AiEng.Platform.App` (except `Composition/`) for
-  `using AiEng.Platform.Providers.<X>;` statements
-  and `new <X>Provider(...)` instantiations. In M1,
-  no `Providers.<X>` project exists, so the test
-  passes trivially.
-- Added `CompositionRootBoundaryTests.cs` with four
-  tests (`Only_CompositionRoot_MayReference_ConcreteProviders`,
-  `Pages_DoNotReference_ConcreteProviders`,
-  `Application_DoesNotReference_ConcreteProviders`,
-  `Components_DoNotInject_ConcreteProviders`), each
-  marked `[Fact(Skip = "…")]` with an explicit skip
-  message citing ADR-016 and M4-D as the activation
-  point. The tests are real, they compile, they
-  appear in the test list, and they will activate
-  when the first `Providers.<X>` project lands in
-  M4-D.
-- Re-ran the validation suite. **80 passed, 4
-  skipped, 0 failed** (up from 79 passed, 0
-  skipped). All seven M1 DoD items now satisfied.
-
-### Part 2 — Dogfood `lavish-axi` review (deferred)
-
-- `lavish-axi` is not installed on the host. The
-  only artefact on the filesystem is
-  `agent-workbench/tools/lavish-axi.md`, a spec
-  document for an event-bus daemon, not a review
-  tool. No review command is documented.
-- Asked the user how to proceed. User chose
-  "Defer PART 2 to a later session." The session
-  wrote `.ai/reviews/M1-design-system-lavish-axi-review.md`
-  documenting the prereq check, the
-  missing-binary finding, the documented-purpose
-  mismatch, and the three options for the next
-  session.
-
-### Part 3 — Project continuity system
-
-- Created `.ai/state/{README,current,task-board}.md`
-  and `.ai/handoffs/{README,latest}.md`. The README
-  files document the format and update cadence; the
-  state files capture the live state of the project;
-  the handoff is the M1 closeout session (this file).
-
-### Part 4 — Update AI session rules
-
-- (deferred to the next session — see "Unresolved
-  Issues" below)
-
-### Part 5 — M1 closeout
-
-- Wrote `implementation-report-m1-closeout.md` (see
-  the file). Documents the M1 closeout, the five
-  added architecture tests, the deferred `lavish-axi`
-  review, and the M2.1 plan reference.
-- Updated `ROADMAP.md` § 4 (Progressive self-dogfooding
-  matrix) to mark the four composition-root tests as
-  `Delivered (M1 closeout) — Active in M4-D`. The
-  matrix's M1 row now lists all architecture tests
-  with their actual delivery state.
-
-### Part 6 — Prepare M2.1 plan
-
-- Drafted `.ai/plans/M2.1-application-shell-skeleton.md`
-  with status `Awaiting Approval`. The plan is the
-  next session's contract; do not begin implementation
-  until the user approves it.
-
-### Part 7 — Git commit and push (commit-only)
-
-- `git remote -v` returned no output (no remote
-  configured). Asked the user how to proceed. User
-  chose "Commit only, no push."
-- The session ends with the M1 closeout artefacts
-  untracked in the working tree. The next session
-  creates the first commit (per the user direction).
-
-## Files Changed
-
-### Created (M1 closeout session)
-
-- `tests/AiEng.Platform.ArchitectureTests/Boundaries/AppDoesNotReferenceProvidersImplementationsTests.cs`
-- `tests/AiEng.Platform.ArchitectureTests/Boundaries/CompositionRootBoundaryTests.cs`
-- `.ai/state/README.md`
-- `.ai/state/current.md`
-- `.ai/state/task-board.md`
-- `.ai/handoffs/README.md`
-- `.ai/handoffs/latest.md`
-- `.ai/handoffs/2026-07-10-m1-closeout.md` (this file)
-- `.ai/reviews/M1-design-system-lavish-axi-review.md`
-- `implementation-report-m1-closeout.md`
+- `PRODUCT.md` (created).
+- `.ai/plans/master-delivery-plan.md` (created).
+- `.ai/state/current.md` (reconciled with
+  repository; the previous version was
+  inconsistent).
+- `.ai/state/task-board.md` (rebuilt with the
+  new structure; immediate next task + next two
+  follow-ups + M1 follow-ups + recently
+  completed work; later milestones kept at
+  one-summary-task-per-milestone).
 - `.ai/plans/M2.1-application-shell-skeleton.md`
-- (and updates to `AGENTS.md`, `.ai/session-start.md`,
-  `.ai/README.md`, `.ai/workflows/feature-lifecycle.md`,
-  `.ai/templates/implementation-report.md`,
-  `.ai/templates/session-handoff.md`, `ROADMAP.md` —
-  Part 4 of the closeout brief)
+  (front matter § 0 added; existing 17
+  sections preserved).
+- `AGENTS.md` (Rule 16 — "no redesign without
+  approval" — added; Rule 17 — "every
+  completed task leaves evidence" — added;
+  numbering updated to "Sixteen Non-Negotiable
+  Rules").
+- `.ai/session-start.md` (session cycle
+  updated; step 16 added for the commit).
+- `.ai/README.md` (the "Closing an AI Session"
+  section updated to reflect the new session
+  cycle).
+- `.ai/workflows/feature-lifecycle.md` (stage
+  8 "Report" updated to include the state
+  update, handoff, and commit steps; stage 4
+  "Resumption" updated; anti-patterns
+  updated).
+- `.ai/templates/implementation-report.md`
+  ("Project Continuity (Rule 15)" section
+  updated; "Linked Artefacts" updated to
+  reference `PRODUCT.md`).
+- `.ai/templates/session-handoff.md` (the
+  "Documents the Next Session Must Read" list
+  updated to put `PRODUCT.md` at the top;
+  "Linked Artefacts" updated).
+- `.ai/handoffs/latest.md` (this file).
 
-### Modified (none other than the Part 4 updates)
+## Current Branch
 
-None.
+- **`master`**.
 
-### Deleted
+## Current Git Status
 
-None.
+- **Working tree:** clean.
+- **Untracked files:** none.
+- **Modified files:** none.
+- **Recent commits:** two commits on `master`
+  (see "Last Stable Commit" below).
+- **Remote:** none configured.
 
-## Commands Run
+## Last Stable Commit
 
-In the order the session ran them:
+- **`2ba1fad3cc45bee513ba38c7269e024bf8667ef9`**
+  — `chore(m1-closeout): finalise
+  project-continuity state after first commit`.
+- **Parent commit:**
+  `1722bd235830cfd8b180191953116c058c92edef` —
+  `chore(m1-closeout): close M1 milestone and
+  prepare M2.1 plan`.
 
-1. `npm run css:build` — exit 0.
-2. `dotnet restore` — exit 0.
-3. `dotnet build AiEng.Platform.slnx --nologo` — exit 0, 0 warnings, 0 errors.
-4. `dotnet format AiEng.Platform.slnx --verify-no-changes` — exit 0.
-5. `dotnet test AiEng.Platform.slnx --nologo --no-build` — 80 passed, 4 skipped, 0 failed.
-6. `Start-Process dotnet run --project src/AiEng.Platform.App/...` (background) — app started on `http://localhost:5286`.
-7. `Invoke-WebRequest http://localhost:5286/{,/counter,/weather,/design-system,/not-found}` — all 200.
-8. `Invoke-WebRequest http://localhost:5286/css/app.css` — 200, 12,890 bytes.
-9. `dotnet build AiEng.Platform.slnx --nologo` (after the architecture tests) — exit 0.
-10. `dotnet test AiEng.Platform.slnx --nologo --no-build` (after the architecture tests) — 80 passed, 4 skipped, 0 failed.
-11. `dotnet format AiEng.Platform.slnx` (to normalise line endings on the new test files) — exit 0.
-12. `dotnet format AiEng.Platform.slnx --verify-no-changes` — exit 0.
+## State Reconciliation (2026-07-10)
 
-## Test Status
+The previous version of `.ai/state/current.md`
+recorded only the first commit (`1722bd2...`) as
+the last commit. The actual repository has two
+commits on `master`; the closeout session also
+produced a follow-up commit (`2ba1fad...`)
+before exiting. This session reconciles the
+state file with the repository: `current.md` now
+records `2ba1fad...` as the head of `master`
+and notes the reconciliation explicitly under
+"Last Stable Commit". The previous `current.md`
+described a state that did not match the
+repository; per `.ai/session-start.md` step 6
+(state reconciliation), the repository wins and
+the state file is updated to match.
 
-| Test project | Total | Passed | Skipped | Failed |
-| ------------ | ----- | ------ | ------- | ------ |
-| `AiEng.Platform.UnitTests` | 0 | 0 | 0 | 0 |
-| `AiEng.Platform.ComponentTests` | 77 | 77 | 0 | 0 |
-| `AiEng.Platform.ArchitectureTests` | 7 | 3 | 4 | 0 |
+## Build and Test Results
 
-The 4 skipped tests are the four composition-root
-architecture tests, registered-but-disabled per
-ADR-016 / M4-D. They activate when the first
-`Providers.<X>` project lands.
+The M1 closeout session's last validation:
 
-## Unresolved Issues
+- `npm run css:build` → exit 0.
+- `dotnet restore` → exit 0.
+- `dotnet build AiEng.Platform.slnx` → exit 0,
+  0 warnings, 0 errors.
+- `dotnet format AiEng.Platform.slnx
+  --verify-no-changes` → exit 0.
+- `dotnet test AiEng.Platform.slnx --no-build`
+  → **80 passed, 4 skipped, 0 failed.**
+  - `AiEng.Platform.ComponentTests`: 77
+    bUnit tests, all passing.
+  - `AiEng.Platform.ArchitectureTests`: 3
+    active + 4 registered-but-disabled.
+- `dotnet run --project
+  src/AiEng.Platform.App` → app starts on
+  `http://localhost:5286`; five routes return
+  200.
 
-- **Part 4 (Update AI session rules) is incomplete.**
-  The session ran out of time before completing the
-  AI-session-rule updates to add the
-  "Update `.ai/state/` and write a handoff" step to
-  the rule set (AGENTS.md, .ai/session-start.md,
-  .ai/README.md, .ai/workflows/feature-lifecycle.md,
-  .ai/templates/implementation-report.md,
-  .ai/templates/session-handoff.md). The state
-  files exist and document the rule, but the
-  upstream rules have not been amended. The next
-  session completes Part 4.
-- **`lavish-axi` review is deferred.** See
-  `.ai/reviews/M1-design-system-lavish-axi-review.md`
-  and the "Blocked" section of
-  `.ai/state/task-board.md`.
-- **No git remote.** PART 7 was completed commit-only.
-- **No commit yet.** The first commit is the next
-  session's first action per the task board.
+This session did not re-run the validation
+(no code changes). The committed state is the
+validated state from the M1 closeout session.
 
-## Exact Next Step
+## Active or Next Task
 
-The next session's first action is to **complete the
-M1 closeout session's Part 4** (update the AI session
-rules to enforce the continuity requirement), then
-**create the first commit** of the M1 closeout
-artefacts, then **pick up the M2.1 plan** from
-`.ai/state/task-board.md` (Ready, Awaiting Approval).
+- **Active task:** none. The M1 closeout
+  session closed M1; the next M2 implementation
+  session is the next active task.
+- **Next task:** **M2.1 — Application Shell
+  Skeleton**.
+- **Next task status:** plan
+  `Awaiting Approval`.
+- **Approved-plan path:**
+  [`.ai/plans/M2.1-application-shell-skeleton.md`](./../../.ai/plans/M2.1-application-shell-skeleton.md).
+- **First action:** review the M2.1 plan
+  (§ 0 front matter and § 1 – § 17 detailed
+  plan). Either approve the plan (and start
+  M2.1 implementation per § 0.8) or amend the
+  plan and re-submit.
 
-If the user wants a different order — for example,
-approve the M2.1 plan and start M2.1 implementation
-first — that is also valid; the order in this
-sentence is the default.
+## Exact Next Action
 
-## Documents the Next Session Must Read
+> The next AI session's first action is to
+> **read the M2.1 plan and decide whether to
+> approve it or amend it**. If approved, the
+> session begins implementation per § 0.8 of the
+> plan. If amended, the plan is updated in place
+> and re-submitted.
 
-1. `AGENTS.md` — the constitution.
-2. `.ai/session-start.md` — the 13-step procedure.
-3. `.ai/state/current.md` — the one-page snapshot.
-4. `.ai/state/task-board.md` — the live work queue.
-5. `.ai/handoffs/latest.md` — the most recent
+The plan is in
+[`.ai/plans/M2.1-application-shell-skeleton.md`](./../../.ai/plans/M2.1-application-shell-skeleton.md).
+The status is `Awaiting Approval`.
+
+## Documents the Next AI Session Must Read
+
+In the order they must be read:
+
+1. `AGENTS.md` — the constitution (now 17
+   non-negotiable rules after this session's
+   Rule 16 and Rule 17 additions).
+2. `.ai/session-start.md` — the operational
+   sequence (now 16 steps after this session's
+   step 16).
+3. [`PRODUCT.md`](./../../PRODUCT.md) — the
+   product definition (new in this session).
+4. [`.ai/state/current.md`](./../../.ai/state/current.md)
+   — the one-page snapshot.
+5. [`.ai/state/task-board.md`](./../../.ai/state/task-board.md)
+   — the live work queue.
+6. `.ai/handoffs/latest.md` — the most recent
    handoff (this file).
-6. `implementation-report-m1-closeout.md` — the M1
-   closeout report.
-7. The plan for the chosen task (e.g.
-   `.ai/plans/M2.1-application-shell-skeleton.md`).
+7. [`.ai/plans/master-delivery-plan.md`](./../../.ai/plans/master-delivery-plan.md)
+   — the master delivery plan.
+8. [`.ai/plans/M2.1-application-shell-skeleton.md`](./../../.ai/plans/M2.1-application-shell-skeleton.md)
+   — the M2.1 plan (Awaiting Approval).
+9. `ROADMAP.md` — the milestone plan
+   (authoritative for ordering and scope).
+10. `ARCHITECTURE.md` and `DECISIONS.md` —
+    the architecture and the decisions behind
+    it.
 
 ## Linked Artefacts
 
-- `AGENTS.md` — the constitution.
-- `.ai/session-start.md` — the 13-step procedure.
-- `.ai/state/{README,current,task-board}.md` — the
-  project-continuity state.
-- `.ai/handoffs/{README,latest,2026-07-10-m1-closeout}.md` —
-  the handoff set.
-- `.ai/reviews/M1-design-system-lavish-axi-review.md` —
-  the deferred PART 2 review record.
-- `.ai/plans/M2.1-application-shell-skeleton.md` —
-  the M2.1 plan (Awaiting Approval).
+- [`PRODUCT.md`](./../../PRODUCT.md) — the
+  product definition.
+- [`.ai/plans/master-delivery-plan.md`](./../../.ai/plans/master-delivery-plan.md)
+  — the master delivery plan.
+- [`.ai/state/current.md`](./../../.ai/state/current.md)
+  — the project-continuity state.
+- [`.ai/state/task-board.md`](./../../.ai/state/task-board.md)
+  — the live work queue.
+- [`.ai/plans/M2.1-application-shell-skeleton.md`](./../../.ai/plans/M2.1-application-shell-skeleton.md)
+  — the M2.1 plan (Awaiting Approval).
+- [`.ai/handoffs/2026-07-10-m1-closeout.md`](./../../.ai/handoffs/2026-07-10-m1-closeout.md)
+  — the M1 closeout session handoff.
+- [`.ai/reviews/M1-design-system-lavish-axi-review.md`](./../../.ai/reviews/M1-design-system-lavish-axi-review.md)
+  — the deferred `lavish-axi` review record.
+- `ROADMAP.md` — the milestone plan.
+- `DECISIONS.md` — ADR-011 (project set),
+  ADR-012 (capability-oriented families),
+  ADR-013 (progressive self-dogfooding),
+  ADR-014 (four-state rule conditional on
+  data ownership), ADR-015 (catalogue
+  versioning), ADR-016 (composition root +
+  5 lifecycle states).
 - `implementation-report-m1-bootstrap.md`,
   `implementation-report-m1-1-frontend-foundation.md`,
   `implementation-report-m1-2-design-system-core.md`,
-  `implementation-report-m1-closeout.md` — the M1
-  report set.
-- `ROADMAP.md` § 4 — the progressive
-  self-dogfooding matrix.
-- `DECISIONS.md` — ADR-011 (project set), ADR-012
-  (capability-oriented families), ADR-013
-  (progressive self-dogfooding), ADR-014
-  (four-state rule conditional on data ownership),
-  ADR-015 (catalogue versioning), ADR-016
-  (composition root + 5 lifecycle states).
-- `tests/AiEng.Platform.ArchitectureTests/Boundaries/` —
-  the seven architecture tests.
+  `implementation-report-m1-closeout.md` —
+  the M1 report set.
+- `tests/AiEng.Platform.ArchitectureTests/Boundaries/`
+  — the seven architecture tests (3 active +
+  4 registered-but-disabled).
 - `docs/design-system.md` — the design-system
-  catalogue (version 0.2.0).
-- `docs/component-guidelines.md` — the component
-  contract.
+  catalogue (version 0.2.0; bumps to 0.3.0 in
+  M2.1).
+- `docs/component-guidelines.md` — the
+  component contract.
+- `AGENTS.md` — the constitution (17 rules).
+- `.ai/session-start.md` — the 16-step
+  operational sequence.
+- `.ai/README.md` — the AI collaboration hub.
 
-## Post-Commit Validation
+## Deviations
 
-After the first commit (PART 7) the session re-ran
-the full validation suite against the committed
-working tree:
+- **None.** The session followed the brief
+  exactly: it created the product definition,
+  the master delivery plan, the state, the
+  task board, the M2.1 plan, the handoff, and
+  the AI-operating-rule updates. It did not
+  implement application code. It did not
+  reorder milestones. It did not invoke an
+  external tool. It performed a state
+  reconciliation (the only deviation from a
+  pure "create" session), which is the
+  documented remedy for a state-mismatch under
+  `.ai/session-start.md` step 6.
 
-- `npm run css:build` → exit 0, Done in 531ms.
-- `dotnet build AiEng.Platform.slnx --nologo` → exit
-  0. 0 warnings, 0 errors.
-- `dotnet format AiEng.Platform.slnx --verify-no-changes`
-  → exit 0 (clean).
-- `dotnet test AiEng.Platform.slnx --nologo --no-build`
-  → 80 passed, 4 skipped, 0 failed. (3 active
-  architecture tests + 77 bUnit tests passed; the 4
-  registered-but-disabled composition-root tests are
-  skipped per ADR-016 / M4-D.)
-- `git status` → working tree clean.
-- `git log --oneline` → `1722bd2 chore(m1-closeout):
-  close M1 milestone and prepare M2.1 plan`.
+## Known Limitations
 
-No post-commit drift. The committed state is the
-validated state.
+- **`lavish-axi` M1 review is deferred.** See
+  `.ai/reviews/M1-design-system-lavish-axi-review.md`.
+- **No git remote.** Adding a remote is a
+  separate decision.
+- **M2.1 plan is `Awaiting Approval`.** No M2
+  implementation has started.
+- **`AppToolbar` example is missing on
+  `/design-system`.** Cosmetic; tracked as
+  `M1-FU-1` in the task board.
+- **This session did not run `dotnet build` /
+  `dotnet test` / `dotnet format`.** No code
+  changed; the committed state is the M1
+  closeout session's validated state. The next
+  implementation session runs the full
+  validation per `.ai/session-start.md` step
+  12.
+
+## Last Updated
+
+- **2026-07-10** (M2 product-definition session).
+- This file is the most recent handoff. It
+  supersedes the M1 closeout handoff at
+  `.ai/handoffs/2026-07-10-m1-closeout.md`
+  for any "where are we now?" question; the
+  M1 closeout handoff remains the record of
+  the M1 closeout session's work.

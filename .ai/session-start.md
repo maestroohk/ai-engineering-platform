@@ -31,8 +31,8 @@ them. Do not parallelise the inspection of `AGENTS.md`,
 order because the later documents assume the earlier ones have
 been read.
 
-1. **Read `AGENTS.md`** in full. Internalise the 13 non-negotiable
-   rules and the precedence hierarchy.
+1. **Read `AGENTS.md`** in full. Internalise the 17
+   non-negotiable rules and the precedence hierarchy.
 2. **Read `.ai/session-start.md`** (this file) in full.
 3. **Classify the request** into exactly one of:
    - `bootstrap`
@@ -58,8 +58,13 @@ been read.
 6. **Inspect the current implementation.** Use the file tools
    to confirm what actually exists. Do not infer from filenames
    or memory. The repository is the source of truth.
-   **Read `.ai/state/current.md` and
-   `.ai/state/task-board.md` first** — they are the
+   **Read [`PRODUCT.md`](./../../PRODUCT.md) first**
+   — the product definition. The product definition
+   answers "why does this project exist?" and "what is
+   the final product?" — the questions the state
+   files cannot answer.
+   **Then read `.ai/state/current.md` and
+   `.ai/state/task-board.md`** — they are the
    single landing point for any new session. The next
    session resumes from the recorded state; if the
    state files do not match the repository, the
@@ -129,6 +134,39 @@ been read.
     A session that ends without these updates has
     not ended. The next session cannot determine
     where the project stopped.
+16. **Commit the session's work** (Rule 17 in
+    `AGENTS.md`). The implementation report, the
+    project-continuity state updates, and the
+    documentation changes are committed in a
+    single coherent commit per task (or per
+    task slice). The commit subject names the
+    milestone or task; the commit body
+    references the implementation report and the
+    approved plan. The session does **not** push
+    the commit; pushing is a separate decision
+    that requires explicit authorisation. The
+    session's working tree is clean at the end
+    of the commit; the next session reads the
+    commit hash from the implementation
+    report and from `.ai/state/current.md`.
+
+The full session cycle is therefore:
+
+```
+Read product and current state
+→ select one Ready task
+→ load or create its plan
+→ request approval
+→ mark task In Progress
+→ implement
+→ validate
+→ update documentation
+→ update state
+→ write implementation report
+→ commit
+→ push when authorised
+→ update latest handoff
+```
 
 ---
 

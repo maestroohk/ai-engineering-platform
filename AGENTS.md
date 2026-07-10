@@ -138,7 +138,7 @@ not a chat app, not a notebook. Every UI decision must reflect that.
 
 ---
 
-## 4. The Fifteen Non-Negotiable Rules
+## 4. The Seventeen Non-Negotiable Rules
 
 These rules are the **law of the project**. Each one is restated and explained
 in detail in the linked document, but the rule itself is binding from the
@@ -349,6 +349,89 @@ Concretely:
 This rule exists so future AI sessions (and humans returning to
 the project) can always determine where the project stopped and
 what task comes next.
+
+### Rule 16 — Scope Discipline
+**Reference:** [`PRODUCT.md`](./PRODUCT.md),
+[`ROADMAP.md`](./ROADMAP.md),
+[`.ai/plans/master-delivery-plan.md`](./.ai/plans/master-delivery-plan.md)
+
+The AI may derive smaller implementation tasks from an accepted
+milestone, but it may not redesign the product, reorder
+milestones, or expand scope without explicit approval.
+
+Concretely:
+
+- The product's identity is `PRODUCT.md`. A change to
+  `PRODUCT.md` is a product-redesign change and requires
+  explicit human approval and an ADR.
+- The roadmap's order is `ROADMAP.md`. Reordering
+  milestones requires an ADR recording the reason. The
+  plan brief may split a milestone into slices (e.g. M2
+  into M2.1, M2.2, M2.3, M2.4, M2.5, M2.6) but the
+  slices' order matches the milestone's acceptance
+  order; the slices do not bypass the milestone.
+- A change that adds a new component, a new service, a
+  new provider, or a new milestone is scope expansion.
+  Scope expansion requires explicit human approval and,
+  when it crosses a milestone boundary, an ADR.
+- A change that removes a planned component, service,
+  provider, or milestone is also scope expansion and
+  requires the same approval. A smaller, equivalent
+  alternative is a substitution, not a removal, and
+  requires an ADR.
+- "I noticed this should be different" is not approval.
+  "I changed this because the user said so" requires
+  the user's words in the implementation report.
+
+The rule is enforced by code review, by the task board
+(`.ai/state/task-board.md`), and by the
+implementation report's `Deviations` section. A session
+that expands scope silently is rejected in review.
+
+### Rule 17 — Evidence of Completion
+**Reference:** [`.ai/templates/implementation-report.md`](./.ai/templates/implementation-report.md),
+[`.ai/state/README.md`](./.ai/state/README.md),
+[`.ai/handoffs/README.md`](./.ai/handoffs/README.md),
+[`.ai/workflows/feature-lifecycle.md`](./.ai/workflows/feature-lifecycle.md)
+stage 8
+
+Every completed task must leave evidence through tests, an
+implementation report, project state updates, and a Git
+commit.
+
+Concretely:
+
+- **Tests.** The session's validation results are recorded
+  in the implementation report. A session that does not
+  run the validation has not validated; a session that
+  runs the validation but does not record the result has
+  not left evidence. The matched prompt's
+  "Validation" section is the authoritative list.
+- **Implementation report.** The session produces an
+  `implementation-report-<milestone-or-task>.md` at
+  the repository root (or, if the work is paused,
+  produces a `session-handoff.md` instead). The report
+  follows `.ai/templates/implementation-report.md`. A
+  session that ends without a report has not ended.
+- **Project state updates.** The session updates
+  `.ai/state/current.md` and `.ai/state/task-board.md`
+  per Rule 15. The task the session worked moves to
+  `Done` (or `Blocked`); any new `Ready` items
+  discovered during the session are added.
+- **Git commit.** The session's diff is committed. The
+  commit subject names the milestone or task; the
+  commit body references the implementation report and
+  the approved plan. The session does not push the
+  commit; pushing is a separate decision per
+  `.ai/workflows/release-checklist.md`. The next
+  session reads the commit hash from the
+  implementation report and from
+  `.ai/state/current.md`.
+
+A session that completes a task but leaves no evidence
+is treated as incomplete. The next session cannot
+verify the work, and the work is re-done from the
+state the live repository actually shows.
 
 ---
 

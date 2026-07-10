@@ -111,11 +111,12 @@ If the work is complete, this is "release M3" or "close the
 milestone". If the work is paused, this is the exact command
 or file the next session should open.
 
-## Project Continuity (Rule 15)
+## Project Continuity (Rule 15) and Evidence (Rule 17)
 
 A session that ends without updating the
-project-continuity state has not ended. Confirm that
-the following were updated at session end:
+project-continuity state and leaving evidence
+has not ended. Confirm that the following were
+done at session end:
 
 - [ ] `.ai/state/current.md` — updated to reflect
       the state of the repository right now
@@ -130,6 +131,14 @@ the following were updated at session end:
       template.
 - [ ] `.ai/handoffs/latest.md` — mirror of the
       per-session handoff.
+- [ ] `implementation-report-<milestone-or-task>.md`
+      — the receipt (this file or its sibling).
+- [ ] **Coherent commit** (Rule 17 in `AGENTS.md`)
+      that includes the implementation, the
+      documentation, the implementation report,
+      the state updates, and the handoff. The
+      commit is local; pushing requires explicit
+      authorisation.
 
 ## Linked Artefacts
 
@@ -140,9 +149,15 @@ the following were updated at session end:
 - `session-handoff.md` (if the work was paused)
 - `review-report.md` (if a review was performed)
 - ADR-### (if a decision was recorded)
-- `.ai/state/current.md` and `.ai/state/task-board.md`
-  — the live state, updated at session end
-  (Rule 15 in `AGENTS.md`).
+- `PRODUCT.md` — the product definition; the
+  report's "Why it matters" cells in the task
+  board cite the relevant section.
+- `.ai/state/current.md` and
+  `.ai/state/task-board.md` — the live state,
+  updated at session end (Rule 15 in
+  `AGENTS.md`).
 - `.ai/handoffs/YYYY-MM-DD-<slug>.md` — the
   per-session handoff, written at session end
   (Rule 15 in `AGENTS.md`).
+- The commit hash of the session's work (Rule 17
+  in `AGENTS.md`).

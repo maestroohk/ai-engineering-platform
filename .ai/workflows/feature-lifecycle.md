@@ -122,6 +122,10 @@ templates are organised around.
   - **Session handoff** at
     `.ai/handoffs/YYYY-MM-DD-<slug>.md` (and
     mirrored to `.ai/handoffs/latest.md`).
+  - **Coherent commit** that includes the
+    implementation, the documentation, the
+    implementation report, the state updates,
+    and the handoff (Rule 17 in `AGENTS.md`).
 - **Workflow step:** produce the report and
   the state updates. The report includes the
   validation results, the documentation updated,
@@ -130,7 +134,9 @@ templates are organised around.
   the **live** state — short, high-signal, no
   prose. The handoff is the bridge to the next
   session and follows
-  `.ai/templates/session-handoff.md`.
+  `.ai/templates/session-handoff.md`. The commit
+  is local; pushing requires explicit
+  authorisation and is a separate step.
 
 ## 3. Stage Gates
 
@@ -160,11 +166,24 @@ If a session is paused, it produces a `session-handoff.md`
 
 The handoff is written to
 `.ai/handoffs/YYYY-MM-DD-<slug>.md` and mirrored to
-`.ai/handoffs/latest.md`. The next session reads
-`.ai/handoffs/latest.md` first, then `.ai/state/current.md`
-and `.ai/state/task-board.md`, then the matching handoff
-and the matching implementation report. The next session
-resumes at the recorded stage.
+`.ai/handoffs/latest.md`. The next session reads, in
+order:
+
+1. `AGENTS.md` — the constitution.
+2. `.ai/session-start.md` — the operational
+   sequence.
+3. [`PRODUCT.md`](./../../PRODUCT.md) — the product
+   definition.
+4. [`.ai/handoffs/latest.md`](./../../.ai/handoffs/latest.md)
+   — the most recent session handoff.
+5. [`.ai/state/current.md`](./../../.ai/state/current.md)
+   — the one-page snapshot.
+6. [`.ai/state/task-board.md`](./../../.ai/state/task-board.md)
+   — the live work queue.
+7. The matching implementation report.
+8. The matching handoff and the matching plan.
+
+The next session resumes at the recorded stage.
 
 ## 5. Anti-Patterns
 
@@ -176,6 +195,8 @@ resumes at the recorded stage.
 - Producing an implementation report that does not name
   the files or the tests.
 - Skipping the review stage because the change is small.
-- Closing a session without a report, a handoff, or an
-  update to `.ai/state/current.md` and
-  `.ai/state/task-board.md` (Rule 15 in `AGENTS.md`).
+- Closing a session without a report, a handoff,
+  an update to `.ai/state/current.md` and
+  `.ai/state/task-board.md` (Rule 15 in
+  `AGENTS.md`), or a coherent commit (Rule 17 in
+  `AGENTS.md`).
