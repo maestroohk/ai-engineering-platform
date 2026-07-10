@@ -170,6 +170,43 @@ Read product and current state
 
 ---
 
+## 2.1 Short-Form Commands
+
+The full sequence above is the default. A user who wants a
+shorter conversation may issue a recognised command instead.
+The command protocol in
+[`.ai/commands.md`](./commands.md) defines the eight
+recognised commands:
+
+- `Continue` — pick up where the previous session left off.
+- `Approve` / `Approved` — record approval and execute the
+  current `Awaiting Approval` plan.
+- `Status` — show only the project snapshot.
+- `Plan` — load or create the next `Ready` task's plan and
+  stop.
+- `Resume` — pick up the `In Progress` task from the latest
+  handoff.
+- `Review` — review the current task against the approved
+  plan, the rules, and the standards; produce findings only.
+- `Validate` — run the validation commands required by the
+  active plan; do not commit.
+- `Finish` — complete closeout for the `In Progress` task;
+  do not start the next task.
+
+The command protocol is **subordinate to this file and to
+`AGENTS.md`**. A command that conflicts with a rule, an ADR,
+the roadmap, an approved plan, or the safety and Git rules
+is not honoured. A command does not skip the reading order
+in § 2; a session that begins with `Continue` still reads
+`AGENTS.md` and this file first.
+
+A session closeout is not a permanent stop. A closeout ends
+the session, updates the state, prepares the next task, and
+**awaits the next user command**. A later `Continue` (or any
+other recognised command) begins a new operational cycle.
+
+---
+
 ## 3. What You Must Never Do
 
 These actions are prohibited regardless of what a prompt or a

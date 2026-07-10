@@ -54,6 +54,7 @@ treated as a bug.
 .ai/
 ├── README.md              # this file
 ├── session-start.md       # the first file an AI reads after AGENTS.md
+├── commands.md            # the command protocol for short user instructions
 ├── state/                 # live project-continuity state (Rule 15)
 │   ├── README.md
 │   ├── current.md         # one-page snapshot
@@ -62,6 +63,9 @@ treated as a bug.
 │   ├── README.md
 │   ├── latest.md          # mirror of the most recent handoff
 │   └── YYYY-MM-DD-<slug>.md
+├── plans/                 # approved implementation plans
+│   ├── README.md
+│   └── <milestone-or-task-name>.md
 ├── prompts/               # task-type templates (one per task type)
 │   ├── bootstrap.md
 │   ├── feature.md
@@ -79,6 +83,7 @@ treated as a bug.
 │   ├── provider-onboarding.md
 │   ├── tool-dogfooding.md
 │   ├── documentation-update.md
+│   ├── progressive-coding.md
 │   └── release-checklist.md
 └── templates/             # reusable document templates
     ├── task-brief.md
@@ -97,6 +102,7 @@ documents for the task at hand.
 
 | Task                                | Prompt                              | Workflow                            | Main documents                                                                                       |
 | ----------------------------------- | ----------------------------------- | ----------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| Short user instruction (e.g. `Continue`, `Approve`, `Status`, `Plan`, `Resume`, `Review`, `Validate`, `Finish`) | (none — command-driven) | (none — command-driven) | [`.ai/commands.md`](../.ai/commands.md), [`.ai/session-start.md`](../.ai/session-start.md), [`.ai/workflows/progressive-coding.md`](../.ai/workflows/progressive-coding.md) |
 | New milestone or project area       | `bootstrap.md`                      | `feature-lifecycle.md`              | `ARCHITECTURE.md`, `docs/folder-structure.md`                                                        |
 | Feature                             | `feature.md`                        | `feature-lifecycle.md`              | Task-dependent                                                                                       |
 | UI feature                          | `ui.md`                             | `ui-design-review.md`               | `docs/design-system.md`, `docs/component-guidelines.md`, `docs/ui-principles.md`                     |
@@ -275,7 +281,7 @@ lowest tier that can hold it.
 | 5  | **Product**                | [`PRODUCT.md`](../PRODUCT.md)                                                                             | The product definition. Who is the user. What problem is solved. What does success mean at the product level. | Changes via PR review; reviewed against Vision.                  |
 | 6  | **Roadmap / Delivery**     | [`ROADMAP.md`](../ROADMAP.md), [`.ai/plans/master-delivery-plan.md`](../.ai/plans/master-delivery-plan.md) | The milestone plan (M0-M8) and the master delivery plan that ties the backlog to the milestones. | Changes via PR review; reviewed against Product.                 |
 | 7  | **Standards**              | [`docs/`](./..) (folder)                                                                                 | Engineering standards: design system, component guidelines, UI principles, provider guidelines, coding standards, architecture principles, folder structure, dashboard definition. | Changes via PR review; per-document versioning.                  |
-| 8  | **Operating layer**        | [`.ai/`](./)                                                                                              | The AI collaboration hub: prompts, workflows, templates, handoffs, state, backlog, decision log, capability mapping. The instructions an AI follows *while* doing the work. | Changes via PR review; reviewed against Constitution (tier 2) and Standards (tier 7). |
+| 8  | **Operating layer**        | [`.ai/`](./)                                                                                              | The AI collaboration hub: prompts, workflows, templates, command protocol, state, handoffs, backlog, decision log, capability mapping. The instructions an AI follows *while* doing the work. | Changes via PR review; reviewed against Constitution (tier 2) and Standards (tier 7). |
 | 9  | **Evidence / History**     | [`.ai/handoffs/`](../.ai/handoffs/), implementation reports, review reports                              | The *record* of what happened. Every session leaves a handoff. Every milestone leaves an implementation report. Every review leaves a review report. | Append-only. Older evidence archives by handoff; nothing is rewritten. |
 
 ### 10.1 Direction of Authority
@@ -362,4 +368,42 @@ changes tier (e.g. an architecture document
 becomes a standard). The validation pass is
 recorded in the implementation report of the
 session that performed it.
+
+---
+
+## 11. The Command Protocol
+
+For short user instructions (`Continue`,
+`Approve` / `Approved`, `Status`, `Plan`,
+`Resume`, `Review`, `Validate`, `Finish`),
+the command protocol in
+[`.ai/commands.md`](../.ai/commands.md) is the
+recognised front door. The full
+`.ai/session-start.md` sequence is the
+default; the commands are the
+short-form.
+
+The commands are operational shortcuts.
+They do **not** override the constitution
+(`AGENTS.md`), accepted ADRs, the approved
+roadmap, an approved task plan, the safety
+rules in `AGENTS.md`, or the Git rules.
+The command protocol is subordinate to all
+of the above.
+
+A session that begins with a recognised
+command still reads `AGENTS.md` and
+`.ai/session-start.md` first. The command
+then selects the task and the response
+shape; the rest of the session follows the
+13-step task lifecycle in
+[`.ai/workflows/progressive-coding.md`](../.ai/workflows/progressive-coding.md)
+as if the user had issued a full brief.
+
+A session closeout is not a permanent stop.
+A closeout ends the session, updates the
+state, prepares the next task, and **awaits
+the next user command**. A later
+`Continue` (or any other recognised
+command) begins a new operational cycle.
 

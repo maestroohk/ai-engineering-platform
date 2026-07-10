@@ -501,6 +501,83 @@ does not relax any of these
 rules; it operationalises them
 on a per-task basis.
 
+## 7.1 Relationship to the Command Protocol
+
+The command protocol in
+[`.ai/commands.md`](../commands.md)
+defines the eight recognised
+short-form commands
+(`Continue`, `Approve`,
+`Status`, `Plan`, `Resume`,
+`Review`, `Validate`,
+`Finish`). The commands are
+the **front door** to the
+Progressive Coding Rule, not
+a replacement for it.
+
+Specifically:
+
+- **`Continue`** selects
+  the first dependency-
+  satisfied `Ready` task
+  (per § 2 above) and then
+  applies the per-task
+  plan-status decision
+  table in
+  `.ai/commands.md` § 4.
+  The decision table is
+  the bridge between the
+  command and the 13-step
+  lifecycle.
+- **`Approve`** records
+  approval and starts
+  the 13-step lifecycle
+  at step 6 (Implement).
+  It does not re-ask for
+  approval; the
+  confirmation was the
+  command.
+- **`Resume`** finds the
+  `In Progress` task
+  (per § 2 above) and
+  resumes the 13-step
+  lifecycle at the
+  step named in
+  `.ai/handoffs/latest.md`.
+- **`Validate`** runs the
+  validation commands
+  the plan specifies
+  (per step 7 above) and
+  updates the validation
+  fields in
+  `.ai/state/current.md`
+  and the handoff. It
+  does not commit.
+- **`Finish`** completes
+  steps 8 through 12 of
+  the lifecycle
+  (catalogue, report,
+  state, handoff, commit)
+  and stops. It does not
+  begin the next task;
+  the next command
+  does.
+- **`Status`**, **`Plan`**,
+  and **`Review`** do
+  not change the
+  lifecycle; they are
+  read-only commands
+  against the state, the
+  plan, or the diff.
+
+A session that begins with
+a command is still bound
+by all 13 steps. The
+command selects the task
+and the response shape;
+the lifecycle governs the
+per-task execution.
+
 ## 8. When the Rule Does Not
    Apply
 
@@ -590,3 +667,24 @@ project state. The rule does
   The rule is the
   meta-contract for task
   selection.
+- **2026-07-11** — added
+  § 7.1 linking the
+  Progressive Coding Rule
+  to the command protocol
+  in
+  [`.ai/commands.md`](../commands.md).
+  The 13-step lifecycle
+  is the per-task
+  execution contract;
+  the commands are the
+  front door. The
+  command-driven
+  decision table in
+  `.ai/commands.md` § 4
+  is the bridge between
+  the short-form command
+  and the lifecycle. The
+  Progressive Coding Rule
+  is unchanged; the
+  link is the only
+  addition.

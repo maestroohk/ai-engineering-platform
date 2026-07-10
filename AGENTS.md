@@ -97,6 +97,14 @@ it sits on top of it.
 > **The `.ai/` directory contains operational workflows but cannot
 > override this document.** It operationalises the rules; it does
 > not relax them.
+>
+> For short user instructions (e.g. `Continue`, `Approve`,
+> `Status`, `Plan`, `Resume`, `Review`, `Validate`, `Finish`),
+> the command protocol in [`.ai/commands.md`](./.ai/commands.md)
+> is the recognised front door. The commands are
+> operational shortcuts; they do not override this
+> document, accepted ADRs, the approved roadmap, an
+> approved task plan, or the safety and Git rules.
 
 ---
 
@@ -494,7 +502,7 @@ but never override a document higher in the list.
 | 5 (product) | [`PRODUCT.md`](./PRODUCT.md) | Changes via PR review (Rule 16). | The product as it is today: purpose, users, principles, journey. |
 | 6 (roadmap / delivery) | [`ROADMAP.md`](./ROADMAP.md), [`.ai/plans/master-delivery-plan.md`](./.ai/plans/master-delivery-plan.md) | Changes via PR review. | Milestones, slices, and the ordered delivery plan. |
 | 7 (standards) | `docs/*`, `STYLEGUIDE.md`, `CONTRIBUTING.md` | Changes via PR review. | The detailed engineering standards. |
-| 8 (operating layer) | `.ai/workflows/*`, `.ai/prompts/*`, `.ai/templates/*`, `.ai/state/*`, `.ai/handoffs/*`, `.ai/backlog/*` | Changes via PR review. | The AI operating layer: workflows, prompts, templates, state, handoffs, backlog. |
+| 8 (operating layer) | `.ai/workflows/*`, `.ai/prompts/*`, `.ai/templates/*`, `.ai/commands.md`, `.ai/state/*`, `.ai/handoffs/*`, `.ai/backlog/*` | Changes via PR review. | The AI operating layer: workflows, prompts, templates, command protocol, state, handoffs, backlog. |
 | 9 (evidence / history) | `implementation-report-*.md`, git log | Append-only. | The receipt of every implementation, the project's history. |
 
 The full document map:
@@ -517,6 +525,7 @@ The full document map:
 | [`docs/architecture-principles.md`](./docs/architecture-principles.md) | Provider model, layering, dependency direction, DI         |
 | [`docs/provider-guidelines.md`](./docs/provider-guidelines.md) | Authoring, registering, configuring, testing providers       |
 | [`.ai/README.md`](./.ai/README.md)                       | AI collaboration hub; precedence hierarchy; task routing table        |
+| [`.ai/commands.md`](./.ai/commands.md)                 | Command protocol for short user instructions (`Continue`, `Approve`, `Status`, `Plan`, `Resume`, `Review`, `Validate`, `Finish`) |
 | [`.ai/session-start.md`](./.ai/session-start.md)       | First file an AI reads after `AGENTS.md`; operational sequence        |
 | [`.ai/prompts/bootstrap.md`](./.ai/prompts/bootstrap.md) | Template for bootstrapping a new project area                       |
 | [`.ai/prompts/feature.md`](./.ai/prompts/feature.md)   | Template for implementing a new feature end-to-end                    |
