@@ -1,0 +1,48 @@
+.app-status-dot {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: var(--app-text-sm);
+  line-height: var(--app-text-sm-line);
+  color: var(--app-fg-muted);
+}
+
+.app-status-dot-icon-only {
+  gap: 0;
+}
+
+.app-status-dot-circle {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.app-status-dot-neutral {
+  background-color: var(--app-fg-subtle);
+}
+
+.app-status-dot-success {
+  background-color: var(--app-success);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--app-success) 22%, transparent);
+}
+
+.app-status-dot-warning {
+  background-color: var(--app-warning);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--app-warning) 22%, transparent);
+}
+
+.app-status-dot-error {
+  background-color: var(--app-error);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--app-error) 22%, transparent);
+}
+
+.app-status-dot-info {
+  background-color: var(--app-info);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--app-info) 22%, transparent);
+}
+
+.app-status-dot-label {
+  display: inline-block;
+}

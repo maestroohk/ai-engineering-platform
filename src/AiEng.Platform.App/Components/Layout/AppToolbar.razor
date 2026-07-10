@@ -1,0 +1,28 @@
+@namespace AiEng.Platform.App.Components.Layout
+
+<div class="app-toolbar" role="toolbar" @attributes="AdditionalAttributes">
+    <div class="app-toolbar-leading">
+        @Leading
+        @if (Leading is null)
+        {
+            @ChildContent
+        }
+    </div>
+    <div class="app-toolbar-trailing">
+        @Trailing
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public RenderFragment? Leading { get; set; }
+
+    [Parameter]
+    public RenderFragment? Trailing { get; set; }
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
+}

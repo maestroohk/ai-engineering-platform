@@ -1,0 +1,28 @@
+@inherits LayoutComponentBase
+
+<div class="min-h-screen grid grid-cols-[14rem_1fr] bg-app-bg text-app-fg">
+    <div class="border-r border-app-border bg-app-surface">
+        <NavMenu />
+    </div>
+
+    <main class="flex flex-col min-h-screen">
+        <div class="flex items-center justify-end px-6 h-12 border-b border-app-border bg-app-surface">
+            <button type="button"
+                    class="inline-flex items-center px-3 py-1 rounded-app border border-app-border text-app-fg-muted hover:text-app-fg hover:border-app-fg-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-app-accent"
+                    onclick="document.documentElement.setAttribute('data-theme', document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'); try { localStorage.setItem('app-theme', document.documentElement.getAttribute('data-theme')); } catch (e) {}"
+                    aria-label="Toggle colour theme">
+                <span data-theme-label>Theme</span>
+            </button>
+        </div>
+
+        <article class="content px-6 py-6 flex-1">
+            @Body
+        </article>
+    </main>
+</div>
+
+<div id="blazor-error-ui" data-nosnippet>
+    An unhandled error has occurred.
+    <a href="." class="reload">Reload</a>
+    <span class="dismiss">🗙</span>
+</div>

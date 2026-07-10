@@ -1,0 +1,46 @@
+@namespace AiEng.Platform.App.Components.Display
+
+<header class="app-page-header" @attributes="AdditionalAttributes">
+    <div class="app-page-header-text">
+        @if (Breadcrumbs is not null)
+        {
+            <div class="app-page-header-breadcrumbs">
+                @Breadcrumbs
+            </div>
+        }
+        @if (Title is not null)
+        {
+            <h1 class="app-page-header-title">@Title</h1>
+        }
+        @if (Description is not null)
+        {
+            <p class="app-page-header-description">@Description</p>
+        }
+    </div>
+    @if (Actions is not null)
+    {
+        <div class="app-page-header-actions">
+            @Actions
+        </div>
+    }
+</header>
+
+@code {
+    [Parameter]
+    public RenderFragment? Breadcrumbs { get; set; }
+
+    [Parameter]
+    public RenderFragment? Title { get; set; }
+
+    [Parameter]
+    public RenderFragment? Description { get; set; }
+
+    [Parameter]
+    public RenderFragment? Actions { get; set; }
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
+}

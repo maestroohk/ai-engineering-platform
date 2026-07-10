@@ -1,0 +1,22 @@
+.app-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.app-skeleton-line {
+  display: block;
+  background-color: var(--app-surface-2);
+  border-radius: var(--app-radius-sm);
+  animation: app-skeleton-pulse 1.4s ease-in-out infinite;
+}
+
+.app-skeleton-line-rounded {
+  border-radius: 9999px;
+}
+
+@keyframes app-skeleton-pulse {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 0.95; }
+}

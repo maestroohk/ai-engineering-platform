@@ -1,0 +1,25 @@
+@namespace AiEng.Platform.App.Components.Feedback
+@inherits AppEmptyStateBase
+
+<div class="app-empty-state" @attributes="AdditionalAttributes">
+    @if (Icon is not null)
+    {
+        <div class="app-empty-state-icon" aria-hidden="true">
+            @Icon
+        </div>
+    }
+    @if (Title is not null)
+    {
+        <h3 class="app-empty-state-title">@Title</h3>
+    }
+    @if (Description is not null)
+    {
+        <p class="app-empty-state-description">@Description</p>
+    }
+    @if (Actions is not null)
+    {
+        <div class="app-empty-state-actions">
+            @Actions
+        </div>
+    }
+</div>

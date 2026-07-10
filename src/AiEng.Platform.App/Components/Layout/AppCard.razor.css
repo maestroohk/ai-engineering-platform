@@ -1,0 +1,36 @@
+.app-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--app-radius-lg);
+  border: 1px solid var(--app-border);
+  background-color: var(--app-surface);
+  overflow: hidden;
+}
+
+.app-card-flat {
+  box-shadow: none;
+}
+
+.app-card-default {
+  box-shadow: var(--app-shadow-1);
+}
+
+.app-card-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--app-border);
+  font-weight: 600;
+  color: var(--app-fg);
+}
+
+.app-card-body {
+  padding: 20px;
+  flex: 1 1 auto;
+  color: var(--app-fg);
+}
+
+.app-card-footer {
+  padding: 12px 20px;
+  border-top: 1px solid var(--app-border);
+  background-color: var(--app-surface-2);
+  color: var(--app-fg-muted);
+}

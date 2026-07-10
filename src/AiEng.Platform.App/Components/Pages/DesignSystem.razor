@@ -1,0 +1,262 @@
+@page "/design-system"
+@rendermode InteractiveServer
+@namespace AiEng.Platform.App.Components.Pages
+@using AiEng.Platform.App.Components.Common
+
+<PageTitle>Design System</PageTitle>
+
+<AppContainer>
+    <AppStack Direction="AppStackDirection.Vertical" Gap="AppStackGap.Large">
+        <AppPageHeader>
+            <Title>Design System</Title>
+            <Description>Reusable Blazor primitives, layouts, displays, feedback, and inputs that the platform composes against. Light and dark themes are verified through the design tokens.</Description>
+        </AppPageHeader>
+
+        <AppDivider />
+
+        <AppSection>
+            <Title>Buttons</Title>
+            <Subtitle>Six variants × three sizes. Loading and disabled states compose with any variant.</Subtitle>
+            <Content>
+                <AppStack Direction="AppStackDirection.Vertical" Gap="AppStackGap.Medium">
+                    <AppStack Direction="AppStackDirection.Vertical" Gap="AppStackGap.Small">
+                        <h3 class="text-app-fg font-semibold">Variants</h3>
+                        <AppStack Direction="AppStackDirection.Horizontal" Gap="AppStackGap.Small" Wrap="AppStackWrap.Wrap">
+                            <AppButton Variant="AppButtonVariant.Primary">Primary</AppButton>
+                            <AppButton Variant="AppButtonVariant.Secondary">Secondary</AppButton>
+                            <AppButton Variant="AppButtonVariant.Outline">Outline</AppButton>
+                            <AppButton Variant="AppButtonVariant.Ghost">Ghost</AppButton>
+                            <AppButton Variant="AppButtonVariant.Danger">Danger</AppButton>
+                            <AppButton Variant="AppButtonVariant.Success">Success</AppButton>
+                        </AppStack>
+                    </AppStack>
+
+                    <AppStack Direction="AppStackDirection.Vertical" Gap="AppStackGap.Small">
+                        <h3 class="text-app-fg font-semibold">Sizes</h3>
+                        <AppStack Direction="AppStackDirection.Horizontal" Gap="AppStackGap.Small" Align="AppStackAlign.Center">
+                            <AppButton Size="AppButtonSize.Small">Small</AppButton>
+                            <AppButton Size="AppButtonSize.Medium">Medium</AppButton>
+                            <AppButton Size="AppButtonSize.Large">Large</AppButton>
+                        </AppStack>
+                    </AppStack>
+
+                    <AppStack Direction="AppStackDirection.Vertical" Gap="AppStackGap.Small">
+                        <h3 class="text-app-fg font-semibold">States</h3>
+                        <AppStack Direction="AppStackDirection.Horizontal" Gap="AppStackGap.Small">
+                            <AppButton Disabled="true">Disabled</AppButton>
+                            <AppButton Loading="true">Loading</AppButton>
+                        </AppStack>
+                    </AppStack>
+
+                    <AppStack Direction="AppStackDirection.Vertical" Gap="AppStackGap.Small">
+                        <h3 class="text-app-fg font-semibold">Icon button</h3>
+                        <AppStack Direction="AppStackDirection.Horizontal" Gap="AppStackGap.Small" Align="AppStackAlign.Center">
+                            <AppIconButton AriaLabel="Add item" Title="Add">
+                                <span aria-hidden="true">+</span>
+                            </AppIconButton>
+                            <AppIconButton AriaLabel="Remove item" Variant="AppButtonVariant.Danger" Title="Remove">
+                                <span aria-hidden="true">×</span>
+                            </AppIconButton>
+                        </AppStack>
+                    </AppStack>
+                </AppStack>
+            </Content>
+        </AppSection>
+
+        <AppDivider />
+
+        <AppSection>
+            <Title>Badges &amp; Status Dots</Title>
+            <Subtitle>Tokens for compact states. Status dots include a glow effect for live signals.</Subtitle>
+            <Content>
+                <AppStack Direction="AppStackDirection.Vertical" Gap="AppStackGap.Medium">
+                    <AppStack Direction="AppStackDirection.Horizontal" Gap="AppStackGap.Small" Wrap="AppStackWrap.Wrap" Align="AppStackAlign.Center">
+                        <AppBadge>Neutral</AppBadge>
+                        <AppBadge Variant="AppBadgeVariant.Accent">Accent</AppBadge>
+                        <AppBadge Variant="AppBadgeVariant.Success">Success</AppBadge>
+                        <AppBadge Variant="AppBadgeVariant.Warning">Warning</AppBadge>
+                        <AppBadge Variant="AppBadgeVariant.Error">Error</AppBadge>
+                        <AppBadge Variant="AppBadgeVariant.Info">Info</AppBadge>
+                    </AppStack>
+                    <AppStack Direction="AppStackDirection.Horizontal" Gap="AppStackGap.Medium" Wrap="AppStackWrap.Wrap" Align="AppStackAlign.Center">
+                        <AppStatusDot Variant="AppStatusDotVariant.Neutral" Label="Idle" />
+                        <AppStatusDot Variant="AppStatusDotVariant.Success" Label="Healthy" />
+                        <AppStatusDot Variant="AppStatusDotVariant.Warning" Label="Degraded" />
+                        <AppStatusDot Variant="AppStatusDotVariant.Error" Label="Down" />
+                        <AppStatusDot Variant="AppStatusDotVariant.Info" Label="Building" />
+                    </AppStack>
+                </AppStack>
+            </Content>
+        </AppSection>
+
+        <AppDivider />
+
+        <AppSection>
+            <Title>Cards &amp; Sections</Title>
+            <Subtitle>Presentational containers. Future domain cards compose AppCard rather than redefining surfaces.</Subtitle>
+            <Content>
+                <AppStack Direction="AppStackDirection.Horizontal" Gap="AppStackGap.Medium" Wrap="AppStackWrap.Wrap">
+                    <AppCard>
+                        <Header>
+                            <span>Default card</span>
+                        </Header>
+                        <ChildContent>
+                            <p class="text-app-fg-muted">Body content. Cards support header, body, and footer slots.</p>
+                        </ChildContent>
+                        <Footer>
+                            <span class="text-app-fg-muted text-sm">Footer area</span>
+                        </Footer>
+                    </AppCard>
+                    <AppCard Variant="AppCardVariant.Flat">
+                        <Header>
+                            <span>Flat card</span>
+                        </Header>
+                        <ChildContent>
+                            <p class="text-app-fg-muted">No shadow variant; same composition rules.</p>
+                        </ChildContent>
+                    </AppCard>
+                    <AppPanel>
+                        <AppStack Direction="AppStackDirection.Vertical" Gap="AppStackGap.Small">
+                            <span class="text-app-fg font-semibold">Panel</span>
+                            <span class="text-app-fg-muted text-sm">Bordered region with internal padding.</span>
+                        </AppStack>
+                    </AppPanel>
+                </AppStack>
+            </Content>
+        </AppSection>
+
+        <AppDivider />
+
+        <AppSection>
+            <Title>Alerts &amp; Error States</Title>
+            <Subtitle>Inline notifications and full-state error surfaces. ErrorState supports optional code and correlation id.</Subtitle>
+            <Content>
+                <AppStack Direction="AppStackDirection.Vertical" Gap="AppStackGap.Medium">
+                    <AppAlert Variant="AppAlertVariant.Information">
+                        <Title>Information</Title>
+                        <Description>Use for neutral, contextual information.</Description>
+                    </AppAlert>
+                    <AppAlert Variant="AppAlertVariant.Success">
+                        <Title>Saved</Title>
+                        <Description>Your changes are persisted.</Description>
+                    </AppAlert>
+                    <AppAlert Variant="AppAlertVariant.Warning">
+                        <Title>Watch out</Title>
+                        <Description>This action will restart the service.</Description>
+                    </AppAlert>
+                    <AppAlert Variant="AppAlertVariant.Error">
+                        <Title>Failed to save</Title>
+                        <Description>The server rejected the request. Try again or contact support.</Description>
+                    </AppAlert>
+                    <AppErrorState>
+                        <Title>Cannot reach the provider registry</Title>
+                        <Description>The local provider store is unreachable. Verify that the registry process is running and try again.</Description>
+                        <PrimaryAction>
+                            <AppButton Variant="AppButtonVariant.Primary">Retry</AppButton>
+                        </PrimaryAction>
+                        <SecondaryAction>
+                            <AppButton Variant="AppButtonVariant.Ghost">View logs</AppButton>
+                        </SecondaryAction>
+                    </AppErrorState>
+                </AppStack>
+            </Content>
+        </AppSection>
+
+        <AppDivider />
+
+        <AppSection>
+            <Title>Loading &amp; Skeletons</Title>
+            <Subtitle>Loading affordances for data-owning surfaces. Skeletons preview the layout that follows.</Subtitle>
+            <Content>
+                <AppStack Direction="AppStackDirection.Vertical" Gap="AppStackGap.Medium">
+                    <AppLoading>
+                        <Label>Loading design tokens…</Label>
+                    </AppLoading>
+                    <AppPanel>
+                        <AppStack Direction="AppStackDirection.Vertical" Gap="AppStackGap.Small">
+                            <AppSkeleton Lines="4" />
+                            <AppSkeleton Lines="2" Rounded="true" />
+                        </AppStack>
+                    </AppPanel>
+                </AppStack>
+            </Content>
+        </AppSection>
+
+        <AppDivider />
+
+        <AppSection>
+            <Title>Empty States</Title>
+            <Subtitle>The fallback surface for data-owning parents when there is no data to render.</Subtitle>
+            <Content>
+                <AppCard>
+                    <ChildContent>
+                        <AppEmptyState>
+                            <Title>No projects yet</Title>
+                            <Description>Once you connect a provider, your projects will appear here.</Description>
+                            <Actions>
+                                <AppButton Variant="AppButtonVariant.Primary">Connect a provider</AppButton>
+                                <AppButton Variant="AppButtonVariant.Ghost">Read the docs</AppButton>
+                            </Actions>
+                        </AppEmptyState>
+                    </ChildContent>
+                </AppCard>
+            </Content>
+        </AppSection>
+
+        <AppDivider />
+
+        <AppSection>
+            <Title>Display</Title>
+            <Subtitle>PageHeader and Avatar. Avatars render up to two initials.</Subtitle>
+            <Content>
+                <AppStack Direction="AppStackDirection.Horizontal" Gap="AppStackGap.Medium" Align="AppStackAlign.Center" Wrap="AppStackWrap.Wrap">
+                    <AppAvatar Initials="ab" Size="AppAvatarSize.Small" />
+                    <AppAvatar Initials="cd" Size="AppAvatarSize.Medium" />
+                    <AppAvatar Initials="ef" Size="AppAvatarSize.Large" />
+                </AppStack>
+            </Content>
+        </AppSection>
+
+        <AppDivider />
+
+        <AppSection>
+            <Title>Inputs</Title>
+            <Subtitle>M1.2 ships the label primitive. Full inputs (AppTextField, AppSelect) land in M3.</Subtitle>
+            <Content>
+                <AppStack Direction="AppStackDirection.Vertical" Gap="AppStackGap.Small">
+                    <AppInputLabel For="example-input">Username</AppInputLabel>
+                    <span id="example-input" class="text-app-fg-muted text-sm">A future AppTextField will compose this label via the For association.</span>
+                    <AppInputLabel For="example-required" Required="true">Email address</AppInputLabel>
+                    <span id="example-required" class="text-app-fg-muted text-sm">The required parameter adds aria-required and a visual marker.</span>
+                </AppStack>
+            </Content>
+        </AppSection>
+
+        <AppDivider />
+
+        <AppSection>
+            <Title>Typography &amp; Spacing</Title>
+            <Subtitle>The platform's type scale and spacing rhythm. All values are design tokens.</Subtitle>
+            <Content>
+                <AppStack Direction="AppStackDirection.Vertical" Gap="AppStackGap.Medium">
+                    <AppStack Direction="AppStackDirection.Vertical" Gap="AppStackGap.Small">
+                        <h1 class="text-app-3xl font-semibold text-app-fg">Heading 3xl</h1>
+                        <h2 class="text-app-2xl font-semibold text-app-fg">Heading 2xl</h2>
+                        <h3 class="text-app-xl font-semibold text-app-fg">Heading xl</h3>
+                        <p class="text-app-lg text-app-fg">Body lg — used for emphasized body text.</p>
+                        <p class="text-app-md text-app-fg">Body md — default body size.</p>
+                        <p class="text-app-base text-app-fg-muted">Body base — secondary text, default muted colour.</p>
+                        <p class="text-app-sm text-app-fg-muted">Body sm — captions and metadata.</p>
+                    </AppStack>
+                    <AppStack Direction="AppStackDirection.Horizontal" Gap="AppStackGap.Small" Wrap="AppStackWrap.Wrap" Align="AppStackAlign.Center">
+                        <AppBadge Variant="AppBadgeVariant.Accent">gap-1 (xs)</AppBadge>
+                        <AppBadge Variant="AppBadgeVariant.Accent">gap-2 (sm)</AppBadge>
+                        <AppBadge Variant="AppBadgeVariant.Accent">gap-4 (md)</AppBadge>
+                        <AppBadge Variant="AppBadgeVariant.Accent">gap-6 (lg)</AppBadge>
+                        <AppBadge Variant="AppBadgeVariant.Accent">gap-8 (xl)</AppBadge>
+                    </AppStack>
+                </AppStack>
+            </Content>
+        </AppSection>
+    </AppStack>
+</AppContainer>

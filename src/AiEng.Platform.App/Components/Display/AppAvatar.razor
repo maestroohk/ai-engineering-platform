@@ -1,0 +1,34 @@
+@namespace AiEng.Platform.App.Components.Display
+
+<span class="@CssClass" role="img" aria-label="@AriaLabel">
+    <span class="app-avatar-initials" aria-hidden="true">@DisplayInitials</span>
+</span>
+
+@code {
+    [Parameter, EditorRequired]
+    public string Initials { get; set; } = string.Empty;
+
+    [Parameter]
+    public AppAvatarSize Size { get; set; } = AppAvatarSize.Medium;
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private string CssClass =>
+        $"app-avatar app-avatar-size-{Size.ToString().ToLowerInvariant()}";
+
+    private string AriaLabel => string.IsNullOrWhiteSpace(Initials) ? "Avatar" : $"Avatar: {DisplayInitials}";
+
+    private string DisplayInitials
+    {
+        get
+        {
+            if (string.IsNullOrWhiteSpace(Initials))
+            {
+                return "?";
+            }
+            var trimmed = Initials.Trim();
+            return trimmed.Length > 2 ? trimmed[..2].ToUpperInvariant() : trimmed.ToUpperInvariant();
+        }
+    }
+}

@@ -1,0 +1,32 @@
+@namespace AiEng.Platform.App.Components.Feedback
+@inherits AppAlertBase
+
+<div class="@CssClass" role="@(Variant == AppAlertVariant.Error ? "alert" : "status")" aria-live="@(Variant == AppAlertVariant.Error ? "assertive" : "polite")" @attributes="AdditionalAttributes">
+    <div class="app-alert-body">
+        <div class="app-alert-text">
+            @if (Title is not null)
+            {
+                <div class="app-alert-title">@Title</div>
+            }
+            @if (Description is not null)
+            {
+                <div class="app-alert-description">@Description</div>
+            }
+        </div>
+        @if (Dismissible)
+        {
+            <button type="button"
+                    class="app-alert-dismiss"
+                    aria-label="Dismiss notification"
+                    @onclick="HandleDismiss">
+                <span aria-hidden="true">×</span>
+            </button>
+        }
+    </div>
+    @if (Actions is not null)
+    {
+        <div class="app-alert-actions">
+            @Actions
+        </div>
+    }
+</div>

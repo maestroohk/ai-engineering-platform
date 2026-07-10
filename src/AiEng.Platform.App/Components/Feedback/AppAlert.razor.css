@@ -1,0 +1,91 @@
+.app-alert {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 16px;
+  border: 1px solid transparent;
+  border-radius: var(--app-radius);
+  background-color: var(--app-surface);
+  color: var(--app-fg);
+}
+
+.app-alert-information {
+  background-color: color-mix(in srgb, var(--app-info) 10%, var(--app-surface));
+  border-color: color-mix(in srgb, var(--app-info) 35%, transparent);
+  color: var(--app-fg);
+}
+
+.app-alert-success {
+  background-color: color-mix(in srgb, var(--app-success) 10%, var(--app-surface));
+  border-color: color-mix(in srgb, var(--app-success) 35%, transparent);
+  color: var(--app-fg);
+}
+
+.app-alert-warning {
+  background-color: color-mix(in srgb, var(--app-warning) 10%, var(--app-surface));
+  border-color: color-mix(in srgb, var(--app-warning) 35%, transparent);
+  color: var(--app-fg);
+}
+
+.app-alert-error {
+  background-color: color-mix(in srgb, var(--app-error) 10%, var(--app-surface));
+  border-color: color-mix(in srgb, var(--app-error) 35%, transparent);
+  color: var(--app-fg);
+}
+
+.app-alert-body {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-width: 0;
+}
+
+.app-alert-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.app-alert-title {
+  font-weight: 600;
+  font-size: var(--app-text-sm);
+  line-height: var(--app-text-sm-line);
+  color: var(--app-fg);
+}
+
+.app-alert-description {
+  font-size: var(--app-text-sm);
+  line-height: var(--app-text-sm-line);
+  color: var(--app-fg-muted);
+}
+
+.app-alert-dismiss {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--app-radius-sm);
+  font-size: 18px;
+  line-height: 1;
+  color: var(--app-fg-muted);
+  cursor: pointer;
+  flex-shrink: 0;
+  border: 0;
+  background: transparent;
+  padding: 0;
+}
+
+.app-alert-dismiss:hover {
+  background-color: var(--app-surface-2);
+  color: var(--app-fg);
+}
+
+.app-alert-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding-left: 4px;
+}

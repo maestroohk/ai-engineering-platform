@@ -1,0 +1,20 @@
+@namespace AiEng.Platform.App.Components.Feedback
+
+<div class="app-loading" role="status" aria-live="polite" @attributes="AdditionalAttributes">
+    <span class="app-loading-spinner" aria-hidden="true"></span>
+    @if (Label is not null)
+    {
+        <span class="app-loading-label">@Label</span>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public RenderFragment? Label { get; set; }
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
+}

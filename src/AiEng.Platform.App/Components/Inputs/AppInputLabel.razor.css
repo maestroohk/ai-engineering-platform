@@ -1,0 +1,20 @@
+.app-input-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--app-text-sm);
+  line-height: var(--app-text-sm-line);
+  font-weight: 500;
+  color: var(--app-fg);
+  cursor: pointer;
+}
+
+.app-input-label-text {
+  display: inline-block;
+}
+
+.app-input-label-required {
+  display: inline-block;
+  color: var(--app-error);
+  font-weight: 600;
+}

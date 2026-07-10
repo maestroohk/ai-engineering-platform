@@ -1,0 +1,20 @@
+@namespace AiEng.Platform.App.Components.Layout
+@inherits AppCardBase
+
+<section class="@CssClass" @attributes="AdditionalAttributes">
+    @if (Header is not null)
+    {
+        <header class="app-card-header">
+            @Header
+        </header>
+    }
+    <div class="app-card-body">
+        @ChildContent
+    </div>
+    @if (Footer is not null)
+    {
+        <footer class="app-card-footer">
+            @Footer
+        </footer>
+    }
+</section>

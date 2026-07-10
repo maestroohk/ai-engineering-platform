@@ -1,0 +1,23 @@
+@page "/counter"
+@rendermode InteractiveServer
+
+<PageTitle>Counter</PageTitle>
+
+<h1 class="text-app-2xl font-semibold text-app-fg">Counter</h1>
+
+<p class="mt-2 text-app-fg-muted" role="status">Current count: @currentCount</p>
+
+<AppButton Variant="AppButtonVariant.Primary"
+           Class="mt-3"
+           @onclick="IncrementCount">
+    Click me
+</AppButton>
+
+@code {
+    private int currentCount = 0;
+
+    private void IncrementCount()
+    {
+        currentCount++;
+    }
+}

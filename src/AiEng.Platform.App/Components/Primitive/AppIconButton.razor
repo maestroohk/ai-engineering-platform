@@ -1,0 +1,21 @@
+@namespace AiEng.Platform.App.Components.Primitive
+@inherits AppIconButtonBase
+
+<button type="@EffectiveType"
+        class="@CssClass"
+        disabled="@DisabledOrLoading"
+        aria-label="@AriaLabel"
+        aria-busy="@Loading.ToString().ToLowerInvariant()"
+        aria-disabled="@DisabledOrLoading.ToString().ToLowerInvariant()"
+        title="@EffectiveTitle"
+        @onclick="HandleClick"
+        @attributes="AdditionalAttributes">
+    @if (Loading)
+    {
+        <span class="app-icon-button-spinner" aria-hidden="true"></span>
+    }
+    else
+    {
+        <span class="app-icon-button-icon">@ChildContent</span>
+    }
+</button>

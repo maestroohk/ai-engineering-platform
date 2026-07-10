@@ -1,0 +1,22 @@
+@using AiEng.Platform.App.Components.Common
+@namespace AiEng.Platform.App.Components.Primitive
+
+<div class="@CssClass" @attributes="AdditionalAttributes">
+    @ChildContent
+</div>
+
+@code {
+    [Parameter]
+    public AppContainerVariant Variant { get; set; } = AppContainerVariant.Default;
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private string CssClass =>
+        Variant == AppContainerVariant.Fluid
+            ? "app-container app-container-fluid"
+            : "app-container app-container-default";
+}

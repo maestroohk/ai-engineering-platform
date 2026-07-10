@@ -1,0 +1,30 @@
+@namespace AiEng.Platform.App.Components.Inputs
+
+<label class="@CssClass"
+       for="@For"
+       aria-required="@Required.ToString().ToLowerInvariant()"
+       @attributes="AdditionalAttributes">
+    <span class="app-input-label-text">@ChildContent</span>
+    @if (Required)
+    {
+        <span class="app-input-label-required" aria-hidden="true">*</span>
+    }
+</label>
+
+@code {
+    [Parameter, EditorRequired]
+    public string For { get; set; } = string.Empty;
+
+    [Parameter]
+    public bool Required { get; set; }
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private string CssClass => Required
+        ? "app-input-label app-input-label-required"
+        : "app-input-label";
+}

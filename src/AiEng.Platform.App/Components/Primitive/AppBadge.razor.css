@@ -1,0 +1,73 @@
+.app-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border-radius: 9999px;
+  border: 1px solid transparent;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.app-badge-size-small {
+  height: 20px;
+  padding: 0 8px;
+  font-size: var(--app-text-xs);
+  line-height: var(--app-text-xs-line);
+}
+
+.app-badge-size-medium {
+  height: 24px;
+  padding: 0 10px;
+  font-size: var(--app-text-sm);
+  line-height: var(--app-text-sm-line);
+}
+
+.app-badge-neutral {
+  background-color: var(--app-surface-2);
+  color: var(--app-fg-muted);
+  border-color: var(--app-border);
+}
+
+.app-badge-accent {
+  background-color: color-mix(in srgb, var(--app-accent) 14%, transparent);
+  color: var(--app-accent);
+  border-color: color-mix(in srgb, var(--app-accent) 30%, transparent);
+}
+
+.app-badge-success {
+  background-color: color-mix(in srgb, var(--app-success) 14%, transparent);
+  color: var(--app-success);
+  border-color: color-mix(in srgb, var(--app-success) 30%, transparent);
+}
+
+.app-badge-warning {
+  background-color: color-mix(in srgb, var(--app-warning) 14%, transparent);
+  color: var(--app-warning);
+  border-color: color-mix(in srgb, var(--app-warning) 30%, transparent);
+}
+
+.app-badge-error {
+  background-color: color-mix(in srgb, var(--app-error) 14%, transparent);
+  color: var(--app-error);
+  border-color: color-mix(in srgb, var(--app-error) 30%, transparent);
+}
+
+.app-badge-info {
+  background-color: color-mix(in srgb, var(--app-info) 14%, transparent);
+  color: var(--app-info);
+  border-color: color-mix(in srgb, var(--app-info) 30%, transparent);
+}
+
+.app-badge-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: currentColor;
+  flex-shrink: 0;
+}
+
+.app-badge-content {
+  display: inline-block;
+}

@@ -1,0 +1,36 @@
+@using AiEng.Platform.App.Components.Common
+@namespace AiEng.Platform.App.Components.Primitive
+
+<span class="@WrapperClass" role="@(string.IsNullOrEmpty(Label) ? "status" : "status")">
+    <span class="@DotClass" aria-hidden="true"></span>
+    @if (!string.IsNullOrEmpty(Label))
+    {
+        <span class="app-status-dot-label">@Label</span>
+    }
+    else if (ChildContent is not null)
+    {
+        <span class="app-status-dot-label">@ChildContent</span>
+    }
+</span>
+
+@code {
+    [Parameter]
+    public AppStatusDotVariant Variant { get; set; } = AppStatusDotVariant.Neutral;
+
+    [Parameter]
+    public string? Label { get; set; }
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private bool HasVisibleLabel => !string.IsNullOrEmpty(Label) || ChildContent is not null;
+
+    private string WrapperClass =>
+        $"app-status-dot {(HasVisibleLabel ? "app-status-dot-with-label" : "app-status-dot-icon-only")}";
+
+    private string DotClass =>
+        $"app-status-dot-circle app-status-dot-{Variant.ToString().ToLowerInvariant()}";
+}

@@ -1,0 +1,8 @@
+@namespace AiEng.Platform.App.Components.Primitive
+
+<hr class="app-divider" role="separator" aria-orientation="horizontal" @attributes="AdditionalAttributes" />
+
+@code {
+    [Parameter(CaptureUnmatchedValues = true)]
+    public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
+}

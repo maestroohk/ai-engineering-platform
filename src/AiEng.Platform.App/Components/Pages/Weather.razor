@@ -1,0 +1,63 @@
+@page "/weather"
+@attribute [StreamRendering]
+
+<PageTitle>Weather</PageTitle>
+
+<h1 class="text-app-2xl font-semibold text-app-fg">Weather</h1>
+
+<p class="mt-2 text-app-fg-muted">This component demonstrates showing data.</p>
+
+@if (forecasts == null)
+{
+    <p class="mt-4 text-app-fg-subtle"><em>Loading...</em></p>
+}
+else
+{
+    <table class="mt-4 w-full border-collapse text-app-fg">
+        <thead>
+            <tr class="border-b border-app-border text-left text-app-fg-muted">
+                <th class="py-2 pr-4 font-medium">Date</th>
+                <th class="py-2 pr-4 font-medium" aria-label="Temperature in Celsius">Temp. (C)</th>
+                <th class="py-2 pr-4 font-medium" aria-label="Temperature in Fahrenheit">Temp. (F)</th>
+                <th class="py-2 pr-4 font-medium">Summary</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var forecast in forecasts)
+            {
+                <tr class="border-b border-app-border">
+                    <td class="py-2 pr-4">@forecast.Date.ToShortDateString()</td>
+                    <td class="py-2 pr-4">@forecast.TemperatureC</td>
+                    <td class="py-2 pr-4">@forecast.TemperatureF</td>
+                    <td class="py-2 pr-4">@forecast.Summary</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private WeatherForecast[]? forecasts;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(500);
+
+        var startDate = DateOnly.FromDateTime(DateTime.Now);
+        var summaries = new[] { "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching" };
+        forecasts = Enumerable.Range(1, 5).Select(index => new WeatherForecast
+        {
+            Date = startDate.AddDays(index),
+            TemperatureC = Random.Shared.Next(-20, 55),
+            Summary = summaries[Random.Shared.Next(summaries.Length)]
+        }).ToArray();
+    }
+
+    private class WeatherForecast
+    {
+        public DateOnly Date { get; set; }
+        public int TemperatureC { get; set; }
+        public string? Summary { get; set; }
+        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+    }
+}

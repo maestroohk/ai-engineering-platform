@@ -1,0 +1,29 @@
+@namespace AiEng.Platform.App.Components.Layout
+@inherits AppSectionBase
+
+<section class="app-section" @attributes="AdditionalAttributes">
+    @if (Title is not null || Subtitle is not null || Actions is not null)
+    {
+        <header class="app-section-header">
+            <div class="app-section-header-text">
+                @if (Title is not null)
+                {
+                    <h2 class="app-section-title">@Title</h2>
+                }
+                @if (Subtitle is not null)
+                {
+                    <p class="app-section-subtitle">@Subtitle</p>
+                }
+            </div>
+            @if (Actions is not null)
+            {
+                <div class="app-section-actions">
+                    @Actions
+                </div>
+            }
+        </header>
+    }
+    <div class="app-section-content">
+        @EffectiveContent
+    </div>
+</section>

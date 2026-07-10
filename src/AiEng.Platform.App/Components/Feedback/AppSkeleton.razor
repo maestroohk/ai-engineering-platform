@@ -1,0 +1,11 @@
+@namespace AiEng.Platform.App.Components.Feedback
+@inherits AppSkeletonBase
+
+<div class="app-skeleton" aria-busy="true" aria-live="polite" @attributes="AdditionalAttributes">
+    @for (var i = 0; i < Lines; i++)
+    {
+        var isLast = i == Lines - 1;
+        var lineWidth = isLast && !FullLastLine ? "60%" : "100%";
+        <span class="@LineClass" style="@($"width: {lineWidth}; height: {Height};")"></span>
+    }
+</div>

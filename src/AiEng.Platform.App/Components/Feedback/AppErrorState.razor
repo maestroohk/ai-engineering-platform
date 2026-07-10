@@ -1,0 +1,38 @@
+@namespace AiEng.Platform.App.Components.Feedback
+@inherits AppErrorStateBase
+
+<div class="@CssClass" role="alert" aria-live="assertive" @attributes="AdditionalAttributes">
+    <div class="app-error-state-body">
+        <h3 class="app-error-state-title">@Title</h3>
+        @if (Description is not null)
+        {
+            <p class="app-error-state-description">@Description</p>
+        }
+        @if (HasDiagnostics)
+        {
+            <dl class="app-error-state-diagnostics">
+                @if (!string.IsNullOrWhiteSpace(ErrorCode))
+                {
+                    <div class="app-error-state-diagnostic">
+                        <dt>Code</dt>
+                        <dd>@ErrorCode</dd>
+                    </div>
+                }
+                @if (!string.IsNullOrWhiteSpace(CorrelationId))
+                {
+                    <div class="app-error-state-diagnostic">
+                        <dt>Reference</dt>
+                        <dd>@CorrelationId</dd>
+                    </div>
+                }
+            </dl>
+        }
+    </div>
+    @if (PrimaryAction is not null || SecondaryAction is not null)
+    {
+        <div class="app-error-state-actions">
+            @PrimaryAction
+            @SecondaryAction
+        </div>
+    }
+</div>
