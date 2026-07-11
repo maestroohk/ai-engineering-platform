@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "updated_at": "2026-07-11T00:00:00Z",
-  "updated_by_session": "m3-1-project-registration-slice-1",
+  "updated_by_session": "m3-2-project-registration-slice-2",
   "milestones": [
     {
       "id": "M0",
@@ -247,20 +247,36 @@
           "handoff": ".ai/handoffs/2026-07-11-m3-1-project-registration-slice-1.md",
           "plan": ".ai/plans/M3-project-registration.md",
           "commit_message": "feat(m3.1): add project registration surface"
+        },
+        "M3.2": {
+          "title": "Project Registration Slice 2 (form, rename, unregister)",
+          "status": "delivered",
+          "delivered_at": "2026-07-11",
+          "session": "m3-2-project-registration-slice-2",
+          "branch": "feature/T-019-m3-2-project-registration-slice-2",
+          "summary": "M3.2 ships the three mutations the M3 surface exists for end-to-end: the registration modal (RegisterProjectForm.razor; HTML5 native <dialog open>; name + folder path fields; resolves IProjectService through the composition root; calls RegisterAsync; emits OnRegistered on success), the rename modal (RenameProjectForm.razor; pre-fills the project's current name; validates the new name is non-empty + differs from the current name; calls RenameAsync; emits OnRenamed on success), the unregister confirmation (ConfirmUnregisterProject.razor; shows the project name; calls UnregisterAsync; emits OnUnregistered on success). The AppProjectCard Rename + Unregister buttons are enabled; the Open button remains disabled (M4-A's responsibility). The page header's Register a project button is enabled; clicking it opens the registration modal. AppProjectList exposes ShowRegisterDialog() (the page header delegates to it) and RefreshAsync() (the form components invoke it on success). The architecture test Pages_Resolve_Projects_Through_Service is extended with three new tests covering the three new form components; the single-seam rule holds for every form. 30 new bUnit tests (8 RegisterProjectFormTests + 8 RenameProjectFormTests + 5 ConfirmUnregisterProjectTests + 5 AppProjectCardTests + 2 ProjectsPageTests + 5 AppProjectListTests) + 3 new architecture tests added. Total: 273 passed, 0 failed, 7 skipped (per ADR-016 / M4-D). 0 warnings, 0 errors. Format clean. Visual smoke: /projects returns 200; the Register a project button is enabled; clicking it opens the registration modal; registering / renaming / unregistering a project works end-to-end. Three documented deviations: (1) AppDialog is not introduced; HTML5 native <dialog> is used directly (minimum-blast-radius; the M1.2 design system does not ship a dialog primitive; the design system is not extended); (2) M3.2 unit tests are reused from M3.1 (the M3.1 IProjectServiceTests already cover the RegisterAsync / RenameAsync / UnregisterAsync happy-path + failure paths); (3) Disabled tests are unchanged (the 7 registered-but-disabled tests remain skipped per ADR-016 / M4-D). The M3.2 closeout commit is on main; the M3.2 feature branch is fast-forwarded into main and deleted per the branching strategy. Push is skipped (no remote authorisation).",
+          "implementation_report": "implementation-report-m3-2-project-registration-slice-2.md",
+          "handoff": ".ai/handoffs/2026-07-11-m3-2-project-registration-slice-2.md",
+          "plan": ".ai/plans/M3.2-project-registration-slice-2.md",
+          "commit_message": "feat(m3.2): enable project registration form, rename, and unregister"
         }
       },
       "evidence": {
         "slices": [
-          "M3.1"
+          "M3.1",
+          "M3.2"
         ],
         "implementation_reports": [
-          "implementation-report-m3-1-project-registration-slice-1.md"
+          "implementation-report-m3-1-project-registration-slice-1.md",
+          "implementation-report-m3-2-project-registration-slice-2.md"
         ],
         "handoffs": [
-          ".ai/handoffs/2026-07-11-m3-1-project-registration-slice-1.md"
+          ".ai/handoffs/2026-07-11-m3-1-project-registration-slice-1.md",
+          ".ai/handoffs/2026-07-11-m3-2-project-registration-slice-2.md"
         ],
         "commits": [
-          "M3.1: feat(m3.1): add project registration surface on feature/m3-1-project-registration-slice-1 (fast-forwarded into main)"
+          "M3.1: feat(m3.1): add project registration surface on feature/m3-1-project-registration-slice-1 (fast-forwarded into main)",
+          "M3.2: feat(m3.2): enable project registration form, rename, and unregister on feature/T-019-m3-2-project-registration-slice-2 (fast-forwarded into main)"
         ]
       }
     },

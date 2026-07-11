@@ -1,3 +1,4 @@
+@using AiEng.Platform.Domain.Projects
 @namespace AiEng.Platform.App.Components.Projects
 
 @inject IProjectService ProjectService
@@ -29,7 +30,9 @@ else if (Projects.Count == 0)
             <Title>No projects yet</Title>
             <Description>Register a project folder to begin. The platform stores the project in memory for the lifetime of the current process; the durable store lands in M4-A.</Description>
             <Actions>
-                <AppButton Variant="AppButtonVariant.Primary" Disabled="true" Title="The registration form lands in M3.2. The action is wired to the seam today.">
+                <AppButton Variant="AppButtonVariant.Primary"
+                           data-testid="empty-register-project"
+                           @onclick="OnShowRegister">
                     Register a project
                 </AppButton>
             </Actions>
@@ -42,11 +45,27 @@ else
         <AppStack Direction="AppStackDirection.Vertical" Gap="AppStackGap.Medium">
             @foreach (var project in Projects)
             {
-                <AppProjectCard Project="project" />
+                <AppProjectCard Project="project"
+                                OnRename="@(() => OnShowRename(project))"
+                                OnUnregister="@(() => OnShowUnregister(project))" />
             }
         </AppStack>
     </div>
 }
+
+<RegisterProjectForm Visible="@ShowRegister"
+                     OnCancel="OnHideRegister"
+                     OnRegistered="OnRegisteredAsync" />
+
+<RenameProjectForm Visible="@(ShowRename && RenameTarget is not null)"
+                   Project="@RenameTarget"
+                   OnCancel="OnHideRename"
+                   OnRenamed="OnRenamedAsync" />
+
+<ConfirmUnregisterProject Visible="@(ShowUnregister && UnregisterTarget is not null)"
+                          Project="@UnregisterTarget"
+                          OnCancel="OnHideUnregister"
+                          OnUnregistered="OnUnregisteredAsync" />
 
 @code {
     private static readonly string CorrelationId = $"m3-list-{Guid.NewGuid():N}";
@@ -57,9 +76,31 @@ else
 
     private string? LoadError { get; set; }
 
+    private bool ShowRegister { get; set; }
+
+    private bool ShowRename { get; set; }
+
+    private AiEng.Platform.Domain.Projects.Project? RenameTarget { get; set; }
+
+    private bool ShowUnregister { get; set; }
+
+    private AiEng.Platform.Domain.Projects.Project? UnregisterTarget { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         await LoadAsync();
+    }
+
+    public async Task RefreshAsync()
+    {
+        await LoadAsync();
+        StateHasChanged();
+    }
+
+    public void ShowRegisterDialog()
+    {
+        ShowRegister = true;
+        StateHasChanged();
     }
 
     private async Task LoadAsync()
@@ -82,4 +123,58 @@ else
     }
 
     private async Task OnRetryAsync() => await LoadAsync();
+
+    private void OnShowRegister()
+    {
+        ShowRegister = true;
+    }
+
+    private void OnHideRegister()
+    {
+        ShowRegister = false;
+    }
+
+    private void OnShowRename(Project project)
+    {
+        RenameTarget = project;
+        ShowRename = true;
+    }
+
+    private void OnHideRename()
+    {
+        ShowRename = false;
+        RenameTarget = null;
+    }
+
+    private void OnShowUnregister(Project project)
+    {
+        UnregisterTarget = project;
+        ShowUnregister = true;
+    }
+
+    private void OnHideUnregister()
+    {
+        ShowUnregister = false;
+        UnregisterTarget = null;
+    }
+
+    private async Task OnRegisteredAsync(Project project)
+    {
+        ShowRegister = false;
+        await LoadAsync();
+    }
+
+    private async Task OnRenamedAsync(Project project)
+    {
+        ShowRename = false;
+        RenameTarget = null;
+        await LoadAsync();
+    }
+
+    private async Task OnUnregisteredAsync(Project project)
+    {
+        ShowUnregister = false;
+        UnregisterTarget = null;
+        await LoadAsync();
+    }
 }

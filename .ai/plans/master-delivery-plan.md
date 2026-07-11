@@ -24,7 +24,7 @@
 | M0    | Documentation Foundation                                | **Done**                   | This document set.                            |
 | M1    | Design System Core                                      | **Done (closed 2026-07-10)** | `implementation-report-m1-closeout.md`; first commits `1722bd2`, `2ba1fad`. |
 | M2    | Application Shell and Navigation                        | **Done (closed 2026-07-11)** | `implementation-report-m2-6-m2-closeout.md`; retrospective at `retrospective-m2-application-shell-and-navigation.md`; M2 closeout commit `chore(m2.6): close M2 with retrospective, milestone closeout standard, and M3 plan` on `main`; `m2` annotated milestone tag at the M2 closeout commit; per-slice commits `de082fd` and `ef1063c` on `feature/m2-1-application-shell` plus the M2.2 → M2.5 commit chain. |
-| M3    | Project Registration                                    | **Active (M3.1 Delivered 2026-07-11)** | `implementation-report-m3-1-project-registration-slice-1.md`; M3.1 closeout commit `feat(m3.1): add project registration surface` on `main`; per-slice branch `feature/m3-1-project-registration-slice-1` (fast-forwarded into `main` and deleted per the branching strategy). The M3 plan is at `.ai/plans/M3-project-registration.md`; the M3.2 plan is at `.ai/plans/M3.2-project-registration-slice-2.md` (Awaiting Approval). |
+| M3    | Project Registration                                    | **Active (M3.1 + M3.2 Delivered 2026-07-11)** | `implementation-report-m3-1-project-registration-slice-1.md`; `implementation-report-m3-2-project-registration-slice-2.md`; M3.1 closeout commit `feat(m3.1): add project registration surface` on `main`; M3.2 closeout commit `feat(m3.2): enable project registration form, rename, and unregister` on `main`; per-slice branches `feature/m3-1-project-registration-slice-1` and `feature/T-019-m3-2-project-registration-slice-2` (both fast-forwarded into `main` and deleted per the branching strategy). The M3 plan is at `.ai/plans/M3-project-registration.md`; the M3.2 plan is at `.ai/plans/M3.2-project-registration-slice-2.md` (Delivered). The M3 closeout (M3.x — the M3 retrospective per the Milestone Closeout Standard) is the next `Ready` task. |
 | M4-A  | Infrastructure / Process Execution                      | Planned                    | No evidence yet.                              |
 | M4-B  | Capability Detection                                    | Planned                    | No evidence yet.                              |
 | M4-C  | Provider Registry Foundation                            | Planned                    | No evidence yet.                              |
@@ -266,6 +266,7 @@ Process execution boundary (M4-A)
 | M2.5  | Empty Routes, Responsive, and Accessibility              | Delivered (2026-07-11). |
 | M2.6  | M2 Closeout and Treehouse Dogfooding                     | Delivered (2026-07-11). |
 | M3.1  | Project Registration Slice 1 (contract + in-memory store + UI surface) | Delivered (2026-07-11). |
+| M3.2  | Project Registration Slice 2 (form, rename, unregister) | Delivered (2026-07-11). |
 
 ### M3 — Project Registration
 
@@ -276,11 +277,13 @@ Process execution boundary (M4-A)
   store; M4-A replaces the in-memory store with a durable
   on-disk implementation behind the same contract.
 - **User-visible outcome.** A user can register a project
-  (name + folder path) from a project-registration page
-  composed of M2 shell + M3 surface. The project appears
-  in the projects list. Projects are not durable across an
-  application restart in M3 (the in-memory store is the
-  smoke test for the contract; durable storage is M4-A).
+  (name + folder path), rename a registered project, and
+  unregister a registered project from a
+  project-registration page composed of M2 shell + M3
+  surface. The project appears in the projects list.
+  Projects are not durable across an application restart
+  in M3 (the in-memory store is the smoke test for the
+  contract; durable storage is M4-A).
 - **Major capabilities delivered.**
   - `AppProjectCard`, `AppProjectList` (the M3
     surface; the list is not virtualised
@@ -288,25 +291,36 @@ Process execution boundary (M4-A)
     if the list grows beyond the
     bUnit-rendered sizes), `AppEmptyState`
     (the registration prompt — wired but
-    disabled in M3.1).
+    disabled in M3.1; the M3.2 Register
+    a project button on the page header
+    replaces the disabled empty-state
+    action).
+  - `RegisterProjectForm`, `RenameProjectForm`,
+    `ConfirmUnregisterProject` (the M3.2
+    mutation modals; HTML5 native
+    `<dialog>`; minimum-blast-radius
+    decision; no `AppDialog` primitive
+    introduced).
   - `IProjectService`, `IProjectStore`
     (in-memory).
   - The architecture test
     `Pages_Resolve_Projects_Through_Service`
-    (active in M3.1; enforces the
+    (active in M3.1; extended in M3.2
+    to cover the three new form
+    components; enforces the
     single-seam rule).
 - **Dependencies.** M2 (closed 2026-07-11).
 - **Completion status.** **Active (M3.1
-  Delivered 2026-07-11; M3.2 is the next
-  `Ready` task; M3 closes when M3.x — the
-  M3 retrospective per the Milestone
-  Closeout Standard — is delivered).**
-  The M3 plan is at
+  + M3.2 Delivered 2026-07-11; M3 closes
+  when M3.x — the M3 retrospective per
+  the Milestone Closeout Standard —
+  is delivered).** The M3 plan is at
   `.ai/plans/M3-project-registration.md`;
   the M3.2 plan is at
   `.ai/plans/M3.2-project-registration-slice-2.md`
-  (Awaiting Approval). T-018 (M3.1) is
-  `Done`; T-019 (M3.2) is `Ready` in
+  (Delivered). T-018 (M3.1) and T-019
+  (M3.2) are `Done`; T-020 (M3 closeout)
+  is `Ready` in
   `.ai/state/tasks.json`.
 - **Evidence.** The M3.1 closeout
   report at
@@ -317,6 +331,17 @@ Process execution boundary (M4-A)
   `feat(m3.1): add project registration surface`
   on `main` (the M3.1 feature branch
   `feature/m3-1-project-registration-slice-1`
+  is fast-forwarded into `main` per the
+  branching strategy rule 6 and deleted
+  per rule 7). The M3.2 closeout report
+  at
+  `implementation-report-m3-2-project-registration-slice-2.md`;
+  the M3.2 per-session handoff at
+  `.ai/handoffs/2026-07-11-m3-2-project-registration-slice-2.md`;
+  the M3.2 closeout commit
+  `feat(m3.2): enable project registration form, rename, and unregister`
+  on `main` (the M3.2 feature branch
+  `feature/T-019-m3-2-project-registration-slice-2`
   is fast-forwarded into `main` per the
   branching strategy rule 6 and deleted
   per rule 7).

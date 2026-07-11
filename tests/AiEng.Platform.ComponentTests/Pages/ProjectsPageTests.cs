@@ -45,49 +45,98 @@ public class ProjectsPageTests : BunitContext
     [Fact]
     public void Renders_App_Project_List_Slot_With_Populated_State_When_Projects_Are_Registered()
     {
-        Services.AddSingleton<IProjectService>(new StaticService(new List<Project>
+        var dir = Path.Combine(Path.GetTempPath(), "aieng-page-pop-" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(dir);
+        try
         {
-            new(Guid.NewGuid(), "alpha", "/tmp/alpha", new DateTimeOffset(2026, 7, 1, 12, 0, 0, TimeSpan.Zero)),
-        }));
-        var cut = Render<ProjectsPage>();
+            Services.AddSingleton<IProjectService>(new StaticService(new List<Project>
+            {
+                new(Guid.NewGuid(), "alpha", dir, new DateTimeOffset(2026, 7, 1, 12, 0, 0, TimeSpan.Zero)),
+            }));
+            var cut = Render<ProjectsPage>();
 
-        cut.WaitForState(() => cut.FindAll(".app-project-card").Count == 1);
+            cut.WaitForState(() => cut.FindAll(".app-project-card").Count == 1);
 
-        Assert.Contains("data-state=\"populated\"", cut.Markup);
-        Assert.Contains("alpha", cut.Markup);
+            Assert.Contains("data-state=\"populated\"", cut.Markup);
+            Assert.Contains("alpha", cut.Markup);
+        }
+        finally
+        {
+            Directory.Delete(dir, recursive: true);
+        }
     }
 
     [Fact]
-    public void Register_Button_Is_Disabled_In_M3_1()
+    public void Register_Button_Is_Enabled_In_M3_2()
     {
         var cut = Render<ProjectsPage>();
 
         cut.WaitForState(() => cut.FindAll("header.app-page-header").Count > 0);
 
-        var button = cut.Find(".app-page-header-actions .app-button-primary");
-        Assert.True(button.HasAttribute("disabled"));
+        var button = cut.Find("[data-testid='register-project']");
+        Assert.False(button.HasAttribute("disabled"));
+    }
+
+    [Fact]
+    public void Clicking_Register_Button_Opens_The_Registration_Modal()
+    {
+        var cut = Render<ProjectsPage>();
+
+        cut.WaitForState(() => cut.FindAll("header.app-page-header").Count > 0);
+
+        Assert.DoesNotContain("data-testid=\"register-project-modal\"", cut.Markup);
+
+        cut.Find("[data-testid='register-project']").Click();
+
+        cut.WaitForState(() => cut.Markup.Contains("data-testid=\"register-project-modal\""));
+
+        Assert.Contains("data-testid=\"register-project-modal\"", cut.Markup);
     }
 
     private sealed class StaticService : IProjectService
     {
-        private readonly IReadOnlyList<Project> _projects;
+        private readonly List<Project> _projects;
 
-        public StaticService(IReadOnlyList<Project> projects) => _projects = projects;
+        public StaticService(IReadOnlyList<Project> projects) => _projects = new List<Project>(projects);
 
-        public Task<Result<Project>> RegisterAsync(string name, string path, CancellationToken cancellationToken = default) =>
-            throw new NotSupportedException("M3.1 ships the list surface; register lands in M3.2.");
+        public Task<Result<Project>> RegisterAsync(string name, string path, CancellationToken cancellationToken = default)
+        {
+            if (!Directory.Exists(path))
+            {
+                return Task.FromResult(Result<Project>.Failure(ValidationError.InvalidPath("path", path)));
+            }
+            var project = new Project(Guid.NewGuid(), name.Trim(), path, DateTimeOffset.UtcNow);
+            _projects.Add(project);
+            return Task.FromResult(Result<Project>.Success(project));
+        }
 
         public Task<IReadOnlyList<Project>> ListAsync(CancellationToken cancellationToken = default) =>
-            Task.FromResult(_projects);
+            Task.FromResult((IReadOnlyList<Project>)_projects.ToArray());
 
         public Task<Project?> GetAsync(Guid id, CancellationToken cancellationToken = default) =>
             Task.FromResult(_projects.FirstOrDefault(p => p.Id == id));
 
-        public Task<Result<Project>> RenameAsync(Guid id, string newName, CancellationToken cancellationToken = default) =>
-            throw new NotSupportedException();
+        public Task<Result<Project>> RenameAsync(Guid id, string newName, CancellationToken cancellationToken = default)
+        {
+            var project = _projects.FirstOrDefault(p => p.Id == id);
+            if (project is null)
+            {
+                return Task.FromResult(Result<Project>.Failure(ValidationError.NotFound("Project", id)));
+            }
+            project.Rename(newName);
+            return Task.FromResult(Result<Project>.Success(project));
+        }
 
-        public Task<Result<Project>> UnregisterAsync(Guid id, CancellationToken cancellationToken = default) =>
-            throw new NotSupportedException();
+        public Task<Result<Project>> UnregisterAsync(Guid id, CancellationToken cancellationToken = default)
+        {
+            var project = _projects.FirstOrDefault(p => p.Id == id);
+            if (project is null)
+            {
+                return Task.FromResult(Result<Project>.Failure(ValidationError.NotFound("Project", id)));
+            }
+            _projects.Remove(project);
+            return Task.FromResult(Result<Project>.Success(project));
+        }
     }
 
     private sealed class RegistryWithRoute : INavigationRegistry

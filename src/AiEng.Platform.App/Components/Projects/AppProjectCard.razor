@@ -34,19 +34,22 @@
             <AppButton Size="AppButtonSize.Small"
                        Variant="AppButtonVariant.Primary"
                        Disabled="true"
+                       data-testid="open-project"
                        Title="Project opening lands in M4-A. The card is wired to the seam today.">
                 Open
             </AppButton>
             <AppButton Size="AppButtonSize.Small"
                        Variant="AppButtonVariant.Outline"
-                       Disabled="true"
-                       Title="Rename lands in M3.2. The action is wired to the seam today.">
+                       data-testid="rename-project"
+                       Title="Rename the project through IProjectService.RenameAsync."
+                       @onclick="OnRenameClick">
                 Rename
             </AppButton>
             <AppButton Size="AppButtonSize.Small"
                        Variant="AppButtonVariant.Ghost"
-                       Disabled="true"
-                       Title="Unregister lands in M3.2. The action is wired to the seam today.">
+                       data-testid="unregister-project"
+                       Title="Unregister the project through IProjectService.UnregisterAsync."
+                       @onclick="OnUnregisterClick">
                 Unregister
             </AppButton>
         </div>
@@ -57,6 +60,12 @@
     [Parameter, EditorRequired]
     public Project Project { get; set; } = null!;
 
+    [Parameter]
+    public EventCallback OnRename { get; set; }
+
+    [Parameter]
+    public EventCallback OnUnregister { get; set; }
+
     [Parameter(CaptureUnmatchedValues = true)]
     public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
 
@@ -65,4 +74,8 @@
     private AppBadgeVariant StatusBadgeVariant => Project.LastUsedAt is null
         ? AppBadgeVariant.Neutral
         : AppBadgeVariant.Success;
+
+    private async Task OnRenameClick() => await OnRename.InvokeAsync();
+
+    private async Task OnUnregisterClick() => await OnUnregister.InvokeAsync();
 }

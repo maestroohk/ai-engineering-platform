@@ -1,0 +1,119 @@
+@namespace AiEng.Platform.App.Components.Projects
+
+@inject IProjectService ProjectService
+
+@if (Visible)
+{
+    <dialog open class="app-project-modal" data-testid="register-project-modal" aria-labelledby="register-project-modal-title">
+        <AppCard>
+            <Header>
+                <h2 id="register-project-modal-title" class="app-project-modal-title">Register a project</h2>
+            </Header>
+            <ChildContent>
+                <AppStack Direction="AppStackDirection.Vertical" Gap="AppStackGap.Medium">
+                    <label class="app-project-modal-field">
+                        <span class="app-project-modal-label">Name</span>
+                        <input class="app-project-modal-input"
+                               type="text"
+                               data-testid="register-project-name"
+                               @bind="Name"
+                               @bind:event="oninput"
+                               disabled="@IsSubmitting"
+                               autocomplete="off"
+                               aria-required="true" />
+                    </label>
+                    <label class="app-project-modal-field">
+                        <span class="app-project-modal-label">Path</span>
+                        <input class="app-project-modal-input"
+                               type="text"
+                               data-testid="register-project-path"
+                               @bind="Path"
+                               @bind:event="oninput"
+                               disabled="@IsSubmitting"
+                               autocomplete="off"
+                               spellcheck="false"
+                               aria-required="true" />
+                    </label>
+                    @if (Error is { } error)
+                    {
+                        <div class="app-project-modal-error" data-testid="register-project-error" role="alert">
+                            @error
+                        </div>
+                    }
+                </AppStack>
+            </ChildContent>
+            <Footer>
+                <div class="app-project-modal-actions">
+                    <AppButton Variant="AppButtonVariant.Ghost"
+                               Disabled="@IsSubmitting"
+                               data-testid="register-project-cancel"
+                               @onclick="OnCancel">
+                        Cancel
+                    </AppButton>
+                    <AppButton Variant="AppButtonVariant.Primary"
+                               Disabled="@(!CanSubmit)"
+                               Loading="@IsSubmitting"
+                               data-testid="register-project-submit"
+                               @onclick="OnSubmitAsync">
+                        Register
+                    </AppButton>
+                </div>
+            </Footer>
+        </AppCard>
+    </dialog>
+}
+
+@code {
+    [Parameter]
+    public bool Visible { get; set; }
+
+    [Parameter]
+    public EventCallback OnCancel { get; set; }
+
+    [Parameter]
+    public EventCallback<AiEng.Platform.Domain.Projects.Project> OnRegistered { get; set; }
+
+    private string Name { get; set; } = string.Empty;
+
+    private string Path { get; set; } = string.Empty;
+
+    private bool IsSubmitting { get; set; }
+
+    private string? Error { get; set; }
+
+    private bool CanSubmit => !IsSubmitting
+        && !string.IsNullOrWhiteSpace(Name)
+        && !string.IsNullOrWhiteSpace(Path);
+
+    private async Task OnSubmitAsync()
+    {
+        if (!CanSubmit)
+        {
+            return;
+        }
+        IsSubmitting = true;
+        Error = null;
+        try
+        {
+            var result = await ProjectService.RegisterAsync(Name, Path);
+            if (result.IsSuccess)
+            {
+                Name = string.Empty;
+                Path = string.Empty;
+                await OnRegistered.InvokeAsync(result.Value);
+            }
+            else
+            {
+                Error = result.Error?.Message;
+            }
+        }
+        catch (Exception ex)
+        {
+            Error = ex.Message;
+        }
+        finally
+        {
+            IsSubmitting = false;
+        }
+    }
+}

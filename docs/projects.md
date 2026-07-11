@@ -17,9 +17,13 @@
 > entity** (`Project`), the **composition root**
 > (`AddProjects`), and the **UI surface**
 > (`AppProjectCard`, `AppProjectList`, the
-> `/projects` page). M3 composes the M2 shell
-> (sidebar, top bar, breadcrumb, page header).
-> M3 does not introduce a new shell surface.
+> `/projects` page). M3.1 composes the M2 shell
+> (sidebar, top bar, breadcrumb, page header) and
+> ships the read-only list. M3.2 ships the
+> registration form, the rename form, and the
+> unregister confirmation; the three mutations
+> reach the store through `IProjectService`. M3
+> does not introduce a new shell surface.
 >
 > This document is the **definition** of the M3
 > product surface. The implementation lives in
@@ -35,13 +39,18 @@ The `/projects` surface exists to:
 - **Register a project.** A user names a folder
   and the platform records it. The platform owns
   the project list in the application layer.
+  **Enabled in M3.2** via the
+  `RegisterProjectForm` modal.
 - **List registered projects.** A user sees every
   project the platform knows about, sorted by
-  name.
+  name. **Enabled in M3.1** via `AppProjectList`.
 - **Open a project** (wired in M3.1; enabled in
   M4-A when durable storage lands).
-- **Rename and unregister a project** (wired in
-  M3.1; enabled in M3.2).
+- **Rename a project** (wired in M3.1; **enabled
+  in M3.2** via the `RenameProjectForm` modal).
+- **Unregister a project** (wired in M3.1;
+  **enabled in M3.2** via the
+  `ConfirmUnregisterProject` confirmation).
 - **Be the smallest piece of state the platform
   needs to be useful.** Every later milestone
   (M4 process runner, M5 worktree, M6 launch, M7
@@ -142,10 +151,12 @@ and three action buttons: **Open**, **Rename**,
 The card does **not** own state. The card is a
 pure render of the `Project` parameter.
 
-The three action buttons are **disabled** in
-M3.1. They are wired to the seam today; the
-**Open** action is enabled in M4-A; the **Rename**
-and **Unregister** actions are enabled in M3.2.
+The three action buttons are **disabled** for
+the Open action in M3.2 (lands in M4-A). The
+**Rename** and **Unregister** buttons are
+**enabled in M3.2**; the Open button remains
+disabled (M4-A's responsibility). All three
+buttons are wired to the seam today.
 
 The status badge is **New** (`AppBadgeVariant.Neutral`)
 when `LastUsedAt` is `null`; **Active**
@@ -181,9 +192,10 @@ between `Dashboard` and `Design system` per the M2
 sidebar ordering (M2.2 sets the order: `Order = 1`).
 
 The page header has a **Register a project**
-action button that is **disabled** in M3.1. The
-button is wired to the seam today; the registration
-form lands in M3.2.
+action button that is **enabled in M3.2** via
+the `RegisterProjectForm` modal. The button is
+wired to the seam today; the modal opens when
+the user clicks.
 
 ---
 
@@ -216,20 +228,38 @@ registers:
 
 - `AppProjectCardTests` — primary render, every
   badge variant (New + Active), every action
-  button.
+  button (Open disabled, Rename + Unregister
+  enabled in M3.2), the click handlers
+  (`OnRename`, `OnUnregister`).
 - `AppProjectListTests` — every state slot
-  (Loading, Empty, Error, Populated).
+  (Loading, Empty, Error, Populated), modal
+  openings (Register, Rename, Unregister),
+  refresh-on-mutation (`RefreshAsync`).
+- `RegisterProjectFormTests` — every form state
+  (idle, submitting, success, validation
+  error); the form is hidden when `Visible` is
+  false.
+- `RenameProjectFormTests` — pre-fill of the
+  current name, the new-name-must-differ
+  rule, success + not-found paths.
+- `ConfirmUnregisterProjectTests` — the
+  confirmation prompt, the cancel + confirm
+  actions, the not-found error path.
 - `ProjectsPageTests` — page header, breadcrumb
-  integration, sidebar registration, the disabled
-  Register button.
+  integration, sidebar registration, the
+  **enabled** Register button (M3.2), the
+  register-modal open path.
 
 ### 7.3 Architecture Tests
 
 - `Pages_Resolve_Projects_Through_Service` —
-  asserts the `/projects` page and the
-  `AppProjectList` consume `IProjectService`
-  through the contract, not through direct access
-  to `InMemoryProjectStore` or the file system.
+  asserts the `/projects` page, the
+  `AppProjectList`, the `RegisterProjectForm`,
+  the `RenameProjectForm`, and the
+  `ConfirmUnregisterProject` modal all consume
+  `IProjectService` through the contract, not
+  through direct access to `InMemoryProjectStore`
+  or the file system.
 
 ### 7.4 Disabled Tests
 
@@ -241,12 +271,11 @@ remain registered-but-disabled per ADR-016 / M4-D.
 
 ## 8. Out of Scope (M3)
 
-- The registration form (M3.2).
-- The rename and unregister actions (M3.2).
-- The open action (M4-A; the durable store
-  replaces the in-memory store, and the platform
-  can resolve a process runner against the path).
 - The on-disk `IProjectStore` (M4-A).
+- The Open action — the durable store replaces
+  the in-memory store, and the platform can
+  resolve a process runner against the path
+  (M4-A).
 - Providers, processes, worktrees, runs, reviews,
   quality gates, autonomous loops, orchestration
   (M4–M8).

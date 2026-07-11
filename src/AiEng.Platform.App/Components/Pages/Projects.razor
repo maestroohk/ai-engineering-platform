@@ -1,7 +1,7 @@
 @namespace AiEng.Platform.App.Components.Pages
 
 @page "/projects"
-@attribute [RouteMetadata("/projects", "Projects", Order = 1, ShowInSidebar = true, Icon = "▢", Description = "Registered projects. The smallest piece of state the platform needs to be useful. M3 ships the contract, the in-memory store, and the surface; M4-A swaps in durable storage behind the same contract.")]
+@attribute [RouteMetadata("/projects", "Projects", Order = 1, ShowInSidebar = true, Icon = "▢", Description = "Registered projects. The smallest piece of state the platform needs to be useful. M3 ships the contract, the in-memory store, and the surface; M4-A swaps in durable storage behind the same seam.")]
 @layout AppLayout
 @rendermode InteractiveServer
 @using AiEng.Platform.App.Components.Common
@@ -24,11 +24,21 @@
     <Description>Registered project folders. The platform owns the project list through the IProjectService contract; the M3 in-memory store is the smoke test for the contract, the M4-A on-disk store replaces it behind the same seam.</Description>
     <Actions>
         <AppButton Variant="AppButtonVariant.Primary"
-                   Disabled="true"
-                   Title="The registration form lands in M3.2. The action is wired to the seam today.">
+                   data-testid="register-project"
+                   Title="Register a new project through IProjectService.RegisterAsync."
+                   @onclick="OnShowRegister">
             Register a project
         </AppButton>
     </Actions>
 </AppPageHeader>
 
-<AppProjectList />
+<AppProjectList @ref="ProjectList" />
+
+@code {
+    private AppProjectList? ProjectList { get; set; }
+
+    private void OnShowRegister()
+    {
+        ProjectList?.ShowRegisterDialog();
+    }
+}

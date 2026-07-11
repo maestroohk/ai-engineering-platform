@@ -17,21 +17,7 @@ public sealed class PagesResolveProjectsThroughServiceTests
             "Projects.razor must reference IProjectService to resolve projects. " +
             "Pages must not read the project store directly; the service is the only allowed seam.");
 
-        var forbidden = new[]
-        {
-            "InMemoryProjectStore",
-            "Directory.GetCurrentDirectory",
-            "File.ReadAllText",
-            "JsonSerializer.Deserialize",
-        };
-        var hits = forbidden
-            .Where(token => source.Contains(token, StringComparison.Ordinal))
-            .ToArray();
-        Assert.True(
-            hits.Length == 0,
-            "Projects.razor must not reach into the project store, the file system, or deserialize JSON directly. " +
-            "The IProjectService abstraction is the only allowed seam. " +
-            "Forbidden tokens found: " + string.Join(", ", hits));
+        AssertNoForbiddenTokens(source, "Projects.razor");
     }
 
     [Fact]
@@ -47,6 +33,46 @@ public sealed class PagesResolveProjectsThroughServiceTests
             "AppProjectList.razor must @inject IProjectService. " +
             "The list is a data-owning component; direct store access is not allowed.");
 
+        AssertNoForbiddenTokens(source, "AppProjectList.razor");
+    }
+
+    [Fact]
+    public void RegisterProjectForm_resolves_projects_through_IProjectService()
+    {
+        var path = Path.Combine(LocateAppRoot(), "Components", "Projects", "RegisterProjectForm.razor");
+        AssertSource(path, "RegisterProjectForm.razor");
+    }
+
+    [Fact]
+    public void RenameProjectForm_resolves_projects_through_IProjectService()
+    {
+        var path = Path.Combine(LocateAppRoot(), "Components", "Projects", "RenameProjectForm.razor");
+        AssertSource(path, "RenameProjectForm.razor");
+    }
+
+    [Fact]
+    public void ConfirmUnregisterProject_resolves_projects_through_IProjectService()
+    {
+        var path = Path.Combine(LocateAppRoot(), "Components", "Projects", "ConfirmUnregisterProject.razor");
+        AssertSource(path, "ConfirmUnregisterProject.razor");
+    }
+
+    private static void AssertSource(string path, string label)
+    {
+        Assert.True(File.Exists(path), $"{label} not found at {path}");
+
+        var source = File.ReadAllText(path);
+
+        Assert.True(
+            source.Contains("@inject IProjectService", StringComparison.Ordinal),
+            $"{label} must @inject IProjectService. " +
+            "The form is a data-mutating component; direct store access is not allowed.");
+
+        AssertNoForbiddenTokens(source, label);
+    }
+
+    private static void AssertNoForbiddenTokens(string source, string label)
+    {
         var forbidden = new[]
         {
             "InMemoryProjectStore",
@@ -59,7 +85,7 @@ public sealed class PagesResolveProjectsThroughServiceTests
             .ToArray();
         Assert.True(
             hits.Length == 0,
-            "AppProjectList.razor must not reach into the project store, the file system, or deserialize JSON directly. " +
+            $"{label} must not reach into the project store, the file system, or deserialize JSON directly. " +
             "The IProjectService abstraction is the only allowed seam. " +
             "Forbidden tokens found: " + string.Join(", ", hits));
     }

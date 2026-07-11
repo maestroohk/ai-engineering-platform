@@ -1,0 +1,66 @@
+.app-project-modal {
+    border: none;
+    padding: 0;
+    background: transparent;
+    color: inherit;
+    max-width: 32rem;
+    width: 100%;
+    margin: auto;
+}
+
+.app-project-modal::backdrop {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.app-project-modal-title {
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+}
+
+.app-project-modal-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.app-project-modal-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.app-project-modal-input {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid currentColor;
+    border-radius: 0.25rem;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.app-project-modal-input:focus {
+    outline: 2px solid #4f46e5;
+    outline-offset: 1px;
+}
+
+.app-project-modal-input:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.app-project-modal-error {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #dc2626;
+    border-radius: 0.25rem;
+    background: rgba(220, 38, 38, 0.1);
+    color: #dc2626;
+    font-size: 0.875rem;
+}
+
+.app-project-modal-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}

@@ -1,0 +1,95 @@
+@namespace AiEng.Platform.App.Components.Projects
+
+@inject IProjectService ProjectService
+
+@if (Visible)
+{
+    <dialog open class="app-project-modal" data-testid="unregister-project-modal" aria-labelledby="unregister-project-modal-title">
+        <AppCard>
+            <Header>
+                <h2 id="unregister-project-modal-title" class="app-project-modal-title">Unregister project</h2>
+            </Header>
+            <ChildContent>
+                <AppStack Direction="AppStackDirection.Vertical" Gap="AppStackGap.Medium">
+                    <p class="app-project-modal-text">
+                        Are you sure you want to unregister <strong>@Project?.Name</strong>?
+                    </p>
+                    <div class="app-project-modal-path" title="@(Project?.Path ?? string.Empty)">
+                        @Project?.Path
+                    </div>
+                    @if (Error is { } error)
+                    {
+                        <div class="app-project-modal-error" data-testid="unregister-project-error" role="alert">
+                            @error
+                        </div>
+                    }
+                </AppStack>
+            </ChildContent>
+            <Footer>
+                <div class="app-project-modal-actions">
+                    <AppButton Variant="AppButtonVariant.Ghost"
+                               Disabled="@IsSubmitting"
+                               data-testid="unregister-project-cancel"
+                               @onclick="OnCancel">
+                        Cancel
+                    </AppButton>
+                    <AppButton Variant="AppButtonVariant.Primary"
+                               Disabled="@IsSubmitting"
+                               Loading="@IsSubmitting"
+                               data-testid="unregister-project-confirm"
+                               @onclick="OnConfirmAsync">
+                        Unregister
+                    </AppButton>
+                </div>
+            </Footer>
+        </AppCard>
+    </dialog>
+}
+
+@code {
+    [Parameter]
+    public bool Visible { get; set; }
+
+    [Parameter]
+    public AiEng.Platform.Domain.Projects.Project? Project { get; set; }
+
+    [Parameter]
+    public EventCallback OnCancel { get; set; }
+
+    [Parameter]
+    public EventCallback<AiEng.Platform.Domain.Projects.Project> OnUnregistered { get; set; }
+
+    private bool IsSubmitting { get; set; }
+
+    private string? Error { get; set; }
+
+    private async Task OnConfirmAsync()
+    {
+        if (IsSubmitting || Project is null)
+        {
+            return;
+        }
+        IsSubmitting = true;
+        Error = null;
+        try
+        {
+            var result = await ProjectService.UnregisterAsync(Project.Id);
+            if (result.IsSuccess)
+            {
+                await OnUnregistered.InvokeAsync(result.Value);
+            }
+            else
+            {
+                Error = result.Error?.Message;
+            }
+        }
+        catch (Exception ex)
+        {
+            Error = ex.Message;
+        }
+        finally
+        {
+            IsSubmitting = false;
+        }
+    }
+}

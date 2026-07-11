@@ -41,7 +41,7 @@
 
 - **Active milestone:** **M3 — Project Registration**
   (Active, 2026-07-11; M3.1 delivered
-  2026-07-11; M3.2 is the next `Ready` task;
+  2026-07-11; M3.2 delivered 2026-07-11;
   M3 closes when M3.x — the M3 closeout
   slice (M3 retrospective per the Milestone
   Closeout Standard) — is delivered).
@@ -234,30 +234,63 @@
   `IProjectService.ListAsync` as its
   input. See
   [`implementation-report-m3-1-project-registration-slice-1.md`](./../../implementation-report-m3-1-project-registration-slice-1.md).
+- **M3.2 — Project Registration Slice 2:**
+  **Delivered (2026-07-11).** The three
+  mutations the M3 surface exists for
+  land: `RegisterProjectForm` (the
+  registration modal; page header
+  Register a project button is now
+  enabled), `RenameProjectForm` (the
+  rename modal; AppProjectCard Rename
+  button is now enabled), and
+  `ConfirmUnregisterProject` (the
+  unregister confirmation; AppProjectCard
+  Unregister button is now enabled).
+  All three use HTML5 native `<dialog>`
+  elements with scoped CSS and
+  `data-testid` attributes. The
+  `AppProjectList` exposes
+  `ShowRegisterDialog()` and
+  `RefreshAsync()` methods. The
+  architecture test
+  `Pages_Resolve_Projects_Through_Service`
+  is extended with three new tests
+  (one per new form component); the
+  single-seam rule holds. 30 new bUnit
+  tests + 3 new architecture tests +
+  0 new unit tests (the M3.1
+  `IProjectServiceTests` already cover
+  the happy-path + failure paths). The
+  Open button on `AppProjectCard`
+  remains disabled — that is M4-A's
+  responsibility. Total: 273 passed, 0
+  failed, 7 skipped (per ADR-016 /
+  M4-D); M3.2 is +30 bUnit + 3
+  architecture vs M3.1 closeout. See
+  [`implementation-report-m3-2-project-registration-slice-2.md`](./../../implementation-report-m3-2-project-registration-slice-2.md).
 
 ## Current Slice
 
-- **Active slice:** **M3.1 — Project
-  Registration Slice 1** (delivered
+- **Active slice:** **M3.2 — Project
+  Registration Slice 2** (delivered
   2026-07-11). The branch
-  `feature/m3-1-project-registration-slice-1`
-  carried the M3.1 work; the M3.1
+  `feature/T-019-m3-2-project-registration-slice-2`
+  carried the M3.2 work; the M3.2
   closeout commit
-  `feat(m3.1): add project registration surface`
+  `feat(m3.2): enable project registration form, rename, and unregister`
   is on this branch; the branch is
   fast-forwarded into `main` per the
   branching strategy rule 6; the branch is
   deleted per rule 7.
-  milestone tag is at the M2 closeout
-  commit on `main` per rule 9.
-- **Last completed slice:** **M2.4 —
-  Project Intelligence Dashboard**
+- **Last completed slice:** **M3.1 —
+  Project Registration Slice 1**
   (delivered 2026-07-11). The branch
-  `feature/m2-4-project-intelligence-dashboard`
-  carries the implementation; the
+  `feature/m3-1-project-registration-slice-1`
+  carried the M3.1 work; the M3.1
   closeout commit
-  `feat(m2.4): add project intelligence dashboard`
-  is on this branch.
+  `feat(m3.1): add project registration surface`
+  is on `main`; the branch is deleted
+  per the branching strategy rule 7.
 - **M2.2 — Navigation Registry and
   Sidebar** (delivered 2026-07-11).
   The branch
@@ -309,28 +342,24 @@
   at the M2 closeout commit on `main`).**
 - **M3 — Project Registration:**
   **Active (2026-07-11; M3.1 Delivered
-  2026-07-11).** The M3 surface is the
-  smallest piece of state the platform
-  needs to be useful on its own. M3.1
-  ships the contract, the in-memory
-  store, the UI surface, and the
-  architecture test. M3.2 is the
-  next `Ready` task (registration form
-  + rename + unregister). M3 closes
-  when M3.x — the M3 retrospective per
-  the Milestone Closeout Standard — is
+  2026-07-11; M3.2 Delivered 2026-07-11).**
+  The M3 surface is the smallest piece
+  of state the platform needs to be
+  useful on its own. M3.1 ships the
+  contract, the in-memory store, the UI
+  surface, and the architecture test.
+  M3.2 ships the three mutations
+  (registration form, rename form,
+  unregister confirmation) through the
+  same contract. M3 closes when M3.x
+  — the M3 retrospective per the
+  Milestone Closeout Standard — is
   delivered. The M3 plan is at
-  `.ai/plans/M3-project-registration.md`
-  (Status: Awaiting Approval, 2026-07-11;
-  promoted implicitly to Approved per
-  the M3.1 brief; the M3.1 plan is the
-  first M3 slice).**
+  `.ai/plans/M3-project-registration.md`.**
 - **M4-A through M8:** Planned; no
-  evidence yet. M3.2 (form + rename +
-  unregister) is the next `Ready`
-  task; M3.x (M3 retrospective) is the
-  M3 closeout slice; M4-A is the next
-  milestone after M3 closes.
+  evidence yet. M3.x (M3 retrospective)
+  is the next `Ready` task; M4-A is the
+  next milestone after M3 closes.
 
 ## Last Completed Milestone
 
@@ -353,60 +382,79 @@
 
 ## Last Completed Task
 
-- The M3.1 implementation session
+- The M3.2 implementation session
   (2026-07-11), which:
-  - Delivered M3.1 — Project
-    Registration Slice 1 per the
-    approved M3 plan
-    (`.ai/plans/M3-project-registration.md`).
-  - Landed the M3 surface end-to-end
-    as a single slice: the contract
-    (`IProjectStore`, `IProjectService`),
-    the in-memory store
-    (`InMemoryProjectStore`; the M3
-    smoke test for the contract; M4-A
-    swaps the `IProjectStore`
-    registration in `AddProjects`),
-    the domain entity (`Project`), the
-    composition root
-    (`ProjectsServiceCollectionExtensions.AddProjects`),
-    the UI surface (`AppProjectCard`,
-    `AppProjectList`, `/projects` page),
-    the architecture test
+  - Delivered M3.2 — Project
+    Registration Slice 2 per the
+    approved M3.2 plan
+    (`.ai/plans/M3.2-project-registration-slice-2.md`).
+  - Landed the three mutations the M3
+    surface exists for: the
+    registration form
+    (`RegisterProjectForm`), the rename
+    form (`RenameProjectForm`), and
+    the unregister confirmation
+    (`ConfirmUnregisterProject`). The
+    three forms use HTML5 native
+    `<dialog>` elements with scoped
+    CSS and `data-testid` attributes.
+  - Enabled the `AppProjectCard`
+    Rename + Unregister buttons (Open
+    remains disabled for M4-A); the
+    page header's Register a project
+    button is enabled; the
+    `AppProjectList` exposes
+    `ShowRegisterDialog()` and
+    `RefreshAsync()` methods.
+  - Extended the architecture test
     `Pages_Resolve_Projects_Through_Service`
-    (enforces the single-seam rule),
-    27 new unit tests + 13 new bUnit
-    tests + 2 new architecture tests.
-  - Validated the M3.1 slice
+    with three new tests (one per new
+    form component); the single-seam
+    rule holds.
+  - 30 new bUnit tests + 3 new
+    architecture tests + 0 new unit
+    tests (the M3.1
+    `IProjectServiceTests` already
+    cover the happy-path + failure
+    paths).
+  - Validated the M3.2 slice
     end-to-end: `npm run css:build`
     (exit 0), `dotnet restore` (exit
     0), `dotnet build` (0 warnings, 0
-    errors), `dotnet test` (240
+    errors), `dotnet test` (273
     passed, 0 failed, 7 skipped per
     ADR-016), `dotnet format
     --verify-no-changes` (exit 0),
-    visual smoke (`curl
-    http://localhost:5286/projects`
-    returns 200 with the expected
-    markers).
-  - 240 total tests pass: 34 unit +
-    198 component + 8 architecture, 7
-    skipped. The M3.1 closeout adds
-    +27 unit + 13 bUnit + 2
-    architecture tests vs the M2.6
+    visual smoke (the /projects
+    route opens the registration
+    modal; registering a project
+    navigates to the populated state;
+    renaming a project updates the
+    name; unregistering a project
+    removes it).
+  - 273 total tests pass: 34 unit +
+    228 component + 11 architecture, 7
+    skipped. The M3.2 closeout adds
+    +0 unit + 30 bUnit + 3
+    architecture tests vs the M3.1
     closeout.
   - Three documented deviations: (1)
-    `ValidationError` is a class, not
-    a struct (`T?` semantics on the
-    `Result<T>.Error` slot forced the
-    change); (2) `IClock` is realised
-    through .NET 8+ `TimeProvider`;
-    (3) Disabled tests unchanged.
+    `AppDialog` is not introduced;
+    HTML5 native `<dialog>` is used
+    instead (minimum-blast-radius
+    decision; the M1.2 design system
+    does not ship a dialog primitive);
+    (2) M3.2 unit tests are reused
+    from M3.1 (the M3.1
+    `IProjectServiceTests` already
+    cover the happy-path + failure
+    paths); (3) Disabled tests
+    unchanged.
   - The commit
-    `feat(m3.1): add project registration surface`
+    `feat(m3.2): enable project registration form, rename, and unregister`
     is the closing receipt; the commit
     is on the feature branch
-    `feature/m3-1-project-registration-slice-1`;
+    `feature/T-019-m3-2-project-registration-slice-2`;
     the branch is fast-forwarded into
     `main` per the branching strategy
     rule 6; the branch is deleted per
@@ -415,38 +463,42 @@
     user may push in a follow-up
     command per the command protocol).
   - The session does **not**
-    implement M3.2; per the
-    Progressive Coding Rule, M3.2 is
-    the next session's responsibility.
-- The M2.5 implementation session
+    implement M3 closeout (M3.x); per
+    the Progressive Coding Rule, M3
+    closeout is the next session's
+    responsibility.
+- The M3.1 implementation session
   (2026-07-11) is the prior task;
-  the M2.4 implementation session
+  the M2.5 implementation session
   (2026-07-11) is the prior-prior
-  task; the M2.3 implementation
+  task; the M2.4 implementation
   session (2026-07-11) is the
-  prior-prior-prior task; the M2.2
+  prior-prior-prior task; the M2.3
   implementation session
   (2026-07-11) is the
   prior-prior-prior-prior task; the
-  M2.1 implementation session
+  M2.2 implementation session
   (2026-07-11) is the
   prior-prior-prior-prior-prior
+  task; the M2.1 implementation
+  session (2026-07-11) is the
+  prior-prior-prior-prior-prior-prior
   task; the M0.5 architecture
   refinement session (2026-07-10)
   is the
-  prior-prior-prior-prior-prior-prior
+  prior-prior-prior-prior-prior-prior-prior
   task.
 
 ## Active Branch
 
-- **`main`** (the M3.1 closeout's
-  fast-forwarded branch). The M3.1
+- **`main`** (the M3.2 closeout's
+  fast-forwarded branch). The M3.2
   closeout commit
-  `feat(m3.1): add project registration surface`
-  is the HEAD of `main`. The M3.1
+  `feat(m3.2): enable project registration form, rename, and unregister`
+  is the HEAD of `main`. The M3.2
   feature branch
-  `feature/m3-1-project-registration-slice-1`
-  carried the M3.1 work; the branch is
+  `feature/T-019-m3-2-project-registration-slice-2`
+  carried the M3.2 work; the branch is
   fast-forwarded into `main` per the
   branching strategy rule 6; the branch
   is deleted per rule 7. The M2.x
@@ -462,30 +514,35 @@
   forwarded into `main` and deleted
   per rule 7; the M3.1 commit is
   recorded in the M3 evidence block.
+  The M3.2 commit chain lives on the
+  M3.2 feature branch, which is fast-
+  forwarded into `main` and deleted
+  per rule 7; the M3.2 commit is
+  recorded in the M3 evidence block.
   The remote (`origin`) is configured
   but push is not authorised in this
   session.
 
 ## Last Stable Commit
 
-- The M3.1 closeout commit
-  `feat(m3.1): add project registration surface`
+- The M3.2 closeout commit
+  `feat(m3.2): enable project registration form, rename, and unregister`
   on `main` (created 2026-07-11). The
-  M3.1 commit is the closing receipt
-  for the M3.1 slice (the first M3
-  implementation slice; the contract,
-  the in-memory store, the UI surface,
-  the architecture test). The M3.1
-  commit chain lives on the M3.1
-  feature branch
-  `feature/m3-1-project-registration-slice-1`,
+  M3.2 commit is the closing receipt
+  for the M3.2 slice (the second M3
+  implementation slice; the three
+  mutations: registration form, rename
+  form, unregister confirmation).
+  The M3.2 commit chain lives on the
+  M3.2 feature branch
+  `feature/T-019-m3-2-project-registration-slice-2`,
   which is fast-forwarded into `main`
   per the branching strategy rule 6
   and deleted per rule 7. The parent
-  commit is the M2.6 closeout commit
-  `chore(m2.6): close M2 with retrospective, milestone closeout standard, and M3 plan`
+  commit is the M3.1 closeout commit
+  `feat(m3.1): add project registration surface`
   on `main`. Working tree is clean at
-  the close of the M3.1 session; the
+  the close of the M3.2 session; the
   remote (`origin`) is configured but
   push is not authorised in this
   session.
@@ -554,37 +611,33 @@
 ## Test Status
 
 - `dotnet test AiEng.Platform.slnx --no-build` →
-  **240 passed, 7 skipped, 0 failed.**
+  **273 passed, 7 skipped, 0 failed.**
   - `AiEng.Platform.UnitTests`: 34 tests
-    (7 existing + 16 new M3.1
-    `IProjectServiceTests` + 11 new
-    M3.1 `InMemoryProjectStoreTests`).
-  - `AiEng.Platform.ComponentTests`: 198
+    (no change vs M3.1 closeout; the
+    M3.1 `IProjectServiceTests` already
+    cover the happy-path + failure paths).
+  - `AiEng.Platform.ComponentTests`: 228
     bUnit / integration tests, all passing
-    (77 M1.2 + 25 M2.1 + 23 M2.2 bUnit + 27
-    M2.3 bUnit − 6 obsolete M2.1
-    `AppTopBarSlotTests` removed in M2.3 +
-    3 M2.4 composition + 14 M2.4 dashboard
-    / theme-toggle + 18 M2.5: 5
-    EmptyRoutesTests + 4
-    AppLayout_ThemeToggleWiringTests + 4
-    AppLayout_ResponsiveMatrixTests + 5
-    AriaCurrentInvariantTests + 5 new
-    M3.1 `AppProjectCardTests` + 4 new
-    M3.1 `AppProjectListTests` + 4 new
-    M3.1 `ProjectsPageTests`).
-  - `AiEng.Platform.ArchitectureTests`: 15
-    tests in total — 8 active (passing)
+    (198 pre-M3.2 + 8 new M3.2
+    `RegisterProjectFormTests` + 8 new
+    M3.2 `RenameProjectFormTests` + 5
+    new M3.2 `ConfirmUnregisterProjectTests`
+    + 5 M3.2 `AppProjectCardTests`
+    extensions + 2 M3.2
+    `ProjectsPageTests` extensions + 5
+    M3.2 `AppProjectListTests`
+    extensions).
+  - `AiEng.Platform.ArchitectureTests`: 18
+    tests in total — 11 active (passing)
     and 7 registered-but-disabled
     (skipped) per ADR-016 and the M4-D
     activation milestone. The
-    `Pages_AreReachable_Through_Registry`
-    test (M2.2), the
-    `Pages_Resolve_State_Through_Reader`
-    test (M2.4), and the
     `Pages_Resolve_Projects_Through_Service`
-    test (M3.1) are the three most recent
-    active architecture tests. The M2.5
+    test (M3.1 + M3.2; the M3.2 slice
+    extended it with three new tests
+    covering the three new form
+    components) is the most recent
+    active architecture test. The M2.5
     `AxeCoreAuditTests` (3 tests) are
     registered but skipped.
 
@@ -868,6 +921,10 @@ Plus the supporting infrastructure:
 
 ## Last Implementation Report
 
+- [`implementation-report-m3-2-project-registration-slice-2.md`](./../../implementation-report-m3-2-project-registration-slice-2.md)
+  — the M3.2 implementation report
+  (the closing receipt for the M3.2
+  slice, 2026-07-11).
 - [`implementation-report-m3-1-project-registration-slice-1.md`](./../../implementation-report-m3-1-project-registration-slice-1.md)
   — the M3.1 implementation report
   (the closing receipt for the M3.1
@@ -913,102 +970,94 @@ Plus the supporting infrastructure:
 
 ## Next Recommended Task
 
-> **M3.2 — Project Registration
-> Slice 2 (form, rename, unregister).**
-> The M3.1 closeout session delivers
-> the M3 surface end-to-end (the
-> contract, the in-memory store, the
-> UI surface, the architecture test);
-> the M3.2 plan is in `Awaiting
-> Approval`. M3.2 enables the
-> M3.1 wired-but-disabled actions
-> (Register a project form, Rename
-> modal, Unregister confirmation);
-> the next session approves the
-> M3.2 plan and starts the M3.2
-> implementation per the
-> Progressive Coding Rule in
-> [`.ai/workflows/progressive-coding.md`](./../../.ai/workflows/progressive-coding.md):
-> one task per session;
-> 13-step lifecycle; stop after
-> the coherent commit. **Do not
-> begin M3.2 implementation in
-> this session** — the M3.1 brief
-> explicitly says *"Do not begin
-> the following task; merge
-> completed task into main;
-> update project intelligence;
-> prepare the following task
-> plan; stop"*.
+> **M3 closeout — M3 retrospective (per
+> the Milestone Closeout Standard).**
+> The M3.2 closeout session delivers
+> the M3 surface's three mutations
+> (registration form, rename form,
+> unregister confirmation); M3 has
+> three slices (M3.1 delivered,
+> M3.2 delivered, M3.x — the M3
+> retrospective). The M3 closeout
+> plan lands at
+> `.ai/plans/M3-closeout.md` (the next
+> session drafts it from the closeout
+> standard at
+> `.ai/workflows/milestone-closeout.md`).
+> The next session drafts the M3
+> closeout plan, then implements it
+> per the Progressive Coding Rule:
+> one task per session; 13-step
+> lifecycle; stop after the coherent
+> commit. **Do not begin M3 closeout
+> in this session** — the M3.2 brief
+> explicitly stops at the M3.2
+> closeout receipt.
 
 The detailed breakdown of the M3 slices is
 in
 [`.ai/state/task-board.md`](./task-board.md)
 and the M3 plan file in
 [`.ai/plans/M3-project-registration.md`](./../../.ai/plans/M3-project-registration.md). The
-next three actionable items are:
+next two actionable items are:
 
-1. **M3.2 plan approval** (the M3.2
-   plan is at
-   [`.ai/plans/M3.2-project-registration-slice-2.md`](./../../.ai/plans/M3.2-project-registration-slice-2.md)
-   with `Status: Awaiting
-   Approval`; the next session
-   promotes it to `Approved`).
-2. **M3.2 — Project Registration
-   second slice** (T-019, `Ready`
-   in `.ai/state/tasks.json`; the
-   next concrete M3 task).
-3. **M1 follow-up — Add
-   `AppToolbar` example to
-   `/design-system`** (cosmetic;
-   the work is small and can be
-   folded into M3.2 or a later M3
-   slice if appropriate).
+1. **M3 closeout plan draft** (the M3
+   closeout plan is to be drafted
+   from
+   [`.ai/workflows/milestone-closeout.md`](./../../.ai/workflows/milestone-closeout.md);
+   the next session promotes it to
+   `Awaiting Approval`).
+2. **M3 closeout — M3 retrospective**
+   (T-020, `Ready` in
+   `.ai/state/tasks.json`; the next
+   concrete M3 task).
 
 ## Last Updated
 
-- **2026-07-11** (M3.1 closeout
+- **2026-07-11** (M3.2 closeout
   session). This version supersedes
-  the M2.6 closeout version
-  (2026-07-11). The M3.1 closeout
-  session delivers the M3 surface
-  end-to-end: ships the contract
-  (`IProjectStore`, `IProjectService`),
-  the in-memory store
-  (`InMemoryProjectStore`; the M3
-  smoke test for the contract),
-  the domain entity (`Project`),
-  the composition root
-  (`AddProjects`), the UI surface
-  (`AppProjectCard`, `AppProjectList`,
-  `/projects` page), the architecture
-  test
-  `Pages_Resolve_Projects_Through_Service`,
-  27 new unit + 13 new bUnit + 2 new
-  architecture tests; runs the
-  validation suite
-  (npm css:build, dotnet build,
-  dotnet test, dotnet format,
-  visual smoke test) and confirms
-  M3.1 is green (240 passed, 0
-  failed, 7 skipped; 0 warnings, 0
-  errors; format clean); updates
-  the project-continuity state per
+  the M3.1 closeout version
+  (2026-07-11). The M3.2 closeout
+  session delivers the M3 surface's
+  three mutations: ships the three
+  modal components
+  (`RegisterProjectForm`,
+  `RenameProjectForm`,
+  `ConfirmUnregisterProject` — HTML5
+  native `<dialog>` elements with
+  scoped CSS and `data-testid`
+  attributes); enables the
+  `AppProjectCard` Rename + Unregister
+  buttons (Open remains disabled for
+  M4-A); enables the page header's
+  Register a project button; the
+  `AppProjectList` exposes
+  `ShowRegisterDialog()` and
+  `RefreshAsync()` methods; extends
+  the architecture test
+  `Pages_Resolve_Projects_Through_Service`
+  with three new tests (one per new
+  form component); runs the validation
+  suite (npm css:build, dotnet build,
+  dotnet test, dotnet format, visual
+  smoke test) and confirms M3.2 is
+  green (273 passed, 0 failed, 7
+  skipped; 0 warnings, 0 errors;
+  format clean); updates the
+  project-continuity state per
   Rule 15; produces
-  `implementation-report-m3-1-project-registration-slice-1.md`;
-  and creates the M3.1 closeout
-  commit. The M3.1 closeout commit
+  `implementation-report-m3-2-project-registration-slice-2.md`;
+  and creates the M3.2 closeout
+  commit. The M3.2 closeout commit
   is the most recent commit on
-  `main`; the M3.1 feature branch
+  `main`; the M3.2 feature branch
   is fast-forwarded into `main`
   and deleted per the branching
   strategy rule 6/7. The M3 plan
-  is delivered (M3.1 is the first
-  M3 slice); the M3.2 plan is at
-  [`.ai/plans/M3.2-project-registration-slice-2.md`](./../../.ai/plans/M3.2-project-registration-slice-2.md)
-  with `Status: Awaiting Approval`;
-  the next M3 task (T-019, M3.2)
-  is `Ready` in
+  is delivered (M3.1 + M3.2 are
+  done; M3.x — the M3 closeout — is
+  the next M3 task); the M3 closeout
+  task (T-020) is `Ready` in
   `.ai/state/tasks.json`. The
   remote (`origin`) is configured
   but push is not authorised in
@@ -1022,13 +1071,17 @@ next three actionable items are:
 - [`.ai/state/task-board.md`](./task-board.md) —
   the live work queue (M2.1
   through M2.6 Done; M3.1
-  `Done`; M3.2
+  and M3.2 `Done`; M3 closeout
   `Ready`; M3 plan
-  `Delivered` (M3.1)).
+  `Delivered` (M3.1 + M3.2)).
 - [`.ai/handoffs/latest.md`](./../../.ai/handoffs/latest.md) —
-  the most recent handoff (the M3.1
+  the most recent handoff (the M3.2
   closeout handoff; mirrored from
-  `.ai/handoffs/2026-07-11-m3-1-project-registration-slice-1.md`).
+  `.ai/handoffs/2026-07-11-m3-2-project-registration-slice-2.md`).
+- [`.ai/handoffs/2026-07-11-m3-2-project-registration-slice-2.md`](./../../.ai/handoffs/2026-07-11-m3-2-project-registration-slice-2.md)
+  — the M3.2 closeout session handoff
+  (the closing receipt for the M3.2
+  slice, 2026-07-11).
 - [`.ai/handoffs/2026-07-11-m3-1-project-registration-slice-1.md`](./../../.ai/handoffs/2026-07-11-m3-1-project-registration-slice-1.md)
   — the M3.1 closeout session handoff
   (the closing receipt for the M3.1

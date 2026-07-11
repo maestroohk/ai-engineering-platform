@@ -70,19 +70,155 @@ public class AppProjectListTests : BunitContext
         Assert.Contains("m3.load_failed", cut.Markup);
     }
 
+    [Fact]
+    public void ShowRegisterDialog_Opens_Register_Modal()
+    {
+        var cut = Render<AppProjectList>();
+
+        cut.WaitForState(() => cut.FindAll(".app-empty-state").Count > 0);
+
+        Assert.DoesNotContain("data-testid=\"register-project-modal\"", cut.Markup);
+
+        cut.InvokeAsync(() => cut.Instance.ShowRegisterDialog());
+
+        cut.WaitForState(() => cut.Markup.Contains("data-testid=\"register-project-modal\""));
+
+        Assert.Contains("data-testid=\"register-project-modal\"", cut.Markup);
+    }
+
+    [Fact]
+    public async Task RefreshAsync_Loads_Newly_Added_Project()
+    {
+        var service = (StaticService)Services.GetRequiredService<IProjectService>();
+        var cut = Render<AppProjectList>();
+
+        cut.WaitForState(() => cut.FindAll(".app-empty-state").Count > 0);
+
+        var dir = Path.Combine(Path.GetTempPath(), "aieng-list-refresh-" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(dir);
+        try
+        {
+            var newProject = new Project(Guid.NewGuid(), "delta", dir, DateTimeOffset.UtcNow);
+            service.Projects.Add(newProject);
+
+            await cut.InvokeAsync(() => cut.Instance.RefreshAsync());
+
+            cut.WaitForState(() => cut.FindAll(".app-project-card").Count == 1);
+
+            Assert.Contains("delta", cut.Markup);
+        }
+        finally
+        {
+            Directory.Delete(dir, recursive: true);
+        }
+    }
+
+    [Fact]
+    public async Task RefreshAsync_Removes_Deleted_Project()
+    {
+        var dir = Path.Combine(Path.GetTempPath(), "aieng-list-remove-" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(dir);
+        try
+        {
+            var removed = new Project(Guid.NewGuid(), "alpha", dir, DateTimeOffset.UtcNow);
+            var kept = new Project(Guid.NewGuid(), "bravo", dir, DateTimeOffset.UtcNow);
+            Services.AddSingleton<IProjectService>(new StaticService(new List<Project> { removed, kept }, afterLoadDelay: TimeSpan.Zero));
+            var cut = Render<AppProjectList>();
+
+            cut.WaitForState(() => cut.FindAll(".app-project-card").Count == 2);
+
+            var refreshed = (StaticService)Services.GetRequiredService<IProjectService>();
+            refreshed.Projects.Remove(removed);
+
+            await cut.InvokeAsync(() => cut.Instance.RefreshAsync());
+
+            cut.WaitForState(() => cut.FindAll(".app-project-card").Count == 1);
+
+            Assert.DoesNotContain("alpha", cut.Markup);
+            Assert.Contains("bravo", cut.Markup);
+        }
+        finally
+        {
+            Directory.Delete(dir, recursive: true);
+        }
+    }
+
+    [Fact]
+    public async Task Clicking_Rename_On_A_Card_Opens_The_Rename_Modal()
+    {
+        var dir = Path.Combine(Path.GetTempPath(), "aieng-list-rename-" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(dir);
+        try
+        {
+            var project = new Project(Guid.NewGuid(), "alpha", dir, DateTimeOffset.UtcNow);
+            Services.AddSingleton<IProjectService>(new StaticService(new List<Project> { project }, afterLoadDelay: TimeSpan.Zero));
+            var cut = Render<AppProjectList>();
+
+            cut.WaitForState(() => cut.FindAll(".app-project-card").Count == 1);
+
+            Assert.DoesNotContain("data-testid=\"rename-project-modal\"", cut.Markup);
+
+            cut.Find("[data-testid='rename-project']").Click();
+
+            cut.WaitForState(() => cut.Markup.Contains("data-testid=\"rename-project-modal\""));
+
+            Assert.Contains("data-testid=\"rename-project-modal\"", cut.Markup);
+        }
+        finally
+        {
+            Directory.Delete(dir, recursive: true);
+        }
+    }
+
+    [Fact]
+    public async Task Clicking_Unregister_On_A_Card_Opens_The_Unregister_Modal()
+    {
+        var dir = Path.Combine(Path.GetTempPath(), "aieng-list-unregister-" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(dir);
+        try
+        {
+            var project = new Project(Guid.NewGuid(), "alpha", dir, DateTimeOffset.UtcNow);
+            Services.AddSingleton<IProjectService>(new StaticService(new List<Project> { project }, afterLoadDelay: TimeSpan.Zero));
+            var cut = Render<AppProjectList>();
+
+            cut.WaitForState(() => cut.FindAll(".app-project-card").Count == 1);
+
+            Assert.DoesNotContain("data-testid=\"unregister-project-modal\"", cut.Markup);
+
+            cut.Find("[data-testid='unregister-project']").Click();
+
+            cut.WaitForState(() => cut.Markup.Contains("data-testid=\"unregister-project-modal\""));
+
+            Assert.Contains("data-testid=\"unregister-project-modal\"", cut.Markup);
+        }
+        finally
+        {
+            Directory.Delete(dir, recursive: true);
+        }
+    }
+
     private sealed class StaticService : IProjectService
     {
-        private readonly IReadOnlyList<Project> _projects;
-        private readonly TimeSpan _delay;
-
         public StaticService(IReadOnlyList<Project> projects, TimeSpan afterLoadDelay)
         {
-            _projects = projects;
+            Projects = new List<Project>(projects);
             _delay = afterLoadDelay;
         }
 
-        public Task<Result<Project>> RegisterAsync(string name, string path, CancellationToken cancellationToken = default) =>
-            throw new NotSupportedException("M3.1 ships the list surface; register lands in M3.2.");
+        public List<Project> Projects { get; }
+
+        private readonly TimeSpan _delay;
+
+        public Task<Result<Project>> RegisterAsync(string name, string path, CancellationToken cancellationToken = default)
+        {
+            if (!Directory.Exists(path))
+            {
+                return Task.FromResult(Result<Project>.Failure(ValidationError.InvalidPath("path", path)));
+            }
+            var project = new Project(Guid.NewGuid(), name.Trim(), path, DateTimeOffset.UtcNow);
+            Projects.Add(project);
+            return Task.FromResult(Result<Project>.Success(project));
+        }
 
         public Task<IReadOnlyList<Project>> ListAsync(CancellationToken cancellationToken = default)
         {
@@ -91,20 +227,36 @@ public class AppProjectListTests : BunitContext
                 return Task.Run(async () =>
                 {
                     await Task.Delay(_delay, cancellationToken);
-                    return _projects;
+                    return (IReadOnlyList<Project>)Projects.ToArray();
                 }, cancellationToken);
             }
-            return Task.FromResult(_projects);
+            return Task.FromResult((IReadOnlyList<Project>)Projects.ToArray());
         }
 
         public Task<Project?> GetAsync(Guid id, CancellationToken cancellationToken = default) =>
-            Task.FromResult(_projects.FirstOrDefault(p => p.Id == id));
+            Task.FromResult(Projects.FirstOrDefault(p => p.Id == id));
 
-        public Task<Result<Project>> RenameAsync(Guid id, string newName, CancellationToken cancellationToken = default) =>
-            throw new NotSupportedException("Rename lands in M3.2.");
+        public Task<Result<Project>> RenameAsync(Guid id, string newName, CancellationToken cancellationToken = default)
+        {
+            var project = Projects.FirstOrDefault(p => p.Id == id);
+            if (project is null)
+            {
+                return Task.FromResult(Result<Project>.Failure(ValidationError.NotFound("Project", id)));
+            }
+            project.Rename(newName);
+            return Task.FromResult(Result<Project>.Success(project));
+        }
 
-        public Task<Result<Project>> UnregisterAsync(Guid id, CancellationToken cancellationToken = default) =>
-            throw new NotSupportedException("Unregister lands in M3.2.");
+        public Task<Result<Project>> UnregisterAsync(Guid id, CancellationToken cancellationToken = default)
+        {
+            var project = Projects.FirstOrDefault(p => p.Id == id);
+            if (project is null)
+            {
+                return Task.FromResult(Result<Project>.Failure(ValidationError.NotFound("Project", id)));
+            }
+            Projects.Remove(project);
+            return Task.FromResult(Result<Project>.Success(project));
+        }
     }
 
     private sealed class ThrowingService : IProjectService

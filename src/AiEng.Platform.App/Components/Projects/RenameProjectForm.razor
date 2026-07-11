@@ -1,0 +1,119 @@
+@namespace AiEng.Platform.App.Components.Projects
+
+@inject IProjectService ProjectService
+
+@if (Visible)
+{
+    <dialog open class="app-project-modal" data-testid="rename-project-modal" aria-labelledby="rename-project-modal-title">
+        <AppCard>
+            <Header>
+                <h2 id="rename-project-modal-title" class="app-project-modal-title">Rename project</h2>
+            </Header>
+            <ChildContent>
+                <AppStack Direction="AppStackDirection.Vertical" Gap="AppStackGap.Medium">
+                    <div class="app-project-modal-path" title="@(Project?.Path ?? string.Empty)">
+                        @Project?.Path
+                    </div>
+                    <label class="app-project-modal-field">
+                        <span class="app-project-modal-label">New name</span>
+                        <input class="app-project-modal-input"
+                               type="text"
+                               data-testid="rename-project-name"
+                               @bind="NewName"
+                               @bind:event="oninput"
+                               disabled="@IsSubmitting"
+                               autocomplete="off"
+                               aria-required="true" />
+                    </label>
+                    @if (Error is { } error)
+                    {
+                        <div class="app-project-modal-error" data-testid="rename-project-error" role="alert">
+                            @error
+                        </div>
+                    }
+                </AppStack>
+            </ChildContent>
+            <Footer>
+                <div class="app-project-modal-actions">
+                    <AppButton Variant="AppButtonVariant.Ghost"
+                               Disabled="@IsSubmitting"
+                               data-testid="rename-project-cancel"
+                               @onclick="OnCancel">
+                        Cancel
+                    </AppButton>
+                    <AppButton Variant="AppButtonVariant.Primary"
+                               Disabled="@(!CanSubmit)"
+                               Loading="@IsSubmitting"
+                               data-testid="rename-project-submit"
+                               @onclick="OnSubmitAsync">
+                        Rename
+                    </AppButton>
+                </div>
+            </Footer>
+        </AppCard>
+    </dialog>
+}
+
+@code {
+    [Parameter]
+    public bool Visible { get; set; }
+
+    [Parameter]
+    public AiEng.Platform.Domain.Projects.Project? Project { get; set; }
+
+    [Parameter]
+    public EventCallback OnCancel { get; set; }
+
+    [Parameter]
+    public EventCallback<AiEng.Platform.Domain.Projects.Project> OnRenamed { get; set; }
+
+    private string NewName { get; set; } = string.Empty;
+
+    private bool IsSubmitting { get; set; }
+
+    private string? Error { get; set; }
+
+    private bool CanSubmit => !IsSubmitting
+        && Project is not null
+        && !string.IsNullOrWhiteSpace(NewName)
+        && NewName != Project?.Name;
+
+    protected override void OnParametersSet()
+    {
+        if (Visible && Project is not null && string.IsNullOrEmpty(NewName))
+        {
+            NewName = Project.Name;
+        }
+    }
+
+    private async Task OnSubmitAsync()
+    {
+        if (!CanSubmit || Project is null)
+        {
+            return;
+        }
+        IsSubmitting = true;
+        Error = null;
+        try
+        {
+            var result = await ProjectService.RenameAsync(Project.Id, NewName);
+            if (result.IsSuccess)
+            {
+                NewName = string.Empty;
+                await OnRenamed.InvokeAsync(result.Value);
+            }
+            else
+            {
+                Error = result.Error?.Message;
+            }
+        }
+        catch (Exception ex)
+        {
+            Error = ex.Message;
+        }
+        finally
+        {
+            IsSubmitting = false;
+        }
+    }
+}

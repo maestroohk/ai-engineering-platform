@@ -40,7 +40,7 @@ A milestone is **complete** only when:
 | M0  | Doc foundation                                        | Done       | This document set exists.                                                  |
 | M1  | Design System Core                                    | **Done (closed 2026-07-10)** | A runnable Blazor shell with the base design-system components.            |
 | M2  | Application Shell and Navigation                      | **Done (closed 2026-07-11)** | A navigable app shell on Windows desktop; pages reach an empty state; the layout is responsive and accessible. |
-| M3  | Project Registration                                  | **Active (M3.1 Delivered 2026-07-11)** | A user can register a project; the platform owns a `Project` entity.       |
+| M3  | Project Registration                                  | **Active (M3.1 + M3.2 Delivered 2026-07-11)** | A user can register, rename, and unregister a project; the platform owns a `Project` entity. M3 closeout (M3.x — the M3 retrospective per the Milestone Closeout Standard) is the next `Ready` task. |
 | M4  | Process Execution, Capability Detection, Provider Registry | Planned | The platform spawns processes safely, detects capabilities, registers providers. Divided into four slices: |
 |     | &nbsp;&nbsp;M4-A: Infrastructure / Process Execution   | Planned    | `AiEng.Platform.Infrastructure` lands; `IProcessRunner`, `ICredentialVault`, `IClock`, on-disk `IProjectStore`. |
 |     | &nbsp;&nbsp;M4-B: Capability Detection                | Planned    | `IHostCapabilitiesService` detects `git`, `ollama`, `powershell.exe`, `wsl.exe`, `wt.exe`, `bash.exe`. |
@@ -431,10 +431,14 @@ presentational container and does not.
 **Definition of done:**
 
 - A user can register a project (name + folder path).
-  **M3.1 status (2026-07-11):** the
-  `IProjectService.RegisterAsync` is wired
-  to the seam; the registration **form**
-  is M3.2 (T-019, `Ready`).
+  **M3.2 status (2026-07-11):** shipped.
+  The `RegisterProjectForm` modal
+  (HTML5 native `<dialog>`; name +
+  folder path fields) calls
+  `IProjectService.RegisterAsync` and
+  emits `OnRegistered` on success.
+  The Register a project button on
+  the page header is enabled.
 - The project appears in the projects list.
   **M3.1 status (2026-07-11):** shipped.
 - The project does **not** persist across application
@@ -447,23 +451,36 @@ presentational container and does not.
   in-memory to on-disk behind the same contract.
 - The project service returns `Project` entities through
   the application layer; the UI does not touch the store
-  directly. **M3.1 status (2026-07-11):** the
+  directly. **M3.2 status (2026-07-11):**
+  the
   `Pages_Resolve_Projects_Through_Service`
   architecture test is active and green;
-  the page and the list resolve projects
-  through `IProjectService` (the contract),
-  not through `InMemoryProjectStore` or the
-  file system directly.
+  the page, the list, and the three
+  new form components (Register,
+  Rename, ConfirmUnregister) resolve
+  projects through `IProjectService`
+  (the contract), not through
+  `InMemoryProjectStore` or the file
+  system directly.
 - A user can rename a registered project.
-  **M3.1 status (2026-07-11):** the
-  `IProjectService.RenameAsync` is wired
-  to the seam; the **rename** action is
-  M3.2 (T-019, `Ready`).
+  **M3.2 status (2026-07-11):** shipped.
+  The `RenameProjectForm` modal
+  pre-fills the project's current
+  name; the user enters a new name;
+  the platform validates (non-empty,
+  differs from current) and persists
+  through `IProjectService.RenameAsync`.
+  The Rename button on
+  `AppProjectCard` is enabled.
 - A user can unregister a registered project.
-  **M3.1 status (2026-07-11):** the
-  `IProjectService.UnregisterAsync` is
-  wired to the seam; the **unregister**
-  action is M3.2 (T-019, `Ready`).
+  **M3.2 status (2026-07-11):** shipped.
+  The `ConfirmUnregisterProject`
+  modal shows the project name; the
+  user confirms; the platform
+  persists through
+  `IProjectService.UnregisterAsync`.
+  The Unregister button on
+  `AppProjectCard` is enabled.
 - The Open action on the project card is
   **M4-A's** responsibility; the durable
   store replaces the in-memory store and
