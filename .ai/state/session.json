@@ -1,54 +1,51 @@
 {
   "schema_version": "1.0.0",
   "updated_at": "2026-07-11T00:00:00Z",
-  "session_id": "m2-4-followup-theme-toggle-bug-record",
-  "session_type": "followup",
+  "session_id": "m2-5-empty-routes-responsive-accessibility",
+  "session_type": "implementation",
   "scope": {
     "milestone": "M2",
-    "task_id": "T-014",
-    "slice": "M2.4",
-    "plan": ".ai/plans/M2.4-project-intelligence-dashboard.md",
-    "branch": "feature/m2-4-project-intelligence-dashboard",
+    "task_id": "T-015",
+    "slice": "M2.5",
+    "plan": ".ai/plans/M2.5-empty-routes-responsive-accessibility.md",
+    "branch": "feature/m2-5-empty-routes-responsive-accessibility",
     "in_scope": [
-      "IProjectIntelligenceReader application service interface + ProjectIntelligenceSnapshot record",
-      "ProjectIntelligenceReader implementation that reads .ai/state/*.json",
-      "ProjectIntelligenceServiceCollectionExtensions composition-root extension",
-      "Dashboard.razor page at /dashboard with [RouteMetadata]",
-      "M0.5-data sections in Populated state; M3+-data sections in Empty state",
-      "Theme toggle bug fix: light/dark switching must work end-to-end and persist across navigation and refresh",
-      "10-16 bUnit tests for the reader, dashboard, and composition extension",
-      "Pages_Resolve_State_Through_Reader architecture test (active and green)",
-      "Validation: css:build, dotnet build, dotnet test, dotnet format, visual smoke test",
-      "Project-continuity state updates (current.md, task-board.md, tasks.json, milestones.json, capabilities.json, ROADMAP.md, handoffs/latest.md)",
-      "Implementation report implementation-report-m2-4-project-intelligence-dashboard.md",
-      "Per-session handoff .ai/handoffs/2026-07-11-m2-4-project-intelligence-dashboard.md mirrored to latest.md",
-      "Promote M2.5 plan stub to a full M2.5 plan in Awaiting Approval (do not implement M2.5)",
-      "Single coherent commit feat(m2.4): add project intelligence dashboard"
+      "T-017 theme toggle fix (included at user request): add @rendermode InteractiveServer to AppLayout.razor (or AppTopBar.razor + AppThemeToggle.razor); add the AppLayout_ThemeToggleWiringTests bUnit test that asserts the click handler is wired in the running app context",
+      "Empty routes: every route in Components/Pages/ reaches an AppEmptyState (or its data-owning equivalent); introduce AppEmptyRouteCard primitive only if the AppCard + AppEmptyState composition is repeated more than 3 times",
+      "Responsive matrix: the layout is usable at 1280x720, 1440x900, and 1920x1080; below 1280px the sidebar collapses to an icon rail; the top bar remains horizontal; the content area scrolls vertically",
+      "Accessibility audit: keyboard smoke test (Tab reachable, Enter activates, Escape closes); aria-current=page invariant; axe-core audit (registered, disabled per ADR-016 / M4-D)",
+      "docs/ui-principles.md § 10.1: responsive matrix documented",
+      "Project-continuity state updates (current.md, task-board.md, session.json, tasks.json, milestones.json, capabilities.json, ROADMAP.md, handoffs/latest.md)",
+      "Implementation report implementation-report-m2-5-empty-routes-responsive-accessibility.md",
+      "Per-session handoff .ai/handoffs/2026-07-11-m2-5-empty-routes-responsive-accessibility.md mirrored to latest.md",
+      "Single coherent commit feat(m2.5): add empty routes, responsive matrix, a11y audit, and theme toggle fix"
     ],
     "out_of_scope": [
-      "M2.5 implementation (only the M2.5 plan is promoted; no code is written for M2.5)",
-      "M3+ work (project registration, IProjectService, IProjectStore, IProjectService)",
-      "M4+ work (process execution, capability detection, provider registry)",
-      "Providers.<X> projects, IProvider (M4+ work)",
+      "M2.6 (the M2 closeout and Treehouse dogfooding checkpoint)",
+      "M3+ (project registration, IProjectService, IProjectStore, providers)",
+      "axe-core activation (the harness is registered but disabled; the activation milestone is M4-D per ADR-016)",
+      "Mobile viewport support below 1280x720 (per ADR-005, the M2 primary viewport is 1280x720 minimum; the M8 closeout adds the full responsive matrix)",
       "Pushing (no remote configured; push is skipped per the brief)"
     ]
   },
   "current_understanding": {
     "active_milestone": "M2",
-    "active_slice": "M2.5 (next planned; plan Awaiting Approval)",
-    "active_task": "T-015 (M2.5, Deferred — plan to be approved)",
+    "active_slice": "M2.5 (implementation in progress)",
+    "active_task": "T-015 (M2.5, Ready, claimed 2026-07-11)",
     "last_completed_milestone": "M2.4",
     "last_completed_task": "T-014 (M2.4 closeout, 2026-07-11)",
-    "last_stable_commit": "9c8031e feat(m2.4): add project intelligence dashboard on feature/m2-4-project-intelligence-dashboard",
+    "last_stable_commit": "0e05dd7 docs(state): record theme toggle bug T-017 in state files (non-blocking) on feature/m2-4-project-intelligence-dashboard",
     "build_status": "passing at M2.4 closeout (0 warnings, 0 errors)",
-    "test_status": "175 passed, 0 failed (163 component + 6 unit + 6 architecture, 4 skipped) at M2.4 closeout"
+    "test_status": "175 passed, 0 failed (6 unit + 163 component + 6 architecture, 4 skipped) at M2.4 closeout"
   },
   "last_action": {
     "at": "2026-07-11T00:00:00Z",
-    "kind": "theme toggle bug recorded; M2.5 plan awaiting approval",
-    "target": "feature/m2-4-project-intelligence-dashboard",
-    "outcome": "The M2.4 closeout reported the theme toggle bug as fixed (JS contract changes; synchronous IsDark flip; bUnit tests). Running the actual app reveals the bug is NOT fixed: the AppLayout / AppTopBar / AppThemeToggle chain is missing @rendermode InteractiveServer, so the @onclick handler is never wired to an interactive circuit. The bUnit tests pass because they render in isolation. Bug recorded as T-017 in tasks.json (status: Ready, severity: medium, bug_status: non-blocking, links_to_capability: shell/theme), added to task-board.md (Ready, top of list) and to current.md (Known Issues, top of section). The M2.4 implementation report has an ERRATUM appended. Per the user's instruction: do NOT fix the bug in this session; record it and continue with the first dependency-satisfied Ready task (M2.5 plan approval). The M2.5 plan is at .ai/plans/M2.5-empty-routes-responsive-accessibility.md (status: Awaiting Approval). The session is now presenting the M2.5 plan summary, risks, and acceptance criteria, and waiting for user approval before implementing."
+    "kind": "M2.5 implementation start + T-017 included",
+    "target": "feature/m2-5-empty-routes-responsive-accessibility",
+    "outcome": "M2.5 plan approved in the M2.4 follow-up session (status: Approved + T-017 included); T-015 moved from Deferred to Ready; T-017 stays in the Ready queue and is the first sub-task of the M2.5 slice (per the user's explicit opt-in). Branch feature/m2-5-empty-routes-responsive-accessibility created off 0e05dd7 (the M2.4 closeout + T-017 record chain). Implementation to begin per the plan's own order: T-017 fix FIRST, then empty routes, then responsive matrix, then accessibility audit."
   },
-  "intended_next_action": "Wait for the user to approve the M2.5 plan. After approval, the M2.5 implementation session follows per the Progressive Coding Rule and the M2.5 plan's 13-step order. The T-017 theme toggle bug is NOT part of the M2.5 scope unless the user explicitly opts in.",
+  "intended_next_action": "Land the T-017 theme toggle fix: add @rendermode InteractiveServer to AppLayout.razor; add the AppLayout_ThemeToggleWiringTests bUnit test that asserts the click handler is wired in the running app context. Then land the empty routes (AppEmptyRouteCard + per-page updates). Then the responsive matrix (AppResponsive + AppLayout update + docs/ui-principles.md § 10.1). Then the accessibility audit (KeyboardSmokeTests + AriaCurrentInvariantTests + AxeCoreAuditTests registered/disabled). Then validate (css:build, build, test, format, smoke). Then closeout per Rule 15: update state, write the implementation report (with the T-017 fix in the Files Modified and Bug Fixes sections) and per-session handoff, create the coherent commit, stop. Do NOT begin M2.6.",
+  "session_notes": "M2.5 implementation session (2026-07-11). The M2.5 plan was approved by the user on 2026-07-11 with the T-017 theme toggle bug fix included in the same slice. The session implements the M2.5 slice per the plan (.ai/plans/M2.5-empty-routes-responsive-accessibility.md) starting with the T-017 fix. The session follows the Progressive Coding Rule: one task per session; 13-step lifecycle; stop after the coherent commit. Push is skipped (no remote)."
+}
   "session_notes": "M2.4 implementation session. The M2.4 plan was approved by the user on 2026-07-11. The session implements the M2.4 slice per the plan (.ai/plans/M2.4-project-intelligence-dashboard.md). The session also addresses the theme toggle bug: the M2.3 AppThemeToggle's state must propagate to the documentElement.data-theme attribute so light/dark switching is visible immediately, persists across navigation and browser refresh, and remains consistent throughout the application. The session follows the Progressive Coding Rule: one task per session; 13-step lifecycle; stop after the coherent commit. The session does NOT implement M2.5 (only the M2.5 plan is promoted to Awaiting Approval). Push is skipped (no remote)."
 }

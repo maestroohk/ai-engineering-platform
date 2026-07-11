@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "updated_at": "2026-07-11T00:00:00Z",
-  "updated_by_session": "m2-4-followup-theme-toggle-bug-record",
+  "updated_by_session": "m2-5-empty-routes-responsive-accessibility",
   "tasks": [
     {
       "id": "T-001",
@@ -234,10 +234,14 @@
     {
       "id": "T-015",
       "title": "M2.5 — Empty Routes, Responsive, and Accessibility",
-      "status": "Deferred",
+      "status": "Ready",
       "milestone": "M2",
       "slice": "M2.5",
-      "notes": "Summary entry. Full-coverage pass over every route; responsive matrix at the 1280x720 minimum; full keyboard smoke test. Will be planned in detail after M2.4 closes."
+      "created_at": "2026-07-10T00:00:00Z",
+      "claimed_at": "2026-07-11T00:00:00Z",
+      "owner": null,
+      "plan": ".ai/plans/M2.5-empty-routes-responsive-accessibility.md",
+      "notes": "Plan promoted from Draft stub to a full plan (Awaiting Approval) in the M2.4 closeout session, 2026-07-11. Approved in the M2.4 follow-up session, 2026-07-11, with the T-017 theme toggle bug fix included in the same slice (per the user's explicit opt-in). The M2.5 implementation session is in progress on feature/m2-5-empty-routes-responsive-accessibility. T-001 (M2.1), T-002 (M2.2), T-003 (M2.3), and T-014 (M2.4) are Done, so the dependencies are satisfied."
     },
     {
       "id": "T-016",
