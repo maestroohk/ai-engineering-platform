@@ -505,12 +505,12 @@ on a per-task basis.
 
 The command protocol in
 [`.ai/commands.md`](../commands.md)
-defines the eight recognised
+defines the nine recognised
 short-form commands
 (`Continue`, `Approve`,
 `Status`, `Plan`, `Resume`,
 `Review`, `Validate`,
-`Finish`). The commands are
+`Finish`, `Next`). The commands are
 the **front door** to the
 Progressive Coding Rule, not
 a replacement for it.
@@ -562,6 +562,39 @@ Specifically:
   begin the next task;
   the next command
   does.
+- **`Next`** is the
+  **end-to-end command**.
+  It performs the work of
+  `Continue` (select the
+  task), `Approve`
+  (promote the plan under
+  the user's standing
+  approval), and the full
+  13-step lifecycle
+  (validate, report,
+  state, handoff, commit,
+  merge, delete the
+  feature branch) in one
+  invocation. `Next` is
+  the answer to "I have
+  already authorised the
+  work; do it." `Next`
+  reconciles state first,
+  resumes an `InProgress`
+  task if one exists, and
+  otherwise selects the
+  first dependency-
+  satisfied `Ready` task.
+  `Next` may not
+  implement two tasks in
+  one invocation; it is
+  the **collapsed** form,
+  not a grouped-
+  execution authorisation.
+  Grouped execution is a
+  separate user
+  authorisation; `Next`
+  does not subsume it.
 - **`Status`**, **`Plan`**,
   and **`Review`** do
   not change the
@@ -687,4 +720,32 @@ project state. The rule does
   Progressive Coding Rule
   is unchanged; the
   link is the only
+  addition.
+- **2026-07-11** — added
+  the `Next` end-to-end
+  command to the § 7.1
+  command list. `Next`
+  is the collapsed form
+  of `Continue` +
+  `Approve` + the 13-step
+  lifecycle; it
+  reconciles state,
+  selects (or resumes)
+  the task, promotes the
+  plan under the
+  user's standing
+  approval, creates the
+  feature branch,
+  implements, validates,
+  reports, commits,
+  merges, deletes the
+  feature branch, and
+  stops. `Next` does not
+  subsume grouped
+  execution; it executes
+  exactly one task per
+  invocation. The
+  Progressive Coding
+  Rule is unchanged; the
+  `Next` row is the only
   addition.

@@ -175,7 +175,7 @@ Read product and current state
 The full sequence above is the default. A user who wants a
 shorter conversation may issue a recognised command instead.
 The command protocol in
-[`.ai/commands.md`](./commands.md) defines the eight
+[`.ai/commands.md`](./commands.md) defines the nine
 recognised commands:
 
 - `Continue` — pick up where the previous session left off.
@@ -192,6 +192,11 @@ recognised commands:
   active plan; do not commit.
 - `Finish` — complete closeout for the `In Progress` task;
   do not start the next task.
+- `Next` — execute exactly one dependency-satisfied `Ready`
+  task from start to closeout (select, promote the plan,
+  implement, validate, report, commit, merge, stop). The
+  end-to-end command; the collapsed form of `Continue`
+  + `Approve` + the 13-step lifecycle.
 
 The command protocol is **subordinate to this file and to
 `AGENTS.md`**. A command that conflicts with a rule, an ADR,

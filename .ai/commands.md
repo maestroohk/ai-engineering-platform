@@ -26,8 +26,9 @@ deliberate, but a user often wants a **shorter** conversation:
 - "Review." — check the current task.
 - "Validate." — run the gates.
 - "Finish." — close out the current task.
+- "Next." — execute the next Ready task from start to closeout.
 
-This document defines those eight commands. The commands are
+This document defines those nine commands. The commands are
 recognised when the user's message matches a command exactly
 (case-insensitive). A message that contains a command as part
 of a longer sentence is **not** a command; the session falls
@@ -38,11 +39,17 @@ A command never:
 - Bypasses the constitution, an ADR, the roadmap, or a plan.
 - Bypasses the safety rules in `AGENTS.md` § 4 (the 17 rules).
 - Bypasses the Git rules in `AGENTS.md` and `CONTRIBUTING.md`.
-- Implements a task whose plan is `Draft` or `Awaiting Approval`.
+- Implements a task whose plan is `Draft` or `Awaiting Approval`,
+  except `Next`, whose standing approval subsumes the
+  `Approve` step.
 - Selects a new task while another is `In Progress` (except
-  `Resume`, which is the one exception).
+  `Resume`, which is the one exception, and `Next`, which
+  inherits `Resume`'s contract when an `InProgress` task
+  exists).
 - Treats a previous session's "Stop" as a permanent prohibition
   against the next session's work.
+- Implements two tasks in one invocation (a `Next` that
+  silently bundles two tasks is a violation).
 
 A session closeout is not a permanent stop. A closeout ends the
 session, updates the state, prepares the next task, and **awaits
@@ -78,7 +85,148 @@ message (use a brief for that).
 
 ## 3. Recognised Commands
 
-### 3.1 `Continue`
+### 3.1 `Next`
+
+The user types only `Next` (or `next`, or `Next.`).
+
+`Next` is the **end-to-end command**. Where `Continue`
+selects a task and stops at the plan-status gate (so the
+user can review the plan), `Next` selects the task, promotes
+the plan if needed, and runs the entire 13-step lifecycle
+in a single invocation. `Next` is the answer to "I have
+already authorised the work; do it."
+
+When `Next` is recognised:
+
+1. Reconcile:
+   - Git branch, commit, status, tags, worktrees, and remote.
+   - Structured JSON state.
+   - `current.md`.
+   - `task-board.md`.
+   - Latest handoff.
+   - Roadmap.
+   - Milestone state.
+
+   The repository wins when the files disagree (per
+   `.ai/session-start.md` step 6); the session records the
+   reconciliation in the next handoff.
+2. Check for an existing `InProgress` task in
+   `.ai/state/task-board.md` and `.ai/state/tasks.json`.
+   - If one exists, **resume** it. Do not select a new
+     task. The `Next` command inherits `Resume`'s contract.
+   - If the `InProgress` task is blocked, **report the
+     blocker and stop**. `Next` does not pick a different
+     task to dodge a blocker.
+3. Otherwise find the first task that:
+   - has status `Ready`,
+   - has all dependencies Delivered or Verified,
+   - belongs to the current active milestone,
+   - has no unresolved blocker.
+4. Load its canonical plan (from `.ai/plans/`).
+5. Handle the plan status:
+   - `Draft` — complete and validate the plan, promote
+     it to `Awaiting Approval`, then continue to step 6
+     (`Next`'s standing approval treats `Awaiting Approval`
+     as approved, per the next row).
+   - `Awaiting Approval` — treat the user's `Next`
+     command as standing approval; record the approval
+     in the plan; promote the plan to `Approved`; continue
+     to step 6.
+   - `Approved` — begin implementation immediately.
+   - `In Progress` — resume from the latest handoff.
+   - `Blocked` — explain the exact blocker and stop.
+   - `Done` — select the next eligible Ready task
+     and return to step 4.
+6. Create the task's feature branch from the latest
+   `main`. Branch name:
+   `feature/T-<task-id>-<short-description>`
+   (e.g. `feature/T-018-m3-1-project-registration`).
+7. Mark the task and related capability `InProgress` in
+   `.ai/state/tasks.json`, `.ai/state/task-board.md`,
+   `.ai/state/capabilities.json`, and
+   `.ai/state/milestones.json` (the relevant slice).
+8. Implement **only** the selected task. Follow the
+   13-step lifecycle in
+   `.ai/workflows/progressive-coding.md` § 3. During
+   implementation:
+   - follow the approved plan,
+   - reuse existing platform capabilities,
+   - avoid unrelated refactors,
+   - run targeted tests as work progresses,
+   - keep the application runnable,
+   - **stop** if an architectural decision, a
+     destructive action, a credential / secret, or
+     a material scope change is required.
+9. Run the task's complete validation per
+   `.ai/commands.md` § 5.5: `npm run css:build`,
+   `dotnet restore`, `dotnet build`,
+   `dotnet test`, `dotnet format --verify-no-changes`,
+   plus any plan-specific visual smoke tests.
+10. Produce:
+    - implementation report (`.ai/templates/implementation-report.md`),
+    - session handoff (`.ai/templates/session-handoff.md`),
+    - state updates (Rule 15 in `AGENTS.md`),
+    - capability evidence,
+    - milestone evidence,
+    - documentation updates required by the task.
+11. Review the complete diff.
+12. Create a focused coherent commit (Rule 17 in
+    `AGENTS.md`).
+13. Merge the completed task branch into `main` using
+    the documented branching strategy
+    (`.ai/workflows/branching-strategy.md`):
+    fast-forward merge; delete the feature branch.
+14. Push only when a remote exists **and** the user has
+    explicitly authorised pushing. Standing approval for
+    `Next` does **not** automatically authorise a remote
+    push unless repository instructions already record
+    that authorisation.
+15. Mark the completed task `Done` in `.ai/state/tasks.json`,
+    `.ai/state/task-board.md`, and
+    `.ai/state/milestones.json` (the relevant slice).
+16. Promote the next dependency-satisfied task to `Ready`
+    in `.ai/state/tasks.json` and
+    `.ai/state/task-board.md`.
+17. Create or expand the next task's plan to
+    `Awaiting Approval` in `.ai/plans/`.
+18. Stop.
+
+`Next` must never implement two tasks in one invocation.
+
+#### 3.1.1 `Next` Guardrails
+
+`Next` may proceed without asking for further approval
+when:
+
+- the task is `Ready`,
+- dependencies are satisfied,
+- its plan exists (or `Next` can synthesise a
+  `Draft` → `Awaiting Approval` plan),
+- scope is clear,
+- no destructive action is required,
+- no architecture change is needed,
+- no secret or credential is required.
+
+`Next` must stop when:
+
+- requirements conflict,
+- the approved plan is materially incomplete
+  (e.g. scope is unclear, acceptance criteria are
+  missing),
+- architecture must change,
+- a destructive Git operation is required,
+- authentication or credentials are needed,
+- validation fails for reasons outside the task scope,
+- completing the task would require implementing
+  another task.
+
+#### 3.1.2 `Next` Response Shape
+
+The `Next` command response uses the
+`Completed / Git / Validation / Evidence / Next`
+shape from § 5.5.
+
+### 3.2 `Continue`
 
 The user types only `Continue` (or `continue`, or `Continue.`).
 
@@ -103,7 +251,7 @@ When `Continue` is recognised:
 not commit the session to any specific task; the task is
 selected by the state, not by the user.
 
-### 3.2 `Approve` / `Approved`
+### 3.3 `Approve` / `Approved`
 
 The user types `Approve` or `Approved` (or `approve`, with or
 without trailing punctuation).
@@ -145,7 +293,7 @@ The session does re-confirm approval only when:
   committed history).
 - An unresolved blocker changes the accepted scope.
 
-### 3.3 `Status`
+### 3.4 `Status`
 
 The user types `Status` (or `status`).
 
@@ -171,7 +319,7 @@ Action / Result / Next` structure from § 5:
 does not run any validation command, and does not advance any
 task. The session returns the snapshot and stops.
 
-### 3.4 `Plan`
+### 3.5 `Plan`
 
 The user types `Plan` (or `plan`).
 
@@ -191,7 +339,7 @@ When `Plan` is recognised, the AI:
 `Plan` does not implement. `Plan` does not validate. `Plan`
 presents the plan and stops.
 
-### 3.5 `Resume`
+### 3.6 `Resume`
 
 The user types `Resume` (or `resume`).
 
@@ -213,7 +361,7 @@ When `Resume` is recognised:
 task `In Progress` and starts a different task is a session
 that ignored its own state.
 
-### 3.6 `Review`
+### 3.7 `Review`
 
 The user types `Review` (or `review`).
 
@@ -240,7 +388,7 @@ When `Review` is recognised:
    in the same message ("Review and fix", "Review and apply",
    "Fix the review findings").
 
-### 3.7 `Validate`
+### 3.8 `Validate`
 
 The user types `Validate` (or `validate`).
 
@@ -260,7 +408,7 @@ When `Validate` is recognised:
    fields. The user reviews the results and then says
    `Finish` (or `Approve` for the next task) to commit.
 
-### 3.8 `Finish`
+### 3.9 `Finish`
 
 The user types `Finish` (or `finish`).
 
@@ -399,11 +547,71 @@ implementation report in the chat is a session that
 duplicated evidence. Surface the path; do not paste the
 content.
 
+### 5.5 The `Next` Response Shape
+
+`Next` is a **multi-step, end-to-end** command: it reconciles
+state, selects a task, promotes the plan if needed, executes
+the 13-step lifecycle, validates, reports, commits, merges,
+and stops. The four-section shape in § 5.1 is too thin for
+a multi-gate closeout. `Next` uses this five-section shape:
+
+```
+### Completed
+- task: [task id, title, milestone, slice]
+- capability advanced: [C-ID, status transition]
+- milestone progress: [delta in milestone status or
+  slice evidence]
+
+### Git
+- source branch: [the feature branch the session
+  created from main; deleted per the branching
+  strategy rule 7]
+- commit: [the coherent commit hash + subject]
+- merge result: [fast-forward | merge commit |
+  no-merge (e.g. blocked)] into main
+- resulting main commit: [the new HEAD of main]
+- push result: [pushed (only when explicitly
+  authorised) | not pushed (default)]
+
+### Validation
+- build: [0 warnings, 0 errors | the specific
+  failure]
+- tests: [N passed, M failed, K skipped]
+- format: [clean | drift]
+- CSS: [exit 0 | the specific failure]
+- visual smoke test: [every route returns 200
+  + the plan-specific smoke checks; or the
+  specific failure]
+
+### Evidence
+- implementation report: [path]
+- handoff: [path] (mirrored to latest.md)
+- retrospective (when applicable): [path]
+- state files updated: [the file list; the
+  status transitions per file]
+
+### Next
+- next Ready task: [task id, title]
+- next plan path: [the .ai/plans/ path;
+  Awaiting Approval or Draft]
+- blockers or deviations: [any unresolved
+  blockers; any deviations from the plan;
+  "none" when the session completed per plan]
+```
+
+The five-section shape is the closeout receipt. A `Next`
+response that omits any of the five sections is a session
+that has not closed out. The implementation report
+(`/`) handoff (`/`) and state files carry the long
+narrative; the five-section shape carries the **outcome
+summary** that the next session (or the next command)
+reads in one screen.
+
 ---
 
 ## 6. The Short-Form Approval Cycle
 
-The eight commands compose into a compact workflow. The
+The nine commands compose into a compact workflow. The
 canonical example:
 
 ```
@@ -415,20 +623,42 @@ User:  Approve
 AI:    [records approval, marks M2.2 In Progress]
        [executes the 13-step lifecycle]
        [validates, reports, commits, stops]
-       [Next: "Run 'Continue' to start M2.3."]
-User:  Continue
-AI:    [finds M2.3, plan is Draft or Awaiting Approval]
+       [Next: "Run 'Next' to start M2.3."]
+User:  Next
+AI:    [reconciles state, finds M2.3, plan is
+        Awaiting Approval, treats Next as standing
+        approval, promotes to Approved, creates
+        the feature branch, implements, validates,
+        reports, commits, merges, deletes the
+        feature branch, stops]
+       [returns the § 5.5 closeout receipt]
+       [Next: "Run 'Next' to start M2.4."]
+User:  Next
+AI:    [finds M2.4, plan is Draft, fills in the
+        plan, promotes to Awaiting Approval,
+        treats Next as standing approval, ...]
        [...]
 ```
 
 The cycle is short because each command is small. The
 discipline is in the **gates**: a `Continue` that lands on
 `Awaiting Approval` does not implement; an `Approve` does not
-re-ask; a `Finish` does not start the next task.
+re-ask; a `Finish` does not start the next task; a `Next`
+does not implement two tasks.
+
+`Next` is the **collapsed** form: it performs the work of
+`Continue` (select the task), `Approve` (promote the plan),
+and the full 13-step lifecycle (validate, report, state,
+handoff, commit, merge, stop) in a single invocation. The
+collapsed form is for when the user has already authorised
+the work; the explicit cycle is for when the user wants to
+review each gate. Both forms are valid; neither overrides
+the other.
 
 A session that drifts (continues without approval, asks for
 approval twice, implements two tasks in one commit, starts a
-new task while one is `In Progress`) is a session that has
+new task while one is `In Progress`, runs `Next` and
+silently implements two tasks) is a session that has
 ignored this protocol. The protocol is the answer to "what
 should the AI do next?" in command-driven mode.
 
@@ -524,3 +754,23 @@ rejected. The constitution is not relaxed by this document.
   to the existing operational sequence in § 7. The
   document is the front door to the 13-step lifecycle
   for command-driven sessions.
+- **2026-07-11** — added the **`Next`** command as the
+  ninth recognised command (and the first
+  end-to-end command). `Next` reconciles state,
+  selects the first dependency-satisfied `Ready`
+  task (or resumes the `InProgress` task), promotes
+  the plan (`Draft` → `Awaiting Approval` →
+  `Approved` as needed) under the standing
+  approval, creates the feature branch, executes
+  the 13-step lifecycle, validates, reports,
+  commits, merges, deletes the feature branch,
+  and stops. The command never implements two
+  tasks. The § 3.1 section, the § 5.5
+  closeout-receipt shape (`Completed / Git /
+  Validation / Evidence / Next`), and the § 6
+  approval cycle example were added or updated.
+  `Continue`, `Approve`, `Plan`, `Resume`,
+  `Review`, `Validate`, `Finish`, and `Status`
+  are unchanged. The decision table in § 4 still
+  governs `Continue` and `Resume`; `Next` is the
+  collapsed form that subsumes them.

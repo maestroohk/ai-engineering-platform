@@ -99,7 +99,8 @@ it sits on top of it.
 > not relax them.
 >
 > For short user instructions (e.g. `Continue`, `Approve`,
-> `Status`, `Plan`, `Resume`, `Review`, `Validate`, `Finish`),
+> `Status`, `Plan`, `Resume`, `Review`, `Validate`, `Finish`,
+> `Next`),
 > the command protocol in [`.ai/commands.md`](./.ai/commands.md)
 > is the recognised front door. The commands are
 > operational shortcuts; they do not override this
@@ -525,7 +526,7 @@ The full document map:
 | [`docs/architecture-principles.md`](./docs/architecture-principles.md) | Provider model, layering, dependency direction, DI         |
 | [`docs/provider-guidelines.md`](./docs/provider-guidelines.md) | Authoring, registering, configuring, testing providers       |
 | [`.ai/README.md`](./.ai/README.md)                       | AI collaboration hub; precedence hierarchy; task routing table        |
-| [`.ai/commands.md`](./.ai/commands.md)                 | Command protocol for short user instructions (`Continue`, `Approve`, `Status`, `Plan`, `Resume`, `Review`, `Validate`, `Finish`) |
+| [`.ai/commands.md`](./.ai/commands.md)                 | Command protocol for short user instructions (`Continue`, `Approve`, `Status`, `Plan`, `Resume`, `Review`, `Validate`, `Finish`, `Next`) |
 | [`.ai/session-start.md`](./.ai/session-start.md)       | First file an AI reads after `AGENTS.md`; operational sequence        |
 | [`.ai/prompts/bootstrap.md`](./.ai/prompts/bootstrap.md) | Template for bootstrapping a new project area                       |
 | [`.ai/prompts/feature.md`](./.ai/prompts/feature.md)   | Template for implementing a new feature end-to-end                    |

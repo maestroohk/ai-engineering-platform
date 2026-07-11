@@ -104,7 +104,7 @@ documents for the task at hand.
 
 | Task                                | Prompt                              | Workflow                            | Main documents                                                                                       |
 | ----------------------------------- | ----------------------------------- | ----------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| Short user instruction (e.g. `Continue`, `Approve`, `Status`, `Plan`, `Resume`, `Review`, `Validate`, `Finish`) | (none — command-driven) | (none — command-driven) | [`.ai/commands.md`](../.ai/commands.md), [`.ai/session-start.md`](../.ai/session-start.md), [`.ai/workflows/progressive-coding.md`](../.ai/workflows/progressive-coding.md) |
+| Short user instruction (e.g. `Continue`, `Approve`, `Status`, `Plan`, `Resume`, `Review`, `Validate`, `Finish`, `Next`) | (none — command-driven) | (none — command-driven) | [`.ai/commands.md`](../.ai/commands.md), [`.ai/session-start.md`](../.ai/session-start.md), [`.ai/workflows/progressive-coding.md`](../.ai/workflows/progressive-coding.md) |
 | New milestone or project area       | `bootstrap.md`                      | `feature-lifecycle.md`              | `ARCHITECTURE.md`, `docs/folder-structure.md`                                                        |
 | Feature                             | `feature.md`                        | `feature-lifecycle.md`              | Task-dependent                                                                                       |
 | UI feature                          | `ui.md`                             | `ui-design-review.md`               | `docs/design-system.md`, `docs/component-guidelines.md`, `docs/ui-principles.md`                     |
@@ -379,7 +379,8 @@ session that performed it.
 
 For short user instructions (`Continue`,
 `Approve` / `Approved`, `Status`, `Plan`,
-`Resume`, `Review`, `Validate`, `Finish`),
+`Resume`, `Review`, `Validate`, `Finish`,
+`Next`),
 the command protocol in
 [`.ai/commands.md`](../.ai/commands.md) is the
 recognised front door. The full
