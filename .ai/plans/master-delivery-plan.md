@@ -23,7 +23,7 @@
 | ----- | -------------------------------------------------------- | -------------------------- | --------------------------------------------- |
 | M0    | Documentation Foundation                                | **Done**                   | This document set.                            |
 | M1    | Design System Core                                      | **Done (closed 2026-07-10)** | `implementation-report-m1-closeout.md`; first commits `1722bd2`, `2ba1fad`. |
-| M2    | Application Shell and Navigation                        | Planned (M2.1 Delivered 2026-07-11; M2.2 plan `Awaiting Approval`) | `implementation-report-m2-1-application-shell-foundation.md`; commits `ef1063c`, `de082fd` on `feature/m2-1-application-shell`. |
+| M2    | Application Shell and Navigation                        | Active (M2.1, M2.2, M2.3, M2.4, M2.5 all Delivered 2026-07-11) | `implementation-report-m2-5-empty-routes-responsive-accessibility.md`; commits `de082fd`, `ef1063c` on `feature/m2-1-application-shell`; M2.5 commit on `feature/m2-5-empty-routes-responsive-accessibility`. |
 | M3    | Project Registration                                    | Planned                    | No evidence yet.                              |
 | M4-A  | Infrastructure / Process Execution                      | Planned                    | No evidence yet.                              |
 | M4-B  | Capability Detection                                    | Planned                    | No evidence yet.                              |
@@ -183,31 +183,47 @@ Process execution boundary (M4-A)
   - `IProjectIntelligenceReader` (M2.4 — the only
     read-side service the M2 milestone introduces; the
     `/dashboard` page is the only consumer).
+  - Empty-route pattern, responsive matrix (lg/md/sm
+    breakpoints per `docs/ui-principles.md` § 10.1), and
+    accessibility audit (keyboard smoke, `aria-current`
+    invariant, axe-core harness registered but disabled
+    per ADR-016 / M4-D) (M2.5).
+  - The T-017 theme toggle fix: `@rendermode
+    InteractiveServer` declared on `AppThemeToggle.razor`
+    (the layout's `@Body` is a `RenderFragment` delegate
+    that Blazor refuses to serialize across the SSR →
+    interactive boundary; declaring the directive on the
+    toggle itself is the minimum-blast-radius fix that
+    closes the click handler wiring).
   - The architecture test
     `Pages_AreReachable_Through_Registry` (M2.2, active).
   - The architecture test
     `Pages_Resolve_State_Through_Reader` (M2.4, active).
+  - The `AppLayout_ThemeToggleWiringTests` bUnit suite
+    (M2.5; the layout's theme toggle click handler
+    reaches `appTheme.set` when the layout is rendered).
 - **Dependencies.** M1, M0.5 (the M2.4 reader consumes the
   structured state introduced in M0.5).
-- **Completion status.** **Active** (M2.1 Delivered
-  2026-07-11; M2.2 plan `Awaiting Approval`; M2.3, M2.4
-  plan stubs in `Draft`; M2.5, M2.6 summary entries in the
-  task board).
+- **Completion status.** **Active** (M2.1, M2.2, M2.3,
+  M2.4, M2.5 all Delivered 2026-07-11; M2.6 summary
+  entry in the task board; M2.6 plan stub in `Deferred`
+  in `.ai/state/task-board.md` and `.ai/state/milestones.json`).
 - **Evidence.**
-  - `.ai/plans/M2.1-application-shell-skeleton.md` (revised
-    2026-07-10; `Awaiting Approval`; implemented 2026-07-11
-    per
+  - `.ai/plans/M2.1-application-shell-skeleton.md`
+    (revised 2026-07-10; implemented 2026-07-11 per
     `implementation-report-m2-1-application-shell-foundation.md`).
-  - `implementation-report-m2-1-application-shell-foundation.md`
-    (the M2.1 closeout receipt; commits `ef1063c`, `de082fd`
-    on `feature/m2-1-application-shell`).
-  - `.ai/plans/M2.2-navigation-registry-sidebar.md` (expanded
-    2026-07-11 from `Draft` to `Awaiting Approval`; T-002
-    in `.ai/state/tasks.json` is `Ready`).
-  - `.ai/plans/M2.3-topbar-breadcrumbs.md` (Draft,
-    2026-07-10).
+  - `.ai/plans/M2.2-navigation-registry-sidebar.md`
+    (expanded 2026-07-11; implemented 2026-07-11 per
+    `implementation-report-m2-2-navigation-registry-sidebar.md`).
+  - `.ai/plans/M2.3-topbar-breadcrumbs.md` (expanded
+    2026-07-11; implemented 2026-07-11 per
+    `implementation-report-m2-3-topbar-breadcrumbs.md`).
   - `.ai/plans/M2.4-project-intelligence-dashboard.md`
-    (Draft, 2026-07-10).
+    (expanded 2026-07-11; implemented 2026-07-11 per
+    `implementation-report-m2-4-project-intelligence-dashboard.md`).
+  - `.ai/plans/M2.5-empty-routes-responsive-accessibility.md`
+    (expanded 2026-07-11; implemented 2026-07-11 per
+    `implementation-report-m2-5-empty-routes-responsive-accessibility.md`).
   - `.ai/workflows/progressive-coding.md` (the
     Progressive Coding Rule that governs task selection
     across the six slices).
@@ -221,11 +237,11 @@ Process execution boundary (M4-A)
 
 | Slice | Title                                                    | Status                |
 | ----- | -------------------------------------------------------- | --------------------- |
-| M2.1  | Application Shell Foundation                             | Plan `Awaiting Approval`. |
-| M2.2  | Navigation Registry and Sidebar                          | Plan stub `Draft`.    |
-| M2.3  | Top Bar, Breadcrumbs, and Page Headers                   | Plan stub `Draft`.    |
-| M2.4  | Project Intelligence Dashboard (read-only, `.ai/state`)  | Plan stub `Draft`.    |
-| M2.5  | Empty Routes, Responsive, and Accessibility              | Summary entry.        |
+| M2.1  | Application Shell Foundation                             | Delivered (2026-07-11). |
+| M2.2  | Navigation Registry and Sidebar                          | Delivered (2026-07-11). |
+| M2.3  | Top Bar, Breadcrumbs, and Page Headers                   | Delivered (2026-07-11). |
+| M2.4  | Project Intelligence Dashboard (read-only, `.ai/state`)  | Delivered (2026-07-11). |
+| M2.5  | Empty Routes, Responsive, and Accessibility              | Delivered (2026-07-11). |
 | M2.6  | M2 Closeout and Treehouse Dogfooding                     | Summary entry.        |
 
 ### M3 — Project Registration

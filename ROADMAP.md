@@ -39,7 +39,7 @@ A milestone is **complete** only when:
 | --- | ----------------------------------------------------- | ---------- | -------------------------------------------------------------------------- |
 | M0  | Doc foundation                                        | Done       | This document set exists.                                                  |
 | M1  | Design System Core                                    | **Done (closed 2026-07-10)** | A runnable Blazor shell with the base design-system components.            |
-| M2  | Application Shell and Navigation                      | Active (M2.1 delivered 2026-07-11; M2.2 delivered 2026-07-11; M2.3 delivered 2026-07-11) | A navigable app shell on Windows desktop; pages reach an empty state.      |
+| M2  | Application Shell and Navigation                      | Active (M2.1 / M2.2 / M2.3 / M2.4 / M2.5 delivered 2026-07-11) | A navigable app shell on Windows desktop; pages reach an empty state; the layout is responsive and accessible. |
 | M3  | Project Registration                                  | Planned    | A user can register a project; the platform owns a `Project` entity.       |
 | M4  | Process Execution, Capability Detection, Provider Registry | Planned | The platform spawns processes safely, detects capabilities, registers providers. Divided into four slices: |
 |     | &nbsp;&nbsp;M4-A: Infrastructure / Process Execution   | Planned    | `AiEng.Platform.Infrastructure` lands; `IProcessRunner`, `ICredentialVault`, `IClock`, on-disk `IProjectStore`. |
@@ -64,12 +64,15 @@ M2.3 ("Top Bar, Breadcrumbs, and Page Headers") is **Delivered**
 (see `implementation-report-m2-3-topbar-breadcrumbs.md`).
 M2.4 ("Project Intelligence Dashboard") is **Delivered** (see
 `implementation-report-m2-4-project-intelligence-dashboard.md`).
-M2.5 ("Empty Routes, Responsive, and Accessibility") is the next
-`Ready` capability (plan
-`.ai/plans/M2.5-empty-routes-responsive-accessibility.md` status
-`Awaiting Approval`; T-015 in
-`.ai/state/tasks.json` status `Ready`); M2.6 is a summary
-entry in the task board.
+M2.5 ("Empty Routes, Responsive, and Accessibility") is
+**Delivered** (see
+`implementation-report-m2-5-empty-routes-responsive-accessibility.md`).
+M2.6 is the M2 closeout and external Treehouse dogfooding
+checkpoint; the plan stub is recorded in
+`.ai/state/task-board.md` and `.ai/state/milestones.json` as
+`Deferred`; the next session promotes the stub to a full plan
+in `Awaiting Approval` and implements per the plan's own
+order.
 
 The sequence is deliberate. M1 builds the design system because every
 later milestone composes its components. M2 builds the shell because
@@ -283,7 +286,7 @@ navigation).
 | M2.2  | Navigation Registry and Sidebar               | Delivered (M2.2, 2026-07-11) | `INavigationRegistry`, `RouteMetadata`, `RouteMetadataAttribute`, `RouteRegistry`, `AppSidebar`, `AppSidebarItem`, `AppNavItem`, the `Pages_AreReachable_Through_Registry` architecture test. |
 | M2.3  | Top Bar, Breadcrumbs, and Page Headers        | Delivered (M2.3, 2026-07-11) | `AppTopBar`, `AppThemeToggle`, `AppUserAvatarSlot`, `AppBreadcrumb`; theme toggle relocated to the top bar; breadcrumb walks the M2.2 registry's `Parent` chain; page-header integration with the navigation registry. |
 | M2.4  | Project Intelligence Dashboard                | Delivered (M2.4, 2026-07-11) | `IProjectIntelligenceReader`, `ProjectIntelligenceSnapshot`, `ProjectIntelligenceReader`, `AddProjectIntelligence`, `Dashboard.razor` at `/dashboard`; the dashboard renders the M0.5-data sections in the **Populated** state and the M3+-data sections in the **Empty** state; the theme toggle bug is fixed (`appTheme.current` JS function; synchronous `IsDark` flip; `JSDisconnectedException` handled); the `Pages_Resolve_State_Through_Reader` architecture test enforces the single-seam rule. |
-| M2.5  | Empty Routes, Responsive, and Accessibility   | Summary entry  | All routes reach an `AppEmptyState`; the shell is usable down to 1280x720 (per ADR-005); keyboard navigation works across the sidebar. |
+| M2.5  | Empty Routes, Responsive, and Accessibility   | Delivered (M2.5, 2026-07-11) | All routes reach an `AppEmptyState`; the shell is usable at 1280x720, 1440x900, and 1920x1080; the sidebar narrows progressively below 1280px (8rem at 1024–1279px); the top bar remains horizontal at every breakpoint; the content area scrolls vertically; keyboard navigation works; `aria-current="page"` invariant enforced on the breadcrumb last segment, the active `NavLink`, and the active sidebar link; axe-core audit harness is registered but disabled per ADR-016 / M4-D; the T-017 theme toggle bug is fixed via `@rendermode InteractiveServer` on `AppThemeToggle.razor` (the layout's `@Body` is a `RenderFragment` delegate that Blazor refuses to serialize across the SSR → interactive boundary; the directive on the toggle itself is the minimum-blast-radius fix). |
 | M2.6  | M2 Closeout and Treehouse Dogfooding          | Summary entry  | The M2 implementation report, the Treehouse dogfooding checkpoint (per `.ai/workflows/tool-dogfooding.md`), and the closeout commit. |
 
 **Reusable components introduced (across all six slices):**
@@ -331,7 +334,15 @@ no page reads the JSON directly.
   milestone, the active slice, the test status, and the
   self-awareness state read through `IProjectIntelligenceReader`.
 - M2.5 is closed: all routes reach an `AppEmptyState`; the shell
-  is usable down to 1280x720; keyboard navigation works.
+  is usable at 1280x720, 1440x900, and 1920x1080 (per the
+  matrix in `docs/ui-principles.md` § 10.1); the top bar
+  remains horizontal at every breakpoint; the content area
+  scrolls vertically; keyboard navigation works;
+  `aria-current="page"` is set on the breadcrumb last segment,
+  the active `NavLink`, and the active sidebar link; the
+  axe-core audit harness is registered but disabled per
+  ADR-016 / M4-D. (Delivered 2026-07-11;
+  `implementation-report-m2-5-empty-routes-responsive-accessibility.md`.)
 - M2.6 is closed: the M2 implementation report is written; the
   Treehouse dogfooding checkpoint has been exercised (or
   explicitly deferred, recorded, and reasoned); the closeout

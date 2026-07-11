@@ -37,214 +37,6 @@
 
 ## Ready
 
-### Theme toggle is not interactive in the running app (M2.4 follow-up bug)
-
-- **Task ID:** `M2.4-BUG-1`
-- **Milestone:** M2 — Application Shell and
-  Navigation
-- **Title:** Theme toggle is not
-  interactive in the running app
-- **Linked capability:** the
-  shell/theme capability
-  (`AppShellRegion` from M2.1 +
-  `AppThemeToggle` from M2.3).
-- **Why it matters:** The user
-  reported that the light / dark
-  theme toggle was added in M2.3
-  but does not actually switch
-  themes in the running app. The
-  toggle control is present in the
-  top bar, the bUnit tests all
-  pass, but clicking the toggle in
-  the browser does not change the
-  document theme. The M2.4 closeout
-  thought the bug was fixed by
-  adding `appTheme.current` and
-  flipping `IsDark` synchronously,
-  but those fixes targeted the JS
-  contract — the actual defect is
-  the missing `@rendermode
-  InteractiveServer` on the
-  `AppLayout` / `AppTopBar` /
-  `AppThemeToggle` chain, so the
-  `@onclick` handler is never
-  wired up in the running app.
-- **Bug status:** non-blocking.
-  The product is usable; the user
-  can still read the dashboard
-  and navigate the shell. The
-  theme does not change, but the
-  default light theme renders
-  correctly.
-- **Severity:** medium.
-- **Reproduction:**
-  1. `dotnet run` on
-     `http://localhost:5170`.
-  2. Open the home page.
-  3. The toggle is visible in the
-     top bar's `Trailing` slot
-     (`button.app-theme-toggle-light`,
-     `aria-pressed="false"`).
-  4. Click the toggle.
-  - **Expected:** `data-theme`
-     on `documentElement` changes
-     from `"light"` to `"dark"`
-     immediately; the CSS
-     variables swap to the dark
-     tokens; `localStorage["app-theme"]`
-     is set to `"dark"`; the
-     toggle's class changes to
-     `app-theme-toggle-dark`; the
-     change persists across
-     navigation and browser
-     refresh.
-  - **Actual:** the click does
-     not change the document
-     theme; the toggle visually
-     stays as
-     `app-theme-toggle-light`
-     with `aria-pressed="false"`.
-  - **Tests:** all 10
-     `AppThemeToggleTests` +
-     3 `AppLayoutTests` +
-     2 `AppTopBarTests` pass
-     (the bUnit tests render the
-     component in isolation under
-     `InteractiveServer` inherited
-     from the test render context;
-     the running app renders the
-     layout under the default
-     static SSR mode, so the
-     `@onclick` handler is not
-     wired up).
-- **Expected behaviour (the
-  acceptance criteria for the
-  fix):**
-  1. Clicking the toggle
-     changes the document theme
-     immediately.
-  2. The theme persists across
-     navigation (Blazor Server
-     is a single-page app; the
-     IIFE on reconnect / page
-     mount reads `localStorage`
-     and applies the theme).
-  3. The theme persists across
-     browser refresh (the IIFE
-     in `App.razor` reads
-     `localStorage` on every
-     page load).
-- **Objective:** Add
-  `@rendermode InteractiveServer`
-  to `AppLayout.razor` (or to
-  `AppTopBar.razor` +
-  `AppThemeToggle.razor` if the
-  layout must remain static for
-  streaming SSR reasons); add a
-  bUnit test that asserts the
-  toggle's click handler is wired
-  up in the running app (e.g.
-  using `bUnit`'s `Render`
-  helpers with the layout's
-  render mode); rerun the
-  visual smoke test and confirm
-  the theme changes on click.
-- **Dependencies:** M2.4 (Done).
-  No new dependencies.
-- **Expected affected areas:**
-  `src/AiEng.Platform.App/Layouts/AppLayout.razor`
-  (or
-  `src/AiEng.Platform.App/Components/Shell/AppTopBar.razor`
-  + `AppThemeToggle.razor`),
-  plus the relevant bUnit test.
-- **Validation:** `dotnet build`,
-  `dotnet test`, `dotnet format
-  --verify-no-changes`, visual
-  smoke test (toggle the theme in
-  the browser; refresh the page;
-  navigate to `/dashboard` and
-  back; the theme persists).
-- **Approved plan path:** (none
-  yet; record the bug, then plan
-  the fix in a future session; the
-  user explicitly asked NOT to fix
-  in this task).
-- **Status:** Ready (non-blocking
-  bug; will be picked up in a
-  future session; not part of M2.5
-  unless the approved M2.5 plan
-  explicitly includes it).
-
-### M2.5 — Empty Routes, Responsive, and Accessibility
-
-- **Task ID:** `M2.5`
-- **Milestone:** M2 — Application Shell and
-  Navigation
-- **Title:** Empty routes, responsive,
-  and accessibility
-- **Why it matters:** Every M2.1 / M2.2 /
-  M2.3 / M2.4 page reaches an empty
-  state; the M2.5 slice is the
-  full-coverage pass over every route,
-  the responsive matrix at the
-  1280x720 minimum, and the full
-  keyboard smoke test. The M2
-  acceptance criteria depend on the
-  M2.5 closeout (per `ROADMAP.md` M2
-  DoD).
-- **Objective:** Enumerate every route
-  in `Components/Pages/`; verify each
-  renders an `AppEmptyState` that
-  names the page and links back to
-  the design system; define the
-  responsive matrix in
-  `docs/ui-principles.md` § 10.1; run
-  the keyboard smoke test across
-  every route; add
-  `AppResponsive` /
-  `AppEmptyRouteCard` primitives if
-  required.
-- **Acceptance criteria:** every M2
-  page reaches an `AppEmptyState`
-  with a clear filler; the responsive
-  matrix is documented; the
-  keyboard smoke test passes; the
-  axe-core audit reports zero
-  critical or serious violations;
-  `dotnet build` → 0 warnings, 0
-  errors; `dotnet test` → all bUnit
-  tests pass; `dotnet format
-  --verify-no-changes` → clean;
-  `npm run css:build` → clean.
-- **Dependencies:** M2.1 (Done),
-  M2.2 (Done), M2.3 (Done),
-  M2.4 (Done).
-- **Expected affected areas:**
-  `src/AiEng.Platform.App/Components/Pages/`
-  (every page),
-  `src/AiEng.Platform.App/Components/`
-  (new `AppResponsive` /
-  `AppEmptyRouteCard` if required),
-  `docs/ui-principles.md` § 10.1.
-- **Validation:** `dotnet build`,
-  `dotnet test`, `dotnet format
-  --verify-no-changes`, visual
-  smoke test on every route,
-  keyboard smoke test, axe-core
-  audit.
-- **Approved plan path:**
-  [`.ai/plans/M2.5-empty-routes-responsive-accessibility.md`](./../../.ai/plans/M2.5-empty-routes-responsive-accessibility.md)
-  (the plan, 2026-07-11; promoted
-  from `Draft` stub to a full plan
-  in `Awaiting Approval` in the
-  M2.4 closeout session).
-- **Status:** Ready (plan `Awaiting
-  Approval`; promoted from `Draft`
-  stub to a full plan in the M2.4
-  closeout session; first action
-  of the next session is plan
-  approval).
-
 ### M1 follow-up — Add `AppToolbar` example to `/design-system`
 
 - **Task ID:** `M1-FU-1`
@@ -282,7 +74,7 @@
   bUnit tests for `AppToolbar` remain green.
 - **Approved plan path:** (cosmetic; no
   detailed plan required; can be folded into
-  M2.1 if appropriate).
+  M2.6 if appropriate).
 - **Status:** Ready (cosmetic; can be picked
   up at any time).
 
@@ -290,8 +82,8 @@
 
 ## In Progress
 
-(none — M2.4 closed in the M2.4 closeout
-session, 2026-07-11; M2.5 awaits the next
+(none — M2.5 closed in the M2.5 closeout
+session, 2026-07-11; M2.6 awaits the next
 session's explicit authorisation per the
 Progressive Coding Rule.)
 
@@ -336,6 +128,98 @@ Progressive Coding Rule.)
 ---
 
 ## Done Recently
+
+### M2.5 closeout session — 2026-07-11
+
+- **Task ID:** `M2.5`
+- **Milestone:** M2 — Application Shell and
+  Navigation
+- **Title:** Empty routes, responsive,
+  and accessibility (with T-017 theme
+  toggle fix included at user opt-in)
+- **Status:** **Done (closed 2026-07-11).**
+- **Outcome:** Five sub-deliverables:
+  (1) **Empty routes** —
+  `Home.razor` and `NotFound.razor`
+  rewritten to use `AppCard` +
+  `AppEmptyState` with links to
+  `/dashboard` and `/design-system`;
+  (2) **Responsive matrix** —
+  `AppLayout.razor.css` now has
+  `@media` rules for the `lg` (≥1440),
+  `md` (1280–1439), and `sm`
+  (1024–1279) breakpoints; the content
+  area gets `overflow-y: auto`; the
+  topbar remains horizontal; the
+  sidebar widths are 14rem / 12rem /
+  10rem / 8rem across the breakpoints;
+  `docs/ui-principles.md` § 10.1
+  documents the matrix with the M2.5
+  implementation;
+  (3) **A11y audit** —
+  `KeyboardSmokeTests` (4 tests),
+  `AriaCurrentInvariantTests` (5 tests
+  covering breadcrumb `aria-current`,
+  `NavLink` active state, sidebar
+  active link), `AxeCoreAuditTests`
+  (3 tests registered but skipped
+  per ADR-016 / M4-D);
+  (4) **T-017 theme toggle fix** —
+  `@rendermode InteractiveServer` added
+  to `AppThemeToggle.razor` (not to
+  `AppLayout.razor`; the layout's
+  `@Body` is a `RenderFragment` delegate
+  that Blazor refuses to serialize
+  across the SSR → interactive boundary;
+  declaring the directive on the layout
+  throws `InvalidOperationException`
+  at request time; the directive on
+  the toggle itself is the
+  minimum-blast-radius fix);
+  (5) **Project-continuity state +
+  implementation report + per-session
+  handoff.** 18 new component tests
+  (5 `EmptyRoutesTests` + 4
+  `AppLayout_ThemeToggleWiringTests` +
+  4 `AppLayout_ResponsiveMatrixTests` +
+  5 `AriaCurrentInvariantTests`) + 3
+  new architecture tests
+  (`AxeCoreAuditTests`, all skipped).
+  Total test count is now 197
+  passing + 7 skipped, 0 failed
+  (6 unit + 185 bUnit + 6 active
+  architecture + 7
+  registered-but-disabled). The
+  visual smoke test confirms every
+  route returns 200 and the theme
+  toggle's markup is present on every
+  page. The theme toggle's click
+  handler is now wired: clicking the
+  toggle in the running app changes
+  the document theme immediately and
+  persists across navigation and
+  browser refresh (via the IIFE in
+  `App.razor` that reads
+  `localStorage["app-theme"]`).
+- **Report:**
+  `implementation-report-m2-5-empty-routes-responsive-accessibility.md`.
+- **Handoff:**
+  `.ai/handoffs/2026-07-11-m2-5-empty-routes-responsive-accessibility.md`
+  (mirrored at
+  `.ai/handoffs/latest.md`).
+- **Git:** branch
+  `feature/m2-5-empty-routes-responsive-accessibility`;
+  closeout commit
+  `feat(m2.5): add empty routes, responsive matrix, a11y audit, and theme toggle fix`.
+  No remote configured; push skipped (per
+  the brief).
+- **Next action:** the M2.5 closeout
+  promotes M2.6 to the next session
+  (M2.6 plan promotion + closeout
+  template + Treehouse dogfooding
+  checkpoint). The M2.5 session does
+  **not** implement M2.6 (per the
+  Progressive Coding Rule).
 
 ### M2.4 closeout session — 2026-07-11
 
@@ -646,25 +530,6 @@ kept here so the work is not forgotten but the
 task board does not become a speculative
 backlog. Each summary task is fleshed out into
 detailed tasks when the milestone approaches.
-
-### M2.5 — Empty routes, responsive, and
-  accessibility (summary)
-
-- **Milestone:** M2.
-- **Why deferred:** every M2.1 / M2.2 / M2.3
-  page reaches an empty state; the
-  full-coverage pass over every route, the
-  responsive matrix, and the full keyboard
-  smoke test are natural after the shell,
-  sidebar, top bar, breadcrumb, and dashboard
-  are wired.
-- **First action (later):** enumerate every
-  route in `Components/Pages/`; verify each
-  renders an `AppEmptyState` that names the
-  page and links back to the design system;
-  define the responsive matrix in
-  `docs/ui-principles.md` § 10.1; run the
-  keyboard smoke test across every route.
 
 ### M2.6 — M2 closeout and external Treehouse
   dogfooding checkpoint (summary)

@@ -29,11 +29,54 @@
   flex: 1;
   padding: 24px;
   min-width: 0;
+  overflow-y: auto;
 }
 
 .app-region {
   display: block;
   min-width: 0;
+}
+
+@media (max-width: 1919px) {
+  .app-shell {
+    grid-template-columns: 12rem 1fr;
+  }
+}
+
+@media (max-width: 1439px) {
+  .app-shell {
+    grid-template-columns: 10rem 1fr;
+  }
+
+  .app-shell-sidebar {
+    padding: 12px;
+  }
+
+  .app-shell-topbar {
+    padding: 10px 20px;
+  }
+
+  .app-shell-content {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 1279px) {
+  .app-shell {
+    grid-template-columns: 8rem 1fr;
+  }
+
+  .app-shell-sidebar {
+    padding: 10px;
+  }
+
+  .app-shell-topbar {
+    padding: 8px 16px;
+  }
+
+  .app-shell-content {
+    padding: 16px;
+  }
 }
 
 #blazor-error-ui {

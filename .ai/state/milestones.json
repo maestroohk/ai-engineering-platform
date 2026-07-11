@@ -97,7 +97,14 @@
         },
         "M2.5": {
           "title": "Empty Routes, Responsive, and Accessibility",
-          "status": "deferred"
+          "status": "delivered",
+          "delivered_at": "2026-07-11",
+          "session": "m2-5-empty-routes-responsive-accessibility",
+          "branch": "feature/m2-5-empty-routes-responsive-accessibility",
+          "summary": "Five sub-deliverables: (1) Empty routes — Home.razor and NotFound.razor rewritten to use AppCard + AppEmptyState with links to /dashboard and /design-system. (2) Responsive matrix — AppLayout.razor.css has @media rules for the lg / md / sm breakpoints (14rem / 10rem / 8rem sidebar widths); content area gets overflow-y: auto; topbar remains horizontal; docs/ui-principles.md § 10.1 documents the matrix. (3) A11y audit — KeyboardSmokeTests (4 tests), AriaCurrentInvariantTests (5 tests covering breadcrumb aria-current, NavLink active state, sidebar active link), AxeCoreAuditTests (3 tests registered but skipped per ADR-016 / M4-D). (4) T-017 theme toggle fix — @rendermode InteractiveServer added to AppThemeToggle.razor (not to AppLayout.razor; the layout's @Body is a RenderFragment delegate, which Blazor refuses to serialize across the SSR → interactive boundary); the new AppLayout_ThemeToggleWiringTests bUnit test renders the AppLayout, finds the toggle inside the topbar, clicks it, and asserts appTheme.set is invoked. (5) Project-continuity state + implementation report + per-session handoff. 18 new component tests + 3 new architecture tests (skipped) added. Total: 197 passing + 7 skipped, 0 failed (6 unit + 185 bUnit + 6 active architecture + 7 registered-but-disabled).",
+          "implementation_report": "implementation-report-m2-5-empty-routes-responsive-accessibility.md",
+          "plan": ".ai/plans/M2.5-empty-routes-responsive-accessibility.md",
+          "commit_message": "feat(m2.5): add empty routes, responsive matrix, a11y audit, and theme toggle fix"
         },
         "M2.6": {
           "title": "M2 Closeout and Treehouse Dogfooding",
@@ -105,18 +112,20 @@
         }
       },
       "evidence": {
-        "slices": ["M2.1", "M2.2", "M2.3", "M2.4"],
+        "slices": ["M2.1", "M2.2", "M2.3", "M2.4", "M2.5"],
         "implementation_reports": [
           "implementation-report-m2-1-application-shell-foundation.md",
           "implementation-report-m2-2-navigation-registry-sidebar.md",
           "implementation-report-m2-3-topbar-breadcrumbs.md",
-          "implementation-report-m2-4-project-intelligence-dashboard.md"
+          "implementation-report-m2-4-project-intelligence-dashboard.md",
+          "implementation-report-m2-5-empty-routes-responsive-accessibility.md"
         ],
         "handoffs": [
           ".ai/handoffs/2026-07-11-m2-1-application-shell-foundation.md",
           ".ai/handoffs/2026-07-11-m2-2-navigation-registry-sidebar.md",
           ".ai/handoffs/2026-07-11-m2-3-topbar-breadcrumbs.md",
-          ".ai/handoffs/2026-07-11-m2-4-project-intelligence-dashboard.md"
+          ".ai/handoffs/2026-07-11-m2-4-project-intelligence-dashboard.md",
+          ".ai/handoffs/2026-07-11-m2-5-empty-routes-responsive-accessibility.md"
         ]
       }
     },

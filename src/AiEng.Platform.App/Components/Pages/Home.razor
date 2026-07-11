@@ -1,9 +1,27 @@
 @page "/"
 @attribute [RouteMetadata("/", "Home", Order = 0)]
-@rendermode InteractiveServer
+@layout AppLayout
 
 <PageTitle>Home</PageTitle>
 
-<h1 class="text-app-2xl font-semibold text-app-fg">Hello, world!</h1>
+<AppPageHeader>
+    <Breadcrumbs>
+        <AppBreadcrumb />
+    </Breadcrumbs>
+    <Title>Home</Title>
+    <Description>Welcome to the AI Engineering Platform. This page is the platform root; it intentionally has no content of its own.</Description>
+</AppPageHeader>
 
-<p class="mt-2 text-app-fg-muted">Welcome to your new app.</p>
+<AppCard>
+    <Header>Home</Header>
+    <ChildContent>
+        <AppEmptyState>
+            <Title>Nothing here yet</Title>
+            <Description>The home route is the platform root. The design system lists every primitive the platform composes against; the dashboard reads the project state.</Description>
+            <Actions>
+                <a href="/dashboard">Open the dashboard</a>
+                <a href="/design-system">Open the design system</a>
+            </Actions>
+        </AppEmptyState>
+    </ChildContent>
+</AppCard>

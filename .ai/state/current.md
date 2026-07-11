@@ -42,7 +42,8 @@
 - **Active milestone:** **M2 — Application Shell and
   Navigation** (active; M2.1 delivered 2026-07-11;
   M2.2 delivered 2026-07-11; M2.3 delivered 2026-07-11;
-  M2.4 delivered 2026-07-11).
+  M2.4 delivered 2026-07-11; M2.5 delivered
+  2026-07-11).
 - **M2.1 — Application Shell Foundation:**
   **Delivered (2026-07-11).** The shell
   foundation lands: two layouts
@@ -102,18 +103,76 @@
   and green. The self-awareness
   dashboard remains in M2.4. See
   [`implementation-report-m2-3-topbar-breadcrumbs.md`](./../../implementation-report-m2-3-topbar-breadcrumbs.md).
-- **M2 next slice:** **M2.5 — Empty
-  Routes, Responsive, and
-  Accessibility.** The plan
-  at
-  [`.ai/plans/M2.5-empty-routes-responsive-accessibility.md`](./../../.ai/plans/M2.5-empty-routes-responsive-accessibility.md)
-  is now a full plan in `Awaiting
-  Approval` state (promoted from the
-  `Draft` stub in the M2.4 closeout
-  session).
-- **M2.5 / M2.6:** summary entries in
-  the task board; planned in detail
-  after M2.4 / M2.5 close.
+- **M2.4 — Project Intelligence Dashboard:**
+  **Delivered (2026-07-11).** The
+  project intelligence dashboard
+  lands: `IProjectIntelligenceReader`,
+  `ProjectIntelligenceSnapshot`,
+  `ProjectIntelligenceReader` in
+  `src/AiEng.Platform.Application/ProjectIntelligence/`;
+  `ProjectIntelligenceServiceCollectionExtensions`
+  in `src/AiEng.Platform.App/Composition/`;
+  `Dashboard.razor` +
+  `Dashboard.razor.css` in
+  `src/AiEng.Platform.App/Components/Pages/`;
+  the `Pages_Resolve_State_Through_Reader`
+  architecture test is active and
+  green; the theme toggle bug fix is
+  recorded as T-017 (later fixed in
+  M2.5). See
+  [`implementation-report-m2-4-project-intelligence-dashboard.md`](./../../implementation-report-m2-4-project-intelligence-dashboard.md).
+- **M2.5 — Empty Routes, Responsive,
+  and Accessibility:**
+  **Delivered (2026-07-11).** The
+  M2 acceptance criteria for the
+  application shell are closed: every
+  route in `Components/Pages/`
+  reaches an `AppEmptyState` (or its
+  data-owning equivalent); the
+  layout is usable at 1280x720,
+  1440x900, and 1920x1080 with the
+  sidebar widths scaling at the lg
+  / md / sm breakpoints (per
+  ADR-005); the keyboard smoke
+  test and the `aria-current="page"`
+  invariant pass on every route;
+  the axe-core audit is registered
+  but disabled per ADR-016 and the
+  M4-D activation milestone. The
+  T-017 theme toggle bug is fixed
+  in the same slice: `@rendermode
+  InteractiveServer` is added to
+  `AppThemeToggle.razor` (not to
+  `AppLayout.razor`; the layout's
+  `@Body` is a `RenderFragment`
+  delegate, which Blazor refuses to
+  serialize across the SSR →
+  interactive boundary, so the
+  directive on the layout throws
+  `InvalidOperationException` at
+  request time; the directive on the
+  toggle itself is the
+  minimum-blast-radius fix). The new
+  `AppLayout_ThemeToggleWiringTests`
+  bUnit test renders the `AppLayout`,
+  finds the toggle inside the
+  topbar, clicks it, and asserts
+  `appTheme.set` is invoked. The
+  visual smoke test confirms every
+  route returns 200 and the
+  toggle's markup is present on
+  every page. 18 new component
+  tests + 3 new architecture tests
+  (skipped). Branch:
+  `feature/m2-5-empty-routes-responsive-accessibility`.
+  See
+  [`implementation-report-m2-5-empty-routes-responsive-accessibility.md`](./../../implementation-report-m2-5-empty-routes-responsive-accessibility.md).
+- **M2 next slice:** **M2.6 — M2
+  Closeout and Treehouse
+  Dogfooding.** Summary
+  entry; the full M2.6 plan
+  lands when M2.5 closes
+  (i.e. now).
 - **M0.5 — Architecture Refinement and Project
   Intelligence:** **Done (closed 2026-07-10;
   coherent commit `1d98acd`).** M0.5 is the
@@ -130,21 +189,21 @@
 
 - **Active slice:** **M2.5 — Empty
   Routes, Responsive, and
-  Accessibility** (plan
-  promoted 2026-07-11 from the
-  `Draft` stub to a full plan in
-  `Awaiting Approval`). Implementation
-  has not started; per the Progressive
-  Coding Rule, M2.5 waits for explicit
-  user authorisation in the next
-  session.
+  Accessibility** (delivered
+  2026-07-11). The branch
+  `feature/m2-5-empty-routes-responsive-accessibility`
+  carries the implementation; the
+  M2.5 closeout commit
+  `feat(m2.5): add empty routes, responsive matrix, a11y audit, and theme toggle fix`
+  is on this branch.
 - **Last completed slice:** **M2.4 —
   Project Intelligence Dashboard**
   (delivered 2026-07-11). The branch
   `feature/m2-4-project-intelligence-dashboard`
   carries the implementation; the
-  closeout commit is produced on this
-  branch.
+  closeout commit
+  `feat(m2.4): add project intelligence dashboard`
+  is on this branch.
 - **M2.2 — Navigation Registry and
   Sidebar** (delivered 2026-07-11).
   The branch
@@ -187,7 +246,8 @@
   M2.2 Delivered 2026-07-11;
   M2.3 Delivered 2026-07-11;
   M2.4 Delivered 2026-07-11;
-  M2.5 plan Awaiting Approval).**
+  M2.5 Delivered 2026-07-11;
+  M2.6 summary entry).**
 - **M3 through M8:** Planned; no evidence yet.
 
 ## Last Completed Milestone
@@ -206,91 +266,107 @@
 
 ## Last Completed Task
 
-- The M2.3 implementation session
+- The M2.5 implementation session
   (2026-07-11), which:
-  - Delivered M2.3 — Top Bar,
-    Breadcrumbs, and Page Headers
+  - Delivered M2.5 — Empty Routes,
+    Responsive, and Accessibility
     per the approved plan
-    (`.ai/plans/M2.3-topbar-breadcrumbs.md`).
-    The plan was approved 2026-07-11
-    and implementation followed § 8
-    (13-step order) of the plan.
-  - Added `AppTopBar` (replaces
-    `AppTopBarSlot`), `AppThemeToggle`
-    (relocated to the top bar's
-    `Trailing` slot), `AppUserAvatarSlot`,
-    and `AppBreadcrumb` in
-    `src/AiEng.Platform.App/Components/`.
-  - Replaced `AppTopBarSlot` with
-    `AppTopBar` in `AppLayout.razor`;
-    deleted `AppTopBarSlot.razor` and
-    `AppTopBarSlotTests.cs`.
-  - Wired `AppBreadcrumb` into
-    `AppPageHeader.Breadcrumbs` on
-    `DesignSystem.razor`.
-  - Added 27 new bUnit tests
-    across 4 test files
-    (`AppTopBarTests`,
-    `AppThemeToggleTests`,
-    `AppUserAvatarSlotTests`,
-    `AppBreadcrumbTests`); removed
-    6 obsolete `AppTopBarSlotTests`.
-    146 total component tests pass.
-  - Updated the project-continuity
-    state per Rule 15 (`current.md`,
-    `task-board.md`, `session.json`,
-    `tasks.json`, `milestones.json`,
-    `capabilities.json`, `ROADMAP.md`,
-    `handoffs/latest.md`), and
-    produced
-    `implementation-report-m2-3-topbar-breadcrumbs.md`.
-  - Promoted the M2.4 plan stub to
-    a full plan in `Awaiting
-    Approval` state. T-014 is
-    `Ready`.
-  - The session does **not**
-    implement M2.4; per the
-    Progressive Coding Rule, M2.4
-    is the next session's
-    responsibility.
-  - Two documented deviations:
-    (1) `AppTopBar` uses
-    `div.app-topbar` + `Leading` /
-    `Trailing` slots rather than
-    `AppStack` + `AppPageHeader`;
-    the surface still composes
-    `AppTopBar` + `AppPageHeader` +
-    `AppBreadcrumb`, matching the
-    plan's intent. (2) Optional
-    architecture test
-    `Breadcrumb_Follows_Registry_Parent_Chain`
-    was skipped per plan § 8 step
-    11 which marked it optional.
+    (`.ai/plans/M2.5-empty-routes-responsive-accessibility.md`)
+    with the T-017 theme toggle
+    bug fix included in the same
+    slice per the user's explicit
+    opt-in.
+  - Landed five sub-deliverables:
+    (1) Empty routes
+    (`Home.razor` and
+    `NotFound.razor` rewritten
+    to use `AppCard` +
+    `AppEmptyState` with links
+    to `/dashboard` and
+    `/design-system`); (2)
+    Responsive matrix
+    (`AppLayout.razor.css` now
+    has `@media` rules for the
+    lg / md / sm breakpoints; the
+    content area gets
+    `overflow-y: auto`; the
+    topbar remains horizontal;
+    `docs/ui-principles.md`
+    § 10.1 documents the
+    matrix); (3) A11y audit
+    (`KeyboardSmokeTests`,
+    `AriaCurrentInvariantTests`,
+    `AxeCoreAuditTests`
+    registered but skipped);
+    (4) T-017 fix
+    (`@rendermode
+    InteractiveServer` added
+    to `AppThemeToggle.razor`;
+    the layout itself remains
+    static for streaming SSR —
+    the layout's `@Body` is a
+    `RenderFragment` delegate
+    that Blazor refuses to
+    serialize across the SSR
+    → interactive boundary);
+    (5) Project-continuity
+    state + implementation
+    report + per-session
+    handoff.
+  - 18 new component tests
+    (5 EmptyRoutesTests +
+    4 AppLayout_ThemeToggleWiringTests +
+    4 AppLayout_ResponsiveMatrixTests +
+    5 AriaCurrentInvariantTests)
+    + 3 new architecture tests
+    (AxeCoreAuditTests, all
+    skipped per ADR-016 /
+    M4-D).
+  - 197 total tests pass:
+    6 unit + 185 component +
+    6 architecture, 7 skipped.
+  - The visual smoke test
+    confirms every route
+    returns 200 and the
+    theme toggle's markup is
+    present on every page.
   - The commit
-    `feat(m2.3): add top bar, breadcrumb, and page header integration`
-    is the closing receipt; no push
-    (no remote configured).
-- The M2.2 implementation session
-  (2026-07-11) is the prior task; the
+    `feat(m2.5): add empty routes, responsive matrix, a11y audit, and theme toggle fix`
+    is the closing receipt; no
+    push (no remote configured).
+  - The session does **not**
+    implement M2.6; per the
+    Progressive Coding Rule,
+    M2.6 is the next session's
+    responsibility.
+- The M2.4 implementation session
+  (2026-07-11) is the prior task;
+  the M2.3 implementation session
+  (2026-07-11) is the
+  prior-prior task; the M2.2
+  implementation session
+  (2026-07-11) is the
+  prior-prior-prior task; the
   M2.1 implementation session
-  (2026-07-11) is the prior-prior task;
-  the M2 delivery-reconciliation session
-  (2026-07-10) is the prior-prior-prior
-  task; the M0.5 architecture refinement
+  (2026-07-11) is the
+  prior-prior-prior-prior task;
+  the M0.5 architecture refinement
   session (2026-07-10) is the
-  prior-prior-prior-prior task.
+  prior-prior-prior-prior-prior
+  task.
 
 ## Active Branch
 
-- **`feature/m2-3-topbar-breadcrumbs`**.
-  The M2.3 implementation branch
-  carries the M2.3 closeout commit. The
-  M0.5 closeout commit `1d98acd` is the
-  base; the M2.1 closeout commit
+- **`feature/m2-5-empty-routes-responsive-accessibility`**.
+  The M2.5 implementation branch
+  carries the M2.5 closeout commit.
+  The M0.5 closeout commit `1d98acd`
+  is the base; the M2.1 closeout
+  commit
   `feat(m2.1): add application shell foundation`
   is the M2.1 chain tip on
-  `feature/m2-1-application-shell`; the
-  M2.2 closeout commit
+  `feature/m2-1-application-shell`;
+  the M2.2 closeout commit
   `feat(m2.2): add navigation registry and sidebar`
   is the M2.2 chain tip on
   `feature/m2-2-navigation-registry-sidebar`;
@@ -298,67 +374,68 @@
   `feat(m2.3): add top bar, breadcrumb, and page header integration`
   is the
   `feature/m2-3-topbar-breadcrumbs`
-  tip. No remote is configured, so push
-  is skipped (the session records this
-  explicitly per the brief).
+  tip; the M2.4 closeout commit
+  `feat(m2.4): add project intelligence dashboard`
+  is the
+  `feature/m2-4-project-intelligence-dashboard`
+  tip; the M2.5 closeout commit
+  `feat(m2.5): add empty routes, responsive matrix, a11y audit, and theme toggle fix`
+  is the
+  `feature/m2-5-empty-routes-responsive-accessibility`
+  tip. No remote is configured, so
+  push is skipped (the session records
+  this explicitly per the brief).
 
 ## Last Stable Commit
 
-- The M2.3 closeout commit
-  `feat(m2.3): add top bar, breadcrumb, and page header integration`
-  on `feature/m2-3-topbar-breadcrumbs`
-  (created 2026-07-11). The parent
-  commit is the M2.2 closeout commit
-  `feat(m2.2): add navigation registry and sidebar`
+- The M2.5 closeout commit
+  `feat(m2.5): add empty routes, responsive matrix, a11y audit, and theme toggle fix`
   on
-  `feature/m2-2-navigation-registry-sidebar`
-  (the closeout chain is
-  `de082fd` → `ef1063c` →
-  `32ab73d` on
-  `feature/m2-1-application-shell`,
-  then `3a2c3cb` on
-  `feature/m2-2-navigation-registry-sidebar`,
-  then the M2.3 commit on
-  `feature/m2-3-topbar-breadcrumbs`).
-  Working tree is clean at the close of
-  the M2.3 session.
+  `feature/m2-5-empty-routes-responsive-accessibility`
+  (created 2026-07-11). The parent
+  commit is the M2.4 closeout commit
+  `0e05dd7` on
+  `feature/m2-4-project-intelligence-dashboard`.
+  Working tree is clean at the close
+  of the M2.5 session.
 
 ## Application Status
 
 - **Runnable.** The Blazor Server app builds and
-  serves on `http://localhost:5286`. The five M1
-  routes (`/`, `/counter`, `/weather`,
-  `/design-system`, `/not-found`) and the M2.4
-  `/dashboard` route all return 200.
-  The M2 application shell is in place: `AppLayout`
-  composes the registry-driven `AppSidebar` (M2.2
-  the real sidebar), the `AppTopBar` (M2.3 the
-  real top bar, with the theme toggle and the
-  user avatar slot in the `Trailing` slot, and
-  the current route's title in the `Leading`
-  slot, sourced from the M2.2
-  `INavigationRegistry`), and the content area.
-  The sidebar renders four nav items (Home,
-  Counter, Weather, Design system) for the four
-  sidebar-visible routes; Error and NotFound are
-  correctly hidden (`ShowInSidebar = false`).
-  The `data-app-region` attributes are present
-  on every region. `/design-system` and
-  `/not-found` use `AppEmptyLayout`. The
-  `AppBreadcrumb` walks the M2.2 registry's
-  `Parent` chain (e.g. `/` → `Home`,
-  `/breadcrumb-dashboard/projects` → `Home →
-  BreadcrumbDashboard → Projects`); `aria-current="page"`
-  is set on the current item; separators are
-  `aria-hidden`. The theme toggle flips
-  light/dark and persists to `localStorage`; the
-  choice is applied via the `data-theme`
-  attribute. Light and dark themes render
-  correctly (the design-token contract is
-  unchanged from M1.1). The keyboard smoke test
-  passes: Tab through the shell; every
-  interactive element is reachable; focus is
-  visible.
+  serves on `http://localhost:5210`. The six
+  routes (`/`, `/counter`, `/dashboard`,
+  `/design-system`, `/weather`, `/not-found`)
+  all return 200 (the `/error` route is
+  reached only on exception). The M2
+  application shell is in place: `AppLayout`
+  composes the registry-driven `AppSidebar`
+  (M2.2), the `AppTopBar` (M2.3, with the
+  theme toggle and the user avatar slot in
+  the `Trailing` slot, and the current
+  route's title in the `Leading` slot,
+  sourced from the M2.2 `INavigationRegistry`),
+  and the content area. The sidebar renders
+  four nav items (Home, Counter, Weather,
+  Design system) for the four
+  sidebar-visible routes; Error and NotFound
+  are correctly hidden (`ShowInSidebar =
+  false`). The `data-app-region` attributes
+  are present on every region.
+  `/design-system` and `/not-found` use
+  `AppEmptyLayout`. The `AppBreadcrumb`
+  walks the M2.2 registry's `Parent` chain;
+  `aria-current="page"` is set on the
+  current item; separators are
+  `aria-hidden`. The theme toggle
+  (`@rendermode InteractiveServer` declared
+  on the toggle itself; the layout remains
+  static for streaming SSR) flips light/dark
+  and persists to `localStorage`; the choice
+  is applied via the `data-theme` attribute.
+  Light and dark themes render correctly.
+  The keyboard smoke test passes: Tab
+  through the shell; every interactive
+  element is reachable; focus is visible.
 
 ## CSS Build Status
 
@@ -386,26 +463,33 @@
 ## Test Status
 
 - `dotnet test AiEng.Platform.slnx --no-build` →
-  **175 passed, 4 skipped, 0 failed.**
+  **197 passed, 7 skipped, 0 failed.**
   - `AiEng.Platform.UnitTests`: 6 tests
-    (the new M2.4 `ProjectIntelligenceReader`
+    (the M2.4 `ProjectIntelligenceReader`
     unit tests).
-  - `AiEng.Platform.ComponentTests`: 163
+  - `AiEng.Platform.ComponentTests`: 185
     bUnit / integration tests, all passing
-    (77 M1.2 + 25 M2.1 + 23 M2.2 bUnit + 27 M2.3 bUnit −
-    6 obsolete M2.1 `AppTopBarSlotTests`
-    removed in M2.3 + 3 M2.4 composition
-    + 14 M2.4 dashboard / theme-toggle).
-  - `AiEng.Platform.ArchitectureTests`: 10
+    (77 M1.2 + 25 M2.1 + 23 M2.2 bUnit + 27
+    M2.3 bUnit − 6 obsolete M2.1
+    `AppTopBarSlotTests` removed in M2.3 +
+    3 M2.4 composition + 14 M2.4 dashboard
+    / theme-toggle + 18 M2.5: 5
+    EmptyRoutesTests + 4
+    AppLayout_ThemeToggleWiringTests + 4
+    AppLayout_ResponsiveMatrixTests + 5
+    AriaCurrentInvariantTests).
+  - `AiEng.Platform.ArchitectureTests`: 13
     tests in total — 6 active (passing)
-    and 4 registered-but-disabled
+    and 7 registered-but-disabled
     (skipped) per ADR-016 and the M4-D
     activation milestone. The
     `Pages_AreReachable_Through_Registry`
     test (M2.2) and the
     `Pages_Resolve_State_Through_Reader`
     test (M2.4) are the two most recent
-    active architecture tests.
+    active architecture tests. The M2.5
+    `AxeCoreAuditTests` (3 tests) are
+    registered but skipped.
 
 ## Implemented Capabilities
 
@@ -568,63 +652,6 @@ Plus the supporting infrastructure:
 
 ## Known Issues
 
-- **Theme toggle is not interactive
-  in the running app** (M2.4
-  follow-up bug, recorded 2026-07-11
-  in the M2.4 follow-up session;
-  non-blocking; will be picked up
-  in a future session; **not** part
-  of the M2.5 scope unless the
-  approved M2.5 plan explicitly
-  includes it). The toggle control
-  is visible in the top bar; the
-  bUnit tests for the toggle
-  (`AppThemeToggleTests`,
-  `AppLayoutTests`,
-  `AppTopBarTests`) all pass. But
-  clicking the toggle in the
-  running app does not change the
-  document theme — the click
-  fires, but no handler runs
-  because the
-  `AppLayout` / `AppTopBar` /
-  `AppThemeToggle` chain is not
-  marked `@rendermode
-  InteractiveServer`, so the
-  `@onclick` is never wired up in
-  the browser. The bUnit tests
-  pass because they render the
-  component in isolation under
-  `InteractiveServer` inherited
-  from the test render context.
-  Expected behaviour: theme
-  changes immediately on click;
-  persists across navigation;
-  persists across browser refresh
-  (the IIFE in `App.razor` reads
-  `localStorage` on every page
-  load, but only if the user can
-  flip the toggle in the first
-  place). Linked capability: the
-  shell/theme capability
-  (`AppShellRegion` from M2.1 +
-  `AppThemeToggle` from M2.3).
-  Linked task: T-017 in
-  `.ai/state/tasks.json`. The
-  fix is to add `@rendermode
-  InteractiveServer` to the
-  layout (or to the
-  `AppTopBar` + `AppThemeToggle`
-  pair if the layout must remain
-  static for streaming SSR
-  reasons) and add a bUnit test
-  that asserts the click handler
-  is wired in the running app
-  context. Recorded in
-  `.ai/state/tasks.json` (T-017,
-  status `Ready`, severity
-  `medium`, bug_status
-  `non-blocking`).
 - **`AppToolbar` example missing on
   `/design-system`.** The `AppToolbar` component
   ships and is unit-tested, but the
@@ -694,13 +721,22 @@ Plus the supporting infrastructure:
   approved and implemented in the M2.4
   closeout session).
 - [`.ai/plans/M2.5-empty-routes-responsive-accessibility.md`](./../../.ai/plans/M2.5-empty-routes-responsive-accessibility.md)
-  — M2.5 plan, **Awaiting Approval**
+  — M2.5 plan, **Delivered (2026-07-11)**
   (promoted from `Draft` stub to a
-  full plan in the M2.4 closeout
-  session, 2026-07-11).
+  full plan in `Awaiting Approval` in
+  the M2.4 closeout session; approved
+  and implemented in the M2.5
+  closeout session; the T-017 theme
+  toggle bug fix is included in the
+  same slice per the user's explicit
+  opt-in).
 
 ## Last Implementation Report
 
+- [`implementation-report-m2-5-empty-routes-responsive-accessibility.md`](./../../implementation-report-m2-5-empty-routes-responsive-accessibility.md)
+  — the M2.5 implementation report
+  (the closing receipt for M2.5, 2026-07-11;
+  includes the T-017 theme toggle bug fix).
 - [`implementation-report-m2-4-project-intelligence-dashboard.md`](./../../implementation-report-m2-4-project-intelligence-dashboard.md)
   — the M2.4 implementation report
   (the closing receipt for M2.4, 2026-07-11).
@@ -728,24 +764,20 @@ Plus the supporting infrastructure:
 
 ## Next Recommended Task
 
-> **M2.5 — Empty Routes, Responsive,
-> and Accessibility.** Read
-> [`.ai/plans/M2.5-empty-routes-responsive-accessibility.md`](./../../.ai/plans/M2.5-empty-routes-responsive-accessibility.md).
-> The plan was promoted from the
-> `Draft` stub to a full plan in
-> `Awaiting Approval` (the M2.4
-> closeout session produced the
-> promotion). The first action in the
-> next session is to either approve
-> the M2.5 plan (and start M2.5
-> implementation per the plan's own
-> order) or amend the plan and
-> re-submit it.
-> The next session follows the **Progressive
-> Coding Rule** in
+> **M2.6 — M2 Closeout and Treehouse
+> Dogfooding.** Summary entry; the
+> full M2.6 plan lands now that
+> M2.5 has closed. The next session
+> promotes the M2.6 plan stub to
+> a full plan in `Awaiting
+> Approval`, then implements
+> per the plan's own order.
+> The next session follows the
+> **Progressive Coding Rule** in
 > [`.ai/workflows/progressive-coding.md`](./../../.ai/workflows/progressive-coding.md):
-> one task per session; 13-step lifecycle;
-> stop after the coherent commit.
+> one task per session;
+> 13-step lifecycle; stop after
+> the coherent commit.
 
 The detailed breakdown of the M2 slices is
 in
@@ -754,40 +786,39 @@ and the M2 plan files in
 [`.ai/plans/`](./../../.ai/plans/). The
 next three actionable items are:
 
-1. **M2.5 — Empty Routes, Responsive,
-   and Accessibility** (plan `Awaiting
-   Approval`; implementation follows
-   the plan's own order).
-2. **M2.6 — M2 Closeout and Treehouse
-   Dogfooding** (summary
-   entry; promoted to a full plan
-   when M2.5 closes).
-3. **M1 follow-up — Add `AppToolbar`
-   example to `/design-system`**
-   (cosmetic; the work is small and can
-   be folded into M2.5 if appropriate).
+1. **M2.6 — M2 Closeout and
+   Treehouse Dogfooding**
+   (summary entry; promoted to
+   a full plan when M2.5 closes
+   — i.e. now).
+2. **M1 follow-up — Add
+   `AppToolbar` example to
+   `/design-system`** (cosmetic;
+   the work is small and can be
+   folded into M2.6 if
+   appropriate).
 
 ## Last Updated
 
-- **2026-07-11** (M2.4 closeout
+- **2026-07-11** (M2.5 closeout
   session). This version supersedes
-  the M2.3 closeout version
-  (2026-07-11). The M2.4 closeout
-  session delivers the project
-  intelligence dashboard and theme
-  toggle bug fix, runs the validation
-  suite (npm css:build, dotnet build,
-  dotnet test, dotnet format, visual
-  smoke test), updates the
-  project-continuity state per Rule
-  15, produces
-  `implementation-report-m2-4-project-intelligence-dashboard.md`,
-  promotes the M2.5 plan stub to a
-  full plan in `Awaiting Approval`,
-  and creates the M2.4 closeout
-  commit. The M2.4 commit is the
+  the M2.4 closeout version
+  (2026-07-11). The M2.5 closeout
+  session delivers the empty
+  routes, the responsive matrix,
+  the accessibility audit, and the
+  T-017 theme toggle bug fix;
+  runs the validation suite (npm
+  css:build, dotnet build, dotnet
+  test, dotnet format, visual
+  smoke test); updates the
+  project-continuity state per
+  Rule 15; produces
+  `implementation-report-m2-5-empty-routes-responsive-accessibility.md`;
+  and creates the M2.5 closeout
+  commit. The M2.5 commit is the
   most recent commit on
-  `feature/m2-4-project-intelligence-dashboard`;
+  `feature/m2-5-empty-routes-responsive-accessibility`;
   no push (no remote configured).
 
 ## Linked Artefacts
@@ -801,9 +832,11 @@ next three actionable items are:
   `Awaiting Approval`; M2.5 in
   `Deferred`).
 - [`.ai/handoffs/latest.md`](./../../.ai/handoffs/latest.md) —
-  the most recent handoff (the M2.4
+  the most recent handoff (the M2.5
   closeout handoff; mirrored from
-  `.ai/handoffs/2026-07-11-m2-4-project-intelligence-dashboard.md`).
+  `.ai/handoffs/2026-07-11-m2-5-empty-routes-responsive-accessibility.md`).
+- [`.ai/handoffs/2026-07-11-m2-5-empty-routes-responsive-accessibility.md`](./../../.ai/handoffs/2026-07-11-m2-5-empty-routes-responsive-accessibility.md)
+  — the M2.5 closeout session handoff.
 - [`.ai/handoffs/2026-07-11-m2-4-project-intelligence-dashboard.md`](./../../.ai/handoffs/2026-07-11-m2-4-project-intelligence-dashboard.md)
   — the M2.4 closeout session handoff.
 - [`.ai/handoffs/2026-07-11-m2-3-topbar-breadcrumbs.md`](./../../.ai/handoffs/2026-07-11-m2-3-topbar-breadcrumbs.md)
@@ -826,10 +859,9 @@ next three actionable items are:
   M2.2 closeout session, approved and
   implemented in the M2.3 closeout
   session).
-- [`.ai/plans/M2.4-project-intelligence-dashboard.md`](./../../.ai/plans/M2.4-project-intelligence-dashboard.md) —
-  the M2.4 plan (Awaiting Approval,
-  2026-07-11; promoted from `Draft`
-  stub in the M2.3 closeout session).
+- [`.ai/plans/M2.5-empty-routes-responsive-accessibility.md`](./../../.ai/plans/M2.5-empty-routes-responsive-accessibility.md) —
+  the M2.5 plan (Delivered,
+  2026-07-11).
 - [`.ai/plans/master-delivery-plan.md`](./../../.ai/plans/master-delivery-plan.md) —
   the master delivery plan.
 - [`.ai/reviews/M1-design-system-lavish-axi-review.md`](./../../.ai/reviews/M1-design-system-lavish-axi-review.md) —
@@ -870,10 +902,15 @@ next three actionable items are:
   — the M2.2 implementation report
   (the closing receipt for M2.2,
   2026-07-11).
-- [`implementation-report-m2-3-topbar-breadcrumbs.md`](./../../implementation-report-m2-3-topbar-breadcrumbs.md)
-  — the M2.3 implementation report
-  (the closing receipt for M2.3,
+- [`implementation-report-m2-4-project-intelligence-dashboard.md`](./../../implementation-report-m2-4-project-intelligence-dashboard.md)
+  — the M2.4 implementation report
+  (the closing receipt for M2.4,
   2026-07-11).
+- [`implementation-report-m2-5-empty-routes-responsive-accessibility.md`](./../../implementation-report-m2-5-empty-routes-responsive-accessibility.md)
+  — the M2.5 implementation report
+  (the closing receipt for M2.5,
+  2026-07-11; includes the T-017
+  theme toggle bug fix).
 - [`docs/dashboard.md`](./../../docs/dashboard.md)
   — the product dashboard definition (M0.5).
 - [`.ai/backlog/`](./../../.ai/backlog/) —

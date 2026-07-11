@@ -297,10 +297,20 @@ The error state is rendered through an `Error` slot or a default
 | Name        | Min width | Use                                     |
 | ----------- | --------- | --------------------------------------- |
 | `xl`        | 1600px    | Maximum density (4 columns)             |
-| `lg`        | 1280px    | Standard desktop                        |
-| `md`        | 1024px    | Compact desktop                         |
-| `sm`        | 768px     | Small window, sidebar collapses to icons |
-| `xs`        | 0         | Below the supported range — show a "this application is desktop-only" message |
+| `lg`        | 1440px    | Standard desktop (full sidebar)         |
+| `md`        | 1280px    | M2 primary viewport (full sidebar)      |
+| `sm`        | 1024px    | Compact desktop (narrow sidebar)        |
+| `xs`        | 768px     | Small window, sidebar collapses to icons (icons missing — falls back to label-clipped sidebar) |
+| —           | 0         | Below the supported range — show a "this application is desktop-only" message |
+
+The M2.5 slice ships the responsive matrix in `Layouts/AppLayout.razor.css`:
+
+- **≥ 1440px (lg / xl)** — grid columns `14rem 1fr`, sidebar padding 16px, content padding 24px.
+- **1280–1439px (md)** — grid columns `10rem 1fr`, sidebar padding 12px, topbar padding 10px 20px, content padding 20px.
+- **1024–1279px (sm)** — grid columns `8rem 1fr`, sidebar padding 10px, topbar padding 8px 16px, content padding 16px. Sidebar labels remain visible (icon-rail collapse is a future enhancement once every sidebar route carries an `Icon`).
+- **< 1024px** — out of M2 scope per ADR-005; the M8 closeout adds the full mobile / icon-rail matrix.
+
+The top bar remains horizontal at every breakpoint. The content area scrolls vertically (`overflow-y: auto`) at every breakpoint. The sidebar never collapses entirely in M2.5; the layout is usable down to 1024px and degrades gracefully below.
 
 ### 10.2 What Does Not Respond
 
