@@ -1,0 +1,36 @@
+@namespace AiEng.Platform.App.Components.Navigation
+
+<NavLink href="@Route.Href"
+         Match="@MatchMode"
+         class="@CssClass"
+         ActiveClass="@ActiveClassName"
+         aria-label="@ResolvedAriaLabel"
+         @attributes="AdditionalAttributes">
+    <span class="app-nav-item-label">@Route.Title</span>
+    @if (!string.IsNullOrEmpty(Route.BadgeText))
+    {
+        <span class="app-nav-item-badge">
+            <AppBadge Variant="AppBadgeVariant.Accent" Size="AppBadgeSize.Small">@Route.BadgeText</AppBadge>
+        </span>
+    }
+</NavLink>
+
+@code {
+    [Parameter, EditorRequired]
+    public RouteMetadata Route { get; set; } = default!;
+
+    [Parameter]
+    public string? AriaLabel { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private const string BaseClass = "app-nav-item";
+    private const string ActiveClassName = "app-nav-item--active";
+
+    private NavLinkMatch MatchMode => Route.MatchPrefix ? NavLinkMatch.Prefix : NavLinkMatch.All;
+
+    private string ResolvedAriaLabel => string.IsNullOrWhiteSpace(AriaLabel) ? Route.Title : AriaLabel!;
+
+    private string CssClass => BaseClass;
+}

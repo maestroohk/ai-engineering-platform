@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "updated_at": "2026-07-11T00:00:00Z",
-  "updated_by_session": "m2-1-application-shell-foundation",
+  "updated_by_session": "m2-2-navigation-registry-sidebar",
   "tasks": [
     {
       "id": "T-001",
@@ -66,21 +66,80 @@
     {
       "id": "T-002",
       "title": "M2.2 — Navigation Registry and Sidebar",
-      "status": "Ready",
+      "status": "Done",
       "milestone": "M2",
       "slice": "M2.2",
       "created_at": "2026-07-10T00:00:00Z",
+      "claimed_at": "2026-07-11T00:00:00Z",
+      "completed_at": "2026-07-11T00:00:00Z",
+      "owner": "m2-2-navigation-registry-sidebar session",
       "plan": ".ai/plans/M2.2-navigation-registry-sidebar.md",
-      "notes": "Plan expanded 2026-07-11 (in the M2.1 closeout session) from a `Draft` stub to a full plan in `Awaiting Approval` state. T-001 (M2.1) is Done, so the dependency is satisfied. The next session either approves the plan and starts M2.2 implementation, or amends the plan and re-submits. The M2.1 closeout session does NOT implement M2.2 (per the Progressive Coding Rule)."
+      "implementation_report": "implementation-report-m2-2-navigation-registry-sidebar.md",
+      "evidence": {
+        "branch": "feature/m2-2-navigation-registry-sidebar",
+        "files_added": [
+          "src/AiEng.Platform.Application/Navigation/INavigationRegistry.cs",
+          "src/AiEng.Platform.Application/Navigation/RouteMetadata.cs",
+          "src/AiEng.Platform.Application/Navigation/RouteMetadataAttribute.cs",
+          "src/AiEng.Platform.Application/Navigation/RouteRegistry.cs",
+          "src/AiEng.Platform.App/Composition/ServiceCollectionExtensions.cs",
+          "src/AiEng.Platform.App/Composition/NavigationServiceCollectionExtensions.cs",
+          "src/AiEng.Platform.App/Components/Navigation/_Imports.razor",
+          "src/AiEng.Platform.App/Components/Navigation/AppSidebar.razor",
+          "src/AiEng.Platform.App/Components/Navigation/AppSidebar.razor.css",
+          "src/AiEng.Platform.App/Components/Navigation/AppSidebarItem.razor",
+          "src/AiEng.Platform.App/Components/Navigation/AppSidebarItem.razor.css",
+          "src/AiEng.Platform.App/Components/Navigation/AppNavItem.razor",
+          "src/AiEng.Platform.App/Components/Navigation/AppNavItem.razor.css",
+          "tests/AiEng.Platform.ComponentTests/Navigation/RouteRegistryTests.cs",
+          "tests/AiEng.Platform.ComponentTests/Navigation/AppNavItemTests.cs",
+          "tests/AiEng.Platform.ComponentTests/Navigation/AppSidebarItemTests.cs",
+          "tests/AiEng.Platform.ComponentTests/Navigation/AppSidebarTests.cs",
+          "tests/AiEng.Platform.ComponentTests/Navigation/NavigationServiceCollectionExtensionsTests.cs",
+          "tests/AiEng.Platform.ArchitectureTests/PagesAreReachableThroughRegistryTests.cs"
+        ],
+        "files_modified": [
+          "src/AiEng.Platform.App/Components/_Imports.razor",
+          "src/AiEng.Platform.App/Layouts/_Imports.razor",
+          "src/AiEng.Platform.App/Layouts/AppLayout.razor",
+          "src/AiEng.Platform.App/Program.cs",
+          "src/AiEng.Platform.App/Components/Pages/Home.razor",
+          "src/AiEng.Platform.App/Components/Pages/Counter.razor",
+          "src/AiEng.Platform.App/Components/Pages/Weather.razor",
+          "src/AiEng.Platform.App/Components/Pages/Error.razor",
+          "src/AiEng.Platform.App/Components/Pages/NotFound.razor",
+          "src/AiEng.Platform.App/Components/Pages/DesignSystem.razor",
+          "tests/AiEng.Platform.ComponentTests/Layouts/AppLayoutTests.cs",
+          "ROADMAP.md"
+        ],
+        "files_deleted": [
+          "src/AiEng.Platform.App/Components/Shell/AppSidebarSlot.razor",
+          "tests/AiEng.Platform.ComponentTests/Shell/AppSidebarSlotTests.cs"
+        ],
+        "tests": {
+          "component_tests_added": 28,
+          "component_tests_total": 125,
+          "component_tests_passing": 125,
+          "component_tests_failed": 0,
+          "architecture_tests_passing": 4,
+          "architecture_tests_skipped": 4,
+          "build_warnings": 0,
+          "build_errors": 0
+        }
+      },
+      "notes": "Delivered 2026-07-11. M2.2 scope landed per the approved plan: INavigationRegistry, RouteMetadata, RouteMetadataAttribute, RouteRegistry in src/AiEng.Platform.Application/Navigation/; ServiceCollectionExtensions + NavigationServiceCollectionExtensions in src/AiEng.Platform.App/Composition/; AppSidebar, AppSidebarItem, AppNavItem in src/AiEng.Platform.App/Components/Navigation/; [RouteMetadata] applied to all 6 pages; AppSidebarSlot and AppSidebarSlotTests deleted; AppLayout updated to use AppSidebar; Pages_AreReachable_Through_Registry architecture test active and green. 28 new bUnit/integration tests + 1 new architecture test added. Branch: feature/m2-2-navigation-registry-sidebar. Commit: feat(m2.2): add navigation registry and sidebar. Push skipped (no remote configured). The session does NOT implement M2.3 (only the M2.3 plan is promoted to Awaiting Approval)."
     },
     {
       "id": "T-003",
       "title": "M2.3 — Top Bar, Breadcrumbs, and Page Headers",
-      "status": "Draft",
+      "status": "Ready",
       "milestone": "M2",
       "slice": "M2.3",
+      "created_at": "2026-07-10T00:00:00Z",
+      "claimed_at": "2026-07-11T00:00:00Z",
+      "owner": "TBD (next session after M2.2 closeout)",
       "plan": ".ai/plans/M2.3-topbar-breadcrumbs.md",
-      "notes": "Plan stub (2026-07-10). Populates the M2.1 AppTopBarSlot with the real top bar (theme toggle, user avatar) and the breadcrumb (composed into AppPageHeader.Breadcrumbs from the M2.2 registry's Parent chain). Promoted to a full plan when M2.2 closes."
+      "notes": "Plan promoted from Draft stub to a full plan (Awaiting Approval) in the M2.2 closeout session, 2026-07-11. The full plan is at .ai/plans/M2.3-topbar-breadcrumbs.md. T-001 (M2.1) and T-002 (M2.2) are Done, so the dependencies are satisfied. The M2.3 plan still requires the user's explicit approval before implementation begins (per the Progressive Coding Rule)."
     },
     {
       "id": "T-014",

@@ -1,0 +1,25 @@
+@namespace AiEng.Platform.App.Components.Navigation
+@inject INavigationRegistry Navigation
+
+<AppShellRegion Name="sidebar">
+    <AppStack Gap="AppStackGap.Small">
+        @if (VisibleRoutes is { Count: > 0 })
+        {
+            @foreach (var route in VisibleRoutes)
+            {
+                <AppNavItem Route="route" />
+            }
+        }
+    </AppStack>
+</AppShellRegion>
+
+@code {
+    private IReadOnlyList<RouteMetadata> VisibleRoutes { get; set; } = Array.Empty<RouteMetadata>();
+
+    protected override void OnInitialized()
+    {
+        VisibleRoutes = Navigation.Routes
+            .Where(static r => r.ShowInSidebar)
+            .ToList();
+    }
+}

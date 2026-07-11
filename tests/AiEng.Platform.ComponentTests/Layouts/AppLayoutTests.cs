@@ -1,11 +1,18 @@
 using AiEng.Platform.App.Layouts;
+using AiEng.Platform.Application.Navigation;
 using Bunit;
+using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
 namespace AiEng.Platform.ComponentTests.Layouts;
 
 public class AppLayoutTests : BunitContext
 {
+    public AppLayoutTests()
+    {
+        Services.AddSingleton<INavigationRegistry>(new EmptyNavigationRegistry());
+    }
+
     [Fact]
     public void Default_Renders_App_Shell_Root()
     {
@@ -76,5 +83,14 @@ public class AppLayoutTests : BunitContext
             .Add(p => p.Body, "<span>body</span>"));
 
         Assert.NotNull(cut.Find("[data-app-region=\"content\"]"));
+    }
+
+    private sealed class EmptyNavigationRegistry : INavigationRegistry
+    {
+        public IReadOnlyList<RouteMetadata> Routes { get; } = Array.Empty<RouteMetadata>();
+
+        public RouteMetadata? FindByHref(string href) => null;
+
+        public IReadOnlyList<RouteMetadata> ChildrenOf(string? parentHref) => Array.Empty<RouteMetadata>();
     }
 }

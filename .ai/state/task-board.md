@@ -37,61 +37,6 @@
 
 ## Ready
 
-### M2.2 — Navigation Registry and Sidebar
-
-- **Task ID:** `M2.2`
-- **Milestone:** M2 — Application Shell and
-  Navigation
-- **Title:** Navigation registry and
-  sidebar
-- **Why it matters:** The sidebar is the
-  primary navigation surface; the
-  navigation registry is the data model
-  M3+ consume. A registry-driven sidebar
-  ensures the M3 project-registration page
-  and every later page are reachable through
-  a single source of truth. The
-  `Pages_AreReachable_Through_Registry`
-  architecture test belongs with the slice
-  that introduces the registry.
-- **Objective:** Land `INavigationRegistry`,
-  `RouteMetadata`,
-  `RouteMetadataAttribute`, `RouteRegistry`.
-  Land `AppSidebar`, `AppSidebarItem`,
-  `AppNavItem`. Apply `[RouteMetadata]` to
-  every page in `Components/Pages/`.
-  Activate the
-  `Pages_AreReachable_Through_Registry`
-  architecture test.
-- **Acceptance criteria:** the registry is
-  the data source for the sidebar; every
-  page is routable through the registry; the
-  `Pages_AreReachable_Through_Registry`
-  architecture test is active and green.
-- **Dependencies:** M2.1.
-- **Expected affected areas:**
-  `src/AiEng.Platform.Application/Navigation/`,
-  `src/AiEng.Platform.App/Components/Shell/AppSidebar*`
-  (replaces `AppSidebarSlot`),
-  `src/AiEng.Platform.App/Components/Navigation/`
-  (new),
-  `src/AiEng.Platform.App/Composition/NavigationServiceCollectionExtensions.cs`,
-  `src/AiEng.Platform.App/Components/Pages/*`,
-  `tests/AiEng.Platform.ComponentTests/`,
-  `tests/AiEng.Platform.ArchitectureTests/`.
-- **Validation:** `dotnet build`, `dotnet
-  test`, `dotnet format
-  --verify-no-changes`, visual smoke test.
-- **Approved plan path:**
-  [`.ai/plans/M2.2-navigation-registry-sidebar.md`](./../../.ai/plans/M2.2-navigation-registry-sidebar.md)
-  (the plan, 2026-07-11; promoted from
-  `Draft` to `Awaiting Approval` in the
-  M2.1 closeout session).
-- **Status:** Ready (plan `Awaiting
-  Approval`; promoted to `Ready` in the
-  M2.1 closeout session; first action of
-  the next session is plan approval).
-
 ### M2.3 — Top bar, breadcrumbs, and page
   headers
 
@@ -121,7 +66,7 @@
   flips light/dark and persists; the
   `AppPageHeader.Breadcrumbs` placeholder is
   no longer a placeholder.
-- **Dependencies:** M2.1, M2.2.
+- **Dependencies:** M2.1 (Done), M2.2 (Done).
 - **Expected affected areas:**
   `src/AiEng.Platform.App/Components/Shell/AppTopBar*`
   (replaces `AppTopBarSlot`),
@@ -135,9 +80,15 @@
   theme-toggle smoke test.
 - **Approved plan path:**
   [`.ai/plans/M2.3-topbar-breadcrumbs.md`](./../../.ai/plans/M2.3-topbar-breadcrumbs.md)
-  (the plan stub, 2026-07-10).
-- **Status:** Draft (plan stub; promoted
-  to a full plan when M2.2 closes).
+  (the plan, 2026-07-11; promoted from
+  `Draft` stub to a full plan in
+  `Awaiting Approval` in the M2.2 closeout
+  session).
+- **Status:** Ready (plan `Awaiting
+  Approval`; promoted from `Draft` stub
+  to a full plan in the M2.2 closeout
+  session; first action of the next
+  session is plan approval).
 
 ### M1 follow-up — Add `AppToolbar` example to `/design-system`
 
@@ -184,8 +135,8 @@
 
 ## In Progress
 
-(none — M2.1 closed in the M2.1 closeout
-session, 2026-07-11; M2.2 awaits the next
+(none — M2.2 closed in the M2.2 closeout
+session, 2026-07-11; M2.3 awaits the next
 session's explicit authorisation per the
 Progressive Coding Rule.)
 
@@ -230,6 +181,67 @@ Progressive Coding Rule.)
 ---
 
 ## Done Recently
+
+### M2.2 closeout session — 2026-07-11
+
+- **Task ID:** `M2.2`
+- **Milestone:** M2 — Application Shell and
+  Navigation
+- **Title:** Navigation registry and
+  sidebar
+- **Status:** **Done (closed 2026-07-11).**
+- **Outcome:** 4 new types in
+  `src/AiEng.Platform.Application/Navigation/`
+  (`INavigationRegistry`,
+  `RouteMetadata`,
+  `RouteMetadataAttribute`,
+  `RouteRegistry`); 2 new extension
+  methods in
+  `src/AiEng.Platform.App/Composition/`
+  (`AddPlatformServices` +
+  `AddNavigation`); 3 new components in
+  `src/AiEng.Platform.App/Components/Navigation/`
+  (`AppSidebar`, `AppSidebarItem`,
+  `AppNavItem`); `[RouteMetadata]`
+  applied to all 6 pages; the
+  composition root wired in
+  `Program.cs`; the
+  `Pages_AreReachable_Through_Registry`
+  architecture test is active and green;
+  28 new bUnit / integration tests +
+  1 new architecture test; the M2.1
+  `AppSidebarSlot` placeholder is
+  replaced by the registry-driven
+  `AppSidebar`; the 19 M1.2 components,
+  77 bUnit tests, and 3 active + 4
+  registered-but-disabled architecture
+  tests are preserved. Total test count
+  is now 129 passing + 4 skipped, 0
+  failed (77 M1.2 + 25 M2.1 + 23 M2.2
+  bUnit + 4 active architecture; 4
+  registered-but-disabled
+  architecture).
+- **Report:**
+  `implementation-report-m2-2-navigation-registry-sidebar.md`.
+- **Handoff:**
+  `.ai/handoffs/2026-07-11-m2-2-navigation-registry-sidebar.md`
+  (mirrored at
+  `.ai/handoffs/latest.md`).
+- **Git:** branch
+  `feature/m2-2-navigation-registry-sidebar`;
+  closeout commit
+  `feat(m2.2): add navigation registry and sidebar`.
+  No remote configured; push skipped (per
+  the brief).
+- **Next action:** the M2.2 closeout
+  promotes T-003 (M2.3) to `Ready` and
+  promotes the M2.3 plan stub to a
+  full plan in `Awaiting Approval`;
+  the next session approves the M2.3
+  plan and starts M2.3
+  implementation. The M2.2 session
+  does **not** implement M2.3 (per
+  the Progressive Coding Rule).
 
 ### M2.1 closeout session — 2026-07-11
 

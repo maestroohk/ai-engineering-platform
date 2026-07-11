@@ -1,0 +1,24 @@
+@namespace AiEng.Platform.App.Components.Navigation
+
+<section class="app-sidebar-item" aria-label="@ResolvedTitle" @attributes="AdditionalAttributes">
+    @if (!string.IsNullOrEmpty(ResolvedTitle))
+    {
+        <h3 class="app-sidebar-item-title">@ResolvedTitle</h3>
+    }
+    <AppStack Gap="AppStackGap.Small">
+        @ChildContent
+    </AppStack>
+</section>
+
+@code {
+    [Parameter]
+    public string? Title { get; set; }
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private string ResolvedTitle => Title ?? string.Empty;
+}

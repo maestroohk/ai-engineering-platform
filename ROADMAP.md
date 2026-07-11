@@ -275,8 +275,8 @@ navigation).
 | Slice | Title                                         | Status         | Major outcome                                                            |
 | ----- | --------------------------------------------- | -------------- | ------------------------------------------------------------------------ |
 | M2.1  | Application Shell Foundation                  | Delivered (M2.1, 2026-07-11) | Two layouts (`AppLayout`, `AppEmptyLayout`), two placeholder shell components (`AppSidebarSlot`, `AppTopBarSlot`), one presentational helper (`AppShellRegion`), and the M1.1 chrome migration. |
-| M2.2  | Navigation Registry and Sidebar               | Plan `Awaiting Approval` | `INavigationRegistry`, `RouteMetadata`, `RouteMetadataAttribute`, `RouteRegistry`, `AppSidebar`, `AppSidebarItem`, `AppNavItem`, the `Pages_AreReachable_Through_Registry` architecture test. |
-| M2.3  | Top Bar, Breadcrumbs, and Page Headers        | Plan stub Draft | `AppTopBar`, `AppBreadcrumb`, theme toggle relocation to the top bar, user avatar slot, page-header integration with the navigation registry. |
+| M2.2  | Navigation Registry and Sidebar               | Delivered (M2.2, 2026-07-11) | `INavigationRegistry`, `RouteMetadata`, `RouteMetadataAttribute`, `RouteRegistry`, `AppSidebar`, `AppSidebarItem`, `AppNavItem`, the `Pages_AreReachable_Through_Registry` architecture test. |
+| M2.3  | Top Bar, Breadcrumbs, and Page Headers        | Plan `Awaiting Approval` | `AppTopBar`, `AppBreadcrumb`, theme toggle relocation to the top bar, user avatar slot, page-header integration with the navigation registry. |
 | M2.4  | Project Intelligence Dashboard                | Plan stub Draft | A read-only `/dashboard` page backed by `IProjectIntelligenceReader` that consumes `.ai/state/*.json`. No new abstractions beyond the reader. |
 | M2.5  | Empty Routes, Responsive, and Accessibility   | Summary entry  | All routes reach an `AppEmptyState`; the shell is usable down to 1280x720 (per ADR-005); keyboard navigation works across the sidebar. |
 | M2.6  | M2 Closeout and Treehouse Dogfooding          | Summary entry  | The M2 implementation report, the Treehouse dogfooding checkpoint (per `.ai/workflows/tool-dogfooding.md`), and the closeout commit. |
@@ -314,7 +314,8 @@ no page reads the JSON directly.
   M1.1 chrome is migrated to `AppLayout`.
 - M2.2 is closed: sidebar items are data-driven from a registry,
   not hard-coded; the `Pages_AreReachable_Through_Registry`
-  architecture test passes.
+  architecture test passes. (Delivered 2026-07-11;
+  `implementation-report-m2-2-navigation-registry-sidebar.md`.)
 - M2.3 is closed: the top bar, breadcrumb, and page header are
   integrated; the theme toggle is relocated to the top bar.
 - M2.4 is closed: the `/dashboard` page renders the current

@@ -1,0 +1,38 @@
+.app-nav-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--app-radius);
+  color: var(--app-fg-muted);
+  text-decoration: none;
+  font-size: var(--app-font-size-sm, 13px);
+  line-height: 1.25;
+  transition: background-color 120ms ease, color 120ms ease;
+}
+
+.app-nav-item:hover {
+  background-color: var(--app-surface-2);
+  color: var(--app-fg);
+}
+
+.app-nav-item:focus-visible {
+  outline: 2px solid var(--app-accent);
+  outline-offset: 2px;
+}
+
+.app-nav-item--active {
+  background-color: var(--app-surface-2);
+  color: var(--app-fg);
+  font-weight: 600;
+}
+
+.app-nav-item-label {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.app-nav-item-badge {
+  flex: 0 0 auto;
+}

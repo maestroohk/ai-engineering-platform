@@ -1,9 +1,12 @@
 using AiEng.Platform.App.Components;
+using AiEng.Platform.App.Composition;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+builder.Services.AddPlatformServices(typeof(Program).Assembly);
 
 var app = builder.Build();
 

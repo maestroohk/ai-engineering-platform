@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "updated_at": "2026-07-11T00:00:00Z",
-  "updated_by_session": "m2-1-application-shell-foundation",
+  "updated_by_session": "m2-2-navigation-registry-sidebar",
   "milestones": [
     {
       "id": "M0",
@@ -67,12 +67,19 @@
         },
         "M2.2": {
           "title": "Navigation Registry and Sidebar",
-          "status": "plan approved",
-          "plan": ".ai/plans/M2.2-navigation-registry-sidebar.md"
+          "status": "delivered",
+          "delivered_at": "2026-07-11",
+          "session": "m2-2-navigation-registry-sidebar",
+          "branch": "feature/m2-2-navigation-registry-sidebar",
+          "summary": "INavigationRegistry, RouteMetadata, RouteMetadataAttribute, RouteRegistry in src/AiEng.Platform.Application/Navigation/; ServiceCollectionExtensions + NavigationServiceCollectionExtensions in src/AiEng.Platform.App/Composition/; AppSidebar, AppSidebarItem, AppNavItem in src/AiEng.Platform.App/Components/Navigation/; [RouteMetadata] applied to all 6 pages; AppSidebarSlot and AppSidebarSlotTests deleted; AppLayout wired to AppSidebar; Pages_AreReachable_Through_Registry architecture test active and green. 28 new bUnit/integration tests + 1 new architecture test added.",
+          "implementation_report": "implementation-report-m2-2-navigation-registry-sidebar.md",
+          "plan": ".ai/plans/M2.2-navigation-registry-sidebar.md",
+          "commit_message": "feat(m2.2): add navigation registry and sidebar"
         },
         "M2.3": {
           "title": "Top Bar, Breadcrumbs, and Page Headers",
-          "status": "stub"
+          "status": "plan awaiting approval",
+          "plan": ".ai/plans/M2.3-topbar-breadcrumbs.md"
         },
         "M2.4": {
           "title": "Project Intelligence Dashboard",
@@ -88,9 +95,15 @@
         }
       },
       "evidence": {
-        "slices": ["M2.1"],
-        "implementation_report": "implementation-report-m2-1-application-shell-foundation.md",
-        "handoff": ".ai/handoffs/2026-07-11-m2-1-application-shell-foundation.md"
+        "slices": ["M2.1", "M2.2"],
+        "implementation_reports": [
+          "implementation-report-m2-1-application-shell-foundation.md",
+          "implementation-report-m2-2-navigation-registry-sidebar.md"
+        ],
+        "handoffs": [
+          ".ai/handoffs/2026-07-11-m2-1-application-shell-foundation.md",
+          ".ai/handoffs/2026-07-11-m2-2-navigation-registry-sidebar.md"
+        ]
       }
     },
     {
