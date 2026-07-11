@@ -39,7 +39,7 @@
     "active_task": "T-015 (M2.5, Deferred — plan to be approved)",
     "last_completed_milestone": "M2.4",
     "last_completed_task": "T-014 (M2.4 closeout, 2026-07-11)",
-    "last_stable_commit": "fb89187 feat(m2.3): add top bar, breadcrumb, and page header integration on feature/m2-3-topbar-breadcrumbs",
+    "last_stable_commit": "9c8031e feat(m2.4): add project intelligence dashboard on feature/m2-4-project-intelligence-dashboard",
     "build_status": "passing at M2.4 closeout (0 warnings, 0 errors)",
     "test_status": "175 passed, 0 failed (163 component + 6 unit + 6 architecture, 4 skipped) at M2.4 closeout"
   },
