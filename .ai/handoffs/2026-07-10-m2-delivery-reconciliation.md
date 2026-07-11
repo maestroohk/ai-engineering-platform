@@ -82,13 +82,13 @@ M2 implementation begins:
   begin the next task in the same session
   unless the user explicitly authorises
   grouped execution.
-- **Delivery system updated.** ROADMAP, master
+- **Delivery system updated.** ROADMAP, main
   delivery plan, task board, current state,
   six JSON state files, session state, and
   this handoff are consistent with the new
   M2 breakdown.
 - **M0.5 closed.** Coherent commit
-  `1d98acd` is the head of `master` at the
+  `1d98acd` is the head of `main` at the
   close of the M0.5 session
   (2026-07-10).
 - **M1 — Design System Core — Done
@@ -107,7 +107,7 @@ M2 implementation begins:
 
 - The M0.5 commit `1d98acd` (`docs(m0.5): add
   project intelligence and structured
-  delivery state`) is the head of `master`.
+  delivery state`) is the head of `main`.
   32 files changed, 6552 insertions, 303
   deletions. The diff is documentation-only
   (no application code, no completed
@@ -244,7 +244,7 @@ M2 implementation begins:
 
 ## Current Branch
 
-- **`master`**.
+- **`main`**.
 
 ## Current Git Status
 
@@ -273,7 +273,7 @@ M2 implementation begins:
   `.ai/workflows/progressive-coding.md`,
   `reconciliation-report-m2-task-breakdown.md`,
   `.ai/handoffs/2026-07-10-m2-delivery-reconciliation.md`.
-- **Recent commits on `master`:** the M0.5
+- **Recent commits on `main`:** the M0.5
   commit `1d98acd` is the head; the M2
   reconciliation commit is the final step
   of this session.
@@ -285,7 +285,7 @@ M2 implementation begins:
   refinement commit
   (`docs(m0.5): add project intelligence and
   structured delivery state`); head of
-  `master` at the start of this session.
+  `main` at the start of this session.
   The M2 reconciliation commit is the
   final session step (per Rule 17).
 
@@ -294,7 +294,7 @@ M2 implementation begins:
 The M2 delivery-reconciliation session
 started with the state files consistent
 with the repository (HEAD `1d98acd`, four
-commits on `master` after the M2
+commits on `main` after the M2
 reconciliation commit lands, working tree
 clean of M0.5). The session reconciles
 the state with the M2 reconciliation

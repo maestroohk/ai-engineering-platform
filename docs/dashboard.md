@@ -246,7 +246,7 @@ status).
 | Build status      | The platform's own build status (read from a build artefact or CI feed)             | `passing`, `failing`, `unknown`.                                                                                            |
 | Test status       | The platform's own test status                                                       | `passing X / failing Y / skipped Z`.                                                                                          |
 | Last build at     | The build's timestamp                                                                | Relative to now.                                                                                                              |
-| Branch            | The branch the build ran against                                                     | E.g. `master`, `feature/M2.1-application-shell-skeleton`.                                                                    |
+| Branch            | The branch the build ran against                                                     | E.g. `main`, `feature/M2.1-application-shell-skeleton`.                                                                    |
 
 This section is **data-owning**. The `Empty`
 state is "no build information available"

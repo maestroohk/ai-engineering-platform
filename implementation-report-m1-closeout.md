@@ -194,7 +194,7 @@ project lands in M4-D.
 The actual commands the session ran, in order:
 
 1. `git remote -v` — no remote configured.
-2. `git status` — branch `master`, no commits.
+2. `git status` — branch `main`, no commits.
 3. `npm run css:build` — exit 0, 12,890 bytes.
 4. `dotnet restore` — exit 0.
 5. `dotnet build AiEng.Platform.slnx --nologo`

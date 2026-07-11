@@ -291,7 +291,7 @@ in the trailing slot) compose against.
 The actual commands the session ran, in order.
 
 - `git status` — verify clean working tree on
-  `master` at `ba6c1e8`.
+  `main` at `ba6c1e8`.
 - `git checkout -b feature/m2-1-application-shell` —
   create the M2.1 task branch.
 - `Write`/`Edit` for each new and modified file

@@ -346,7 +346,7 @@ checks before completion. All 14 pass.
    scope is written.
 8. **M0.5 committed.** The M0.5
    commit `1d98acd` is the head of
-   `master` at the start of this
+   `main` at the start of this
    session; the M2 reconciliation
    commit is the closeout.
 9. **No milestone reordered.** M0,

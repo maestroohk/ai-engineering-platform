@@ -166,7 +166,7 @@ the M2.2 implementation session.
 ## Commands Run
 
 - `git status` — clean working
-  tree on `master` at `ba6c1e8`.
+  tree on `main` at `ba6c1e8`.
 - `git checkout -b feature/m2-1-application-shell`
 - `npm run css:build` — produces
   11,381 bytes minified.

@@ -1,14 +1,15 @@
 {
   "schema_version": "1.0.0",
   "updated_at": "2026-07-11T00:00:00Z",
-  "session_id": "m2-5-empty-routes-responsive-accessibility",
-  "session_type": "implementation",
+  "session_id": "repo-infrastructure-main-branch-rename",
+  "session_type": "infrastructure",
+  "previous_session": "m2-5-empty-routes-responsive-accessibility",
   "scope": {
-    "milestone": "M2",
-    "task_id": "T-015",
-    "slice": "M2.5",
-    "plan": ".ai/plans/M2.5-empty-routes-responsive-accessibility.md",
-    "branch": "feature/m2-5-empty-routes-responsive-accessibility",
+    "milestone": "infrastructure",
+    "task_id": "T-INFRA-1",
+    "slice": "main-branch-rename-and-branching-strategy",
+    "plan": "(none; one-time infrastructure change)",
+    "branch": "feature/repo-infrastructure-main-branch-rename",
     "in_scope": [
       "T-017 theme toggle fix (included at user request): add @rendermode InteractiveServer to AppThemeToggle.razor (the layout cannot be marked InteractiveServer; its @Body is a RenderFragment delegate that Blazor refuses to serialize across the SSR -> interactive boundary; declaring the directive on the toggle itself is the minimum-blast-radius fix); add the AppLayout_ThemeToggleWiringTests bUnit test that asserts the click handler is wired when the layout is rendered (not the toggle in isolation)",
       "Empty routes: every route in Components/Pages/ reaches an AppEmptyState (or its data-owning equivalent); the AppCard + AppEmptyState composition is repeated only twice (Home.razor and NotFound.razor), so the AppEmptyRouteCard primitive is not introduced per the plan's >3 rule",

@@ -402,7 +402,7 @@ A new capability is added in three steps:
 
 When the work is approved and sequenced:
 
-4. The capability is added to the master
+4. The capability is added to the main
    delivery plan with a milestone.
 5. The capability's status changes to
    `Accepted` in both files.

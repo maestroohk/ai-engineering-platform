@@ -351,7 +351,7 @@ capability, C-019; the shell foundation C-020 is
 **Last closed milestone:** M1 — Design System Core (closed
 2026-07-10; first commits
 `1722bd235830cfd8b180191953116c058c92edef` and
-`2ba1fad3cc45bee513ba38c7269e024bf8667ef9` on `master`).
+`2ba1fad3cc45bee513ba38c7269e024bf8667ef9` on `main`).
 
 **M2 slices:** M2.1 — Application Shell Foundation
 **Delivered** 2026-07-11 (commits

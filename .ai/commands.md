@@ -223,7 +223,7 @@ When `Review` is recognised:
    `Ready` task, or the `In Progress` task if one exists).
 2. Read its approved plan, the implementation report (if any),
    and the current diff (`git diff` against the parent commit,
-   or `git diff master...HEAD` if the branch is published).
+   or `git diff main...HEAD` if the branch is published).
 3. Review the diff against:
    - The approved plan.
    - The 17 rules in `AGENTS.md`.

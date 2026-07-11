@@ -503,7 +503,7 @@ Progressive Coding Rule.)
   `1722bd235830cfd8b180191953116c058c92edef`
   and
   `2ba1fad3cc45bee513ba38c7269e024bf8667ef9`
-  on `master`. 166 files committed. Working
+  on `main`. 166 files committed. Working
   tree clean. No remote configured.
 
 ### M1 follow-up — Re-anchor composition-root tests in `ROADMAP.md` matrix
