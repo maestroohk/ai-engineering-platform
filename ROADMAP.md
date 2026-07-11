@@ -40,9 +40,9 @@ A milestone is **complete** only when:
 | M0  | Doc foundation                                        | Done       | This document set exists.                                                  |
 | M1  | Design System Core                                    | **Done (closed 2026-07-10)** | A runnable Blazor shell with the base design-system components.            |
 | M2  | Application Shell and Navigation                      | **Done (closed 2026-07-11)** | A navigable app shell on Windows desktop; pages reach an empty state; the layout is responsive and accessible. |
-| M3  | Project Registration                                  | **Active (M3.1 + M3.2 Delivered 2026-07-11)** | A user can register, rename, and unregister a project; the platform owns a `Project` entity. M3 closeout (M3.x — the M3 retrospective per the Milestone Closeout Standard) is the next `Ready` task. |
+| M3  | Project Registration                                  | **Done (closed 2026-07-11; M3.1 + M3.2 + M3 closeout Delivered 2026-07-11)** | A user can register, rename, and unregister a project; the platform owns a `Project` entity. M3 is closed; the M3 retrospective is at `retrospective-m3-project-registration.md` (13 sections per the Milestone Closeout Standard); the `m3` annotated milestone tag is at the M3 closeout commit on `main`. M4-A is the next milestone (Status: Awaiting Approval; the M4-A plan is at `.ai/plans/M4-A-infrastructure-process-execution.md`). |
 | M4  | Process Execution, Capability Detection, Provider Registry | Planned | The platform spawns processes safely, detects capabilities, registers providers. Divided into four slices: |
-|     | &nbsp;&nbsp;M4-A: Infrastructure / Process Execution   | Planned    | `AiEng.Platform.Infrastructure` lands; `IProcessRunner`, `ICredentialVault`, `IClock`, on-disk `IProjectStore`. |
+|     | &nbsp;&nbsp;M4-A: Infrastructure / Process Execution   | **Awaiting Approval (M4-A plan produced by the M3 closeout, 2026-07-11)** | `AiEng.Platform.Infrastructure` lands; `IProcessRunner`, `ICredentialVault`, `IPlatformInfo`, on-disk `IProjectStore` (replaces the M3 in-memory store behind the same contract); the Open action on `AppProjectCard` is enabled. |
 |     | &nbsp;&nbsp;M4-B: Capability Detection                | Planned    | `IHostCapabilitiesService` detects `git`, `ollama`, `powershell.exe`, `wsl.exe`, `wt.exe`, `bash.exe`. |
 |     | &nbsp;&nbsp;M4-C: Provider Registry Foundation        | Planned    | `IProviderRegistry`, family-scoped registries, fake providers for every family, composition root `App/Composition/`. |
 |     | &nbsp;&nbsp;M4-D: First Concrete Process Providers    | Planned    | `GitProvider`, `OllamaLaunchProvider` smoke, `ProviderContractTests`; composition-root architecture tests activate. |
@@ -486,6 +486,25 @@ presentational container and does not.
   store replaces the in-memory store and
   the platform can resolve a process
   runner against the project's path.
+  **M3 closeout status (2026-07-11):**
+  the M3 retrospective is written at
+  `retrospective-m3-project-registration.md`
+  (13 sections per the Milestone Closeout
+  Standard § 4; the second milestone
+  retrospective in the repository); the
+  M3 closeout plan is at
+  `.ai/plans/M3-closeout.md`; the M4-A
+  plan is at
+  `.ai/plans/M4-A-infrastructure-process-execution.md`
+  (Status: Awaiting Approval; the first
+  M4-A task T-021 is `Ready` in
+  `.ai/state/tasks.json`); M3 is moved
+  from `Active` to `Done` with
+  `closed_at: 2026-07-11`; the `m3`
+  annotated milestone tag is at the M3
+  closeout commit on `main` per the
+  branching strategy rule 9. All M3
+  DoD items above are satisfied.
 
 **Dogfooding checkpoint (M3):** When the build and test
 suite are stable, the development team may initialise and

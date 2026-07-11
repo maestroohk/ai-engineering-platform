@@ -24,8 +24,8 @@
 | M0    | Documentation Foundation                                | **Done**                   | This document set.                            |
 | M1    | Design System Core                                      | **Done (closed 2026-07-10)** | `implementation-report-m1-closeout.md`; first commits `1722bd2`, `2ba1fad`. |
 | M2    | Application Shell and Navigation                        | **Done (closed 2026-07-11)** | `implementation-report-m2-6-m2-closeout.md`; retrospective at `retrospective-m2-application-shell-and-navigation.md`; M2 closeout commit `chore(m2.6): close M2 with retrospective, milestone closeout standard, and M3 plan` on `main`; `m2` annotated milestone tag at the M2 closeout commit; per-slice commits `de082fd` and `ef1063c` on `feature/m2-1-application-shell` plus the M2.2 → M2.5 commit chain. |
-| M3    | Project Registration                                    | **Active (M3.1 + M3.2 Delivered 2026-07-11)** | `implementation-report-m3-1-project-registration-slice-1.md`; `implementation-report-m3-2-project-registration-slice-2.md`; M3.1 closeout commit `feat(m3.1): add project registration surface` on `main`; M3.2 closeout commit `feat(m3.2): enable project registration form, rename, and unregister` on `main`; per-slice branches `feature/m3-1-project-registration-slice-1` and `feature/T-019-m3-2-project-registration-slice-2` (both fast-forwarded into `main` and deleted per the branching strategy). The M3 plan is at `.ai/plans/M3-project-registration.md`; the M3.2 plan is at `.ai/plans/M3.2-project-registration-slice-2.md` (Delivered). The M3 closeout (M3.x — the M3 retrospective per the Milestone Closeout Standard) is the next `Ready` task. |
-| M4-A  | Infrastructure / Process Execution                      | Planned                    | No evidence yet.                              |
+| M3    | Project Registration                                    | **Done (closed 2026-07-11; M3.1 + M3.2 + M3 closeout Delivered 2026-07-11)** | `implementation-report-m3-1-project-registration-slice-1.md`; `implementation-report-m3-2-project-registration-slice-2.md`; `implementation-report-m3-closeout.md`; the M3 retrospective at `retrospective-m3-project-registration.md` (13 sections per the Milestone Closeout Standard); the M3 closeout commit `chore(m3.closeout): close M3 with retrospective, M4-A plan, and m3 milestone tag` on `main`; the `m3` annotated milestone tag at the M3 closeout commit on `main` per the branching strategy rule 9; per-slice branches `feature/m3-1-project-registration-slice-1`, `feature/T-019-m3-2-project-registration-slice-2`, `feature/T-020-m3-closeout-and-retrospective` (all fast-forwarded into `main` and deleted per the branching strategy). The M3 plan is at `.ai/plans/M3-project-registration.md`; the M3.2 plan is at `.ai/plans/M3.2-project-registration-slice-2.md`; the M3 closeout plan is at `.ai/plans/M3-closeout.md` (all Delivered). M4-A is the next milestone; the M4-A plan is at `.ai/plans/M4-A-infrastructure-process-execution.md` (Status: Awaiting Approval); the first M4-A task T-021 is `Ready` in `.ai/state/tasks.json`. |
+| M4-A  | Infrastructure / Process Execution                      | **Awaiting Approval (M4-A plan produced by the M3 closeout, 2026-07-11)** | `.ai/plans/M4-A-infrastructure-process-execution.md` (the M4-A plan; the first M4-A task T-021 is `Ready`). |
 | M4-B  | Capability Detection                                    | Planned                    | No evidence yet.                              |
 | M4-C  | Provider Registry Foundation                            | Planned                    | No evidence yet.                              |
 | M4-D  | First Concrete Process Providers                        | Planned                    | No evidence yet.                              |
@@ -267,6 +267,7 @@ Process execution boundary (M4-A)
 | M2.6  | M2 Closeout and Treehouse Dogfooding                     | Delivered (2026-07-11). |
 | M3.1  | Project Registration Slice 1 (contract + in-memory store + UI surface) | Delivered (2026-07-11). |
 | M3.2  | Project Registration Slice 2 (form, rename, unregister) | Delivered (2026-07-11). |
+| M3.x  | M3 Closeout — M3 Retrospective (per the Milestone Closeout Standard) | Delivered (2026-07-11). |
 
 ### M3 — Project Registration
 
@@ -310,18 +311,24 @@ Process execution boundary (M4-A)
     components; enforces the
     single-seam rule).
 - **Dependencies.** M2 (closed 2026-07-11).
-- **Completion status.** **Active (M3.1
-  + M3.2 Delivered 2026-07-11; M3 closes
-  when M3.x — the M3 retrospective per
-  the Milestone Closeout Standard —
-  is delivered).** The M3 plan is at
+- **Completion status.** **Done (closed
+  2026-07-11; M3.1 + M3.2 + M3 closeout
+  M3.x Delivered 2026-07-11).** The M3
+  plan is at
   `.ai/plans/M3-project-registration.md`;
   the M3.2 plan is at
-  `.ai/plans/M3.2-project-registration-slice-2.md`
-  (Delivered). T-018 (M3.1) and T-019
-  (M3.2) are `Done`; T-020 (M3 closeout)
-  is `Ready` in
-  `.ai/state/tasks.json`.
+  `.ai/plans/M3.2-project-registration-slice-2.md`;
+  the M3 closeout plan is at
+  `.ai/plans/M3-closeout.md` (all
+  Delivered). T-018 (M3.1), T-019 (M3.2),
+  and T-020 (M3 closeout) are `Done` in
+  `.ai/state/tasks.json`; T-021 (M4-A.1)
+  is `Ready`. The M3 retrospective is at
+  `retrospective-m3-project-registration.md`
+  (13 sections per the Milestone Closeout
+  Standard). The `m3` annotated milestone
+  tag is at the M3 closeout commit on
+  `main`.
 - **Evidence.** The M3.1 closeout
   report at
   `implementation-report-m3-1-project-registration-slice-1.md`;
@@ -344,10 +351,38 @@ Process execution boundary (M4-A)
   `feature/T-019-m3-2-project-registration-slice-2`
   is fast-forwarded into `main` per the
   branching strategy rule 6 and deleted
-  per rule 7).
-- **Next milestone enabled.** M4 (the
-  process runner and the capability
-  detector work on registered projects).
+  per rule 7). The M3 closeout report at
+  `implementation-report-m3-closeout.md`;
+  the M3 closeout per-session handoff at
+  `.ai/handoffs/2026-07-11-m3-closeout.md`;
+  the M3 closeout commit
+  `chore(m3.closeout): close M3 with retrospective, M4-A plan, and m3 milestone tag`
+  on `main` (the M3 closeout feature
+  branch
+  `feature/T-020-m3-closeout-and-retrospective`
+  is fast-forwarded into `main` per the
+  branching strategy rule 6 and deleted
+  per rule 7). The `m3` annotated
+  milestone tag is at the M3 closeout
+  commit on `main` per the branching
+  strategy rule 9. The M3 plan is
+  complete: the contract
+  (`IProjectService` / `IProjectStore`),
+  the in-memory smoke test, the UI
+  surface, the three mutations, the
+  architecture tests, the documentation,
+  the retrospective, the M4-A plan in
+  `Awaiting Approval`, and the `m3`
+  milestone tag. 273 tests pass (34 unit
+  + 228 bUnit + 11 architecture), 7
+  skipped per ADR-016 / M4-D. Zero
+  warnings, zero errors. Format clean.
+  Visual smoke on `/projects` green.
+- **Next milestone enabled.** M4-A
+  (Infrastructure / Process Execution);
+  the M4-A plan is at
+  `.ai/plans/M4-A-infrastructure-process-execution.md`
+  (Status: Awaiting Approval).
 - **Dogfooding checkpoint.** No Mistakes
   may be initialised and run as a quality
   gate against a registered project
@@ -386,8 +421,20 @@ Process execution boundary (M4-A)
     `No_DirectProcessStart_OutsideInfrastructure`
     (registered-but-disabled; activates in M4-D).
 - **Dependencies.** M3.
-- **Completion status.** **Planned.**
-- **Evidence.** No evidence yet.
+- **Completion status.** **Awaiting
+  Approval (the M4-A plan is at
+  `.ai/plans/M4-A-infrastructure-process-execution.md`;
+  the M4-A plan is a first draft; the M4-A
+  first session reviews and revises the
+  plan as needed; the first M4-A task
+  T-021 — M4-A.1 infrastructure project
+  skeleton — is `Ready` in
+  `.ai/state/tasks.json`; M4-A.1 begins
+  in a separate session after the M3
+  closeout per the Progressive Coding
+  Rule).**
+- **Evidence.** No evidence yet (M4-A.1
+  is the next `Ready` task).
 - **Next milestone enabled.** M4-B (capability detection
   consumes the infrastructure abstractions).
 

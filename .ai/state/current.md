@@ -40,11 +40,15 @@
 ## Current Milestone
 
 - **Active milestone:** **M3 — Project Registration**
-  (Active, 2026-07-11; M3.1 delivered
-  2026-07-11; M3.2 delivered 2026-07-11;
-  M3 closes when M3.x — the M3 closeout
-  slice (M3 retrospective per the Milestone
-  Closeout Standard) — is delivered).
+  (Done, 2026-07-11; closed 2026-07-11;
+  M3.1 delivered 2026-07-11;
+  M3.2 delivered 2026-07-11;
+  M3 closeout M3.x delivered 2026-07-11).
+  M4-A — Infrastructure / Process Execution
+  is the next milestone (Status: Awaiting
+  Approval; the M4-A plan is at
+  `.ai/plans/M4-A-infrastructure-process-execution.md`;
+  the first M4-A task T-021 is `Ready`).
 - **M2.1 — Application Shell Foundation:**
   **Delivered (2026-07-11).** The shell
   foundation lands: two layouts
@@ -271,19 +275,21 @@
 
 ## Current Slice
 
-- **Active slice:** **M3.2 — Project
-  Registration Slice 2** (delivered
+- **Active slice:** **M3.x — M3 closeout
+  (M3 retrospective)** (delivered
   2026-07-11). The branch
-  `feature/T-019-m3-2-project-registration-slice-2`
-  carried the M3.2 work; the M3.2
+  `feature/T-020-m3-closeout-and-retrospective`
+  carried the M3 closeout work; the M3
   closeout commit
-  `feat(m3.2): enable project registration form, rename, and unregister`
+  `chore(m3.closeout): close M3 with retrospective, M4-A plan, and m3 milestone tag`
   is on this branch; the branch is
   fast-forwarded into `main` per the
   branching strategy rule 6; the branch is
-  deleted per rule 7.
-- **Last completed slice:** **M3.1 —
-  Project Registration Slice 1**
+  deleted per rule 7. The `m3` annotated
+  milestone tag is at the M3 closeout
+  commit on `main` per rule 9.
+- **Last completed slice:** **M3.2 —
+  Project Registration Slice 2**
   (delivered 2026-07-11). The branch
   `feature/m3-1-project-registration-slice-1`
   carried the M3.1 work; the M3.1
@@ -341,8 +347,9 @@
   the `m2` annotated milestone tag is
   at the M2 closeout commit on `main`).**
 - **M3 — Project Registration:**
-  **Active (2026-07-11; M3.1 Delivered
-  2026-07-11; M3.2 Delivered 2026-07-11).**
+  **Done (closed 2026-07-11; M3.1 Delivered
+  2026-07-11; M3.2 Delivered 2026-07-11;
+  M3 closeout M3.x Delivered 2026-07-11).**
   The M3 surface is the smallest piece
   of state the platform needs to be
   useful on its own. M3.1 ships the
@@ -351,62 +358,111 @@
   M3.2 ships the three mutations
   (registration form, rename form,
   unregister confirmation) through the
-  same contract. M3 closes when M3.x
-  — the M3 retrospective per the
-  Milestone Closeout Standard — is
-  delivered. The M3 plan is at
-  `.ai/plans/M3-project-registration.md`.**
-- **M4-A through M8:** Planned; no
-  evidence yet. M3.x (M3 retrospective)
-  is the next `Ready` task; M4-A is the
-  next milestone after M3 closes.
+  same contract. M3.x (the M3 closeout
+  per the Milestone Closeout Standard)
+  ships the M3 retrospective, moves M3
+  to `Done` with `closed_at: 2026-07-11`,
+  creates the `m3` annotated milestone
+  tag, and produces the M4-A plan in
+  `Awaiting Approval`. The M3 plan is at
+  `.ai/plans/M3-project-registration.md`.
+  The M3 retrospective is at
+  [`retrospective-m3-project-registration.md`](./../../retrospective-m3-project-registration.md).**
+- **M4-A through M8:** M4-A is **Awaiting
+  Approval**; the plan is at
+  `.ai/plans/M4-A-infrastructure-process-execution.md`;
+  the first M4-A task T-021 (M4-A.1
+  infrastructure project skeleton) is
+  `Ready`. M4-B through M8 are Planned;
+  no evidence yet.
 
 ## Last Completed Milestone
 
-- **M2 — Application Shell and Navigation**,
-  closed **2026-07-11** (the most recent
-  milestone). The M2 evidence is the
-  per-slice implementation reports (M2.1 →
-  M2.6) and the per-slice handoffs (M2.1 →
-  M2.6). The M2 retrospective is at
+- **M3 — Project Registration**, closed
+  **2026-07-11** (the most recent
+  milestone). The M3 evidence is the
+  per-slice implementation reports
+  (M3.1, M3.2, M3 closeout) and the
+  per-slice handoffs (M3.1, M3.2, M3
+  closeout). The M3 retrospective is at
+  [`retrospective-m3-project-registration.md`](./../../retrospective-m3-project-registration.md).
+  The M3 closeout commit
+  `chore(m3.closeout): close M3 with retrospective, M4-A plan, and m3 milestone tag`
+  is on `main`; the `m3` annotated
+  milestone tag is at the M3 closeout
+  commit. The M3 plan is at
+  `.ai/plans/M3-project-registration.md`.
+  The M4-A plan is at
+  `.ai/plans/M4-A-infrastructure-process-execution.md`
+  (Status: Awaiting Approval).
+- **M2 — Application Shell and
+  Navigation**, closed **2026-07-11**
+  (preceding milestone). The M2
+  retrospective is at
   [`retrospective-m2-application-shell-and-navigation.md`](./../../retrospective-m2-application-shell-and-navigation.md).
   The Milestone Closeout Standard is at
   [`.ai/workflows/milestone-closeout.md`](./../../.ai/workflows/milestone-closeout.md).
-  The M2 closeout commit
-  `chore(m2.6): close M2 with retrospective, milestone closeout standard, and M3 plan`
-  is on `main`; the `m2` annotated
-  milestone tag is at the M2 closeout
-  commit.
 - **M1 — Design System Core**, closed
   **2026-07-10** (preceding milestone).
 
 ## Last Completed Task
 
-- The M3.2 implementation session
+- The M3 closeout implementation session
   (2026-07-11), which:
-  - Delivered M3.2 — Project
-    Registration Slice 2 per the
-    approved M3.2 plan
-    (`.ai/plans/M3.2-project-registration-slice-2.md`).
-  - Landed the three mutations the M3
-    surface exists for: the
-    registration form
-    (`RegisterProjectForm`), the rename
-    form (`RenameProjectForm`), and
-    the unregister confirmation
-    (`ConfirmUnregisterProject`). The
-    three forms use HTML5 native
-    `<dialog>` elements with scoped
-    CSS and `data-testid` attributes.
-  - Enabled the `AppProjectCard`
-    Rename + Unregister buttons (Open
-    remains disabled for M4-A); the
-    page header's Register a project
-    button is enabled; the
-    `AppProjectList` exposes
-    `ShowRegisterDialog()` and
-    `RefreshAsync()` methods.
-  - Extended the architecture test
+  - Delivered M3.x — M3 closeout per the
+    approved M3 closeout plan
+    (`.ai/plans/M3-closeout.md`).
+  - Shipped the M3 retrospective at
+    [`retrospective-m3-project-registration.md`](./../../retrospective-m3-project-registration.md)
+    (13 sections per the Milestone
+    Closeout Standard § 4; the second
+    milestone retrospective in this
+    repository, mirroring the M2
+    retrospective's structure with
+    M3-specific evidence).
+  - Produced the M4-A plan at
+    [`.ai/plans/M4-A-infrastructure-process-execution.md`](./../../.ai/plans/M4-A-infrastructure-process-execution.md)
+    (12 sections; Status: Awaiting
+    Approval; the first M4-A task T-021
+    is `Ready`).
+  - Moved M3 from `Active` to `Done` in
+    `.ai/state/milestones.json` with
+    `closed_at: 2026-07-11`.
+  - Created the `m3` annotated
+    milestone tag at the M3 closeout
+    commit on `main` per the branching
+    strategy rule 9.
+  - Updated the project-continuity
+    state per Rule 15 (session.json,
+    tasks.json, current.md, task-board.md,
+    milestones.json, ROADMAP.md, master
+    delivery plan, the M3 closeout
+    handoff, the M3 closeout
+    implementation report).
+  - Validated the complete M3 milestone
+    end-to-end: 273 passed, 0 failed,
+    7 skipped (per ADR-016 / M4-D);
+    0 warnings, 0 errors; format clean;
+    visual smoke on `/projects` green.
+  - The commit
+    `chore(m3.closeout): close M3 with retrospective, M4-A plan, and m3 milestone tag`
+    is the closing receipt; the commit
+    is on the feature branch
+    `feature/T-020-m3-closeout-and-retrospective`;
+    the branch is fast-forwarded into
+    `main` per the branching strategy
+    rule 6; the branch is deleted per
+    rule 7. No push (push is not
+    authorised in this session; the
+    user may push in a follow-up
+    command per the command protocol).
+  - The session does **not**
+    implement M4-A; per the
+    Progressive Coding Rule, M4-A
+    is the next session's
+    responsibility.
+- The M3.2 implementation session
+  (2026-07-11) is the prior task;
     `Pages_Resolve_Projects_Through_Service`
     with three new tests (one per new
     form component); the single-seam
@@ -417,7 +473,7 @@
     `IProjectServiceTests` already
     cover the happy-path + failure
     paths).
-  - Validated the M3.2 slice
+  - Validated the M3 closeout
     end-to-end: `npm run css:build`
     (exit 0), `dotnet restore` (exit
     0), `dotnet build` (0 warnings, 0
@@ -434,22 +490,18 @@
     removes it).
   - 273 total tests pass: 34 unit +
     228 component + 11 architecture, 7
-    skipped. The M3.2 closeout adds
-    +0 unit + 30 bUnit + 3
-    architecture tests vs the M3.1
-    closeout.
-  - Three documented deviations: (1)
-    `AppDialog` is not introduced;
-    HTML5 native `<dialog>` is used
-    instead (minimum-blast-radius
-    decision; the M1.2 design system
-    does not ship a dialog primitive);
-    (2) M3.2 unit tests are reused
-    from M3.1 (the M3.1
-    `IProjectServiceTests` already
-    cover the happy-path + failure
-    paths); (3) Disabled tests
-    unchanged.
+    skipped. The M3 closeout adds
+    +0 unit + 0 bUnit + 0
+    architecture tests vs the M3.2
+    closeout (the M3 closeout is docs
+    + workflow + state change only).
+  - Zero deviations: the M3 closeout
+    follows the Milestone Closeout
+    Standard as-is (the standard is
+    mature enough to be reused without
+    modification; the M2.6 closeout's
+    "introduce the standard" is
+    amortised).
   - The commit
     `feat(m3.2): enable project registration form, rename, and unregister`
     is the closing receipt; the commit
@@ -491,61 +543,52 @@
 
 ## Active Branch
 
-- **`main`** (the M3.2 closeout's
-  fast-forwarded branch). The M3.2
-  closeout commit
-  `feat(m3.2): enable project registration form, rename, and unregister`
-  is the HEAD of `main`. The M3.2
+- **`main`** (the M3 closeout's
+  fast-forwarded branch). The M3 closeout
+  commit
+  `chore(m3.closeout): close M3 with retrospective, M4-A plan, and m3 milestone tag`
+  is the HEAD of `main`. The M3 closeout
   feature branch
-  `feature/T-019-m3-2-project-registration-slice-2`
-  carried the M3.2 work; the branch is
-  fast-forwarded into `main` per the
-  branching strategy rule 6; the branch
-  is deleted per rule 7. The M2.x
-  commit chain (M2.1 → M2.6) lives on
-  the per-slice feature branches; the
-  per-slice feature branches are
-  deleted per the branching strategy
-  rule 7; the per-slice commits are
-  recorded in the M2 evidence block of
-  `.ai/state/milestones.json`. The M3.1
-  commit chain lives on the M3.1
-  feature branch, which is fast-
-  forwarded into `main` and deleted
-  per rule 7; the M3.1 commit is
-  recorded in the M3 evidence block.
-  The M3.2 commit chain lives on the
-  M3.2 feature branch, which is fast-
-  forwarded into `main` and deleted
-  per rule 7; the M3.2 commit is
-  recorded in the M3 evidence block.
-  The remote (`origin`) is configured
-  but push is not authorised in this
-  session.
+  `feature/T-020-m3-closeout-and-retrospective`
+  carried the M3 closeout work; the branch
+  is fast-forwarded into `main` per the
+  branching strategy rule 6; the branch is
+  deleted per rule 7. The M3.1 + M3.2
+  commit chain lives on the per-slice
+  feature branches; the per-slice feature
+  branches are deleted per the branching
+  strategy rule 7; the per-slice commits
+  are recorded in the M3 evidence block
+  of `.ai/state/milestones.json`. The
+  `m3` annotated milestone tag is at the
+  M3 closeout commit on `main` per the
+  branching strategy rule 9. The remote
+  (`origin`) is configured but push is
+  not authorised in this session.
 
 ## Last Stable Commit
 
-- The M3.2 closeout commit
-  `feat(m3.2): enable project registration form, rename, and unregister`
-  on `main` (created 2026-07-11). The
-  M3.2 commit is the closing receipt
-  for the M3.2 slice (the second M3
-  implementation slice; the three
-  mutations: registration form, rename
-  form, unregister confirmation).
-  The M3.2 commit chain lives on the
-  M3.2 feature branch
-  `feature/T-019-m3-2-project-registration-slice-2`,
+- The M3 closeout commit
+  `chore(m3.closeout): close M3 with retrospective, M4-A plan, and m3 milestone tag`
+  on `main` (created 2026-07-11). The M3
+  closeout commit is the closing receipt
+  for the M3 milestone (the M3
+  retrospective + the M4-A plan + the
+  project-continuity update + the `m3`
+  milestone tag). The M3 closeout
+  commit lives on the feature branch
+  `feature/T-020-m3-closeout-and-retrospective`,
   which is fast-forwarded into `main`
   per the branching strategy rule 6
   and deleted per rule 7. The parent
-  commit is the M3.1 closeout commit
-  `feat(m3.1): add project registration surface`
-  on `main`. Working tree is clean at
-  the close of the M3.2 session; the
-  remote (`origin`) is configured but
-  push is not authorised in this
-  session.
+  commit is the M3.2 closeout commit
+  `feat(m3.2): enable project registration form, rename, and unregister`
+  on `main`. The `m3` annotated
+  milestone tag is at this commit.
+  Working tree is clean at the close of
+  the M3 closeout session; the remote
+  (`origin`) is configured but push is
+  not authorised in this session.
 
 ## Application Status
 
@@ -899,28 +942,63 @@ Plus the supporting infrastructure:
   the M2 retrospective lives at
   [`retrospective-m2-application-shell-and-navigation.md`](./../../retrospective-m2-application-shell-and-navigation.md).
 - [`.ai/plans/M3-project-registration.md`](./../../.ai/plans/M3-project-registration.md)
-  — M3 plan, **Delivered (M3.1,
-  2026-07-11)**. Prepared in the M2.6
-  closeout session; the M3.1 plan is
-  the first M3 implementation slice
-  (T-018, delivered 2026-07-11). M3
-  is **Active**; M3.2 is the next
-  `Ready` task; M3 closes when M3.x
-  (M3 retrospective) is delivered.
+  — M3 plan, **Delivered (M3.1, M3.2,
+  M3 closeout, 2026-07-11)**. Prepared
+  in the M2.6 closeout session; the
+  M3.1 plan is the first M3
+  implementation slice (T-018,
+  delivered 2026-07-11); the M3.2 plan
+  is the second M3 implementation slice
+  (T-019, delivered 2026-07-11); the
+  M3 closeout plan is the M3
+  retrospective (T-020, delivered
+  2026-07-11). M3 is **Done (closed
+  2026-07-11)**; the M3 retrospective
+  is at
+  [`retrospective-m3-project-registration.md`](./../../retrospective-m3-project-registration.md).
 - [`.ai/plans/M3.2-project-registration-slice-2.md`](./../../.ai/plans/M3.2-project-registration-slice-2.md)
-  — M3.2 plan, **Awaiting Approval
+  — M3.2 plan, **Delivered
   (2026-07-11)**. Prepared in the
   M3.1 closeout session; M3.2
-  enables the M3.1 wired-but-
+  enabled the M3.1 wired-but-
   disabled actions (Register form,
-  Rename, Unregister). The next
-  session approves the M3.2 plan
-  and starts the M3.2
-  implementation per the
-  Progressive Coding Rule.
+  Rename, Unregister).
+- [`.ai/plans/M3-closeout.md`](./../../.ai/plans/M3-closeout.md)
+  — M3 closeout plan, **Delivered
+  (2026-07-11)**. Prepared in the M3.2
+  closeout session; the M3 closeout
+  plan mirrors the M2.6 closeout
+  plan's structure; the M3 closeout
+  implementation follows the plan.
+  The M3 retrospective is at
+  [`retrospective-m3-project-registration.md`](./../../retrospective-m3-project-registration.md).
+  The `m3` annotated milestone tag is
+  at the M3 closeout commit on `main`.
+- [`.ai/plans/M4-A-infrastructure-process-execution.md`](./../../.ai/plans/M4-A-infrastructure-process-execution.md)
+  — M4-A plan, **Awaiting Approval
+  (2026-07-11)**. Prepared in the M3
+  closeout session; the M4-A plan
+  introduces the
+  `AiEng.Platform.Infrastructure`
+  csproj, the `IProcessRunner` /
+  `ICredentialVault` / `IPlatformInfo`
+  contracts, the on-disk
+  `IProjectStore` (which replaces the
+  M3 in-memory store behind the same
+  contract), and the Open action on
+  `AppProjectCard`. The first M4-A
+  task (T-021, M4-A.1 infrastructure
+  project skeleton) is `Ready` in
+  `.ai/state/tasks.json`. The next
+  session approves the M4-A plan and
+  begins the M4-A.1 implementation.
 
 ## Last Implementation Report
 
+- [`implementation-report-m3-closeout.md`](./../../implementation-report-m3-closeout.md)
+  — the M3 closeout implementation
+  report (the closing receipt for the
+  M3 milestone, 2026-07-11).
 - [`implementation-report-m3-2-project-registration-slice-2.md`](./../../implementation-report-m3-2-project-registration-slice-2.md)
   — the M3.2 implementation report
   (the closing receipt for the M3.2
@@ -970,98 +1048,89 @@ Plus the supporting infrastructure:
 
 ## Next Recommended Task
 
-> **M3 closeout — M3 retrospective (per
-> the Milestone Closeout Standard).**
-> The M3.2 closeout session delivers
-> the M3 surface's three mutations
-> (registration form, rename form,
-> unregister confirmation); M3 has
-> three slices (M3.1 delivered,
-> M3.2 delivered, M3.x — the M3
-> retrospective). The M3 closeout
-> plan lands at
-> `.ai/plans/M3-closeout.md` (the next
-> session drafts it from the closeout
-> standard at
-> `.ai/workflows/milestone-closeout.md`).
-> The next session drafts the M3
-> closeout plan, then implements it
-> per the Progressive Coding Rule:
-> one task per session; 13-step
-> lifecycle; stop after the coherent
-> commit. **Do not begin M3 closeout
-> in this session** — the M3.2 brief
-> explicitly stops at the M3.2
-> closeout receipt.
+> **M4-A.1 — Infrastructure project
+> skeleton.** M3 is closed (2026-07-11).
+> The M4-A plan is at
+> [`.ai/plans/M4-A-infrastructure-process-execution.md`](./../../.ai/plans/M4-A-infrastructure-process-execution.md)
+> (Status: Awaiting Approval). The first
+> M4-A task (T-021, M4-A.1 infrastructure
+> project skeleton) is `Ready` in
+> `.ai/state/tasks.json`. The next
+> session approves the M4-A plan and
+> starts the M4-A.1 implementation per
+> the Progressive Coding Rule: one task
+> per session; 13-step lifecycle; stop
+> after the coherent commit. **Do not
+> begin M4-A implementation in this
+> session** — the M3 closeout brief
+> explicitly stops at the M3 closeout
+> receipt (the M3 closeout is the
+> boundary between M3 and M4-A; the
+> Progressive Coding Rule applies).
 
-The detailed breakdown of the M3 slices is
-in
+The detailed breakdown of the M3 slices
+is in
 [`.ai/state/task-board.md`](./task-board.md)
 and the M3 plan file in
-[`.ai/plans/M3-project-registration.md`](./../../.ai/plans/M3-project-registration.md). The
-next two actionable items are:
+[`.ai/plans/M3-project-registration.md`](./../../.ai/plans/M3-project-registration.md).
+The M3 retrospective is at
+[`retrospective-m3-project-registration.md`](./../../retrospective-m3-project-registration.md).
+The next actionable item is:
 
-1. **M3 closeout plan draft** (the M3
-   closeout plan is to be drafted
-   from
-   [`.ai/workflows/milestone-closeout.md`](./../../.ai/workflows/milestone-closeout.md);
-   the next session promotes it to
-   `Awaiting Approval`).
-2. **M3 closeout — M3 retrospective**
-   (T-020, `Ready` in
+1. **M4-A.1 — Infrastructure project
+   skeleton** (T-021, `Ready` in
    `.ai/state/tasks.json`; the next
-   concrete M3 task).
+   concrete M4-A task; the plan is
+   `.ai/plans/M4-A-infrastructure-process-execution.md`).
 
 ## Last Updated
 
-- **2026-07-11** (M3.2 closeout
+- **2026-07-11** (M3 closeout
   session). This version supersedes
-  the M3.1 closeout version
-  (2026-07-11). The M3.2 closeout
-  session delivers the M3 surface's
-  three mutations: ships the three
-  modal components
-  (`RegisterProjectForm`,
-  `RenameProjectForm`,
-  `ConfirmUnregisterProject` — HTML5
-  native `<dialog>` elements with
-  scoped CSS and `data-testid`
-  attributes); enables the
-  `AppProjectCard` Rename + Unregister
-  buttons (Open remains disabled for
-  M4-A); enables the page header's
-  Register a project button; the
-  `AppProjectList` exposes
-  `ShowRegisterDialog()` and
-  `RefreshAsync()` methods; extends
-  the architecture test
-  `Pages_Resolve_Projects_Through_Service`
-  with three new tests (one per new
-  form component); runs the validation
-  suite (npm css:build, dotnet build,
-  dotnet test, dotnet format, visual
-  smoke test) and confirms M3.2 is
-  green (273 passed, 0 failed, 7
-  skipped; 0 warnings, 0 errors;
-  format clean); updates the
-  project-continuity state per
-  Rule 15; produces
-  `implementation-report-m3-2-project-registration-slice-2.md`;
-  and creates the M3.2 closeout
-  commit. The M3.2 closeout commit
-  is the most recent commit on
-  `main`; the M3.2 feature branch
-  is fast-forwarded into `main`
-  and deleted per the branching
-  strategy rule 6/7. The M3 plan
-  is delivered (M3.1 + M3.2 are
-  done; M3.x — the M3 closeout — is
-  the next M3 task); the M3 closeout
-  task (T-020) is `Ready` in
-  `.ai/state/tasks.json`. The
-  remote (`origin`) is configured
-  but push is not authorised in
-  this session.
+  the M3.2 closeout version
+  (2026-07-11). The M3 closeout
+  session ships: the M3 retrospective
+  at
+  [`retrospective-m3-project-registration.md`](./../../retrospective-m3-project-registration.md)
+  (13 sections per the Milestone
+  Closeout Standard § 4; the second
+  milestone retrospective in the
+  repository); the M4-A plan at
+  [`.ai/plans/M4-A-infrastructure-process-execution.md`](./../../.ai/plans/M4-A-infrastructure-process-execution.md)
+  (Status: Awaiting Approval); the M3
+  closeout plan at
+  [`.ai/plans/M3-closeout.md`](./../../.ai/plans/M3-closeout.md);
+  the project-continuity state
+  updates (session.json, tasks.json,
+  current.md, task-board.md,
+  milestones.json, ROADMAP.md, master
+  delivery plan); the M3 closeout
+  implementation report at
+  [`implementation-report-m3-closeout.md`](./../../implementation-report-m3-closeout.md);
+  the M3 closeout per-session handoff
+  at
+  [`.ai/handoffs/2026-07-11-m3-closeout.md`](./../../.ai/handoffs/2026-07-11-m3-closeout.md)
+  (mirrored to latest.md). M3 is moved
+  from `Active` to `Done` with
+  `closed_at: 2026-07-11`. The `m3`
+  annotated milestone tag is at the M3
+  closeout commit on `main`. The M3
+  closeout commit
+  `chore(m3.closeout): close M3 with retrospective, M4-A plan, and m3 milestone tag`
+  is the most recent commit on `main`;
+  the M3 closeout feature branch is
+  fast-forwarded into `main` and
+  deleted per the branching strategy
+  rule 6/7. Validation results: 273
+  passed, 0 failed, 7 skipped; 0
+  warnings, 0 errors; format clean;
+  visual smoke on `/projects` green.
+  The remote (`origin`) is configured
+  but push is not authorised in this
+  session. M3 is closed; M4-A is the
+  next milestone; the M4-A first task
+  (T-021, M4-A.1) is `Ready` in
+  `.ai/state/tasks.json`.
 
 ## Linked Artefacts
 
@@ -1070,18 +1139,19 @@ next two actionable items are:
   tier 1 of the document hierarchy).
 - [`.ai/state/task-board.md`](./task-board.md) —
   the live work queue (M2.1
-  through M2.6 Done; M3.1
-  and M3.2 `Done`; M3 closeout
-  `Ready`; M3 plan
-  `Delivered` (M3.1 + M3.2)).
+  through M2.6 Done; M3.1, M3.2
+  + M3 closeout `Done`; T-021
+  M4-A.1 `Ready`; M3 plan
+  `Delivered` (M3.1 + M3.2 + M3
+  closeout)).
 - [`.ai/handoffs/latest.md`](./../../.ai/handoffs/latest.md) —
-  the most recent handoff (the M3.2
+  the most recent handoff (the M3
   closeout handoff; mirrored from
-  `.ai/handoffs/2026-07-11-m3-2-project-registration-slice-2.md`).
-- [`.ai/handoffs/2026-07-11-m3-2-project-registration-slice-2.md`](./../../.ai/handoffs/2026-07-11-m3-2-project-registration-slice-2.md)
-  — the M3.2 closeout session handoff
-  (the closing receipt for the M3.2
-  slice, 2026-07-11).
+  `.ai/handoffs/2026-07-11-m3-closeout.md`).
+- [`.ai/handoffs/2026-07-11-m3-closeout.md`](./../../.ai/handoffs/2026-07-11-m3-closeout.md)
+  — the M3 closeout session handoff
+  (the closing receipt for the M3
+  milestone, 2026-07-11).
 - [`.ai/handoffs/2026-07-11-m3-1-project-registration-slice-1.md`](./../../.ai/handoffs/2026-07-11-m3-1-project-registration-slice-1.md)
   — the M3.1 closeout session handoff
   (the closing receipt for the M3.1
@@ -1127,6 +1197,13 @@ next two actionable items are:
   retrospective in the repository;
   produced in the M2.6 closeout
   session, 2026-07-11.
+- [`retrospective-m3-project-registration.md`](./../../retrospective-m3-project-registration.md) —
+  the M3 retrospective
+  (13 sections per the Milestone
+  Closeout Standard § 4). The second
+  milestone retrospective in the
+  repository; produced in the M3
+  closeout session, 2026-07-11.
 - [`.ai/plans/M2.6-m2-closeout-and-treehouse-dogfooding.md`](./../../.ai/plans/M2.6-m2-closeout-and-treehouse-dogfooding.md) —
   the M2.6 plan (Delivered,
   2026-07-11).
@@ -1157,15 +1234,30 @@ next two actionable items are:
   2026-07-11).
 - [`.ai/plans/M3-project-registration.md`](./../../.ai/plans/M3-project-registration.md) —
   the M3 plan (M3.1 Delivered
-  2026-07-11; the first M3
-  implementation slice is the
-  contract + in-memory store +
-  UI surface + architecture test).
+  2026-07-11; M3.2 Delivered
+  2026-07-11; M3 closeout M3.x
+  Delivered 2026-07-11; the
+  M3 plan is the M3 umbrella plan;
+  the M3 / M4-A boundary is the
+  `IProjectStore` contract, not
+  the storage medium).
 - [`.ai/plans/M3.2-project-registration-slice-2.md`](./../../.ai/plans/M3.2-project-registration-slice-2.md) —
-  the M3.2 plan (Awaiting Approval
-  2026-07-11; the next M3 slice;
+  the M3.2 plan (Delivered
+  2026-07-11; the second M3 slice;
   registration form + rename +
   unregister).
+- [`.ai/plans/M3-closeout.md`](./../../.ai/plans/M3-closeout.md) —
+  the M3 closeout plan
+  (Delivered 2026-07-11; mirrors
+  the M2.6 closeout plan's
+  structure; the M3 closeout
+  implementation follows the plan).
+- [`.ai/plans/M4-A-infrastructure-process-execution.md`](./../../.ai/plans/M4-A-infrastructure-process-execution.md) —
+  the M4-A plan (Awaiting Approval
+  2026-07-11; the next milestone
+  after M3 closes; the M4-A.1 task
+  T-021 is `Ready` in
+  `.ai/state/tasks.json`).
 - [`.ai/plans/master-delivery-plan.md`](./../../.ai/plans/master-delivery-plan.md) —
   the master delivery plan.
 - [`.ai/reviews/M1-design-system-lavish-axi-review.md`](./../../.ai/reviews/M1-design-system-lavish-axi-review.md) —
@@ -1223,6 +1315,10 @@ next two actionable items are:
   — the M2.6 implementation report
   (the closing receipt for the M2
   milestone, 2026-07-11).
+- [`implementation-report-m3-closeout.md`](./../../implementation-report-m3-closeout.md)
+  — the M3 closeout implementation
+  report (the closing receipt for the
+  M3 milestone, 2026-07-11).
 - [`docs/dashboard.md`](./../../docs/dashboard.md)
   — the product dashboard definition (M0.5).
 - [`.ai/backlog/`](./../../.ai/backlog/) —

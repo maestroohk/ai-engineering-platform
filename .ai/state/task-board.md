@@ -37,91 +37,99 @@
 
 ## Ready
 
-### M3 closeout — M3 retrospective (per the Milestone Closeout Standard)
+### M4-A.1 — Infrastructure project skeleton (IProcessRunner, ICredentialVault, IPlatformInfo, on-disk IProjectStore)
 
-- **Task ID:** `T-020`
-- **Milestone:** M3 — Project Registration
-- **Title:** M3 closeout — the M3
-  retrospective per the Milestone
-  Closeout Standard
-- **Why it matters:** Every milestone
-  closes with a retrospective that
-  captures what shipped, what was
-  deferred, what technical debt remains,
-  what was learned (process + technical),
-  and what the next milestone should
-  account for. M3 has three slices
-  (M3.1, M3.2, M3.x). M3.1 and M3.2
-  are delivered. M3.x — the M3
-  retrospective — is the M3 closeout
-  slice per
-  `.ai/workflows/milestone-closeout.md`.
-- **Objective:** Draft
-  `.ai/plans/M3-closeout.md` from the
-  Milestone Closeout Standard;
-  implement the closeout in a single
-  coherent commit; produce the
-  retrospective document
-  (`retrospective-m3-project-registration.md`)
-  with the 13 sections the standard
-  requires; update
-  `milestones.json` + `ROADMAP.md` +
-  `master-delivery-plan.md` to move M3
-  from `Active` to `Done`; tag the
-  M3 closeout commit on `main` with
-  the `m3` annotated milestone tag
-  per the branching strategy rule 9.
+- **Task ID:** `T-021`
+- **Milestone:** M4-A — Infrastructure /
+  Process Execution
+- **Title:** M4-A.1 — the first M4-A
+  implementation slice; introduces the
+  `AiEng.Platform.Infrastructure` csproj,
+  the `IProcessRunner` /
+  `ICredentialVault` / `IPlatformInfo`
+  contracts in
+  `Application/Infrastructure/`, the
+  `SystemProcessRunner` /
+  `WindowsCredentialVault` /
+  `SystemPlatformInfo` /
+  `JsonFileProjectStore` implementations,
+  the `AddInfrastructure` composition root
+  extension, and the one-line swap in
+  `AddProjects` (the M3 in-memory
+  `InMemoryProjectStore` registration is
+  removed; the on-disk
+  `JsonFileProjectStore` is now
+  registered through `AddInfrastructure`).
+- **Why it matters:** M4-A is the
+  first milestone that introduces a
+  process boundary. The boundary is
+  designed to be testable and to keep
+  the UI (Blazor Server) free of
+  process-boundary types. The on-disk
+  `IProjectStore` is the **first durable
+  surface** in this repository.
+- **Objective:** Add the
+  `AiEng.Platform.Infrastructure` csproj;
+  add the four contracts in
+  `Application/Infrastructure/`;
+  add the four implementations in
+  `Infrastructure/`; add the
+  `AddInfrastructure` composition root
+  extension; swap the in-memory
+  `IProjectStore` registration in
+  `AddProjects`; add the unit + bUnit
+  tests (50+ tests); preserve the
+  `InMemoryProjectStore` as a test
+  fixture in
+  `tests/AiEng.Platform.UnitTests/`.
 - **Acceptance criteria:** see
-  `.ai/plans/M3-closeout.md` § 4
-  (drafted in the M3 closeout plan
-  session).
-- **Dependencies:** M3.1 (Delivered
-  2026-07-11); M3.2 (Delivered
-  2026-07-11); M3 plan
-  (`.ai/plans/M3-project-registration.md`,
-  Awaiting Approval → implemented via
-  M3.1 + M3.2). No new dependencies.
+  `.ai/plans/M4-A-infrastructure-process-execution.md`
+  § 2 (the M4-A plan). M4-A.1 does **not**
+  enable the Open action on
+  `AppProjectCard` (that is the M4-A.2
+  slice). M4-A.1 is the boundary, not the
+  activation.
+- **Dependencies:** M3 (Done 2026-07-11);
+  M2 (Done 2026-07-11); M1.2 (Done). No
+  new dependencies. The M3 in-memory
+  `IProjectStore` is the smoke test for
+  the `IProjectStore` contract; M4-A.1
+  replaces it on disk behind the same
+  contract.
 - **Expected affected areas:**
-  `.ai/plans/M3-closeout.md` (new);
-  `retrospective-m3-project-registration.md`
-  (new);
-  `.ai/state/milestones.json` (M3 row
-  Done);
-  `.ai/state/tasks.json` (T-020 moved
-  to Done);
-  `.ai/state/current.md` (M3 row
-  closed);
-  `.ai/state/task-board.md` (M3 closeout
-  moved to Done Recently);
-  `ROADMAP.md` (§ 2 M3 row Done + § 3
-  M3.x row Delivered);
-  `.ai/plans/master-delivery-plan.md`
-  (§ 1 M3 row Done + § 3 M3.x slice
-  Delivered);
-  `.ai/handoffs/2026-07-11-m3-closeout.md`
-  (new) + mirror to
-  `.ai/handoffs/latest.md`;
-  `implementation-report-m3-closeout.md`
-  (new).
-- **Validation:** the milestone-level
-  validation gate per the Milestone
-  Closeout Standard § 3 — `npm run
-  css:build` (exit 0); `dotnet restore`
-  (exit 0); `dotnet build` (0 warnings,
-  0 errors); `dotnet test` (every
-  active test passing); `dotnet format
-  --verify-no-changes` (exit 0);
-  visual smoke on `/projects` (200).
-  The `m3` annotated milestone tag is
-  at the M3 closeout commit on `main`.
+  `src/AiEng.Platform.Infrastructure/`
+  (new csproj + contracts implementations);
+  `src/AiEng.Platform.App/Composition/`
+  (the `AddInfrastructure` extension; the
+  `AddProjects` swap); the
+  `src/AiEng.Platform.Application/` project
+  reference updates; the unit + bUnit
+  tests; the `AppProjectCard.razor`
+  test extension (the Open action
+  remains disabled in M4-A.1; the
+  bUnit test extension is in M4-A.2).
+- **Validation:** the per-slice
+  validation gate — `npm run css:build`
+  (exit 0); `dotnet restore` (exit 0);
+  `dotnet build` (0 warnings, 0 errors);
+  `dotnet test` (273+M4-A.1 tests passed,
+  0 failed, 7 skipped); `dotnet format
+  --verify-no-changes` (exit 0); visual
+  smoke on `/projects` (200; the Open
+  action is still disabled in M4-A.1; the
+  M4-A.1 visual smoke asserts the page
+  loads 200 and the project list persists
+  across an application restart).
 - **Approved plan path:**
-  `.ai/plans/M3-closeout.md` (to be
-  drafted in the M3 closeout plan
-  session per the Milestone Closeout
-  Standard).
-- **Status:** Ready (the M3.2 closeout
-  promoted T-020 to Ready per the
-  Milestone Closeout Standard § 8).
+  `.ai/plans/M4-A-infrastructure-process-execution.md`
+  (Awaiting Approval; produced by the M3
+  closeout per the Milestone Closeout
+  Standard § 8).
+- **Status:** Ready (the M3 closeout
+  promoted T-021 to Ready; the next
+  session approves the M4-A plan and
+  starts the M4-A.1 implementation per
+  the Progressive Coding Rule).
 
 ### M1 follow-up — Add `AppToolbar` example to `/design-system`
 
@@ -168,13 +176,16 @@
 
 ## In Progress
 
-(none — M3.2 delivered in the M3.2
-implementation session, 2026-07-11; M3
-is Active; the M3 closeout (T-020)
-awaits the next session's plan
-approval and explicit `Approve`
-command per the Progressive Coding
-Rule.)
+(none — M3 closeout delivered in the
+m3-closeout-and-retrospective session,
+2026-07-11; M3 is Done (closed
+2026-07-11); the M4-A plan is in
+`Awaiting Approval`; T-021 (M4-A.1
+infrastructure project skeleton) is the
+next `Ready` task; the next session
+approves the M4-A plan and begins the
+M4-A.1 implementation per the
+Progressive Coding Rule.)
 
 ---
 
@@ -329,6 +340,105 @@ Rule.)
   session does **not** close M3 (per
   the brief: "Do not begin the
   following task").
+
+### M3 closeout — M3 retrospective (per the Milestone Closeout Standard) — 2026-07-11
+
+- **Task ID:** `T-020`
+- **Milestone:** M3 — Project Registration
+  (closed 2026-07-11)
+- **Title:** M3 closeout — the M3
+  retrospective per the Milestone
+  Closeout Standard; the third M3
+  slice (M3.1 + M3.2 + M3.x)
+- **Status:** **Done (delivered
+  2026-07-11).** M3 is **Done (closed
+  2026-07-11)**. The M4-A plan is in
+  `Awaiting Approval`; T-021 (M4-A.1
+  infrastructure project skeleton) is
+  the next `Ready` task.
+- **Outcome:** The M3 closeout ships
+  per the Milestone Closeout Standard
+  § 4 + § 8: (1) **The M3 retrospective**
+  at
+  `retrospective-m3-project-registration.md`
+  (13 sections: delivered
+  capabilities, deferred capabilities,
+  technical debt, known issues,
+  lessons learned, architecture
+  changes, documentation changes,
+  testing summary, validation results,
+  implementation reports, commit
+  range, readiness for M4-A,
+  recommendations for the next
+  milestone); the M3 retrospective is
+  the second milestone retrospective
+  in the repository (the M2
+  retrospective was the first). (2)
+  **The M4-A plan** at
+  `.ai/plans/M4-A-infrastructure-process-execution.md`
+  (12 sections; Status: Awaiting
+  Approval; the first M4-A task T-021
+  is `Ready`). (3) **The M3 closeout
+  plan** at `.ai/plans/M3-closeout.md`
+  (mirrors the M2.6 closeout plan's
+  structure). (4) **The M3 closeout
+  implementation report** at
+  `implementation-report-m3-closeout.md`
+  (15+ sections; mirrors the M2.6
+  closeout report). (5) **The M3
+  closeout per-session handoff** at
+  `.ai/handoffs/2026-07-11-m3-closeout.md`
+  (mirrored to
+  `.ai/handoffs/latest.md`). (6)
+  **M3 moved from `Active` to `Done`**
+  in `.ai/state/milestones.json` with
+  `closed_at: 2026-07-11`. (7) **The
+  `m3` annotated milestone tag** at
+  the M3 closeout commit on `main`
+  per the branching strategy rule 9.
+  (8) **The project-continuity state
+  updated** per Rule 15: session.json,
+  tasks.json, current.md, task-board.md,
+  milestones.json, ROADMAP.md,
+  master delivery plan, the M3
+  closeout handoff, the M3 closeout
+  implementation report. (9)
+  **Validation gate passed:** 273
+  passed, 0 failed, 7 skipped (per
+  ADR-016 / M4-D); 0 warnings, 0
+  errors; format clean; visual smoke
+  on `/projects` green.
+- **Report:**
+  `implementation-report-m3-closeout.md`.
+- **Handoff:**
+  `.ai/handoffs/2026-07-11-m3-closeout.md`
+  (mirrored at
+  `.ai/handoffs/latest.md`).
+- **Git:** branch
+  `feature/T-020-m3-closeout-and-retrospective`
+  (created from `main` at the M3.2
+  closeout commit `ff9010a`; the M3
+  closeout commit
+  `chore(m3.closeout): close M3 with retrospective, M4-A plan, and m3 milestone tag`
+  is on this branch; the branch is
+  fast-forwarded into `main` per the
+  branching strategy rule 6; the
+  branch is deleted per rule 7). The
+  `m3` annotated milestone tag is at
+  the M3 closeout commit on `main`
+  per rule 9. No remote push (push
+  is not authorised in this session;
+  the user may push in a follow-up
+  command per the command protocol).
+- **Next action:** the M3 closeout
+  promotes the M4-A.1 (T-021) to
+  `Ready`. The next session approves
+  the M4-A plan and begins the
+  M4-A.1 implementation per the
+  Progressive Coding Rule. The M3
+  closeout session does **not**
+  begin M4-A (per the brief: "Do not
+  begin the following task").
 
 ### M3.1 closeout session — 2026-07-11
 
@@ -944,24 +1054,38 @@ task board does not become a speculative
 backlog. Each summary task is fleshed out into
 detailed tasks when the milestone approaches.
 
-### M3 — Project Registration (summary) — Active
+### M3 — Project Registration (summary) — Done (archived 2026-07-11)
 
 - **Milestone:** M3 — Project Registration
-  (Active 2026-07-11).
-- **Status:** Active (M3.1 Delivered
+  (Done 2026-07-11; closed 2026-07-11).
+- **Status:** Done (M3.1 Delivered
   2026-07-11; M3.2 Delivered 2026-07-11;
-  M3 closes when M3.x — the M3
-  retrospective per the Milestone Closeout
-  Standard — is delivered).
-- **First action (later):** M3 closeout
-  (T-020) — M3 retrospective per
-  `.ai/workflows/milestone-closeout.md`.
+  M3 closeout M3.x Delivered 2026-07-11).
+  M3 is moved to `Done` with
+  `closed_at: 2026-07-11`; the `m3`
+  annotated milestone tag is at the M3
+  closeout commit on `main`. The M3
+  retrospective is at
+  `retrospective-m3-project-registration.md`.
+  This summary entry is archived
+  (M3 is closed; the summary is no
+  longer in `Deferred`).
 
-### M4-A — Infrastructure / Process Execution (summary)
+### M4-A — Infrastructure / Process Execution (summary) — Awaiting Approval
 
 - **Milestone:** M4-A.
-- **First action (later):** draft
-  `.ai/plans/M4-A-infrastructure-process-execution.md`.
+- **Status:** Awaiting Approval (M4-A plan
+  produced 2026-07-11 by the M3 closeout
+  per the Milestone Closeout Standard
+  § 8; the plan is at
+  `.ai/plans/M4-A-infrastructure-process-execution.md`;
+  the first M4-A task T-021, M4-A.1
+  infrastructure project skeleton, is
+  `Ready` in `.ai/state/tasks.json`).
+- **First action (later):** the next
+  session approves the M4-A plan and
+  begins the M4-A.1 implementation per
+  the Progressive Coding Rule.
 
 ### M4-B — Capability Detection (summary)
 
