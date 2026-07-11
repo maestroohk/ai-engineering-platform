@@ -53,13 +53,16 @@ A milestone is **complete** only when:
 
 M0 is the milestone that ends with this document. The rest are sequenced
 in [`docs/architecture-principles.md`](./docs/architecture-principles.md)
-and detailed below. **As of 2026-07-10, M1 is done** (see
+and detailed below. **As of 2026-07-11, M1 is done** (see
 `implementation-report-m1-closeout.md`); M2 is the active milestone
 and is divided into six sequential slices. M2.1 ("Application Shell
 Foundation") is **Delivered** (see
-`implementation-report-m2-1-application-shell-foundation.md`); M2.2
-("Navigation Registry and Sidebar") is the next active slice (plan
-in `.ai/plans/M2.2-navigation-registry-sidebar.md`); M2.3, M2.4
+`implementation-report-m2-1-application-shell-foundation.md`);
+M2.2 ("Navigation Registry and Sidebar") is the next
+`Ready` capability (plan
+`.ai/plans/M2.2-navigation-registry-sidebar.md` status
+`Awaiting Approval`; T-002 in
+`.ai/state/tasks.json` status `Ready`); M2.3, M2.4
 remain plan stubs in `Draft`; M2.5 and M2.6 are summary entries in
 the task board.
 
@@ -272,7 +275,7 @@ navigation).
 | Slice | Title                                         | Status         | Major outcome                                                            |
 | ----- | --------------------------------------------- | -------------- | ------------------------------------------------------------------------ |
 | M2.1  | Application Shell Foundation                  | Delivered (M2.1, 2026-07-11) | Two layouts (`AppLayout`, `AppEmptyLayout`), two placeholder shell components (`AppSidebarSlot`, `AppTopBarSlot`), one presentational helper (`AppShellRegion`), and the M1.1 chrome migration. |
-| M2.2  | Navigation Registry and Sidebar               | Plan stub Draft | `INavigationRegistry`, `RouteMetadata`, `RouteMetadataAttribute`, `RouteRegistry`, `AppSidebar`, `AppSidebarItem`, `AppNavItem`, the `Pages_AreReachable_Through_Registry` architecture test. |
+| M2.2  | Navigation Registry and Sidebar               | Plan `Awaiting Approval` | `INavigationRegistry`, `RouteMetadata`, `RouteMetadataAttribute`, `RouteRegistry`, `AppSidebar`, `AppSidebarItem`, `AppNavItem`, the `Pages_AreReachable_Through_Registry` architecture test. |
 | M2.3  | Top Bar, Breadcrumbs, and Page Headers        | Plan stub Draft | `AppTopBar`, `AppBreadcrumb`, theme toggle relocation to the top bar, user avatar slot, page-header integration with the navigation registry. |
 | M2.4  | Project Intelligence Dashboard                | Plan stub Draft | A read-only `/dashboard` page backed by `IProjectIntelligenceReader` that consumes `.ai/state/*.json`. No new abstractions beyond the reader. |
 | M2.5  | Empty Routes, Responsive, and Accessibility   | Summary entry  | All routes reach an `AppEmptyState`; the shell is usable down to 1280x720 (per ADR-005); keyboard navigation works across the sidebar. |

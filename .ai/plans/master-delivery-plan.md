@@ -23,7 +23,7 @@
 | ----- | -------------------------------------------------------- | -------------------------- | --------------------------------------------- |
 | M0    | Documentation Foundation                                | **Done**                   | This document set.                            |
 | M1    | Design System Core                                      | **Done (closed 2026-07-10)** | `implementation-report-m1-closeout.md`; first commits `1722bd2`, `2ba1fad`. |
-| M2    | Application Shell and Navigation                        | Planned (M2.1 in plan)     | `.ai/plans/M2.1-application-shell-skeleton.md` (Awaiting Approval). |
+| M2    | Application Shell and Navigation                        | Planned (M2.1 Delivered 2026-07-11; M2.2 plan `Awaiting Approval`) | `implementation-report-m2-1-application-shell-foundation.md`; commits `ef1063c`, `de082fd` on `feature/m2-1-application-shell`. |
 | M3    | Project Registration                                    | Planned                    | No evidence yet.                              |
 | M4-A  | Infrastructure / Process Execution                      | Planned                    | No evidence yet.                              |
 | M4-B  | Capability Detection                                    | Planned                    | No evidence yet.                              |
@@ -189,15 +189,21 @@ Process execution boundary (M4-A)
     `Pages_Resolve_State_Through_Reader` (M2.4, active).
 - **Dependencies.** M1, M0.5 (the M2.4 reader consumes the
   structured state introduced in M0.5).
-- **Completion status.** **Planned** (M2.1 in revised
-  plan, `Awaiting Approval`; M2.2, M2.3, M2.4 in `Draft`
-  plan stubs; M2.5, M2.6 summary entries in the task
-  board).
+- **Completion status.** **Active** (M2.1 Delivered
+  2026-07-11; M2.2 plan `Awaiting Approval`; M2.3, M2.4
+  plan stubs in `Draft`; M2.5, M2.6 summary entries in the
+  task board).
 - **Evidence.**
   - `.ai/plans/M2.1-application-shell-skeleton.md` (revised
-    2026-07-10; `Awaiting Approval`).
-  - `.ai/plans/M2.2-navigation-registry-sidebar.md` (Draft,
-    2026-07-10).
+    2026-07-10; `Awaiting Approval`; implemented 2026-07-11
+    per
+    `implementation-report-m2-1-application-shell-foundation.md`).
+  - `implementation-report-m2-1-application-shell-foundation.md`
+    (the M2.1 closeout receipt; commits `ef1063c`, `de082fd`
+    on `feature/m2-1-application-shell`).
+  - `.ai/plans/M2.2-navigation-registry-sidebar.md` (expanded
+    2026-07-11 from `Draft` to `Awaiting Approval`; T-002
+    in `.ai/state/tasks.json` is `Ready`).
   - `.ai/plans/M2.3-topbar-breadcrumbs.md` (Draft,
     2026-07-10).
   - `.ai/plans/M2.4-project-intelligence-dashboard.md`

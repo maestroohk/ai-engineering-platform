@@ -1,301 +1,706 @@
 {
-  "schema_version": "1.0.0",
-  "updated_at": "2026-07-10T00:00:00Z",
-  "updated_by_session": "m2-delivery-reconciliation",
+  "schema_version": "1.1.0",
+  "updated_at": "2026-07-11T00:00:00Z",
+  "updated_by_session": "project-intelligence-refinement",
+  "completion_status_mapping": {
+    "NotStarted": "Not in capabilities.json. Reserved for capabilities the product will need but which have not yet been admitted to the graph.",
+    "Planned": "status: Accepted; delivered_by_milestone status: Planned; no plan yet, or plan stub is Draft. Sequenced for a milestone, plan not promoted to Ready / Awaiting Approval.",
+    "Ready": "status: Accepted; delivered_by_milestone status: Planned or Active; a Ready or Awaiting Approval plan exists, and the task that advances the capability is in tasks.json with status Ready. Dependencies are satisfied.",
+    "InProgress": "status: Accepted; a task with this capability in its delivered_by_tasks has status InProgress in tasks.json. Implementation has started on a branch.",
+    "Delivered": "status: Accepted; implementation merged on a branch with a commit; the implementation report exists; the milestones.json evidence array lists the commit. The receipts have not been linked in every consumer, or one of the consumer milestones is still open.",
+    "Verified": "status: Done; or status: Accepted with milestone status: Done AND every consumed_by dependency is also Verified. Implementation is in place, validation is green, and the evidence is linked.",
+    "Blocked": "status: Accepted; a Blocked task in tasks.json references the capability in its blocker field. The next task cannot start until the blocker is resolved.",
+    "Deferred": "status: Accepted; delivered_by_milestone status: Deferred in milestones.json. The roadmap defers the milestone; the work is in the backlog, not in the active queue."
+  },
   "capabilities": [
     {
       "id": "C-001",
       "title": "IProvider base contract",
       "status": "Done",
+      "completion_status": "Verified",
       "layer": 1,
       "category": "ProviderModel",
       "description": "The base metadata contract every family contract inherits from. Carries Id, DisplayName, DescribeAsync, HealthAsync, ConfigureAsync.",
+      "product_outcome": "Every family contract (IAgentRuntimeProvider, IGitProvider, etc.) shares a single base shape that the registry can enumerate, the health service can poll, and the composition root can configure.",
       "depends_on": [],
       "consumed_by": ["C-002", "C-003", "C-004", "C-005", "C-006", "C-007", "C-008", "C-009", "C-010", "C-018"],
       "delivered_by_milestone": "M4-C",
       "consumed_by_milestones": ["M4-D", "M5", "M6", "M7", "M8"],
+      "delivered_by_tasks": [],
+      "next_task": null,
+      "blocked_by": [],
+      "evidence": {
+        "plans": [".ai/plans/M2.1-application-shell-skeleton.md"],
+        "reports": [],
+        "commits": [],
+        "tests": [],
+        "source_paths": ["src/AiEng.Platform.Providers.Abstractions/IProvider.cs"]
+      },
+      "acceptance_criteria": [
+        "IProvider carries Id, DisplayName, DescribeAsync, HealthAsync, ConfigureAsync.",
+        "Every family contract (C-002..C-009) inherits from IProvider.",
+        "The IProviderRegistry can enumerate, resolve by ProviderId, and apply Enabled/Healthy filter (C-010)."
+      ],
+      "completed_criteria": [],
       "adr": "ADR-012",
-      "architecture_tests": []
+      "architecture_tests": [],
+      "last_updated": "2026-07-11"
     },
     {
       "id": "C-002",
       "title": "IAgentRuntimeProvider family",
       "status": "Accepted",
+      "completion_status": "Planned",
       "layer": 1,
       "category": "ProviderModel",
       "description": "Providers that execute agent models (Ollama Launch, Ollama API, Claude, OpenAI, Codex, custom command runtimes).",
+      "product_outcome": "The platform can launch a coding agent through a registered runtime provider; users pick a runtime and a model from the registry, not from a hard-coded list.",
       "depends_on": ["C-001"],
       "consumed_by": ["C-008", "C-021"],
       "delivered_by_milestone": "M4-D",
       "consumed_by_milestones": ["M6", "M7", "M8"],
+      "delivered_by_tasks": [],
+      "next_task": null,
+      "blocked_by": [],
+      "evidence": {
+        "plans": [],
+        "reports": [],
+        "commits": [],
+        "tests": [],
+        "source_paths": []
+      },
+      "acceptance_criteria": [
+        "IAgentRuntimeProvider extends IProvider; LaunchAsync returns an IAsyncEnumerable<string> stream.",
+        "OllamaLaunchProvider smoke test (M4-D) and a vertical slice (M6) are green.",
+        "Only_CompositionRoot_MayReference_ConcreteProviders architecture test is active and green."
+      ],
+      "completed_criteria": [],
       "adr": "ADR-012",
-      "architecture_tests": ["Only_CompositionRoot_MayReference_ConcreteProviders", "Pages_Resolve_Providers_Through_Registry"]
+      "architecture_tests": ["Only_CompositionRoot_MayReference_ConcreteProviders", "Pages_Resolve_Providers_Through_Registry"],
+      "last_updated": "2026-07-11"
     },
     {
       "id": "C-003",
       "title": "IGitProvider family",
       "status": "Accepted",
+      "completion_status": "Planned",
       "layer": 1,
       "category": "ProviderModel",
       "description": "Providers that read and operate on source control (Git).",
+      "product_outcome": "The platform can read repository state, list branches, and compute diffs through a registered IGitProvider, so the worktree, review, and disposition surfaces can render Git data without bypassing the registry.",
       "depends_on": ["C-001"],
       "consumed_by": ["C-005"],
       "delivered_by_milestone": "M4-D",
       "consumed_by_milestones": ["M5", "M6", "M7", "M8"],
+      "delivered_by_tasks": [],
+      "next_task": null,
+      "blocked_by": [],
+      "evidence": {
+        "plans": [],
+        "reports": [],
+        "commits": [],
+        "tests": [],
+        "source_paths": []
+      },
+      "acceptance_criteria": [
+        "IGitProvider extends IProvider; StatusAsync / DiffAsync / LogAsync return a typed result.",
+        "GitProvider (M4-D) smoke test is green; composition-root architecture test is active.",
+        "IWorktreeProvider (C-005) consumes IGitProvider through the family-scoped registry."
+      ],
+      "completed_criteria": [],
       "adr": "ADR-012",
-      "architecture_tests": ["Only_CompositionRoot_MayReference_ConcreteProviders", "NativeProviders_Use_Contracts_Not_Implementations"]
+      "architecture_tests": ["Only_CompositionRoot_MayReference_ConcreteProviders", "NativeProviders_Use_Contracts_Not_Implementations"],
+      "last_updated": "2026-07-11"
     },
     {
       "id": "C-004",
       "title": "ITerminalProvider family",
       "status": "Accepted",
+      "completion_status": "Planned",
       "layer": 1,
       "category": "ProviderModel",
       "description": "Providers that run shell commands (PowerShell, Windows Terminal, WSL, Git Bash).",
+      "product_outcome": "The platform can open a terminal in the developer's preferred shell through a registered ITerminalProvider, so the user can drop into a worktree from the application without leaving it.",
       "depends_on": ["C-001"],
       "consumed_by": [],
       "delivered_by_milestone": "M6",
       "consumed_by_milestones": ["M6", "M7", "M8"],
+      "delivered_by_tasks": [],
+      "next_task": null,
+      "blocked_by": [],
+      "evidence": {
+        "plans": [],
+        "reports": [],
+        "commits": [],
+        "tests": [],
+        "source_paths": []
+      },
+      "acceptance_criteria": [
+        "ITerminalProvider extends IProvider; OpenAsync returns a typed session descriptor.",
+        "NativeTerminalProvider smoke test (M6) is green; composition-root architecture test is active."
+      ],
+      "completed_criteria": [],
       "adr": "ADR-012",
-      "architecture_tests": ["Only_CompositionRoot_MayReference_ConcreteProviders"]
+      "architecture_tests": ["Only_CompositionRoot_MayReference_ConcreteProviders"],
+      "last_updated": "2026-07-11"
     },
     {
       "id": "C-005",
       "title": "IWorktreeProvider family",
       "status": "Accepted",
+      "completion_status": "Planned",
       "layer": 1,
       "category": "ProviderModel",
       "description": "Providers that create and manage isolated Git worktrees (native Git worktree, Treehouse).",
+      "product_outcome": "The platform can create, list, and dispose isolated Git worktrees through a registered IWorktreeProvider, so every run gets its own working tree without contaminating the developer's main checkout.",
       "depends_on": ["C-001", "C-003"],
       "consumed_by": ["C-009", "C-021"],
       "delivered_by_milestone": "M5",
       "consumed_by_milestones": ["M6", "M7", "M8"],
+      "delivered_by_tasks": [],
+      "next_task": null,
+      "blocked_by": [],
+      "evidence": {
+        "plans": [],
+        "reports": [],
+        "commits": [],
+        "tests": [],
+        "source_paths": []
+      },
+      "acceptance_criteria": [
+        "IWorktreeProvider extends IProvider; CreateAsync / ListAsync / DisposeAsync return a typed Worktree handle.",
+        "NativeWorktreeProvider (M5) smoke test is green; consumes IGitProvider through the family-scoped registry.",
+        "Treehouse is integrated as a second provider (M5 dogfood)."
+      ],
+      "completed_criteria": [],
       "adr": "ADR-012",
-      "architecture_tests": ["Only_CompositionRoot_MayReference_ConcreteProviders", "NativeProviders_Use_Contracts_Not_Implementations"]
+      "architecture_tests": ["Only_CompositionRoot_MayReference_ConcreteProviders", "NativeProviders_Use_Contracts_Not_Implementations"],
+      "last_updated": "2026-07-11"
     },
     {
       "id": "C-006",
       "title": "IQualityGateProvider family",
       "status": "Accepted",
+      "completion_status": "Planned",
       "layer": 1,
       "category": "ProviderModel",
       "description": "Providers that run a quality gate against a worktree (No Mistakes, built-in pass-through or disabled provider).",
+      "product_outcome": "The platform can run a quality gate against an isolated worktree through a registered IQualityGateProvider; the gate's pass / fail is rendered in the run surface and is part of the worktree's disposition.",
       "depends_on": ["C-001"],
       "consumed_by": ["C-008"],
       "delivered_by_milestone": "M7",
       "consumed_by_milestones": ["M7", "M8"],
+      "delivered_by_tasks": [],
+      "next_task": null,
+      "blocked_by": [],
+      "evidence": {
+        "plans": [],
+        "reports": [],
+        "commits": [],
+        "tests": [],
+        "source_paths": []
+      },
+      "acceptance_criteria": [
+        "IQualityGateProvider extends IProvider; RunAsync returns a typed QualityGateResult.",
+        "NativeQualityGateProvider (M7) and No Mistakes (M7 dogfood) are wired through the composition root.",
+        "No_Secrets_In_Configuration and No_Secrets_In_Logs architecture tests are active and green."
+      ],
+      "completed_criteria": [],
       "adr": "ADR-012",
-      "architecture_tests": ["Only_CompositionRoot_MayReference_ConcreteProviders", "Pages_Resolve_Providers_Through_Registry", "No_Secrets_In_Configuration", "No_Secrets_In_Logs"]
+      "architecture_tests": ["Only_CompositionRoot_MayReference_ConcreteProviders", "Pages_Resolve_Providers_Through_Registry", "No_Secrets_In_Configuration", "No_Secrets_In_Logs"],
+      "last_updated": "2026-07-11"
     },
     {
       "id": "C-007",
       "title": "IReviewProvider family",
       "status": "Accepted",
+      "completion_status": "Planned",
       "layer": 1,
       "category": "ProviderModel",
       "description": "Providers that review an artefact (native HTML review, Lavish Axi).",
+      "product_outcome": "The platform can route an artefact (a design-system page, a generated report) to a registered IReviewProvider; the review's findings are rendered and persisted as part of the artefact's history.",
       "depends_on": ["C-001"],
       "consumed_by": [],
       "delivered_by_milestone": "M7",
       "consumed_by_milestones": ["M7", "M8"],
+      "delivered_by_tasks": [],
+      "next_task": null,
+      "blocked_by": [],
+      "evidence": {
+        "plans": [],
+        "reports": [],
+        "commits": [],
+        "tests": [],
+        "source_paths": []
+      },
+      "acceptance_criteria": [
+        "IReviewProvider extends IProvider; ReviewAsync returns a typed ReviewReport.",
+        "NativeReviewProvider (M7) is the baseline; Lavish Axi is wired as a second provider once installed.",
+        "No_Secrets_In_Configuration and No_Secrets_In_Logs architecture tests are active and green."
+      ],
+      "completed_criteria": [],
       "adr": "ADR-012",
-      "architecture_tests": ["Only_CompositionRoot_MayReference_ConcreteProviders", "Pages_Resolve_Providers_Through_Registry", "No_Secrets_In_Configuration", "No_Secrets_In_Logs"]
+      "architecture_tests": ["Only_CompositionRoot_MayReference_ConcreteProviders", "Pages_Resolve_Providers_Through_Registry", "No_Secrets_In_Configuration", "No_Secrets_In_Logs"],
+      "last_updated": "2026-07-11"
     },
     {
       "id": "C-008",
       "title": "IAutonomousLoopProvider family",
       "status": "Accepted",
+      "completion_status": "Planned",
       "layer": 1,
       "category": "ProviderModel",
       "description": "Providers that perform bounded autonomous iteration (GNHF).",
+      "product_outcome": "The platform can drive a bounded series of agent launches and quality gates under a registered IAutonomousLoopProvider; the loop is observable, cancellable, and recoverable.",
       "depends_on": ["C-001", "C-002", "C-006"],
       "consumed_by": ["C-009"],
       "delivered_by_milestone": "M8",
       "consumed_by_milestones": ["M8"],
+      "delivered_by_tasks": [],
+      "next_task": null,
+      "blocked_by": [],
+      "evidence": {
+        "plans": [],
+        "reports": [],
+        "commits": [],
+        "tests": [],
+        "source_paths": []
+      },
+      "acceptance_criteria": [
+        "IAutonomousLoopProvider extends IProvider; RunAsync returns an IAsyncEnumerable<LoopEvent>.",
+        "NativeAutonomousLoopProvider (M8) and GNHF (M8 dogfood) are wired through the composition root.",
+        "NativeProviders_Use_ApplicationServices_Not_Implementation architecture test is active and green."
+      ],
+      "completed_criteria": [],
       "adr": "ADR-012",
-      "architecture_tests": ["Only_CompositionRoot_MayReference_ConcreteProviders", "NativeProviders_Use_ApplicationServices_Not_Implementation"]
+      "architecture_tests": ["Only_CompositionRoot_MayReference_ConcreteProviders", "NativeProviders_Use_ApplicationServices_Not_Implementation"],
+      "last_updated": "2026-07-11"
     },
     {
       "id": "C-009",
       "title": "IOrchestrationProvider family",
       "status": "Accepted",
+      "completion_status": "Planned",
       "layer": 1,
       "category": "ProviderModel",
       "description": "Providers that perform multi-agent orchestration (native orchestration, Firstmate through WSL).",
+      "product_outcome": "The platform can coordinate a graph of agents, worktrees, and gates under a registered IOrchestrationProvider; the orchestration is observable, recoverable, and bounded.",
       "depends_on": ["C-001", "C-005", "C-008"],
       "consumed_by": [],
       "delivered_by_milestone": "M8",
       "consumed_by_milestones": ["M8"],
+      "delivered_by_tasks": [],
+      "next_task": null,
+      "blocked_by": [],
+      "evidence": {
+        "plans": [],
+        "reports": [],
+        "commits": [],
+        "tests": [],
+        "source_paths": []
+      },
+      "acceptance_criteria": [
+        "IOrchestrationProvider extends IProvider; CoordinateAsync returns an IAsyncEnumerable<OrchestrationEvent>.",
+        "NativeOrchestrationProvider (M8) and Firstmate through WSL (M8 dogfood) are wired through the composition root.",
+        "NativeProviders_Use_ApplicationServices_Not_Implementation architecture test is active and green."
+      ],
+      "completed_criteria": [],
       "adr": "ADR-012",
-      "architecture_tests": ["Only_CompositionRoot_MayReference_ConcreteProviders", "NativeProviders_Use_ApplicationServices_Not_Implementation"]
+      "architecture_tests": ["Only_CompositionRoot_MayReference_ConcreteProviders", "NativeProviders_Use_ApplicationServices_Not_Implementation"],
+      "last_updated": "2026-07-11"
     },
     {
       "id": "C-010",
       "title": "IProviderRegistry and family-scoped registries",
       "status": "Accepted",
+      "completion_status": "Planned",
       "layer": 1,
       "category": "ProviderModel",
       "description": "The cross-family registry and the eight family-scoped registries. Enumerate registered providers, resolve by ProviderId, apply Enabled/Healthy filter.",
+      "product_outcome": "Every family has a typed registry; pages and services resolve providers by ProviderId, never by importing a concrete implementation directly. The cross-family registry surfaces the health state to the dashboard.",
       "depends_on": ["C-001"],
       "consumed_by": ["C-018"],
       "delivered_by_milestone": "M4-C",
       "consumed_by_milestones": ["M4-D", "M5", "M6", "M7", "M8"],
+      "delivered_by_tasks": [],
+      "next_task": null,
+      "blocked_by": [],
+      "evidence": {
+        "plans": [],
+        "reports": [],
+        "commits": [],
+        "tests": [],
+        "source_paths": []
+      },
+      "acceptance_criteria": [
+        "IProviderRegistry and the eight family-scoped registries exist with Enumerate / Resolve / SetEnabled.",
+        "Pages_Resolve_Providers_Through_Registry and Pages_DoNotReference_ConcreteProviders architecture tests are active and green.",
+        "Fake providers for every family are wired in the composition root (M4-C)."
+      ],
+      "completed_criteria": [],
       "adr": "ADR-012, ADR-016",
-      "architecture_tests": ["Only_CompositionRoot_MayReference_ConcreteProviders", "Pages_Resolve_Providers_Through_Registry", "Pages_DoNotReference_ConcreteProviders", "Application_DoesNotReference_ConcreteProviders", "Components_DoNotInject_ConcreteProviders"]
+      "architecture_tests": ["Only_CompositionRoot_MayReference_ConcreteProviders", "Pages_Resolve_Providers_Through_Registry", "Pages_DoNotReference_ConcreteProviders", "Application_DoesNotReference_ConcreteProviders", "Components_DoNotInject_ConcreteProviders"],
+      "last_updated": "2026-07-11"
     },
     {
       "id": "C-011",
       "title": "Composition root",
       "status": "Accepted",
+      "completion_status": "Planned",
       "layer": 1,
       "category": "ProviderModel",
       "description": "The set of files in AiEng.Platform.App/Composition/ that wire concrete provider implementations into DI. The only place in the solution that may reference Providers.<X> projects directly.",
+      "product_outcome": "Every concrete provider implementation is wired into DI in a single, audited location; Pages, Components, Application, and Domain never reference a concrete provider directly.",
       "depends_on": ["C-010"],
       "consumed_by": [],
       "delivered_by_milestone": "M4-C",
       "consumed_by_milestones": ["M4-D", "M5", "M6", "M7", "M8"],
+      "delivered_by_tasks": [],
+      "next_task": null,
+      "blocked_by": [],
+      "evidence": {
+        "plans": [],
+        "reports": [],
+        "commits": [],
+        "tests": [],
+        "source_paths": []
+      },
+      "acceptance_criteria": [
+        "AiEng.Platform.App/Composition/ exists; only this folder references Providers.<X> projects.",
+        "ServiceCollectionExtensions.AddProviderComposition() is the single composition extension; called once in Program.cs.",
+        "Only_CompositionRoot_MayReference_ConcreteProviders architecture test is active and green."
+      ],
+      "completed_criteria": [],
       "adr": "ADR-016",
-      "architecture_tests": ["Only_CompositionRoot_MayReference_ConcreteProviders", "Pages_DoNotReference_ConcreteProviders", "Application_DoesNotReference_ConcreteProviders", "Components_DoNotInject_ConcreteProviders"]
+      "architecture_tests": ["Only_CompositionRoot_MayReference_ConcreteProviders", "Pages_DoNotReference_ConcreteProviders", "Application_DoesNotReference_ConcreteProviders", "Components_DoNotInject_ConcreteProviders"],
+      "last_updated": "2026-07-11"
     },
     {
       "id": "C-012",
       "title": "IProcessRunner",
       "status": "Accepted",
+      "completion_status": "Planned",
       "layer": 0,
       "category": "Infrastructure",
       "description": "The only legal caller of Process.Start in the platform. Exposes RunAsync (streaming) and RunToCompletionAsync (one-shot).",
+      "product_outcome": "Every process the platform spawns goes through IProcessRunner; no module outside AiEng.Platform.Infrastructure calls Process.Start directly.",
       "depends_on": [],
       "consumed_by": ["C-003", "C-015"],
       "delivered_by_milestone": "M4-A",
       "consumed_by_milestones": ["M4-D", "M5", "M6", "M7", "M8"],
+      "delivered_by_tasks": [],
+      "next_task": null,
+      "blocked_by": [],
+      "evidence": {
+        "plans": [],
+        "reports": [],
+        "commits": [],
+        "tests": [],
+        "source_paths": []
+      },
+      "acceptance_criteria": [
+        "AiEng.Platform.Infrastructure is created (M4-A); IProcessRunner has RunAsync and RunToCompletionAsync.",
+        "No_DirectProcessStart_OutsideInfrastructure architecture test is active and green."
+      ],
+      "completed_criteria": [],
       "adr": "ADR-011, ADR-016",
-      "architecture_tests": ["No_DirectProcessStart_OutsideInfrastructure"]
+      "architecture_tests": ["No_DirectProcessStart_OutsideInfrastructure"],
+      "last_updated": "2026-07-11"
     },
     {
       "id": "C-013",
       "title": "ICredentialVault",
       "status": "Accepted",
+      "completion_status": "Planned",
       "layer": 0,
       "category": "Infrastructure",
       "description": "The contract for reading and writing secrets. Real backing store is Windows Credential Manager.",
+      "product_outcome": "Every secret the platform reads or writes goes through ICredentialVault; the application never embeds a credential in configuration, code, or a log line.",
       "depends_on": [],
       "consumed_by": ["C-006", "C-007"],
       "delivered_by_milestone": "M4-A",
       "consumed_by_milestones": ["M4-D", "M5", "M6", "M7", "M8"],
+      "delivered_by_tasks": [],
+      "next_task": null,
+      "blocked_by": [],
+      "evidence": {
+        "plans": [],
+        "reports": [],
+        "commits": [],
+        "tests": [],
+        "source_paths": []
+      },
+      "acceptance_criteria": [
+        "AiEng.Platform.Infrastructure is created (M4-A); ICredentialVault is implemented on Windows Credential Manager.",
+        "No_Secrets_In_Configuration and No_Secrets_In_Logs architecture tests are active and green."
+      ],
+      "completed_criteria": [],
       "adr": "ADR-011",
-      "architecture_tests": ["No_Secrets_In_Logs", "No_Secrets_In_Configuration"]
+      "architecture_tests": ["No_Secrets_In_Logs", "No_Secrets_In_Configuration"],
+      "last_updated": "2026-07-11"
     },
     {
       "id": "C-014",
       "title": "IClock",
       "status": "Accepted",
+      "completion_status": "Planned",
       "layer": 0,
       "category": "Infrastructure",
       "description": "The time abstraction. Exposes UtcNow. Used by every service that produces a timestamp.",
+      "product_outcome": "Every service that produces a timestamp reads it from IClock; tests can freeze time deterministically by substituting a fake clock.",
       "depends_on": [],
       "consumed_by": [],
       "delivered_by_milestone": "M4-A",
       "consumed_by_milestones": ["M4-D", "M5", "M6", "M7", "M8"],
+      "delivered_by_tasks": [],
+      "next_task": null,
+      "blocked_by": [],
+      "evidence": {
+        "plans": [],
+        "reports": [],
+        "commits": [],
+        "tests": [],
+        "source_paths": []
+      },
+      "acceptance_criteria": [
+        "AiEng.Platform.Infrastructure is created (M4-A); IClock is implemented and injected into every service that produces a timestamp."
+      ],
+      "completed_criteria": [],
       "adr": "ADR-011",
-      "architecture_tests": []
+      "architecture_tests": [],
+      "last_updated": "2026-07-11"
     },
     {
       "id": "C-015",
       "title": "IHostCapabilitiesService",
       "status": "Accepted",
+      "completion_status": "Planned",
       "layer": 0,
       "category": "Infrastructure",
       "description": "The host's capability detection. Detects git, ollama, powershell.exe, wsl.exe, wt.exe, bash.exe. Produces a typed HostCapabilities report at host startup.",
+      "product_outcome": "At host startup the platform reports which external tools are installed and reachable; the dashboard renders the report and the registry disables providers whose binaries are absent.",
       "depends_on": ["C-012"],
       "consumed_by": ["C-010"],
       "delivered_by_milestone": "M4-B",
       "consumed_by_milestones": ["M4-C", "M4-D", "M5", "M6", "M7", "M8"],
+      "delivered_by_tasks": [],
+      "next_task": null,
+      "blocked_by": [],
+      "evidence": {
+        "plans": [],
+        "reports": [],
+        "commits": [],
+        "tests": [],
+        "source_paths": []
+      },
+      "acceptance_criteria": [
+        "IHostCapabilitiesService detects git, ollama, powershell.exe, wsl.exe, wt.exe, bash.exe at host startup.",
+        "Capabilities_Resolved_Through_Service architecture test is active and green."
+      ],
+      "completed_criteria": [],
       "adr": null,
-      "architecture_tests": ["Capabilities_Resolved_Through_Service"]
+      "architecture_tests": ["Capabilities_Resolved_Through_Service"],
+      "last_updated": "2026-07-11"
     },
     {
       "id": "C-016",
       "title": "IProjectService and IProjectStore",
       "status": "Accepted",
+      "completion_status": "Planned",
       "layer": 2,
       "category": "DomainOrchestration",
       "description": "The application service for projects and the persistence contract. M3 in-memory; M4-A durable.",
+      "product_outcome": "A developer can register a Git repository (a folder on disk) through the project service; the platform owns the Project entity end-to-end (register, list, rename, delete).",
       "depends_on": [],
       "consumed_by": ["C-005"],
       "delivered_by_milestone": "M3",
       "consumed_by_milestones": ["M4-A", "M4-B", "M4-C", "M4-D", "M5", "M6", "M7", "M8"],
+      "delivered_by_tasks": [],
+      "next_task": null,
+      "blocked_by": [],
+      "evidence": {
+        "plans": [],
+        "reports": [],
+        "commits": [],
+        "tests": [],
+        "source_paths": []
+      },
+      "acceptance_criteria": [
+        "IProjectService and IProjectStore exist; in-memory store lands in M3, durable on-disk store lands in M4-A.",
+        "Providers_Resolve_Project_Through_Service architecture test is active and green."
+      ],
+      "completed_criteria": [],
       "adr": null,
-      "architecture_tests": ["Providers_Resolve_Project_Through_Service"]
+      "architecture_tests": ["Providers_Resolve_Project_Through_Service"],
+      "last_updated": "2026-07-11"
     },
     {
       "id": "C-017",
       "title": "IHistoryStore",
       "status": "Accepted",
+      "completion_status": "Planned",
       "layer": 2,
       "category": "DomainOrchestration",
       "description": "The persistence contract for runs, reviews, gates, and dispositions. Append-only event log.",
+      "product_outcome": "Every run, every review, every gate, and every disposition is persisted to IHistoryStore; the history survives an application restart and is queryable from the dashboard.",
       "depends_on": [],
       "consumed_by": [],
       "delivered_by_milestone": "M6",
       "consumed_by_milestones": ["M6", "M7", "M8"],
+      "delivered_by_tasks": [],
+      "next_task": null,
+      "blocked_by": [],
+      "evidence": {
+        "plans": [],
+        "reports": [],
+        "commits": [],
+        "tests": [],
+        "source_paths": []
+      },
+      "acceptance_criteria": [
+        "IHistoryStore is an append-only event log; events cover run, review, gate, and disposition.",
+        "History_Routed_Through_Store architecture test is active and green."
+      ],
+      "completed_criteria": [],
       "adr": null,
-      "architecture_tests": ["History_Routed_Through_Store"]
+      "architecture_tests": ["History_Routed_Through_Store"],
+      "last_updated": "2026-07-11"
     },
     {
       "id": "C-018",
       "title": "IProviderHealthService",
       "status": "Accepted",
+      "completion_status": "Planned",
       "layer": 1,
       "category": "ProviderModel",
       "description": "The periodic health-check service. Polls every registered provider and reports ProviderHealth (Healthy, Degraded, Unhealthy) through the registries.",
+      "product_outcome": "Every registered provider is polled periodically; the dashboard renders the health state; the registries hide Unhealthy providers from selection.",
       "depends_on": ["C-010"],
       "consumed_by": [],
       "delivered_by_milestone": "M4-C",
       "consumed_by_milestones": ["M4-D", "M5", "M6", "M7", "M8"],
+      "delivered_by_tasks": [],
+      "next_task": null,
+      "blocked_by": [],
+      "evidence": {
+        "plans": [],
+        "reports": [],
+        "commits": [],
+        "tests": [],
+        "source_paths": []
+      },
+      "acceptance_criteria": [
+        "IProviderHealthService polls every registered provider on a configurable interval; reports ProviderHealth.",
+        "The cross-family registry filters Unhealthy providers from selection by default."
+      ],
+      "completed_criteria": [],
       "adr": null,
-      "architecture_tests": []
+      "architecture_tests": [],
+      "last_updated": "2026-07-11"
     },
     {
       "id": "C-019",
       "title": "INavigationService",
       "status": "Accepted",
+      "completion_status": "Ready",
       "layer": 2,
       "category": "DomainOrchestration",
       "description": "The route-aware navigation service. The sidebar and the breadcrumb are data-driven from a route registry, not hard-coded.",
+      "product_outcome": "Every page is reachable through the navigation registry; the sidebar and the breadcrumb are data-driven from a single source of truth; adding a page requires only a RouteMetadata attribute.",
       "depends_on": [],
       "consumed_by": [],
       "delivered_by_milestone": "M2",
       "consumed_by_milestones": ["M3", "M4-A", "M4-B", "M4-C", "M4-D", "M5", "M6", "M7", "M8"],
+      "delivered_by_tasks": ["T-001"],
+      "next_task": "T-002",
+      "blocked_by": [],
+      "evidence": {
+        "plans": [".ai/plans/M2.1-application-shell-skeleton.md", ".ai/plans/M2.2-navigation-registry-sidebar.md"],
+        "reports": ["implementation-report-m2-1-application-shell-foundation.md"],
+        "commits": ["de082fd", "ef1063c"],
+        "tests": ["tests/AiEng.Platform.ComponentTests/Layouts/AppLayoutTests.cs", "tests/AiEng.Platform.ComponentTests/Layouts/AppEmptyLayoutTests.cs", "tests/AiEng.Platform.ComponentTests/Shell/AppSidebarSlotTests.cs", "tests/AiEng.Platform.ComponentTests/Shell/AppTopBarSlotTests.cs"],
+        "source_paths": ["src/AiEng.Platform.App/Layouts/AppLayout.razor", "src/AiEng.Platform.App/Layouts/AppEmptyLayout.razor", "src/AiEng.Platform.App/Components/Shell/AppShellRegion.razor", "src/AiEng.Platform.App/Components/Shell/AppSidebarSlot.razor", "src/AiEng.Platform.App/Components/Shell/AppTopBarSlot.razor"]
+      },
+      "acceptance_criteria": [
+        "INavigationRegistry, RouteMetadata, RouteRegistry exist; the AppSidebar is data-driven from the registry.",
+        "Every page declares its route metadata through RouteMetadataAttribute.",
+        "Pages_AreReachable_Through_Registry architecture test is active and green."
+      ],
+      "completed_criteria": [
+        "AppLayout, AppEmptyLayout, AppShellRegion, AppSidebarSlot, AppTopBarSlot exist (M2.1 — the shell foundation the navigation registry composes against)."
+      ],
       "adr": null,
-      "architecture_tests": ["Pages_AreReachable_Through_Registry"]
+      "architecture_tests": ["Pages_AreReachable_Through_Registry"],
+      "last_updated": "2026-07-11"
     },
     {
       "id": "C-020",
       "title": "Design system catalogue",
       "status": "Done",
+      "completion_status": "Verified",
       "layer": 3,
       "category": "UserSurface",
       "description": "The catalogue of reusable Blazor components documented in docs/design-system.md. Every reusable component has a public surface, a class slot assignment, and a versioning rule.",
+      "product_outcome": "Every reusable Blazor component is documented in docs/design-system.md with a public surface, a class slot, and a versioning rule; the /design-system page renders the catalogue from the docs.",
       "depends_on": [],
       "consumed_by": [],
       "delivered_by_milestone": "M1",
       "consumed_by_milestones": ["M2", "M3", "M4-A", "M4-B", "M4-C", "M4-D", "M5", "M6", "M7", "M8"],
+      "delivered_by_tasks": ["T-013"],
+      "next_task": null,
+      "blocked_by": [],
+      "evidence": {
+        "plans": [".ai/plans/M1.1-frontend-foundation.md", ".ai/plans/M1.2-design-system-core.md"],
+        "reports": ["implementation-report-m1-closeout.md", "implementation-report-m0.5-architecture-refinement.md"],
+        "commits": ["1722bd235830cfd8b180191953116c058c92edef", "2ba1fad3cc45bee513ba38c7269e024bf8667ef9", "1d98acd"],
+        "tests": ["tests/AiEng.Platform.ComponentTests/DesignSystemTests.cs"],
+        "source_paths": ["src/AiEng.Platform.App/Components/", "docs/design-system.md", "docs/component-guidelines.md"]
+      },
+      "acceptance_criteria": [
+        "docs/design-system.md is the catalogue; every reusable component has a public surface, a class slot, and a versioning rule.",
+        "Pages_Use_DesignSystem_Components_Not_DOM and App_DoesNotReference_Providers_Implementations architecture tests are active and green.",
+        "The /design-system page renders the catalogue."
+      ],
+      "completed_criteria": [
+        "docs/design-system.md is the catalogue; every reusable component has a public surface, a class slot, and a versioning rule.",
+        "Pages_Use_DesignSystem_Components_Not_DOM and App_DoesNotReference_Providers_Implementations architecture tests are active and green.",
+        "The /design-system page renders the catalogue."
+      ],
       "adr": "ADR-014, ADR-015",
-      "architecture_tests": ["Pages_Use_DesignSystem_Components_Not_DOM", "App_DoesNotReference_Providers_Implementations"]
+      "architecture_tests": ["Pages_Use_DesignSystem_Components_Not_DOM", "App_DoesNotReference_Providers_Implementations"],
+      "last_updated": "2026-07-11"
     },
     {
       "id": "C-021",
       "title": "IStreamingChannel",
       "status": "Accepted",
+      "completion_status": "Planned",
       "layer": 2,
       "category": "DomainOrchestration",
       "description": "The streaming channel for long-running work. Pages subscribe to IStreamingChannel; the channel subscribes to a provider's IAsyncEnumerable.",
+      "product_outcome": "Pages render a long-running run's stdout / stderr in real time through IStreamingChannel; the channel abstracts the provider's IAsyncEnumerable so a page does not depend on a particular runtime.",
       "depends_on": [],
       "consumed_by": [],
       "delivered_by_milestone": "M6",
       "consumed_by_milestones": ["M6", "M7", "M8"],
+      "delivered_by_tasks": [],
+      "next_task": null,
+      "blocked_by": [],
+      "evidence": {
+        "plans": [],
+        "reports": [],
+        "commits": [],
+        "tests": [],
+        "source_paths": []
+      },
+      "acceptance_criteria": [
+        "IStreamingChannel exposes SubscribeAsync; the channel wraps a provider's IAsyncEnumerable without leaking it to the page.",
+        "The run-observation page renders the stream in real time without blocking the Blazor render thread."
+      ],
+      "completed_criteria": [],
       "adr": null,
-      "architecture_tests": []
+      "architecture_tests": [],
+      "last_updated": "2026-07-11"
     }
   ]
 }

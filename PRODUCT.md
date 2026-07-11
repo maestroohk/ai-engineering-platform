@@ -191,6 +191,111 @@ capability-oriented provider families defined in
 | `IAutonomousLoopProvider` | Drive bounded autonomous loops                           | `NativeAutonomousLoopProvider` (M8) | GNHF (M5 / M8 dogfood)               |
 | `IOrchestrationProvider`  | Coordinate multiple agents and gates                     | `NativeOrchestrationProvider` (M8) | Firstmate through WSL (M8 dogfood)   |
 
+# Product Completion Model
+
+> **The structured answer to "what product are we building, how
+> far are we, and what is the next step?"** This section
+> mirrors the structured state in
+> [`.ai/state/capabilities.json`](./.ai/state/capabilities.json),
+> the milestone slice block in
+> [`.ai/state/milestones.json`](./.ai/state/milestones.json),
+> and the task queue in
+> [`.ai/state/tasks.json`](./.ai/state/tasks.json). The
+> per-step table below is hand-derived from those JSON files;
+> no progress percentage is invented. The
+> `Status`, `Continue`, `Approve`, `Resume`, and `Finish`
+> commands defined in
+> [`.ai/commands.md`](./.ai/commands.md) read the same JSON
+> files and answer the same questions.
+
+## Status Definitions
+
+Each capability carries a `completion_status` field with one
+of eight values. The mapping from the canonical 5-value
+`status` (the `Done / Accepted / Proposed / Deferred / Rejected`
+field on every capability) to the 8-value `completion_status`
+is the single source of truth for the
+`Status` / `Continue` / `Approve` / `Resume` / `Finish`
+commands.
+
+| `completion_status` | Meaning |
+| --- | --- |
+| `NotStarted` | The capability is not in `capabilities.json` yet; the product will need it, but it has not been admitted to the graph. |
+| `Planned` | The capability is `Accepted`, its `delivered_by_milestone` is `Planned`, and there is no plan yet — or the plan stub is `Draft`. The work is sequenced for a milestone but is not on the queue. |
+| `Ready` | The capability is `Accepted`, its `delivered_by_milestone` is `Planned` or `Active`, a `Ready` or `Awaiting Approval` plan exists, and the task that advances the capability is in `tasks.json` with status `Ready`. Dependencies are satisfied. |
+| `InProgress` | A task with this capability in its `delivered_by_tasks` is `In Progress` in `tasks.json`. Implementation has started on a branch. |
+| `Delivered` | Implementation is merged on a branch with a commit; the implementation report exists; the `milestones.json` evidence array lists the commit. The receipts have not been linked in every consumer, or one of the consumer milestones is still open. |
+| `Verified` | The capability is `Delivered`, **and** every `consumed_by` dependency is also `Verified`, **and** the receipts are linked. |
+| `Blocked` | A `Blocked` task in `tasks.json` references the capability in its `blocker` field. The next task cannot start until the blocker is resolved. |
+| `Deferred` | The capability's `delivered_by_milestone` is `Deferred` in `milestones.json`. The work is in the backlog, not in the active queue. |
+
+## Mapping Rule
+
+The `completion_status` is derived from the canonical
+`status`, the `delivered_by_milestone` status in
+`milestones.json`, the matching plan status (if any), and
+the matching task status (if any) in `tasks.json`. The
+derivation is rule-based, not hand-typed, and is recorded
+per capability in
+[`.ai/state/capabilities.json`](./.ai/state/capabilities.json).
+
+| Existing state | Mapped `completion_status` | Reason |
+| --- | --- | --- |
+| `status: Done` | `Verified` | The canonical state is `Done`; the capability is implemented, validated, and evidenced in the closed-milestone receipts. |
+| `status: Accepted`, milestone `Done`, evidence linked in `milestones.json`, all `consumed_by` deps `Verified` | `Verified` | The capability is in place and consumed by closed milestones. |
+| `status: Accepted`, milestone `Done`, no evidence link in `milestones.json` | `Delivered` | The implementation is recorded but the receipts have not been linked. |
+| `status: Accepted`, milestone `Planned` or `Active`, plan `Ready` or `Awaiting Approval`, task `Ready` in `tasks.json` | `Ready` | The plan is on the queue; dependencies are satisfied. |
+| `status: Accepted`, milestone `Planned`, plan `Draft` (or no plan yet) | `Planned` | Sequenced for a milestone, plan not yet promoted. |
+| `status: Accepted`, task `Blocked` in `tasks.json` references the capability in its `blocker` field | `Blocked` | A named blocker must be resolved. |
+| `status: Accepted`, milestone `Deferred` | `Deferred` | The roadmap defers the milestone. |
+| Not in `capabilities.json` | `NotStarted` | Reserved for capabilities the product will need but which have not yet been admitted to the graph. |
+
+## Per-Step Checklist (User Journey)
+
+Each row below maps a step in the **Core User Journey** (above)
+to the capabilities that make it work, the current state of
+those capabilities, the milestone that delivers the missing
+ones, the blocking dependencies, and the evidence that
+proves the step is complete. The required-capabilities list
+is the union of the matching feature's
+`depends_on_capabilities` in
+[`.ai/state/features.json`](./.ai/state/features.json);
+`Delivered / Required` counts the capabilities whose
+`completion_status` is `Verified` or `Delivered`.
+
+| # | Step | Required C-IDs | Status (current) | Delivered / Required | Milestone | Dependencies | Evidence required |
+| - | ---- | -------------- | ---------------- | -------------------- | --------- | ------------ | ----------------- |
+| 1 | **Register project** | C-016, C-019, C-020 | Verified, Ready, Verified | **2 / 3** | M3 | C-016 (Planned) | IProjectService + durable IProjectStore (M4-A); project-registration page rendered through INavigationService. |
+| 2 | **Create task** | C-019, C-020 (and F-001) | Ready, Verified | **1 / 2** | M3 | C-016 (Planned) | Task entity + persistence (M3); task-create page in the navigation registry. |
+| 3 | **Prepare worktree** | C-003, C-005, C-019, C-020 | Planned, Planned, Ready, Verified | **1 / 4** | M5 | C-003 (Planned) | IWorktreeProvider + IGitProvider wired through the family-scoped registry; worktree page composed from the navigation registry. |
+| 4 | **Choose runtime and model** | C-002, C-010, C-019, C-020 | Planned, Planned, Ready, Verified | **1 / 4** | M4-C, M6 | C-002, C-010 (Planned) | IProviderRegistry (M4-C) + IAgentRuntimeProvider smoke (M4-D) and runtime picker page (M6) in the navigation registry. |
+| 5 | **Launch agent** | C-002, C-012, C-019, C-020, C-021 | Planned, Planned, Ready, Verified, Planned | **1 / 5** | M4-D, M6 | C-002, C-012, C-021 (Planned) | IProcessRunner (M4-A) + IAgentRuntimeProvider smoke (M4-D) + run-launch page (M6) + IStreamingChannel (M6). |
+| 6 | **Observe execution** | C-002, C-012, C-019, C-020, C-021 | Planned, Planned, Ready, Verified, Planned | **1 / 5** | M6 | C-002, C-012, C-021 (Planned) | IStreamingChannel (M6); run-observation page in the navigation registry. |
+| 7 | **Stop / cancel / resume / recover** | C-002, C-012, C-019, C-020, C-021 | Planned, Planned, Ready, Verified, Planned | **1 / 5** | M6 | C-002, C-012, C-021 (Planned) | Cancellation token owned by the run service (M6); IHistoryStore persists the transition. |
+| 8 | **Inspect diff** | C-003, C-019, C-020 | Planned, Ready, Verified | **1 / 3** | M6, M7 | C-003 (Planned) | IGitProvider diff/log (M4-D) + diff-inspector page (M6/M7) in the navigation registry. |
+| 9a | **Submit for review** | C-007, C-013, C-019, C-020 | Planned, Planned, Ready, Verified | **1 / 4** | M7 | C-007, C-013 (Planned) | IReviewProvider (M7) + ICredentialVault (M4-A); review-page in the navigation registry. |
+| 9b | **Run quality gate** | C-006, C-013, C-019, C-020 | Planned, Planned, Ready, Verified | **1 / 4** | M7 | C-006, C-013 (Planned) | IQualityGateProvider (M7) + ICredentialVault (M4-A); quality-gate page in the navigation registry. |
+| 10 | **Approve / reject / merge / retain / clean up** | C-003, C-005, C-019, C-020 | Planned, Planned, Ready, Verified | **1 / 4** | M5, M7 | C-003, C-005 (Planned) | IWorktreeProvider dispose (M5) + IGitProvider merge (M4-D) + disposition service (M7); disposition page in the navigation registry. |
+| 12 | **Execution and task history** | C-017, C-019, C-020 | Planned, Ready, Verified | **1 / 3** | M6 | C-017 (Planned) | IHistoryStore (M6); history page in the navigation registry. |
+| 13 | **Bounded autonomous loops** | C-002, C-006, C-008, C-019, C-020 | Planned, Planned, Planned, Ready, Verified | **1 / 5** | M8 | C-002, C-006, C-008 (Planned) | IAutonomousLoopProvider (M8); autonomous-loop page in the navigation registry. |
+| 14 | **Coordinate multiple agents** | C-005, C-008, C-009, C-019, C-020 | Planned, Planned, Planned, Ready, Verified | **1 / 5** | M8 | C-005, C-008, C-009 (Planned) | IOrchestrationProvider (M8); orchestration page in the navigation registry. |
+
+> **Steps 11 and the un-numbered 9c–11 transitions** are
+> covered by step 10's "Approve / reject / merge / retain /
+> clean up" row above. The Core User Journey list in this
+> file counts the steps; this table groups step 9 into
+> review (9a) and quality gate (9b) so each capability
+> dependency is named.
+
+## Overall Progress
+
+`Verified + Delivered` capabilities: **2 of 21** (C-001
+`IProvider base contract`; C-020 `Design system catalogue`).
+The remaining 19 capabilities are sequenced for milestones
+M2 through M8; one (C-019 `INavigationService`) is `Ready`
+(M2.2 plan `Awaiting Approval`; T-002 `Ready`); the other
+18 are `Planned`.
+
 # What the Product Is Not
 
 The product is explicitly **not**:
@@ -238,17 +343,28 @@ The product is successful when:
 
 # Current Delivery Stage
 
-**Active milestone:** M2 — Application Shell and Navigation.
+**Active milestone:** M2 — Application Shell and Navigation
+(`completion_status: Ready` for the `INavigationService`
+capability, C-019; the shell foundation C-020 is
+`Verified`).
 
 **Last closed milestone:** M1 — Design System Core (closed
 2026-07-10; first commits
 `1722bd235830cfd8b180191953116c058c92edef` and
 `2ba1fad3cc45bee513ba38c7269e024bf8667ef9` on `master`).
 
-**Next planned slice:** M2.1 — Application Shell Skeleton
-(plan in
-[`.ai/plans/M2.1-application-shell-skeleton.md`](./.ai/plans/M2.1-application-shell-skeleton.md),
-status `Awaiting Approval`).
+**M2 slices:** M2.1 — Application Shell Foundation
+**Delivered** 2026-07-11 (commits
+`ef1063c`, `de082fd` on
+`feature/m2-1-application-shell`; see
+`implementation-report-m2-1-application-shell-foundation.md`).
+M2.2 — Navigation Registry and Sidebar is the next
+`Ready` slice (plan in
+[`.ai/plans/M2.2-navigation-registry-sidebar.md`](./.ai/plans/M2.2-navigation-registry-sidebar.md)
+status `Awaiting Approval`; T-002 in
+[`.ai/state/tasks.json`](./.ai/state/tasks.json)
+status `Ready`). M2.3, M2.4 remain `Draft` plan stubs;
+M2.5, M2.6 are `Deferred` summary entries.
 
 # Link to Delivery State
 

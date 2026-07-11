@@ -361,6 +361,27 @@ The JSON file
 is the canonical source; this document is the
 human-readable projection.
 
+A capability also carries a derived
+`completion_status` field with one of
+eight values: `NotStarted`, `Planned`,
+`Ready`, `InProgress`, `Delivered`,
+`Verified`, `Blocked`, `Deferred`. The
+`completion_status` is derived from the
+canonical 5-value `status` field, the
+matching milestone's status in
+`milestones.json`, the matching plan
+status (if any), and the matching task
+status (if any) in `tasks.json`. The
+`Status`, `Continue`, `Approve`, `Resume`,
+and `Finish` commands defined in
+[`.ai/commands.md`](./../commands.md) read
+this field; the human-readable
+**Product Completion Model** in
+[`PRODUCT.md`](./../../PRODUCT.md) is the
+projection. The mapping rule is recorded
+in the `completion_status_mapping` object
+at the top of `capabilities.json`.
+
 ---
 
 ## 5. Adding a New Capability
