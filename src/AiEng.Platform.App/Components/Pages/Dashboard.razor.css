@@ -1,0 +1,218 @@
+.app-dashboard-current {
+  margin-bottom: 24px;
+}
+
+.app-dashboard-current-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin: 0;
+}
+
+.app-dashboard-current-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.app-dashboard-current-label {
+  font-size: var(--app-text-xs);
+  line-height: var(--app-text-xs-line);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--app-fg-muted);
+  margin: 0;
+}
+
+.app-dashboard-current-value {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--app-text-base);
+  line-height: var(--app-text-base-line);
+  color: var(--app-fg);
+  margin: 0;
+}
+
+.app-dashboard-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-size: var(--app-text-xs);
+  line-height: var(--app-text-xs-line);
+  font-weight: 600;
+  background-color: var(--app-surface-2);
+  color: var(--app-fg);
+  border: 1px solid var(--app-border);
+}
+
+.app-dashboard-tag[data-status="Verified"],
+.app-dashboard-tag[data-status="Delivered"],
+.app-dashboard-tag[data-status="Done"],
+.app-dashboard-tag[data-status="Active"],
+.app-dashboard-tag[data-status="passing"],
+.app-dashboard-tag[data-status="Ready"] {
+  color: var(--app-success);
+  border-color: var(--app-success);
+}
+
+.app-dashboard-tag[data-status="InProgress"],
+.app-dashboard-tag[data-status="In Progress"],
+.app-dashboard-tag[data-status="Awaiting Approval"] {
+  color: var(--app-info);
+  border-color: var(--app-info);
+}
+
+.app-dashboard-tag[data-status="Blocked"] {
+  color: var(--app-error);
+  border-color: var(--app-error);
+}
+
+.app-dashboard-tag-subtle {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-size: var(--app-text-xs);
+  line-height: var(--app-text-xs-line);
+  color: var(--app-fg-muted);
+  background-color: var(--app-surface-2);
+}
+
+.app-dashboard-mono {
+  font-family: var(--app-font-mono);
+  font-size: 0.92em;
+  color: var(--app-fg);
+  background-color: var(--app-surface-2);
+  padding: 1px 6px;
+  border-radius: var(--app-radius-sm);
+}
+
+.app-dashboard-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+@media (max-width: 1024px) {
+  .app-dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.app-dashboard-col-left,
+.app-dashboard-col-right {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+.app-dashboard-metric {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--app-text-base);
+  line-height: var(--app-text-base-line);
+}
+
+.app-dashboard-subhead {
+  font-size: var(--app-text-sm);
+  line-height: var(--app-text-sm-line);
+  font-weight: 600;
+  color: var(--app-fg-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 16px 0 8px 0;
+}
+
+.app-dashboard-progress-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.app-dashboard-progress-numbers {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 64px;
+  padding: 8px 12px;
+  border-radius: var(--app-radius);
+  background-color: var(--app-surface-2);
+}
+
+.app-dashboard-progress-count {
+  font-size: var(--app-text-2xl);
+  line-height: var(--app-text-2xl-line);
+  font-weight: 700;
+  color: var(--app-fg);
+}
+
+.app-dashboard-progress-count-verified { color: var(--app-success); }
+.app-dashboard-progress-count-delivered { color: var(--app-success); }
+.app-dashboard-progress-count-inprogress { color: var(--app-info); }
+.app-dashboard-progress-count-ready { color: var(--app-info); }
+.app-dashboard-progress-count-planned { color: var(--app-fg-muted); }
+.app-dashboard-progress-count-blocked { color: var(--app-error); }
+.app-dashboard-progress-count-deferred { color: var(--app-fg-subtle); }
+.app-dashboard-progress-count-total { color: var(--app-fg); }
+
+.app-dashboard-progress-label {
+  font-size: var(--app-text-xs);
+  line-height: var(--app-text-xs-line);
+  color: var(--app-fg-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 600;
+}
+
+.app-dashboard-progress-list,
+.app-dashboard-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.app-dashboard-progress-row,
+.app-dashboard-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--app-text-sm);
+  line-height: var(--app-text-sm-line);
+  color: var(--app-fg);
+}
+
+.app-dashboard-progress-milestone {
+  color: var(--app-fg-muted);
+  font-size: var(--app-text-xs);
+  line-height: var(--app-text-xs-line);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.app-dashboard-footer {
+  display: flex;
+  gap: 16px;
+  padding: 16px 0;
+  border-top: 1px solid var(--app-border);
+  color: var(--app-fg-muted);
+  font-size: var(--app-text-sm);
+  line-height: var(--app-text-sm-line);
+}
+
+.app-dashboard-footer-link {
+  color: var(--app-fg-muted);
+}
+
+.app-dashboard-footer-link:hover {
+  color: var(--app-accent);
+}

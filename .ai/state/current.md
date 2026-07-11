@@ -41,7 +41,8 @@
 
 - **Active milestone:** **M2 — Application Shell and
   Navigation** (active; M2.1 delivered 2026-07-11;
-  M2.2 delivered 2026-07-11; M2.3 delivered 2026-07-11).
+  M2.2 delivered 2026-07-11; M2.3 delivered 2026-07-11;
+  M2.4 delivered 2026-07-11).
 - **M2.1 — Application Shell Foundation:**
   **Delivered (2026-07-11).** The shell
   foundation lands: two layouts
@@ -101,13 +102,14 @@
   and green. The self-awareness
   dashboard remains in M2.4. See
   [`implementation-report-m2-3-topbar-breadcrumbs.md`](./../../implementation-report-m2-3-topbar-breadcrumbs.md).
-- **M2 next slice:** **M2.4 — Project
-  Intelligence Dashboard.** The plan
+- **M2 next slice:** **M2.5 — Empty
+  Routes, Responsive, and
+  Accessibility.** The plan
   at
-  [`.ai/plans/M2.4-project-intelligence-dashboard.md`](./../../.ai/plans/M2.4-project-intelligence-dashboard.md)
+  [`.ai/plans/M2.5-empty-routes-responsive-accessibility.md`](./../../.ai/plans/M2.5-empty-routes-responsive-accessibility.md)
   is now a full plan in `Awaiting
   Approval` state (promoted from the
-  `Draft` stub in the M2.3 closeout
+  `Draft` stub in the M2.4 closeout
   session).
 - **M2.5 / M2.6:** summary entries in
   the task board; planned in detail
@@ -126,20 +128,20 @@
 
 ## Current Slice
 
-- **Active slice:** **M2.4 — Project
-  Intelligence Dashboard** (plan
+- **Active slice:** **M2.5 — Empty
+  Routes, Responsive, and
+  Accessibility** (plan
   promoted 2026-07-11 from the
   `Draft` stub to a full plan in
   `Awaiting Approval`). Implementation
   has not started; per the Progressive
-  Coding Rule, M2.4 waits for explicit
+  Coding Rule, M2.5 waits for explicit
   user authorisation in the next
   session.
-- **Last completed slice:** **M2.3 —
-  Top Bar, Breadcrumbs, and Page
-  Headers** (delivered 2026-07-11).
-  The branch
-  `feature/m2-3-topbar-breadcrumbs`
+- **Last completed slice:** **M2.4 —
+  Project Intelligence Dashboard**
+  (delivered 2026-07-11). The branch
+  `feature/m2-4-project-intelligence-dashboard`
   carries the implementation; the
   closeout commit is produced on this
   branch.
@@ -184,7 +186,8 @@
   **Active (M2.1 Delivered 2026-07-11;
   M2.2 Delivered 2026-07-11;
   M2.3 Delivered 2026-07-11;
-  M2.4 plan Awaiting Approval).**
+  M2.4 Delivered 2026-07-11;
+  M2.5 plan Awaiting Approval).**
 - **M3 through M8:** Planned; no evidence yet.
 
 ## Last Completed Milestone
@@ -325,7 +328,8 @@
 - **Runnable.** The Blazor Server app builds and
   serves on `http://localhost:5286`. The five M1
   routes (`/`, `/counter`, `/weather`,
-  `/design-system`, `/not-found`) all return 200.
+  `/design-system`, `/not-found`) and the M2.4
+  `/dashboard` route all return 200.
   The M2 application shell is in place: `AppLayout`
   composes the registry-driven `AppSidebar` (M2.2
   the real sidebar), the `AppTopBar` (M2.3 the
@@ -382,22 +386,26 @@
 ## Test Status
 
 - `dotnet test AiEng.Platform.slnx --no-build` →
-  **150 passed, 4 skipped, 0 failed.**
-  - `AiEng.Platform.UnitTests`: 0 tests (no
-    Domain logic in M1, M2.1, M2.2, or M2.3).
-  - `AiEng.Platform.ComponentTests`: 146
+  **175 passed, 4 skipped, 0 failed.**
+  - `AiEng.Platform.UnitTests`: 6 tests
+    (the new M2.4 `ProjectIntelligenceReader`
+    unit tests).
+  - `AiEng.Platform.ComponentTests`: 163
     bUnit / integration tests, all passing
     (77 M1.2 + 25 M2.1 + 23 M2.2 bUnit + 27 M2.3 bUnit −
     6 obsolete M2.1 `AppTopBarSlotTests`
-    removed in M2.3).
-  - `AiEng.Platform.ArchitectureTests`: 8
-    tests in total — 4 active (passing)
+    removed in M2.3 + 3 M2.4 composition
+    + 14 M2.4 dashboard / theme-toggle).
+  - `AiEng.Platform.ArchitectureTests`: 10
+    tests in total — 6 active (passing)
     and 4 registered-but-disabled
     (skipped) per ADR-016 and the M4-D
     activation milestone. The
     `Pages_AreReachable_Through_Registry`
-    test (M2.2) remains the active
-    architecture test.
+    test (M2.2) and the
+    `Pages_Resolve_State_Through_Reader`
+    test (M2.4) are the two most recent
+    active architecture tests.
 
 ## Implemented Capabilities
 
@@ -622,13 +630,23 @@ Plus the supporting infrastructure:
   approved and implemented in the M2.3
   closeout session).
 - [`.ai/plans/M2.4-project-intelligence-dashboard.md`](./../../.ai/plans/M2.4-project-intelligence-dashboard.md)
-  — M2.4 plan, **Awaiting Approval**
+  — M2.4 plan, **Delivered (2026-07-11)**
   (promoted from `Draft` stub to a
-  full plan in the M2.3 closeout
+  full plan in `Awaiting Approval` in
+  the M2.3 closeout session;
+  approved and implemented in the M2.4
+  closeout session).
+- [`.ai/plans/M2.5-empty-routes-responsive-accessibility.md`](./../../.ai/plans/M2.5-empty-routes-responsive-accessibility.md)
+  — M2.5 plan, **Awaiting Approval**
+  (promoted from `Draft` stub to a
+  full plan in the M2.4 closeout
   session, 2026-07-11).
 
 ## Last Implementation Report
 
+- [`implementation-report-m2-4-project-intelligence-dashboard.md`](./../../implementation-report-m2-4-project-intelligence-dashboard.md)
+  — the M2.4 implementation report
+  (the closing receipt for M2.4, 2026-07-11).
 - [`implementation-report-m2-3-topbar-breadcrumbs.md`](./../../implementation-report-m2-3-topbar-breadcrumbs.md)
   — the M2.3 implementation report
   (the closing receipt for M2.3, 2026-07-11).
@@ -653,16 +671,16 @@ Plus the supporting infrastructure:
 
 ## Next Recommended Task
 
-> **M2.4 — Project Intelligence
-> Dashboard.** Read
-> [`.ai/plans/M2.4-project-intelligence-dashboard.md`](./../../.ai/plans/M2.4-project-intelligence-dashboard.md).
+> **M2.5 — Empty Routes, Responsive,
+> and Accessibility.** Read
+> [`.ai/plans/M2.5-empty-routes-responsive-accessibility.md`](./../../.ai/plans/M2.5-empty-routes-responsive-accessibility.md).
 > The plan was promoted from the
 > `Draft` stub to a full plan in
-> `Awaiting Approval` (the M2.3
+> `Awaiting Approval` (the M2.4
 > closeout session produced the
 > promotion). The first action in the
 > next session is to either approve
-> the M2.4 plan (and start M2.4
+> the M2.5 plan (and start M2.5
 > implementation per the plan's own
 > order) or amend the plan and
 > re-submit it.
@@ -679,43 +697,40 @@ and the M2 plan files in
 [`.ai/plans/`](./../../.ai/plans/). The
 next three actionable items are:
 
-1. **M2.4 — Project Intelligence
-   Dashboard** (plan `Awaiting
+1. **M2.5 — Empty Routes, Responsive,
+   and Accessibility** (plan `Awaiting
    Approval`; implementation follows
    the plan's own order).
-2. **M2.5 — Empty Routes, Responsive,
-   and Accessibility** (summary
+2. **M2.6 — M2 Closeout and Treehouse
+   Dogfooding** (summary
    entry; promoted to a full plan
-   when M2.4 closes).
+   when M2.5 closes).
 3. **M1 follow-up — Add `AppToolbar`
    example to `/design-system`**
    (cosmetic; the work is small and can
-   be folded into M2.4 if appropriate).
+   be folded into M2.5 if appropriate).
 
 ## Last Updated
 
-- **2026-07-11** (M2.3 closeout
+- **2026-07-11** (M2.4 closeout
   session). This version supersedes
-  the M2.2 closeout version
-  (2026-07-11) and the M2
-  delivery-reconciliation version
-  (2026-07-10). The M2.3 closeout
-  session delivers the M2.3 top bar,
-  breadcrumb, theme toggle
-  relocation, user avatar slot, and
-  page header integration, runs the
-  validation suite (npm css:build,
-  dotnet build, dotnet test, dotnet
-  format, visual smoke test),
-  updates the project-continuity
-  state per Rule 15, produces
-  `implementation-report-m2-3-topbar-breadcrumbs.md`,
-  promotes the M2.4 plan stub to a
+  the M2.3 closeout version
+  (2026-07-11). The M2.4 closeout
+  session delivers the project
+  intelligence dashboard and theme
+  toggle bug fix, runs the validation
+  suite (npm css:build, dotnet build,
+  dotnet test, dotnet format, visual
+  smoke test), updates the
+  project-continuity state per Rule
+  15, produces
+  `implementation-report-m2-4-project-intelligence-dashboard.md`,
+  promotes the M2.5 plan stub to a
   full plan in `Awaiting Approval`,
-  and creates the M2.3 closeout
-  commit. The M2.3 commit is the
+  and creates the M2.4 closeout
+  commit. The M2.4 commit is the
   most recent commit on
-  `feature/m2-3-topbar-breadcrumbs`;
+  `feature/m2-4-project-intelligence-dashboard`;
   no push (no remote configured).
 
 ## Linked Artefacts
@@ -729,9 +744,11 @@ next three actionable items are:
   `Awaiting Approval`; M2.5 in
   `Deferred`).
 - [`.ai/handoffs/latest.md`](./../../.ai/handoffs/latest.md) —
-  the most recent handoff (the M2.3
+  the most recent handoff (the M2.4
   closeout handoff; mirrored from
-  `.ai/handoffs/2026-07-11-m2-3-topbar-breadcrumbs.md`).
+  `.ai/handoffs/2026-07-11-m2-4-project-intelligence-dashboard.md`).
+- [`.ai/handoffs/2026-07-11-m2-4-project-intelligence-dashboard.md`](./../../.ai/handoffs/2026-07-11-m2-4-project-intelligence-dashboard.md)
+  — the M2.4 closeout session handoff.
 - [`.ai/handoffs/2026-07-11-m2-3-topbar-breadcrumbs.md`](./../../.ai/handoffs/2026-07-11-m2-3-topbar-breadcrumbs.md)
   — the M2.3 closeout session handoff.
 - [`.ai/handoffs/2026-07-11-m2-2-navigation-registry-sidebar.md`](./../../.ai/handoffs/2026-07-11-m2-2-navigation-registry-sidebar.md)

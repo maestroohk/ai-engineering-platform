@@ -11,7 +11,7 @@ public class AppLayoutTests : BunitContext
     public AppLayoutTests()
     {
         Services.AddSingleton<INavigationRegistry>(new EmptyNavigationRegistry());
-        JSInterop.Setup<string?>("appTheme.get").SetResult(null);
+        JSInterop.Setup<string>("appTheme.current").SetResult("light");
         JSInterop.SetupVoid("appTheme.set", _ => true);
     }
 

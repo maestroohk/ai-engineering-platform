@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "updated_at": "2026-07-11T00:00:00Z",
-  "updated_by_session": "m2-3-topbar-breadcrumbs",
+  "updated_by_session": "m2-4-project-intelligence-dashboard",
   "tasks": [
     {
       "id": "T-001",
@@ -185,14 +185,51 @@
     {
       "id": "T-014",
       "title": "M2.4 — Project Intelligence Dashboard",
-      "status": "Ready",
+      "status": "Done",
       "milestone": "M2",
       "slice": "M2.4",
       "created_at": "2026-07-10T00:00:00Z",
       "claimed_at": "2026-07-11T00:00:00Z",
-      "owner": "TBD (next session after M2.3 closeout)",
+      "completed_at": "2026-07-11T00:00:00Z",
+      "owner": "m2-4-project-intelligence-dashboard session",
       "plan": ".ai/plans/M2.4-project-intelligence-dashboard.md",
-      "notes": "Plan promoted from Draft stub to a full plan (Awaiting Approval) in the M2.3 closeout session, 2026-07-11. The full plan is at .ai/plans/M2.4-project-intelligence-dashboard.md. T-001 (M2.1), T-002 (M2.2), and T-003 (M2.3) are Done, so the dependencies are satisfied. The M2.4 plan still requires the user's explicit approval before implementation begins (per the Progressive Coding Rule)."
+      "implementation_report": "implementation-report-m2-4-project-intelligence-dashboard.md",
+      "evidence": {
+        "branch": "feature/m2-4-project-intelligence-dashboard",
+        "files_added": [
+          "src/AiEng.Platform.Application/ProjectIntelligence/IProjectIntelligenceReader.cs",
+          "src/AiEng.Platform.Application/ProjectIntelligence/ProjectIntelligenceSnapshot.cs",
+          "src/AiEng.Platform.Application/ProjectIntelligence/ProjectIntelligenceReader.cs",
+          "src/AiEng.Platform.App/Composition/ProjectIntelligenceServiceCollectionExtensions.cs",
+          "src/AiEng.Platform.App/Components/Pages/Dashboard.razor",
+          "src/AiEng.Platform.App/Components/Pages/Dashboard.razor.css",
+          "tests/AiEng.Platform.UnitTests/ProjectIntelligence/ProjectIntelligenceReaderTests.cs",
+          "tests/AiEng.Platform.ComponentTests/Composition/ProjectIntelligenceServiceCollectionExtensionsTests.cs",
+          "tests/AiEng.Platform.ComponentTests/Pages/DashboardTests.cs",
+          "tests/AiEng.Platform.ArchitectureTests/PagesResolveStateThroughReaderTests.cs"
+        ],
+        "files_modified": [
+          "src/AiEng.Platform.App/Components/App.razor",
+          "src/AiEng.Platform.App/Components/Shell/AppThemeToggle.razor",
+          "src/AiEng.Platform.App/Composition/ServiceCollectionExtensions.cs",
+          "tests/AiEng.Platform.ComponentTests/Layouts/AppLayoutTests.cs",
+          "tests/AiEng.Platform.ComponentTests/Shell/AppThemeToggleTests.cs",
+          "tests/AiEng.Platform.ComponentTests/Shell/AppTopBarTests.cs"
+        ],
+        "tests": {
+          "unit_tests_added": 6,
+          "component_tests_added": 13,
+          "architecture_tests_added": 2,
+          "component_tests_total": 163,
+          "component_tests_passing": 163,
+          "component_tests_failed": 0,
+          "architecture_tests_passing": 6,
+          "architecture_tests_skipped": 4,
+          "build_warnings": 0,
+          "build_errors": 0
+        }
+      },
+      "notes": "Delivered 2026-07-11. M2.4 scope landed per the approved plan: IProjectIntelligenceReader + ProjectIntelligenceSnapshot + ProjectIntelligenceReader in src/AiEng.Platform.Application/ProjectIntelligence/; ProjectIntelligenceServiceCollectionExtensions in src/AiEng.Platform.App/Composition/; Dashboard.razor + Dashboard.razor.css in src/AiEng.Platform.App/Components/Pages/; theme toggle bug fixed (added appTheme.current JS function; IsDark updated synchronously before JSInterop; JSDisconnectedException handled); 6 unit tests, 13 new bUnit tests, 2 new architecture tests added. Architecture test Pages_Resolve_State_Through_Reader confirms the Dashboard consumes state only through IProjectIntelligenceReader. Branch: feature/m2-4-project-intelligence-dashboard. Commit: feat(m2.4): add project intelligence dashboard (pending). Push skipped (no remote configured). The session does NOT implement M2.5 (only the M2.5 plan is promoted to Awaiting Approval)."
     },
     {
       "id": "T-015",

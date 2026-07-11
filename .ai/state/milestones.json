@@ -89,8 +89,11 @@
         },
         "M2.4": {
           "title": "Project Intelligence Dashboard",
-          "status": "plan awaiting approval",
-          "plan": ".ai/plans/M2.4-project-intelligence-dashboard.md"
+          "status": "delivered",
+          "summary": "IProjectIntelligenceReader + ProjectIntelligenceSnapshot + ProjectIntelligenceReader in src/AiEng.Platform.Application/ProjectIntelligence/; ProjectIntelligenceServiceCollectionExtensions in src/AiEng.Platform.App/Composition/; Dashboard.razor + Dashboard.razor.css in src/AiEng.Platform.App/Components/Pages/; theme toggle bug fixed (added appTheme.current JS function, IsDark updated synchronously before JSInterop, JSDisconnectedException handled); 6 unit + 13 bUnit + 2 architecture tests added (175 total passing). Architecture test Pages_Resolve_State_Through_Reader confirms the Dashboard consumes state only through IProjectIntelligenceReader.",
+          "implementation_report": "implementation-report-m2-4-project-intelligence-dashboard.md",
+          "plan": ".ai/plans/M2.4-project-intelligence-dashboard.md",
+          "commit_message": "feat(m2.4): add project intelligence dashboard"
         },
         "M2.5": {
           "title": "Empty Routes, Responsive, and Accessibility",
@@ -102,16 +105,18 @@
         }
       },
       "evidence": {
-        "slices": ["M2.1", "M2.2", "M2.3"],
+        "slices": ["M2.1", "M2.2", "M2.3", "M2.4"],
         "implementation_reports": [
           "implementation-report-m2-1-application-shell-foundation.md",
           "implementation-report-m2-2-navigation-registry-sidebar.md",
-          "implementation-report-m2-3-topbar-breadcrumbs.md"
+          "implementation-report-m2-3-topbar-breadcrumbs.md",
+          "implementation-report-m2-4-project-intelligence-dashboard.md"
         ],
         "handoffs": [
           ".ai/handoffs/2026-07-11-m2-1-application-shell-foundation.md",
           ".ai/handoffs/2026-07-11-m2-2-navigation-registry-sidebar.md",
-          ".ai/handoffs/2026-07-11-m2-3-topbar-breadcrumbs.md"
+          ".ai/handoffs/2026-07-11-m2-3-topbar-breadcrumbs.md",
+          ".ai/handoffs/2026-07-11-m2-4-project-intelligence-dashboard.md"
         ]
       }
     },

@@ -1,44 +1,54 @@
 {
   "schema_version": "1.0.0",
   "updated_at": "2026-07-11T00:00:00Z",
-  "session_id": "m2-3-topbar-breadcrumbs-closeout",
-  "session_type": "closeout",
+  "session_id": "m2-4-project-intelligence-dashboard",
+  "session_type": "implementation",
   "scope": {
     "milestone": "M2",
-    "task_id": "T-003",
-    "slice": "M2.3",
-    "plan": ".ai/plans/M2.3-topbar-breadcrumbs.md",
-    "branch": "feature/m2-3-topbar-breadcrumbs",
+    "task_id": "T-014",
+    "slice": "M2.4",
+    "plan": ".ai/plans/M2.4-project-intelligence-dashboard.md",
+    "branch": "feature/m2-4-project-intelligence-dashboard",
     "in_scope": [
-      "M2.3 closeout reconciliation: T-003 -> Done in tasks.json; M2.3 slice -> delivered in milestones.json; C-019 -> Verified (preserved from M2.2) in capabilities.json; M2.3 row -> Delivered in ROADMAP.md; current.md and task-board.md updated to the M2.3 closeout state",
-      "Promote M2.4 plan stub to a full M2.4 plan in Awaiting Approval (do not implement M2.4)",
-      "Implementation report implementation-report-m2-3-topbar-breadcrumbs.md at the repo root",
-      "Per-session handoff .ai/handoffs/2026-07-11-m2-3-topbar-breadcrumbs.md mirrored to latest.md",
-      "Single coherent commit feat(m2.3): add top bar, breadcrumb, and page header integration"
+      "IProjectIntelligenceReader application service interface + ProjectIntelligenceSnapshot record",
+      "ProjectIntelligenceReader implementation that reads .ai/state/*.json",
+      "ProjectIntelligenceServiceCollectionExtensions composition-root extension",
+      "Dashboard.razor page at /dashboard with [RouteMetadata]",
+      "M0.5-data sections in Populated state; M3+-data sections in Empty state",
+      "Theme toggle bug fix: light/dark switching must work end-to-end and persist across navigation and refresh",
+      "10-16 bUnit tests for the reader, dashboard, and composition extension",
+      "Pages_Resolve_State_Through_Reader architecture test (active and green)",
+      "Validation: css:build, dotnet build, dotnet test, dotnet format, visual smoke test",
+      "Project-continuity state updates (current.md, task-board.md, tasks.json, milestones.json, capabilities.json, ROADMAP.md, handoffs/latest.md)",
+      "Implementation report implementation-report-m2-4-project-intelligence-dashboard.md",
+      "Per-session handoff .ai/handoffs/2026-07-11-m2-4-project-intelligence-dashboard.md mirrored to latest.md",
+      "Promote M2.5 plan stub to a full M2.5 plan in Awaiting Approval (do not implement M2.5)",
+      "Single coherent commit feat(m2.4): add project intelligence dashboard"
     ],
     "out_of_scope": [
-      "M2.4 implementation (only the M2.4 plan is promoted; no code is written for M2.4)",
-      "M2.5 / M2.6 (deferred)",
-      "Providers.<X> projects, IProjectService, IProjectStore, IProvider (M3+ and M4-A through M4-D)",
+      "M2.5 implementation (only the M2.5 plan is promoted; no code is written for M2.5)",
+      "M3+ work (project registration, IProjectService, IProjectStore, IProjectService)",
+      "M4+ work (process execution, capability detection, provider registry)",
+      "Providers.<X> projects, IProvider (M4+ work)",
       "Pushing (no remote configured; push is skipped per the brief)"
     ]
   },
   "current_understanding": {
     "active_milestone": "M2",
-    "active_slice": "M2.4 (plan Awaiting Approval; next slice)",
-    "active_task": "T-014 (M2.4, Ready)",
-    "last_completed_milestone": "M0.5",
-    "last_completed_task": "T-003 (M2.3 closeout, 2026-07-11)",
-    "last_stable_commit": "feat(m2.3): add top bar, breadcrumb, and page header integration on feature/m2-3-topbar-breadcrumbs",
-    "build_status": "passing at closeout (0 warnings, 0 errors)",
-    "test_status": "146 passed, 0 failed (component); 4 passed, 4 skipped, 0 failed (architecture) at closeout"
+    "active_slice": "M2.5 (next planned; plan Awaiting Approval)",
+    "active_task": "T-015 (M2.5, Deferred — plan to be approved)",
+    "last_completed_milestone": "M2.4",
+    "last_completed_task": "T-014 (M2.4 closeout, 2026-07-11)",
+    "last_stable_commit": "fb89187 feat(m2.3): add top bar, breadcrumb, and page header integration on feature/m2-3-topbar-breadcrumbs",
+    "build_status": "passing at M2.4 closeout (0 warnings, 0 errors)",
+    "test_status": "175 passed, 0 failed (163 component + 6 unit + 6 architecture, 4 skipped) at M2.4 closeout"
   },
   "last_action": {
     "at": "2026-07-11T00:00:00Z",
-    "kind": "m2.3 closeout",
-    "target": "feature/m2-3-topbar-breadcrumbs",
-    "outcome": "M2.3 implementation complete (T-003 Done; M2.3 slice delivered; C-019 Verified preserved; ROADMAP M2.3 row Delivered; 27 new bUnit tests + 6 obsolete tests removed; 146 component tests + 4 active architecture tests pass; npm run css:build, dotnet build, dotnet format --verify-no-changes all clean; visual smoke test 4/4 routes 200; top bar title tracks INavigationRegistry, theme toggle flips light/dark, breadcrumb walks the parent chain). Stale projections (current.md, task-board.md, session.json) reconciled to the M2.3 closeout state. M2.4 plan stub promoted to a full M2.4 plan in Awaiting Approval. Per-session handoff and implementation report written. Coherent commit feat(m2.3): add top bar, breadcrumb, and page header integration produced on feature/m2-3-topbar-breadcrumbs. No push (no remote). Two documented deviations from the plan: (1) AppTopBar uses div.app-topbar + Leading/Trailing slots rather than AppStack + AppPageHeader; the surface still composes AppTopBar + AppPageHeader + AppBreadcrumb, matching the plan's intent. (2) Optional architecture test Breadcrumb_Follows_Registry_Parent_Chain was skipped per plan § 8 step 11 which marked it optional."
+    "kind": "m2.4 closeout",
+    "target": "feature/m2-4-project-intelligence-dashboard",
+    "outcome": "Landed IProjectIntelligenceReader + ProjectIntelligenceSnapshot + ProjectIntelligenceReader in Application; ProjectIntelligenceServiceCollectionExtensions in Composition; Dashboard.razor + Dashboard.razor.css at /dashboard; theme toggle bug fixed (appTheme.current JS function, IsDark updated synchronously before JSInterop, JSDisconnectedException handled); 6 unit + 13 bUnit + 2 architecture tests added (175 total passing). T-014 marked Done; C-022 promoted to completion_status: Verified. Branch ready for focused commit feat(m2.4): add project intelligence dashboard. M2.5 plan promoted to Awaiting Approval; implementation of M2.5 NOT started per the brief."
   },
-  "intended_next_action": "The next session approves the M2.4 plan and starts M2.4 implementation per the plan's own order. The session stops after the M2.4 coherent commit and does NOT begin M2.5.",
-  "session_notes": "M2.3 closeout session. All M2.3 acceptance criteria satisfied per the approved plan .ai/plans/M2.3-topbar-breadcrumbs.md. The session reconciles the stale projections (current.md, task-board.md, session.json) into the M2.3 closeout per the user instruction, and adds an implementation report and per-session handoff at session end. Push is skipped (no remote). The session does NOT implement M2.4 (only the M2.4 plan is promoted to Awaiting Approval). Two documented deviations: (1) AppTopBar uses div.app-topbar + Leading/Trailing slots rather than AppStack + AppPageHeader (the plan § 8 step 4 wording was ambiguous; the implementation matches the plan's intent). (2) Optional architecture test Breadcrumb_Follows_Registry_Parent_Chain was skipped (plan § 8 step 11 marked it optional)."
+  "intended_next_action": "The next session approves the M2.5 plan and begins M2.5 implementation per the Progressive Coding Rule and the command protocol. The M2.5 plan is at .ai/plans/M2.5-empty-routes-responsive-accessibility.md (status: Awaiting Approval). T-015 is Deferred and will move to Ready when the plan is approved.",
+  "session_notes": "M2.4 implementation session. The M2.4 plan was approved by the user on 2026-07-11. The session implements the M2.4 slice per the plan (.ai/plans/M2.4-project-intelligence-dashboard.md). The session also addresses the theme toggle bug: the M2.3 AppThemeToggle's state must propagate to the documentElement.data-theme attribute so light/dark switching is visible immediately, persists across navigation and browser refresh, and remains consistent throughout the application. The session follows the Progressive Coding Rule: one task per session; 13-step lifecycle; stop after the coherent commit. The session does NOT implement M2.5 (only the M2.5 plan is promoted to Awaiting Approval). Push is skipped (no remote)."
 }

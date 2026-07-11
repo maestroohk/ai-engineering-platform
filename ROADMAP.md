@@ -62,12 +62,14 @@ M2.2 ("Navigation Registry and Sidebar") is **Delivered** (see
 `implementation-report-m2-2-navigation-registry-sidebar.md`);
 M2.3 ("Top Bar, Breadcrumbs, and Page Headers") is **Delivered**
 (see `implementation-report-m2-3-topbar-breadcrumbs.md`).
-M2.4 ("Project Intelligence Dashboard") is the next
+M2.4 ("Project Intelligence Dashboard") is **Delivered** (see
+`implementation-report-m2-4-project-intelligence-dashboard.md`).
+M2.5 ("Empty Routes, Responsive, and Accessibility") is the next
 `Ready` capability (plan
-`.ai/plans/M2.4-project-intelligence-dashboard.md` status
-`Awaiting Approval`; T-014 in
-`.ai/state/tasks.json` status `Ready`); M2.5 and M2.6 are summary
-entries in the task board.
+`.ai/plans/M2.5-empty-routes-responsive-accessibility.md` status
+`Awaiting Approval`; T-015 in
+`.ai/state/tasks.json` status `Ready`); M2.6 is a summary
+entry in the task board.
 
 The sequence is deliberate. M1 builds the design system because every
 later milestone composes its components. M2 builds the shell because
@@ -280,7 +282,7 @@ navigation).
 | M2.1  | Application Shell Foundation                  | Delivered (M2.1, 2026-07-11) | Two layouts (`AppLayout`, `AppEmptyLayout`), two placeholder shell components (`AppSidebarSlot`, `AppTopBarSlot`), one presentational helper (`AppShellRegion`), and the M1.1 chrome migration. |
 | M2.2  | Navigation Registry and Sidebar               | Delivered (M2.2, 2026-07-11) | `INavigationRegistry`, `RouteMetadata`, `RouteMetadataAttribute`, `RouteRegistry`, `AppSidebar`, `AppSidebarItem`, `AppNavItem`, the `Pages_AreReachable_Through_Registry` architecture test. |
 | M2.3  | Top Bar, Breadcrumbs, and Page Headers        | Delivered (M2.3, 2026-07-11) | `AppTopBar`, `AppThemeToggle`, `AppUserAvatarSlot`, `AppBreadcrumb`; theme toggle relocated to the top bar; breadcrumb walks the M2.2 registry's `Parent` chain; page-header integration with the navigation registry. |
-| M2.4  | Project Intelligence Dashboard                | Plan `Awaiting Approval` | A read-only `/dashboard` page backed by `IProjectIntelligenceReader` that consumes `.ai/state/*.json`. No new abstractions beyond the reader. |
+| M2.4  | Project Intelligence Dashboard                | Delivered (M2.4, 2026-07-11) | `IProjectIntelligenceReader`, `ProjectIntelligenceSnapshot`, `ProjectIntelligenceReader`, `AddProjectIntelligence`, `Dashboard.razor` at `/dashboard`; the dashboard renders the M0.5-data sections in the **Populated** state and the M3+-data sections in the **Empty** state; the theme toggle bug is fixed (`appTheme.current` JS function; synchronous `IsDark` flip; `JSDisconnectedException` handled); the `Pages_Resolve_State_Through_Reader` architecture test enforces the single-seam rule. |
 | M2.5  | Empty Routes, Responsive, and Accessibility   | Summary entry  | All routes reach an `AppEmptyState`; the shell is usable down to 1280x720 (per ADR-005); keyboard navigation works across the sidebar. |
 | M2.6  | M2 Closeout and Treehouse Dogfooding          | Summary entry  | The M2 implementation report, the Treehouse dogfooding checkpoint (per `.ai/workflows/tool-dogfooding.md`), and the closeout commit. |
 

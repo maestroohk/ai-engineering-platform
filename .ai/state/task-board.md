@@ -37,94 +37,72 @@
 
 ## Ready
 
-### M2.4 — Project Intelligence Dashboard
+### M2.5 — Empty Routes, Responsive, and Accessibility
 
-- **Task ID:** `M2.4`
+- **Task ID:** `M2.5`
 - **Milestone:** M2 — Application Shell and
   Navigation
-- **Title:** Project intelligence
-  dashboard
-- **Why it matters:** The M2 landing
-  page is the read-only
-  `/dashboard` page; the contract is
-  in `docs/dashboard.md`. The
-  dashboard renders the M0.5
-  structured-state sections in the
-  **Populated** state (per ADR-014)
-  and the M3+-data sections in the
-  **Empty** state. The
-  `IProjectIntelligenceReader` is the
-  read-side service the M2.4 slice
-  introduces; M3+ slices add new
-  data sources but do not modify
-  the reader.
-- **Objective:** Land
-  `IProjectIntelligenceReader` in
-  `src/AiEng.Platform.Application/ProjectIntelligence/`;
-  the
-  `ProjectIntelligenceServiceCollectionExtensions`
-  composition-root extension in
-  `src/AiEng.Platform.App/Composition/`;
-  the `/dashboard` page at
-  `src/AiEng.Platform.App/Components/Pages/Dashboard.razor`
-  that uses the M2.1 `AppLayout`;
-  the M0.5-data sections in the
-  **Populated** state; the M3+-data
-  sections in the **Empty** state;
-  a new navigation item in the M2.2
-  registry for `/dashboard`.
-- **Acceptance criteria:** the
-  `/dashboard` route exists in the
-  M2.2 navigation registry;
-  `IProjectIntelligenceReader` is
-  registered in the composition
-  root and resolves through DI; the
-  dashboard renders the M0.5-data
-  sections in the **Populated**
-  state; the dashboard renders the
-  M3+-data sections in the
-  **Empty** state with a clear
-  "M3 fills this section" message;
-  every data-owning section exposes
-  the four slots per ADR-014;
+- **Title:** Empty routes, responsive,
+  and accessibility
+- **Why it matters:** Every M2.1 / M2.2 /
+  M2.3 / M2.4 page reaches an empty
+  state; the M2.5 slice is the
+  full-coverage pass over every route,
+  the responsive matrix at the
+  1280x720 minimum, and the full
+  keyboard smoke test. The M2
+  acceptance criteria depend on the
+  M2.5 closeout (per `ROADMAP.md` M2
+  DoD).
+- **Objective:** Enumerate every route
+  in `Components/Pages/`; verify each
+  renders an `AppEmptyState` that
+  names the page and links back to
+  the design system; define the
+  responsive matrix in
+  `docs/ui-principles.md` § 10.1; run
+  the keyboard smoke test across
+  every route; add
+  `AppResponsive` /
+  `AppEmptyRouteCard` primitives if
+  required.
+- **Acceptance criteria:** every M2
+  page reaches an `AppEmptyState`
+  with a clear filler; the responsive
+  matrix is documented; the
+  keyboard smoke test passes; the
+  axe-core audit reports zero
+  critical or serious violations;
   `dotnet build` → 0 warnings, 0
   errors; `dotnet test` → all bUnit
-  tests pass (M2.4 tests add to the
-  count; the
-  `Application_DoesNotReference_ConcreteProviders`
-  architecture test remains
-  green); `dotnet format
+  tests pass; `dotnet format
   --verify-no-changes` → clean;
-  `npm run css:build` → clean; the
-  app starts; `/dashboard` returns
-  200; the keyboard smoke test
-  passes.
+  `npm run css:build` → clean.
 - **Dependencies:** M2.1 (Done),
-  M2.2 (Done), M2.3 (Done).
+  M2.2 (Done), M2.3 (Done),
+  M2.4 (Done).
 - **Expected affected areas:**
-  `src/AiEng.Platform.Application/ProjectIntelligence/`
-  (new),
-  `src/AiEng.Platform.App/Composition/ProjectIntelligenceServiceCollectionExtensions.cs`
-  (new),
-  `src/AiEng.Platform.App/Components/Pages/Dashboard.razor`
-  (new),
-  `src/AiEng.Platform.App/Components/Navigation/AppBreadcrumb.razor`
-  (reused — the M2.3 breadcrumb
-  composes against the same
-  navigation registry).
+  `src/AiEng.Platform.App/Components/Pages/`
+  (every page),
+  `src/AiEng.Platform.App/Components/`
+  (new `AppResponsive` /
+  `AppEmptyRouteCard` if required),
+  `docs/ui-principles.md` § 10.1.
 - **Validation:** `dotnet build`,
   `dotnet test`, `dotnet format
   --verify-no-changes`, visual
-  smoke test on `/dashboard`.
+  smoke test on every route,
+  keyboard smoke test, axe-core
+  audit.
 - **Approved plan path:**
-  [`.ai/plans/M2.4-project-intelligence-dashboard.md`](./../../.ai/plans/M2.4-project-intelligence-dashboard.md)
+  [`.ai/plans/M2.5-empty-routes-responsive-accessibility.md`](./../../.ai/plans/M2.5-empty-routes-responsive-accessibility.md)
   (the plan, 2026-07-11; promoted
   from `Draft` stub to a full plan
   in `Awaiting Approval` in the
-  M2.3 closeout session).
+  M2.4 closeout session).
 - **Status:** Ready (plan `Awaiting
   Approval`; promoted from `Draft`
-  stub to a full plan in the M2.3
+  stub to a full plan in the M2.4
   closeout session; first action
   of the next session is plan
   approval).
@@ -174,8 +152,8 @@
 
 ## In Progress
 
-(none — M2.3 closed in the M2.3 closeout
-session, 2026-07-11; M2.4 awaits the next
+(none — M2.4 closed in the M2.4 closeout
+session, 2026-07-11; M2.5 awaits the next
 session's explicit authorisation per the
 Progressive Coding Rule.)
 
@@ -220,6 +198,72 @@ Progressive Coding Rule.)
 ---
 
 ## Done Recently
+
+### M2.4 closeout session — 2026-07-11
+
+- **Task ID:** `M2.4`
+- **Milestone:** M2 — Application Shell and
+  Navigation
+- **Title:** Project intelligence
+  dashboard
+- **Status:** **Done (closed 2026-07-11).**
+- **Outcome:** 3 new types in
+  `src/AiEng.Platform.Application/ProjectIntelligence/`
+  (`IProjectIntelligenceReader`,
+  `ProjectIntelligenceSnapshot`,
+  `ProjectIntelligenceReader`); 1 new
+  composition-root extension in
+  `src/AiEng.Platform.App/Composition/`
+  (`AddProjectIntelligence`); 1 new
+  page at
+  `src/AiEng.Platform.App/Components/Pages/Dashboard.razor`
+  (the M0.5-data sections in
+  **Populated** state; the M3+-data
+  sections in **Empty** state); the
+  theme toggle bug is fixed (added
+  `appTheme.current` JS function;
+  component reads the resolved theme
+  in `OnAfterRenderAsync(firstRender)`;
+  click handler updates `IsDark`
+  synchronously before the JSInterop
+  call; `JSDisconnectedException` is
+  handled); 6 new unit tests for
+  `ProjectIntelligenceReader`; 13 new
+  bUnit tests (3 composition + 9
+  dashboard + 4 theme toggle); 2 new
+  architecture tests
+  (`Dashboard_Resolves_State_Through_Reader`
+  and
+  `No_Page_Reaches_State_Directly`).
+  Total test count is now 175
+  passing + 4 skipped, 0 failed
+  (6 unit + 163 bUnit + 6 active
+  architecture). The dashboard
+  consumes state only through
+  `IProjectIntelligenceReader`
+  (architecture test enforces this).
+- **Report:**
+  `implementation-report-m2-4-project-intelligence-dashboard.md`.
+- **Handoff:**
+  `.ai/handoffs/2026-07-11-m2-4-project-intelligence-dashboard.md`
+  (mirrored at
+  `.ai/handoffs/latest.md`).
+- **Git:** branch
+  `feature/m2-4-project-intelligence-dashboard`;
+  closeout commit
+  `feat(m2.4): add project intelligence dashboard`.
+  No remote configured; push skipped (per
+  the brief).
+- **Next action:** the M2.4 closeout
+  promotes T-015 (M2.5) to `Ready`
+  and promotes the M2.5 plan stub
+  to a full plan in `Awaiting
+  Approval`; the next session
+  approves the M2.5 plan and starts
+  M2.5 implementation. The M2.4
+  session does **not** implement
+  M2.5 (per the Progressive Coding
+  Rule).
 
 ### M2.3 closeout session — 2026-07-11
 
@@ -464,25 +508,6 @@ kept here so the work is not forgotten but the
 task board does not become a speculative
 backlog. Each summary task is fleshed out into
 detailed tasks when the milestone approaches.
-
-### M2.4 — Project Intelligence Dashboard
-  (summary)
-
-- **Milestone:** M2.
-- **Why deferred:** the dashboard is the M2
-  landing page; the contract is in
-  `docs/dashboard.md`. The M2.4 slice
-  implements the **read-only** dashboard:
-  `IProjectIntelligenceReader` reads
-  `.ai/state/*.json` and produces a
-  `ProjectIntelligenceSnapshot`; the
-  dashboard renders the M0.5-data sections in
-  the Populated state and the M3+-data
-  sections in the Empty state.
-- **First action (later):** draft
-  `.ai/plans/M2.4-project-intelligence-dashboard.md`
-  (the plan stub already exists; promote it
-  to a full plan after M2.3 closes).
 
 ### M2.5 — Empty routes, responsive, and
   accessibility (summary)

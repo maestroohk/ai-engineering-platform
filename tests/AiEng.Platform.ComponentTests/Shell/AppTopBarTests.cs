@@ -12,7 +12,7 @@ public class AppTopBarTests : BunitContext
     public AppTopBarTests()
     {
         Services.AddSingleton<INavigationRegistry>(new RouteRegistry(typeof(TopBarRouteMarker).Assembly));
-        JSInterop.Setup<string?>("appTheme.get").SetResult(null);
+        JSInterop.Setup<string>("appTheme.current").SetResult("light");
         JSInterop.SetupVoid("appTheme.set", _ => true);
     }
     [Fact]

@@ -13,6 +13,7 @@
                     ? stored
                     : (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
                 document.documentElement.setAttribute("data-theme", theme);
+                try { localStorage.setItem("app-theme", theme); } catch (e2) { }
             } catch (e) {
                 document.documentElement.setAttribute("data-theme", "light");
             }
@@ -24,8 +25,20 @@
                 try { return localStorage.getItem("app-theme"); }
                 catch (e) { return null; }
             },
+            current: function () {
+                try {
+                    var attr = document.documentElement.getAttribute("data-theme");
+                    if (attr === "light" || attr === "dark") { return attr; }
+                    var stored = localStorage.getItem("app-theme");
+                    if (stored === "light" || stored === "dark") { return stored; }
+                    return "light";
+                } catch (e) {
+                    return "light";
+                }
+            },
             set: function (theme) {
                 try {
+                    if (theme !== "light" && theme !== "dark") { theme = "light"; }
                     document.documentElement.setAttribute("data-theme", theme);
                     localStorage.setItem("app-theme", theme);
                 } catch (e) {

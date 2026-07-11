@@ -37,25 +37,22 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender)
+        if (!firstRender) { return; }
+        try
         {
-            try
-            {
-                var stored = await JSRuntime.InvokeAsync<string?>("appTheme.get");
-                if (!string.IsNullOrEmpty(stored))
-                {
-                    IsDark = string.Equals(stored, "dark", StringComparison.OrdinalIgnoreCase);
-                    StateHasChanged();
-                }
-            }
-            catch (InvalidOperationException)
-            {
-            }
-            catch (TaskCanceledException)
-            {
-            }
+            var current = await JSRuntime.InvokeAsync<string>("appTheme.current");
+            IsDark = string.Equals(current, "dark", StringComparison.OrdinalIgnoreCase);
+            StateHasChanged();
         }
-        await Task.CompletedTask;
+        catch (InvalidOperationException)
+        {
+        }
+        catch (TaskCanceledException)
+        {
+        }
+        catch (JSDisconnectedException)
+        {
+        }
     }
 
     private async Task ToggleAsync()
@@ -70,6 +67,9 @@
         {
         }
         catch (TaskCanceledException)
+        {
+        }
+        catch (JSDisconnectedException)
         {
         }
     }

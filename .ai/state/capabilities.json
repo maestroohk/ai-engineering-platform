@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1.0",
   "updated_at": "2026-07-11T00:00:00Z",
-  "updated_by_session": "m2-3-topbar-breadcrumbs",
+  "updated_by_session": "m2-4-project-intelligence-dashboard",
   "completion_status_mapping": {
     "NotStarted": "Not in capabilities.json. Reserved for capabilities the product will need but which have not yet been admitted to the graph.",
     "Planned": "status: Accepted; delivered_by_milestone status: Planned; no plan yet, or plan stub is Draft. Sequenced for a milestone, plan not promoted to Ready / Awaiting Approval.",
@@ -748,6 +748,47 @@
       "completed_criteria": [],
       "adr": null,
       "architecture_tests": [],
+      "last_updated": "2026-07-11"
+    },
+    {
+      "id": "C-022",
+      "title": "IProjectIntelligenceReader",
+      "status": "Done",
+      "completion_status": "Verified",
+      "layer": 2,
+      "category": "DomainOrchestration",
+      "description": "The read-side application service that exposes a typed ProjectIntelligenceSnapshot built from the M0.5 structured state (.ai/state/*.json). The dashboard consumes only this abstraction; no page parses JSON or Markdown directly.",
+      "product_outcome": "The /dashboard page renders the project intelligence state (current milestone, current task, current slice, branch, last commit, build status, test status, product progress, capability progress, implemented capabilities, plans awaiting approval, next recommended action) by consuming IProjectIntelligenceReader through DI. M3+ slices add new data sources but do not modify the reader.",
+      "depends_on": ["C-019"],
+      "consumed_by": [],
+      "delivered_by_milestone": "M2",
+      "consumed_by_milestones": ["M3", "M4-A", "M4-B", "M4-C", "M4-D", "M5", "M6", "M7", "M8"],
+      "delivered_by_tasks": ["T-014"],
+      "next_task": null,
+      "blocked_by": [],
+      "evidence": {
+        "plans": [".ai/plans/M2.4-project-intelligence-dashboard.md"],
+        "reports": ["implementation-report-m2-4-project-intelligence-dashboard.md"],
+        "commits": [],
+        "tests": ["tests/AiEng.Platform.UnitTests/ProjectIntelligence/ProjectIntelligenceReaderTests.cs", "tests/AiEng.Platform.ComponentTests/Pages/DashboardTests.cs", "tests/AiEng.Platform.ArchitectureTests/PagesResolveStateThroughReaderTests.cs"],
+        "source_paths": ["src/AiEng.Platform.Application/ProjectIntelligence/IProjectIntelligenceReader.cs", "src/AiEng.Platform.Application/ProjectIntelligence/ProjectIntelligenceSnapshot.cs", "src/AiEng.Platform.Application/ProjectIntelligence/ProjectIntelligenceReader.cs", "src/AiEng.Platform.App/Components/Pages/Dashboard.razor", "src/AiEng.Platform.App/Composition/ProjectIntelligenceServiceCollectionExtensions.cs"]
+      },
+      "acceptance_criteria": [
+        "IProjectIntelligenceReader.GetSnapshotAsync returns a typed ProjectIntelligenceSnapshot.",
+        "ProjectIntelligenceReader reads .ai/state/*.json and produces the snapshot deterministically.",
+        "The /dashboard page consumes IProjectIntelligenceReader through DI; no page parses JSON or Markdown.",
+        "Pages_Resolve_State_Through_Reader architecture test is active and green.",
+        "The dashboard renders the M0.5-data sections in the Populated state (per ADR-014) and the M3+-data sections in the Empty state."
+      ],
+      "completed_criteria": [
+        "IProjectIntelligenceReader.GetSnapshotAsync returns a typed ProjectIntelligenceSnapshot.",
+        "ProjectIntelligenceReader reads .ai/state/*.json and produces the snapshot deterministically.",
+        "The /dashboard page consumes IProjectIntelligenceReader through DI; no page parses JSON or Markdown.",
+        "Pages_Resolve_State_Through_Reader architecture test is active and green.",
+        "The dashboard renders the M0.5-data sections in the Populated state (per ADR-014) and the M3+-data sections in the Empty state."
+      ],
+      "adr": null,
+      "architecture_tests": ["Pages_Resolve_State_Through_Reader"],
       "last_updated": "2026-07-11"
     }
   ]

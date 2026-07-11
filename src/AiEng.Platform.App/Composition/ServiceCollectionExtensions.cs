@@ -1,4 +1,5 @@
 using System.Reflection;
+using AiEng.Platform.Application.ProjectIntelligence;
 
 namespace AiEng.Platform.App.Composition;
 
@@ -18,6 +19,7 @@ public static class ServiceCollectionExtensions
             : new[] { Assembly.GetExecutingAssembly() };
 
         services.AddNavigation(assemblies);
+        services.AddProjectIntelligence();
         return services;
     }
 }

@@ -1,0 +1,298 @@
+@namespace AiEng.Platform.App.Components.Pages
+
+@page "/dashboard"
+@attribute [RouteMetadata("/dashboard", "Dashboard", Order = 0, ShowInSidebar = true, Icon = "▦", Description = "Self-awareness dashboard. Read-only view of the current milestone, current task, branch, build, tests, and capability progress.")]
+@layout AppLayout
+@rendermode InteractiveServer
+@using AiEng.Platform.App.Components.Common
+@using AiEng.Platform.App.Components.Layout
+@using AiEng.Platform.App.Components.Primitive
+@using AiEng.Platform.App.Components.Display
+@using AiEng.Platform.App.Components.Feedback
+@using AiEng.Platform.App.Components.Shell
+@using AiEng.Platform.App.Components.Navigation
+@using AiEng.Platform.App.Layouts
+@using AiEng.Platform.Application.ProjectIntelligence
+@inject IProjectIntelligenceReader Reader
+
+<PageTitle>Dashboard — @(_snapshot?.ProductName ?? "AI Engineering Platform")</PageTitle>
+
+<AppPageHeader>
+    <Breadcrumbs>
+        <AppBreadcrumb />
+    </Breadcrumbs>
+    <Title>@(_snapshot?.ProductName ?? "Dashboard")</Title>
+    <Description>The operator's instrument panel. Read-only view of the current milestone, current task, branch, last commit, build, tests, and capability progress.</Description>
+</AppPageHeader>
+
+@if (_snapshot is null)
+{
+    <AppCard>
+        <Header>Loading</Header>
+        <ChildContent>
+            <p class="text-app-fg-muted">Reading project state from <code>.ai/state/*.json</code>…</p>
+        </ChildContent>
+    </AppCard>
+}
+else
+{
+    @CurrentRow(_snapshot)
+
+    <div class="app-dashboard-grid">
+        <div class="app-dashboard-col-left">
+            @EmptySection("Running agents", "▶ No running agents", "M3 introduces IRunService and IHistoryStore. The M3 launch-and-monitor slice fills this section.")
+            @EmptySection("Queued tasks", "⏳ No queued tasks", "When work is queued behind a worktree or a parallel gate, M3 surfaces it here.")
+            @EmptySection("Recent quality gates", "⚙ No recent quality gates", "The IQualityGateProviderRegistry ships in M4-C; the first concrete provider lands in M7.")
+            @EmptySection("Latest commits", "⎇ No live commit log", "IGitProvider ships in M4-D; this section will list the most recent commits on the active branch.")
+        </div>
+        <div class="app-dashboard-col-right">
+            @EmptySection("Providers", "◇ No providers registered", "The provider registry lands in M4-C; this section will enumerate every registered provider family with its lifecycle state.")
+            @EmptySection("Recent reviews", "✓ No recent reviews", "IReviewService and IReviewProviderRegistry ship in M7; this section will list the five most recent review findings.")
+            @BuildStatusSection(_snapshot)
+            @CapabilityProgressSection(_snapshot)
+        </div>
+    </div>
+
+    <div class="app-dashboard-footer">
+        <a class="app-dashboard-footer-link" href="/design-system">Design system</a>
+        <a class="app-dashboard-footer-link" href="/">Home</a>
+    </div>
+}
+
+@code {
+    private ProjectIntelligenceSnapshot? _snapshot;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _snapshot = await Reader.GetSnapshotAsync();
+    }
+
+    private static RenderFragment CurrentRow(ProjectIntelligenceSnapshot snap) => __builder =>
+    {
+        <div class="app-dashboard-current">
+            <AppCard>
+                <Header>Current milestone and task</Header>
+                <ChildContent>
+                    <dl class="app-dashboard-current-grid">
+                        <div class="app-dashboard-current-cell">
+                            <dt class="app-dashboard-current-label">Milestone</dt>
+                            <dd class="app-dashboard-current-value">
+                                @if (snap.CurrentMilestone is { } m)
+                                {
+                                    <strong>@m.Title</strong>
+                                    <span class="app-dashboard-tag" data-status="@m.Status">@m.Status</span>
+                                }
+                                else
+                                {
+                                    <span class="text-app-fg-muted">No active milestone</span>
+                                }
+                            </dd>
+                        </div>
+                        <div class="app-dashboard-current-cell">
+                            <dt class="app-dashboard-current-label">Task</dt>
+                            <dd class="app-dashboard-current-value">
+                                @if (snap.CurrentTask is { } t)
+                                {
+                                    <strong>@t.Title</strong>
+                                    <span class="app-dashboard-tag">@t.Status</span>
+                                    @if (!string.IsNullOrEmpty(t.Owner))
+                                    {
+                                        <span class="app-dashboard-tag-subtle">@t.Owner</span>
+                                    }
+                                }
+                                else
+                                {
+                                    <span class="text-app-fg-muted">No task in progress</span>
+                                }
+                            </dd>
+                        </div>
+                        <div class="app-dashboard-current-cell">
+                            <dt class="app-dashboard-current-label">Active plan</dt>
+                            <dd class="app-dashboard-current-value">
+                                @if (snap.CurrentPlan is { } p)
+                                {
+                                    <a href="@p.Path">@p.Title</a>
+                                    <span class="app-dashboard-tag" data-status="@p.Status">@p.Status</span>
+                                }
+                                else
+                                {
+                                    <span class="text-app-fg-muted">No active plan</span>
+                                }
+                            </dd>
+                        </div>
+                        <div class="app-dashboard-current-cell">
+                            <dt class="app-dashboard-current-label">Last commit</dt>
+                            <dd class="app-dashboard-current-value">
+                                @if (!string.IsNullOrEmpty(snap.LastCommitHash))
+                                {
+                                    <code class="app-dashboard-mono">@snap.LastCommitHash</code>
+                                    @if (!string.IsNullOrEmpty(snap.LastCommitSubject))
+                                    {
+                                        <span>@snap.LastCommitSubject</span>
+                                    }
+                                }
+                                else
+                                {
+                                    <span class="text-app-fg-muted">No commit information</span>
+                                }
+                            </dd>
+                        </div>
+                        <div class="app-dashboard-current-cell">
+                            <dt class="app-dashboard-current-label">Branch</dt>
+                            <dd class="app-dashboard-current-value">
+                                @if (!string.IsNullOrEmpty(snap.Branch))
+                                {
+                                    <code class="app-dashboard-mono">@snap.Branch</code>
+                                }
+                                else
+                                {
+                                    <span class="text-app-fg-muted">No branch</span>
+                                }
+                            </dd>
+                        </div>
+                        <div class="app-dashboard-current-cell">
+                            <dt class="app-dashboard-current-label">Next recommended action</dt>
+                            <dd class="app-dashboard-current-value">
+                                @if (snap.NextRecommendedAction is { } n)
+                                {
+                                    <strong>@n.Title</strong>
+                                    <span class="app-dashboard-tag-subtle">@n.Task</span>
+                                    <p class="text-app-fg-muted mt-2">@n.Reason</p>
+                                }
+                                else
+                                {
+                                    <span class="text-app-fg-muted">No next action</span>
+                                }
+                            </dd>
+                        </div>
+                    </dl>
+                </ChildContent>
+            </AppCard>
+        </div>
+    };
+
+    private static RenderFragment EmptySection(string header, string title, string description) => __builder =>
+    {
+        <AppCard>
+            <Header>@header</Header>
+            <ChildContent>
+                <AppEmptyState>
+                    <Title>@title</Title>
+                    <Description>@description</Description>
+                </AppEmptyState>
+            </ChildContent>
+        </AppCard>
+    };
+
+    private static RenderFragment BuildStatusSection(ProjectIntelligenceSnapshot snap) => __builder =>
+    {
+        <AppCard>
+            <Header>Build status</Header>
+            <ChildContent>
+                @if (!string.IsNullOrEmpty(snap.BuildStatus))
+                {
+                    <div class="app-dashboard-metric">
+                        <span class="app-dashboard-tag" data-status="@snap.BuildStatus">@snap.BuildStatus</span>
+                        @if (!string.IsNullOrEmpty(snap.TestStatus))
+                        {
+                            <span class="app-dashboard-tag-subtle">@snap.TestStatus</span>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <AppEmptyState>
+                        <Title>⚒ No build information available</Title>
+                        <Description>The platform is not yet connected to a build feed. The build status is recorded in .ai/state/session.json.</Description>
+                    </AppEmptyState>
+                }
+            </ChildContent>
+        </AppCard>
+    };
+
+    private static RenderFragment CapabilityProgressSection(ProjectIntelligenceSnapshot snap) => __builder =>
+    {
+        <AppCard>
+            <Header>Capability progress</Header>
+            <ChildContent>
+                <div class="app-dashboard-progress-summary">
+                    <div class="app-dashboard-progress-numbers">
+                        <span class="app-dashboard-progress-count app-dashboard-progress-count-verified">@snap.ProductProgress.Verified</span>
+                        <span class="app-dashboard-progress-label">Verified</span>
+                    </div>
+                    <div class="app-dashboard-progress-numbers">
+                        <span class="app-dashboard-progress-count app-dashboard-progress-count-delivered">@snap.ProductProgress.Delivered</span>
+                        <span class="app-dashboard-progress-label">Delivered</span>
+                    </div>
+                    <div class="app-dashboard-progress-numbers">
+                        <span class="app-dashboard-progress-count app-dashboard-progress-count-inprogress">@snap.ProductProgress.InProgress</span>
+                        <span class="app-dashboard-progress-label">In progress</span>
+                    </div>
+                    <div class="app-dashboard-progress-numbers">
+                        <span class="app-dashboard-progress-count app-dashboard-progress-count-ready">@snap.ProductProgress.Ready</span>
+                        <span class="app-dashboard-progress-label">Ready</span>
+                    </div>
+                    <div class="app-dashboard-progress-numbers">
+                        <span class="app-dashboard-progress-count app-dashboard-progress-count-planned">@snap.ProductProgress.Planned</span>
+                        <span class="app-dashboard-progress-label">Planned</span>
+                    </div>
+                    <div class="app-dashboard-progress-numbers">
+                        <span class="app-dashboard-progress-count app-dashboard-progress-count-blocked">@snap.ProductProgress.Blocked</span>
+                        <span class="app-dashboard-progress-label">Blocked</span>
+                    </div>
+                    <div class="app-dashboard-progress-numbers">
+                        <span class="app-dashboard-progress-count app-dashboard-progress-count-deferred">@snap.ProductProgress.Deferred</span>
+                        <span class="app-dashboard-progress-label">Deferred</span>
+                    </div>
+                    <div class="app-dashboard-progress-numbers">
+                        <span class="app-dashboard-progress-count app-dashboard-progress-count-total">@snap.ProductProgress.Total</span>
+                        <span class="app-dashboard-progress-label">Total</span>
+                    </div>
+                </div>
+                @if (snap.CapabilityProgress.Count > 0)
+                {
+                    <h3 class="app-dashboard-subhead">By milestone</h3>
+                    <ul class="app-dashboard-progress-list">
+                        @foreach (var item in snap.CapabilityProgress)
+                        {
+                            <li class="app-dashboard-progress-row">
+                                <span class="app-dashboard-progress-milestone">@item.Verified / @item.Total verified</span>
+                            </li>
+                        }
+                    </ul>
+                }
+                @if (snap.ImplementedCapabilities.Count > 0)
+                {
+                    <h3 class="app-dashboard-subhead">Implemented capabilities</h3>
+                    <ul class="app-dashboard-list">
+                        @foreach (var c in snap.ImplementedCapabilities)
+                        {
+                            <li>
+                                <code class="app-dashboard-mono">@c.Id</code>
+                                <span>@c.Title</span>
+                                <span class="app-dashboard-tag" data-status="@c.Status">@c.Status</span>
+                            </li>
+                        }
+                    </ul>
+                }
+                @if (snap.PlansAwaitingApproval.Count > 0)
+                {
+                    <h3 class="app-dashboard-subhead">Plans awaiting approval</h3>
+                    <ul class="app-dashboard-list">
+                        @foreach (var p in snap.PlansAwaitingApproval)
+                        {
+                            <li>
+                                <a href="@p.Path">@p.Title</a>
+                                <span class="app-dashboard-tag" data-status="@p.Status">@p.Status</span>
+                                @if (!string.IsNullOrEmpty(p.Milestone))
+                                {
+                                    <span class="app-dashboard-tag-subtle">@p.Milestone</span>
+                                }
+                            </li>
+                        }
+                    </ul>
+                }
+            </ChildContent>
+        </AppCard>
+    };
+}
