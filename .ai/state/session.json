@@ -8,46 +8,43 @@
     "milestone": "infrastructure",
     "task_id": "T-INFRA-1",
     "slice": "main-branch-rename-and-branching-strategy",
-    "plan": "(none; one-time infrastructure change)",
-    "branch": "feature/repo-infrastructure-main-branch-rename",
+    "plan": "(none; one-time repository infrastructure change per the user's brief on 2026-07-11)",
+    "branch": "main",
     "in_scope": [
-      "T-017 theme toggle fix (included at user request): add @rendermode InteractiveServer to AppThemeToggle.razor (the layout cannot be marked InteractiveServer; its @Body is a RenderFragment delegate that Blazor refuses to serialize across the SSR -> interactive boundary; declaring the directive on the toggle itself is the minimum-blast-radius fix); add the AppLayout_ThemeToggleWiringTests bUnit test that asserts the click handler is wired when the layout is rendered (not the toggle in isolation)",
-      "Empty routes: every route in Components/Pages/ reaches an AppEmptyState (or its data-owning equivalent); the AppCard + AppEmptyState composition is repeated only twice (Home.razor and NotFound.razor), so the AppEmptyRouteCard primitive is not introduced per the plan's >3 rule",
-      "Responsive matrix: the layout is usable at 1280x720, 1440x900, and 1920x1080; below 1280px the sidebar narrows progressively (8rem at 1024-1279px); the top bar remains horizontal at every breakpoint; the content area scrolls vertically (overflow-y: auto)",
-      "Accessibility audit: keyboard smoke test (Tab reachable, focusable buttons and anchors, default focus styles); aria-current=page invariant (breadcrumb last segment + NavLink active state + sidebar active link); axe-core audit (registered, disabled per ADR-016 / M4-D)",
-      "docs/ui-principles.md § 10.1: responsive matrix documented with the M2.5 implementation",
-      "Project-continuity state updates (current.md, task-board.md, session.json, tasks.json, milestones.json, capabilities.json, ROADMAP.md, handoffs/latest.md)",
-      "Implementation report implementation-report-m2-5-empty-routes-responsive-accessibility.md",
-      "Per-session handoff .ai/handoffs/2026-07-11-m2-5-empty-routes-responsive-accessibility.md mirrored to latest.md",
-      "Single coherent commit feat(m2.5): add empty routes, responsive matrix, a11y audit, and theme toggle fix"
+      "Rename the default branch from master to main; main is created at the M2.5 closeout commit (the latest stable, releasable state of the product).",
+      "Re-key all Git-branch references to the word master in the working tree (13 markdown files; 1 JSON file). The phrase 'master delivery plan' (the file master-delivery-plan.md) is preserved; the Git branch is what changed, not the file name.",
+      "Adopt the permanent branching strategy (12 rules; one canonical location at .ai/workflows/branching-strategy.md; no duplication). Update CONTRIBUTING.md § 3 and .ai/README.md to reference the new strategy instead of restating branch-name conventions.",
+      "Add the GitHub remote at https://github.com/maestroohk/ai-engineering-platform.git as 'origin'. Do not push (per the brief and the command protocol: push requires explicit user authorisation).",
+      "Tag the M2.5 closeout commit as m2.5 (the first milestone tag; per rule 9 of the new branching strategy, every milestone receives a milestone tag).",
+      "Delete the legacy master branch.",
+      "Verify the Git identity: the existing authenticated identity (Kasozi Henry <20888838+maestroohk@users.noreply.github.com>) is the host's user, not a Claude-specific identity. No Claude identity to remove. The repository inherits the host's identity.",
+      "Single coherent commit on main: chore(repo): adopt main as the default branch and document the branching strategy."
     ],
     "out_of_scope": [
-      "M2.6 (the M2 closeout and Treehouse dogfooding checkpoint)",
-      "M3+ (project registration, IProjectService, IProjectStore, providers)",
-      "axe-core activation (the harness is registered but disabled; the activation milestone is M4-D per ADR-016)",
-      "Mobile viewport support below 1024px (per ADR-005, the M2 primary viewport is 1280x720 minimum; the M8 closeout adds the full responsive matrix)",
-      "Adding icons to all sidebar routes (the icon-rail collapse at <1024px is a future enhancement once every sidebar route carries an Icon; per ADR-005 and the M2 primary viewport, this is M8 closeout scope)",
-      "Pushing (no remote configured; push is skipped per the brief)"
+      "Renaming legacy feature branches (the M0.5 → M2.5 branches use the older feature/<milestone>-<short-kebab> naming; they are preserved as historical record per the strategy's § 6).",
+      "Pushing to the remote (no push in this session; the user controls merges and pushes per the command protocol).",
+      "Renaming the file master-delivery-plan.md (the file is a delivery artefact, not a Git branch; renaming the file would cascade into many references and is out of scope for this one-time infrastructure change).",
+      "M2.6 or any other M2/M3 work (per the Progressive Coding Rule: one task per session; the M2.5 closeout is the previous session's work, and the next session is M2.6)."
     ]
   },
   "current_understanding": {
-    "active_milestone": "M2",
-    "active_slice": "M2.5 (delivered 2026-07-11)",
-    "active_task": "T-015 (M2.5, Done, 2026-07-11)",
-    "last_completed_milestone": "M2.5",
-    "last_completed_task": "T-015 (M2.5 closeout, 2026-07-11)",
-    "last_stable_commit": "feat(m2.5): add empty routes, responsive matrix, a11y audit, and theme toggle fix on feature/m2-5-empty-routes-responsive-accessibility",
-    "build_status": "passing at M2.5 closeout (0 warnings, 0 errors)",
-    "test_status": "197 passed, 0 failed (6 unit + 185 component + 6 architecture, 7 skipped) at M2.5 closeout"
+    "active_milestone": "infrastructure",
+    "active_slice": "main-branch-rename-and-branching-strategy (delivered 2026-07-11)",
+    "active_task": "T-INFRA-1 (Done, 2026-07-11)",
+    "last_completed_milestone": "M2.5 (delivered 2026-07-11)",
+    "last_completed_task": "T-INFRA-1 (infrastructure, 2026-07-11)",
+    "default_branch": "main",
+    "default_branch_head": "the M2.5 closeout commit + the master→main doc re-keying + the canonical branching strategy + the m2.5 milestone tag",
+    "remote": "origin = https://github.com/maestroohk/ai-engineering-platform.git (added; not pushed)",
+    "build_status": "passing at M2.5 closeout (0 warnings, 0 errors; no code changes in this session)",
+    "test_status": "197 passed, 0 failed (6 unit + 185 component + 6 architecture, 7 skipped) at M2.5 closeout; the infrastructure change is docs + Git topology; no test changes"
   },
   "last_action": {
     "at": "2026-07-11T00:00:00Z",
-    "kind": "M2.5 closeout",
-    "target": "feature/m2-5-empty-routes-responsive-accessibility",
-    "outcome": "M2.5 delivered 2026-07-11: empty routes (Home.razor + NotFound.razor reach AppEmptyState with /dashboard and /design-system links); responsive matrix (AppLayout.razor.css @media rules for lg/md/sm breakpoints; docs/ui-principles.md § 10.1 documents the matrix); a11y audit (KeyboardSmokeTests + AriaCurrentInvariantTests + AxeCoreAuditTests registered but skipped per ADR-016 / M4-D); T-017 theme toggle fix (@rendermode InteractiveServer added to AppThemeToggle.razor; the layout itself remains static for streaming SSR; the new AppLayout_ThemeToggleWiringTests bUnit test asserts the click handler is wired when the layout is rendered). 18 new component tests + 3 new architecture tests (skipped). Total: 197 passing + 7 skipped, 0 failed. Visual smoke test: every route returns 200; the theme toggle's markup is present on every page."
+    "kind": "repository infrastructure change",
+    "target": "main",
+    "outcome": "main is the new default branch; the legacy master branch is deleted; the GitHub remote is added as origin (no push); the m2.5 milestone tag is created at the M2.5 closeout commit; the canonical branching strategy is documented at .ai/workflows/branching-strategy.md (12 rules, one place, no duplication); CONTRIBUTING.md § 3 is updated to reference the strategy and remove the conflicting branch-name conventions; .ai/README.md is updated to add the workflow to the directory layout and the task-routing table. 20 branch references to master are re-keyed to main across 13 markdown files and 1 JSON file. The 'master delivery plan' (the file master-delivery-plan.md) is preserved; the Git branch is what changed, not the file name. The Git identity is verified: Kasozi Henry <20888838+maestroohk@users.noreply.github.com> (the host's authenticated user, not a Claude-specific identity)."
   },
-  "intended_next_action": "Stop. The M2.6 closeout session follows per the Progressive Coding Rule. The M2.6 plan stub is recorded in task-board.md and milestones.json as Deferred; the next session promotes the M2.6 plan stub to a full plan in Awaiting Approval, then implements per the plan's own order (M2 closeout template + Treehouse dogfooding checkpoint + M3 plan preparation). Do NOT begin M2.6 in this session.",
-  "session_notes": "M2.5 closeout session (2026-07-11). The M2.5 plan was approved by the user on 2026-07-11 with the T-017 theme toggle bug fix included in the same slice. The session implements the M2.5 slice per the plan (.ai/plans/M2.5-empty-routes-responsive-accessibility.md) starting with the T-017 fix. Two documented deviations: (1) the T-017 fix was applied to AppThemeToggle.razor (not AppLayout.razor as the plan's primary path) because the layout's @Body is a RenderFragment delegate, which Blazor refuses to serialize across the SSR -> interactive boundary; the layout rejects the @rendermode directive with InvalidOperationException. The plan § 1 explicitly allowed this fallback ('If the layout must remain static for streaming SSR reasons, mark AppTopBar.razor + AppThemeToggle.razor as Interactive instead and add a comment explaining why'). (2) The plan's responsive matrix mentions 'sidebar collapses to an icon rail below 1280px'; the implementation narrows the sidebar progressively (8rem at 1024-1279px) but does not collapse to an icon rail because most sidebar routes do not carry an Icon (only Dashboard does). The icon-rail collapse is a future enhancement once every sidebar route carries an Icon; per ADR-005 and the M2 primary viewport (1280x720 minimum), the M2.5 implementation is usable at 1280x720 and above. The session follows the Progressive Coding Rule: one task per session; 13-step lifecycle; stop after the coherent commit. Push is skipped (no remote)."
-}
-  "session_notes": "M2.4 implementation session. The M2.4 plan was approved by the user on 2026-07-11. The session implements the M2.4 slice per the plan (.ai/plans/M2.4-project-intelligence-dashboard.md). The session also addresses the theme toggle bug: the M2.3 AppThemeToggle's state must propagate to the documentElement.data-theme attribute so light/dark switching is visible immediately, persists across navigation and browser refresh, and remains consistent throughout the application. The session follows the Progressive Coding Rule: one task per session; 13-step lifecycle; stop after the coherent commit. The session does NOT implement M2.5 (only the M2.5 plan is promoted to Awaiting Approval). Push is skipped (no remote)."
+  "intended_next_action": "Stop. The next session is M2.6 (the M2 closeout and external Treehouse dogfooding checkpoint). The new branching strategy applies to M2.6: the M2.6 work starts on a new feature branch created from the latest main; the branch is named feature/T-<task-id>-<short-kebab-description> per rule 4; the work ends with one coherent commit that is fast-forwarded into main; the feature branch is deleted. The M2.6 plan stub is recorded in .ai/state/task-board.md and .ai/state/milestones.json as Deferred. Do NOT begin M2.6 in this session.",
+  "session_notes": "Repository infrastructure session (2026-07-11). The user's brief was to (1) rename the default branch from master to main, (2) inspect the Git identity (no Claude identity was present; the host's authenticated identity is Kasozi Henry <20888838+maestroohk@users.noreply.github.com>), (3) add the GitHub remote at https://github.com/maestroohk/ai-engineering-platform.git as origin (no push), and (4) adopt a permanent branching strategy (12 rules; one canonical location; no duplication). The session executes the brief in the order: (a) commit the master→main re-keyings on the M2.5 feature branch (the doc/state changes ride on the existing branch); (b) create main at the M2.5 feature branch's tip (which carries the M2.5 closeout + the re-keying); (c) switch to main; (d) write the canonical branching strategy at .ai/workflows/branching-strategy.md; (e) update CONTRIBUTING.md § 3 and .ai/README.md to reference the strategy (the conflicting branch-name conventions in CONTRIBUTING.md are removed); (f) add the GitHub remote; (g) tag the M2.5 closeout as m2.5 (the first milestone tag); (h) delete the legacy master branch; (i) create the single coherent commit on main. The session follows the Progressive Coding Rule: one task per session; stop after the coherent commit. Push is skipped (no push in this session; the user controls pushes per the command protocol)."
 }

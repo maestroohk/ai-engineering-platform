@@ -42,20 +42,28 @@ If a contribution cannot answer "yes" to all three, it is not ready.
 
 ## 3. Branching Model
 
-The repository uses a trunk-based model with short-lived feature
-branches.
+The branching model is documented in full in
+[`.ai/workflows/branching-strategy.md`](./.ai/workflows/branching-strategy.md).
+That document is the **single source of truth** for branching
+and merging in this repository; if this section and that
+document disagree, that document wins.
 
-- `main` is always green. Every commit on `main` passes the full CI
-  pipeline.
-- Feature branches are named `feature/<milestone>-<short-kebab>`.
-- Bugfix branches are named `bugfix/<issue>-<short-kebab>`.
-- Refactor branches are named `refactor/<area>-<short-kebab>`.
-- Documentation-only branches are named `docs/<short-kebab>`.
-- Architecture decision branches are named `adr/<short-kebab>` and
-  always modify `DECISIONS.md`.
+The high-level rules:
 
-Branches are deleted after merge. Long-lived branches are not
-permitted.
+- `main` is the default branch; it is always the latest stable,
+  releasable version of the product.
+- Every task has its own feature branch, named
+  `feature/T-<task-id>-<short-kebab-description>`. The task ID
+  matches the task's identifier in `.ai/state/tasks.json`.
+- Every task ends with one coherent commit on the feature
+  branch; the commit is fast-forwarded into `main` and the
+  feature branch is deleted.
+- Every milestone receives a milestone tag (`m<milestone-number>`)
+  at its closeout commit on `main`.
+
+See `.ai/workflows/branching-strategy.md` for the full
+workflow, the branch lifecycle, the milestone-tagging rules,
+the legacy branch-name conventions, and the anti-patterns.
 
 ---
 

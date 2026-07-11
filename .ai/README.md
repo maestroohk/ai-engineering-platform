@@ -78,6 +78,7 @@ treated as a bug.
 │   ├── provider.md
 │   └── release.md
 ├── workflows/             # multi-step operating procedures
+│   ├── branching-strategy.md
 │   ├── feature-lifecycle.md
 │   ├── ui-design-review.md
 │   ├── provider-onboarding.md
@@ -113,6 +114,7 @@ documents for the task at hand.
 | Review                              | `review.md`                         | `ui-design-review.md` when relevant | Standards relevant to the diff                                                                       |
 | Architecture decision               | `architecture.md`                   | `documentation-update.md`           | `ARCHITECTURE.md`, `DECISIONS.md`                                                                    |
 | Release                             | `release.md`                        | `release-checklist.md`              | `CONTRIBUTING.md`, `ROADMAP.md`                                                                      |
+| Branching / merging decision        | (none — read directly)              | (none — read directly)              | [`.ai/workflows/branching-strategy.md`](../.ai/workflows/branching-strategy.md) (single source of truth) |
 | Documentation update                | `refactor.md` (as guidance)         | `documentation-update.md`           | The documents affected by the change                                                                 |
 | Tool dogfooding (development-time)  | `feature.md` + workflow note        | `tool-dogfooding.md`                | `docs/provider-guidelines.md` (for the boundary)                                                     |
 | Product integration of a tool       | `provider.md`                       | `provider-onboarding.md`            | `docs/provider-guidelines.md`                                                                        |
