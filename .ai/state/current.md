@@ -39,20 +39,12 @@
 
 ## Current Milestone
 
-- **Active milestone:** **M2 — Application Shell and
-  Navigation** (closed 2026-07-11; M2.1
-  delivered 2026-07-11; M2.2 delivered
-  2026-07-11; M2.3 delivered 2026-07-11;
-  M2.4 delivered 2026-07-11; M2.5 delivered
-  2026-07-11; M2.6 delivered 2026-07-11; the
-  M2 retrospective is the first milestone
-  retrospective in this repository; the
-  Milestone Closeout Standard at
-  `.ai/workflows/milestone-closeout.md` is
-  the canonical procedure every future
-  milestone closeout must follow; the `m2`
-  annotated milestone tag is at the M2
-  closeout commit on `main`).
+- **Active milestone:** **M3 — Project Registration**
+  (Active, 2026-07-11; M3.1 delivered
+  2026-07-11; M3.2 is the next `Ready` task;
+  M3 closes when M3.x — the M3 closeout
+  slice (M3 retrospective per the Milestone
+  Closeout Standard) — is delivered).
 - **M2.1 — Application Shell Foundation:**
   **Delivered (2026-07-11).** The shell
   foundation lands: two layouts
@@ -207,19 +199,55 @@
   [`implementation-report-m0.5-architecture-refinement.md`](./../../implementation-report-m0.5-architecture-refinement.md)
   and
   [`.ai/handoffs/2026-07-10-m0.5-architecture-refinement.md`](./../../.ai/handoffs/2026-07-10-m0.5-architecture-refinement.md).
+- **M3.1 — Project Registration Slice 1:**
+  **Delivered (2026-07-11).** The M3
+  surface lands end-to-end as a single
+  slice: the contract
+  (`IProjectStore`, `IProjectService`),
+  the in-memory store
+  (`InMemoryProjectStore`; the M3 smoke
+  test for the contract; M4-A swaps the
+  `IProjectStore` registration in
+  `AddProjects`), the domain entity
+  (`Project`), the composition root
+  (`AddProjects`), the UI surface
+  (`AppProjectCard`, `AppProjectList`,
+  `/projects` page), the architecture
+  test
+  `Pages_Resolve_Projects_Through_Service`
+  (enforces the single-seam rule),
+  27 new unit tests + 13 new bUnit
+  tests + 2 new architecture tests.
+  Total: 240 passed, 0 failed, 7
+  skipped (per ADR-016 / M4-D). The
+  page composes `AppPageHeader` +
+  `AppBreadcrumb` (M2.3) +
+  `AppProjectList`; the sidebar entry
+  is in the M2.2 `INavigationRegistry`
+  (Href `/projects`, Order 1, Icon
+  `▢`). The M3 surface is the
+  smallest piece of state the platform
+  needs to be useful on its own; every
+  later milestone (M4 process runner,
+  M5 worktree, M6 launch, M7 review,
+  M8 orchestration) consumes
+  `IProjectService.ListAsync` as its
+  input. See
+  [`implementation-report-m3-1-project-registration-slice-1.md`](./../../implementation-report-m3-1-project-registration-slice-1.md).
 
 ## Current Slice
 
-- **Active slice:** **M2.6 — M2 Closeout**
-  (delivered 2026-07-11). The branch
-  `feature/T-016-m2-closeout-and-treehouse-dogfooding`
-  carried the M2.6 work; the M2.6 closeout
-  commit
-  `chore(m2.6): close M2 with retrospective, milestone closeout standard, and M3 plan`
+- **Active slice:** **M3.1 — Project
+  Registration Slice 1** (delivered
+  2026-07-11). The branch
+  `feature/m3-1-project-registration-slice-1`
+  carried the M3.1 work; the M3.1
+  closeout commit
+  `feat(m3.1): add project registration surface`
   is on this branch; the branch is
   fast-forwarded into `main` per the
   branching strategy rule 6; the branch is
-  deleted per rule 7; the `m2` annotated
+  deleted per rule 7.
   milestone tag is at the M2 closeout
   commit on `main` per rule 9.
 - **Last completed slice:** **M2.4 —
@@ -279,7 +307,30 @@
   `retrospective-m2-application-shell-and-navigation.md`;
   the `m2` annotated milestone tag is
   at the M2 closeout commit on `main`).**
-- **M3 through M8:** Planned; no evidence yet.
+- **M3 — Project Registration:**
+  **Active (2026-07-11; M3.1 Delivered
+  2026-07-11).** The M3 surface is the
+  smallest piece of state the platform
+  needs to be useful on its own. M3.1
+  ships the contract, the in-memory
+  store, the UI surface, and the
+  architecture test. M3.2 is the
+  next `Ready` task (registration form
+  + rename + unregister). M3 closes
+  when M3.x — the M3 retrospective per
+  the Milestone Closeout Standard — is
+  delivered. The M3 plan is at
+  `.ai/plans/M3-project-registration.md`
+  (Status: Awaiting Approval, 2026-07-11;
+  promoted implicitly to Approved per
+  the M3.1 brief; the M3.1 plan is the
+  first M3 slice).**
+- **M4-A through M8:** Planned; no
+  evidence yet. M3.2 (form + rename +
+  unregister) is the next `Ready`
+  task; M3.x (M3 retrospective) is the
+  M3 closeout slice; M4-A is the next
+  milestone after M3 closes.
 
 ## Last Completed Milestone
 
@@ -302,78 +353,71 @@
 
 ## Last Completed Task
 
-- The M2.6 implementation session
+- The M3.1 implementation session
   (2026-07-11), which:
-  - Delivered M2.6 — M2 Closeout and
-    Treehouse Dogfooding per the
-    approved plan
-    (`.ai/plans/M2.6-m2-closeout-and-treehouse-dogfooding.md`).
-  - Landed four sub-deliverables:
-    (1) The Milestone Closeout Standard
-    at
-    `.ai/workflows/milestone-closeout.md`
-    (10 sections; the canonical
-    procedure every future milestone
-    closeout must follow; the
-    13-section retrospective is the
-    standard's required deliverable);
-    (2) The M2 retrospective at
-    `retrospective-m2-application-shell-and-navigation.md`
-    (13 sections, all populated; the
-    first milestone retrospective in
-    this repository); (3) Project-
-    continuity state + ROADMAP.md +
-    master-delivery-plan.md updates
-    (M2.6 from in_progress to
-    delivered; M2 from Active to Done
-    with closed_at 2026-07-11; M2
-    evidence block updated; M3 plan
-    path added; T-016 Done; T-006 M2
-    summary Done; T-018 M3.1 promoted
-    to Ready); (4) M3 plan + first M3
-    task promotion (the M3 plan at
-    `.ai/plans/M3-project-registration.md`
-    Status: Awaiting Approval; the
-    first M3 task T-018 M3.1 Ready).
-  - Validated the complete M2
-    milestone end-to-end per the
-    Milestone Closeout Standard § 3:
-    `npm run css:build` (exit 0),
-    `dotnet restore` (exit 0), `dotnet
-    build` (0 warnings, 0 errors),
-    `dotnet test` (197 passed, 0
-    failed, 7 skipped per ADR-016),
-    `dotnet format --verify-no-changes`
-    (exit 0), visual smoke (5 routes
-    return 200 on `localhost:5211`;
-    theme toggle markup present on
-    every `AppLayout` page).
-  - 197 total tests pass: 6 unit + 185
-    component + 6 architecture, 7
-    skipped. The M2.6 closeout adds
-    no tests; the M2 closeout's test
-    count is identical to the M2.5
-    closeout's test count.
+  - Delivered M3.1 — Project
+    Registration Slice 1 per the
+    approved M3 plan
+    (`.ai/plans/M3-project-registration.md`).
+  - Landed the M3 surface end-to-end
+    as a single slice: the contract
+    (`IProjectStore`, `IProjectService`),
+    the in-memory store
+    (`InMemoryProjectStore`; the M3
+    smoke test for the contract; M4-A
+    swaps the `IProjectStore`
+    registration in `AddProjects`),
+    the domain entity (`Project`), the
+    composition root
+    (`ProjectsServiceCollectionExtensions.AddProjects`),
+    the UI surface (`AppProjectCard`,
+    `AppProjectList`, `/projects` page),
+    the architecture test
+    `Pages_Resolve_Projects_Through_Service`
+    (enforces the single-seam rule),
+    27 new unit tests + 13 new bUnit
+    tests + 2 new architecture tests.
+  - Validated the M3.1 slice
+    end-to-end: `npm run css:build`
+    (exit 0), `dotnet restore` (exit
+    0), `dotnet build` (0 warnings, 0
+    errors), `dotnet test` (240
+    passed, 0 failed, 7 skipped per
+    ADR-016), `dotnet format
+    --verify-no-changes` (exit 0),
+    visual smoke (`curl
+    http://localhost:5286/projects`
+    returns 200 with the expected
+    markers).
+  - 240 total tests pass: 34 unit +
+    198 component + 8 architecture, 7
+    skipped. The M3.1 closeout adds
+    +27 unit + 13 bUnit + 2
+    architecture tests vs the M2.6
+    closeout.
+  - Three documented deviations: (1)
+    `ValidationError` is a class, not
+    a struct (`T?` semantics on the
+    `Result<T>.Error` slot forced the
+    change); (2) `IClock` is realised
+    through .NET 8+ `TimeProvider`;
+    (3) Disabled tests unchanged.
   - The commit
-    `chore(m2.6): close M2 with retrospective, milestone closeout standard, and M3 plan`
+    `feat(m3.1): add project registration surface`
     is the closing receipt; the commit
     is on the feature branch
-    `feature/T-016-m2-closeout-and-treehouse-dogfooding`;
+    `feature/m3-1-project-registration-slice-1`;
     the branch is fast-forwarded into
     `main` per the branching strategy
     rule 6; the branch is deleted per
-    rule 7; the `m2` annotated
-    milestone tag is at the M2
-    closeout commit on `main` per
-    rule 9. No push (push is not
+    rule 7. No push (push is not
     authorised in this session; the
     user may push in a follow-up
     command per the command protocol).
   - The session does **not**
-    implement M3; per the
-    Progressive Coding Rule, M3 is
-    the next milestone's
-    responsibility.
+    implement M3.2; per the
+    Progressive Coding Rule, M3.2 is
+    the next session's responsibility.
 - The M2.5 implementation session
   (2026-07-11) is the prior task;
   the M2.4 implementation session
@@ -395,55 +439,53 @@
 
 ## Active Branch
 
-- **`main`** (the M2 closeout's
-  fast-forwarded branch). The M2.6
+- **`main`** (the M3.1 closeout's
+  fast-forwarded branch). The M3.1
   closeout commit
-  `chore(m2.6): close M2 with retrospective, milestone closeout standard, and M3 plan`
-  is the HEAD of `main`. The M2.6
+  `feat(m3.1): add project registration surface`
+  is the HEAD of `main`. The M3.1
   feature branch
-  `feature/T-016-m2-closeout-and-treehouse-dogfooding`
-  carried the M2.6 work; the branch is
+  `feature/m3-1-project-registration-slice-1`
+  carried the M3.1 work; the branch is
   fast-forwarded into `main` per the
   branching strategy rule 6; the branch
-  is deleted per rule 7; the `m2`
-  annotated milestone tag is at the M2
-  closeout commit on `main` per rule 9.
-  The M2.x commit chain (M2.1 → M2.5)
-  lives on the per-slice feature
-  branches; the per-slice feature
-  branches are deleted per the
-  branching strategy rule 7; the
-  per-slice commits are recorded in the
-  M2 evidence block of
-  `.ai/state/milestones.json`. The
-  remote (`origin`) is configured but
-  push is not authorised in this
+  is deleted per rule 7. The M2.x
+  commit chain (M2.1 → M2.6) lives on
+  the per-slice feature branches; the
+  per-slice feature branches are
+  deleted per the branching strategy
+  rule 7; the per-slice commits are
+  recorded in the M2 evidence block of
+  `.ai/state/milestones.json`. The M3.1
+  commit chain lives on the M3.1
+  feature branch, which is fast-
+  forwarded into `main` and deleted
+  per rule 7; the M3.1 commit is
+  recorded in the M3 evidence block.
+  The remote (`origin`) is configured
+  but push is not authorised in this
   session.
 
 ## Last Stable Commit
 
-- The M2.6 closeout commit
-  `chore(m2.6): close M2 with retrospective, milestone closeout standard, and M3 plan`
+- The M3.1 closeout commit
+  `feat(m3.1): add project registration surface`
   on `main` (created 2026-07-11). The
-  M2.6 commit is the closing receipt
-  for the entire M2 milestone
-  (Application Shell & Navigation).
-  The M2.6 commit chain lives on the
-  M2.6 feature branch
-  `feature/T-016-m2-closeout-and-treehouse-dogfooding`,
-  which is fast-forwarded into
-  `main` per the branching strategy
-  rule 6 and deleted per rule 7.
-  The `m2` annotated milestone tag
-  points at this commit on `main` per
-  the branching strategy rule 9. The
-  parent commit is the M2.5 closeout
-  commit
-  `feat(m2.5): add empty routes, responsive matrix, a11y audit, and theme toggle fix`
-  on the deleted
-  `feature/m2-5-empty-routes-responsive-accessibility`
-  branch. Working tree is clean at
-  the close of the M2.6 session; the
+  M3.1 commit is the closing receipt
+  for the M3.1 slice (the first M3
+  implementation slice; the contract,
+  the in-memory store, the UI surface,
+  the architecture test). The M3.1
+  commit chain lives on the M3.1
+  feature branch
+  `feature/m3-1-project-registration-slice-1`,
+  which is fast-forwarded into `main`
+  per the branching strategy rule 6
+  and deleted per rule 7. The parent
+  commit is the M2.6 closeout commit
+  `chore(m2.6): close M2 with retrospective, milestone closeout standard, and M3 plan`
+  on `main`. Working tree is clean at
+  the close of the M3.1 session; the
   remote (`origin`) is configured but
   push is not authorised in this
   session.
@@ -512,11 +554,12 @@
 ## Test Status
 
 - `dotnet test AiEng.Platform.slnx --no-build` →
-  **197 passed, 7 skipped, 0 failed.**
-  - `AiEng.Platform.UnitTests`: 6 tests
-    (the M2.4 `ProjectIntelligenceReader`
-    unit tests).
-  - `AiEng.Platform.ComponentTests`: 185
+  **240 passed, 7 skipped, 0 failed.**
+  - `AiEng.Platform.UnitTests`: 34 tests
+    (7 existing + 16 new M3.1
+    `IProjectServiceTests` + 11 new
+    M3.1 `InMemoryProjectStoreTests`).
+  - `AiEng.Platform.ComponentTests`: 198
     bUnit / integration tests, all passing
     (77 M1.2 + 25 M2.1 + 23 M2.2 bUnit + 27
     M2.3 bUnit − 6 obsolete M2.1
@@ -526,16 +569,21 @@
     EmptyRoutesTests + 4
     AppLayout_ThemeToggleWiringTests + 4
     AppLayout_ResponsiveMatrixTests + 5
-    AriaCurrentInvariantTests).
-  - `AiEng.Platform.ArchitectureTests`: 13
-    tests in total — 6 active (passing)
+    AriaCurrentInvariantTests + 5 new
+    M3.1 `AppProjectCardTests` + 4 new
+    M3.1 `AppProjectListTests` + 4 new
+    M3.1 `ProjectsPageTests`).
+  - `AiEng.Platform.ArchitectureTests`: 15
+    tests in total — 8 active (passing)
     and 7 registered-but-disabled
     (skipped) per ADR-016 and the M4-D
     activation milestone. The
     `Pages_AreReachable_Through_Registry`
-    test (M2.2) and the
+    test (M2.2), the
     `Pages_Resolve_State_Through_Reader`
-    test (M2.4) are the two most recent
+    test (M2.4), and the
+    `Pages_Resolve_Projects_Through_Service`
+    test (M3.1) are the three most recent
     active architecture tests. The M2.5
     `AxeCoreAuditTests` (3 tests) are
     registered but skipped.
@@ -798,21 +846,32 @@ Plus the supporting infrastructure:
   the M2 retrospective lives at
   [`retrospective-m2-application-shell-and-navigation.md`](./../../retrospective-m2-application-shell-and-navigation.md).
 - [`.ai/plans/M3-project-registration.md`](./../../.ai/plans/M3-project-registration.md)
-  — M3 plan, **Awaiting Approval
-  (2026-07-11)**. Prepared in the M2.6
-  closeout session per the user's
-  brief; the first M3 task (T-018,
-  M3.1) is in `Ready` in
-  `.ai/state/tasks.json` and at the
-  top of the Ready block in the
-  task board. The M3 plan is
-  approved in the next session;
-  M3.1 implementation lands in the
-  session after the M3 plan
-  approval.
+  — M3 plan, **Delivered (M3.1,
+  2026-07-11)**. Prepared in the M2.6
+  closeout session; the M3.1 plan is
+  the first M3 implementation slice
+  (T-018, delivered 2026-07-11). M3
+  is **Active**; M3.2 is the next
+  `Ready` task; M3 closes when M3.x
+  (M3 retrospective) is delivered.
+- [`.ai/plans/M3.2-project-registration-slice-2.md`](./../../.ai/plans/M3.2-project-registration-slice-2.md)
+  — M3.2 plan, **Awaiting Approval
+  (2026-07-11)**. Prepared in the
+  M3.1 closeout session; M3.2
+  enables the M3.1 wired-but-
+  disabled actions (Register form,
+  Rename, Unregister). The next
+  session approves the M3.2 plan
+  and starts the M3.2
+  implementation per the
+  Progressive Coding Rule.
 
 ## Last Implementation Report
 
+- [`implementation-report-m3-1-project-registration-slice-1.md`](./../../implementation-report-m3-1-project-registration-slice-1.md)
+  — the M3.1 implementation report
+  (the closing receipt for the M3.1
+  slice, 2026-07-11).
 - [`implementation-report-m2-6-m2-closeout.md`](./../../implementation-report-m2-6-m2-closeout.md)
   — the M2.6 implementation report
   (the closing receipt for the M2
@@ -854,35 +913,33 @@ Plus the supporting infrastructure:
 
 ## Next Recommended Task
 
-> **M3.1 — Project Registration
-> (M3 first slice).** The M2.6
-> closeout session delivers the M2
-> closeout and prepares the M3 plan
-> in `Awaiting Approval`; the next
-> session approves the M3 plan and
-> implements M3.1 (the M3 first
-> slice). M3.1 introduces
-> `IProjectRegistry` (the M3
-> project-registration service) and
-> the `Project` aggregate root; the
-> `Projects` dashboard route reads
-> projects through the
-> `IProjectRegistry` per the
-> architecture test
-> `Pages_Resolve_Projects_Through_Service`
-> introduced in the M3 plan.
-> The next session follows the
-> **Progressive Coding Rule** in
+> **M3.2 — Project Registration
+> Slice 2 (form, rename, unregister).**
+> The M3.1 closeout session delivers
+> the M3 surface end-to-end (the
+> contract, the in-memory store, the
+> UI surface, the architecture test);
+> the M3.2 plan is in `Awaiting
+> Approval`. M3.2 enables the
+> M3.1 wired-but-disabled actions
+> (Register a project form, Rename
+> modal, Unregister confirmation);
+> the next session approves the
+> M3.2 plan and starts the M3.2
+> implementation per the
+> Progressive Coding Rule in
 > [`.ai/workflows/progressive-coding.md`](./../../.ai/workflows/progressive-coding.md):
 > one task per session;
 > 13-step lifecycle; stop after
 > the coherent commit. **Do not
-> begin M3.1 implementation in
-> this session** — the M2.6 brief
-> explicitly says *"do not
-> expand into M3 implementation"*
-> and *"do not begin M3
-> implementation"*.
+> begin M3.2 implementation in
+> this session** — the M3.1 brief
+> explicitly says *"Do not begin
+> the following task; merge
+> completed task into main;
+> update project intelligence;
+> prepare the following task
+> plan; stop"*.
 
 The detailed breakdown of the M3 slices is
 in
@@ -891,60 +948,66 @@ and the M3 plan file in
 [`.ai/plans/M3-project-registration.md`](./../../.ai/plans/M3-project-registration.md). The
 next three actionable items are:
 
-1. **M3 plan approval** (the M3
+1. **M3.2 plan approval** (the M3.2
    plan is at
-   [`.ai/plans/M3-project-registration.md`](./../../.ai/plans/M3-project-registration.md)
+   [`.ai/plans/M3.2-project-registration-slice-2.md`](./../../.ai/plans/M3.2-project-registration-slice-2.md)
    with `Status: Awaiting
    Approval`; the next session
    promotes it to `Approved`).
-2. **M3.1 — Project Registration
-   first slice** (T-018, `Ready`
+2. **M3.2 — Project Registration
+   second slice** (T-019, `Ready`
    in `.ai/state/tasks.json`; the
-   first concrete M3 task).
+   next concrete M3 task).
 3. **M1 follow-up — Add
    `AppToolbar` example to
    `/design-system`** (cosmetic;
    the work is small and can be
-   folded into M3.1 or a later M3
+   folded into M3.2 or a later M3
    slice if appropriate).
 
 ## Last Updated
 
-- **2026-07-11** (M2.6 closeout
+- **2026-07-11** (M3.1 closeout
   session). This version supersedes
-  the M2.5 closeout version
-  (2026-07-11). The M2.6 closeout
-  session delivers the M2 closeout
-  end-to-end: introduces the
-  Milestone Closeout Standard at
-  [`.ai/workflows/milestone-closeout.md`](./../../.ai/workflows/milestone-closeout.md);
-  produces the M2 retrospective
-  (13 sections) at
-  [`retrospective-m2-application-shell-and-navigation.md`](./../../retrospective-m2-application-shell-and-navigation.md);
-  runs the validation suite
+  the M2.6 closeout version
+  (2026-07-11). The M3.1 closeout
+  session delivers the M3 surface
+  end-to-end: ships the contract
+  (`IProjectStore`, `IProjectService`),
+  the in-memory store
+  (`InMemoryProjectStore`; the M3
+  smoke test for the contract),
+  the domain entity (`Project`),
+  the composition root
+  (`AddProjects`), the UI surface
+  (`AppProjectCard`, `AppProjectList`,
+  `/projects` page), the architecture
+  test
+  `Pages_Resolve_Projects_Through_Service`,
+  27 new unit + 13 new bUnit + 2 new
+  architecture tests; runs the
+  validation suite
   (npm css:build, dotnet build,
   dotnet test, dotnet format,
   visual smoke test) and confirms
-  M2 is green (197 passed, 0
+  M3.1 is green (240 passed, 0
   failed, 7 skipped; 0 warnings, 0
   errors; format clean); updates
   the project-continuity state per
   Rule 15; produces
-  `implementation-report-m2-6-m2-closeout.md`;
-  and creates the M2.6 closeout
-  commit. The M2 closeout commit
+  `implementation-report-m3-1-project-registration-slice-1.md`;
+  and creates the M3.1 closeout
+  commit. The M3.1 closeout commit
   is the most recent commit on
-  `main`; the M2.6 feature branch
+  `main`; the M3.1 feature branch
   is fast-forwarded into `main`
   and deleted per the branching
-  strategy; the `m2` annotated
-  milestone tag is at the M2
-  closeout commit on `main` per
-  rule 9. The M3 plan is prepared
-  at
-  [`.ai/plans/M3-project-registration.md`](./../../.ai/plans/M3-project-registration.md)
+  strategy rule 6/7. The M3 plan
+  is delivered (M3.1 is the first
+  M3 slice); the M3.2 plan is at
+  [`.ai/plans/M3.2-project-registration-slice-2.md`](./../../.ai/plans/M3.2-project-registration-slice-2.md)
   with `Status: Awaiting Approval`;
-  the first M3 task (T-018, M3.1)
+  the next M3 task (T-019, M3.2)
   is `Ready` in
   `.ai/state/tasks.json`. The
   remote (`origin`) is configured
@@ -959,13 +1022,17 @@ next three actionable items are:
 - [`.ai/state/task-board.md`](./task-board.md) —
   the live work queue (M2.1
   through M2.6 Done; M3.1
-  `Ready`, M3 plan `Awaiting
-  Approval`; M3 summary entry
-  noted as promoted to `Ready`).
+  `Done`; M3.2
+  `Ready`; M3 plan
+  `Delivered` (M3.1)).
 - [`.ai/handoffs/latest.md`](./../../.ai/handoffs/latest.md) —
-  the most recent handoff (the M2.6
+  the most recent handoff (the M3.1
   closeout handoff; mirrored from
-  `.ai/handoffs/2026-07-11-m2-6-m2-closeout.md`).
+  `.ai/handoffs/2026-07-11-m3-1-project-registration-slice-1.md`).
+- [`.ai/handoffs/2026-07-11-m3-1-project-registration-slice-1.md`](./../../.ai/handoffs/2026-07-11-m3-1-project-registration-slice-1.md)
+  — the M3.1 closeout session handoff
+  (the closing receipt for the M3.1
+  slice, 2026-07-11).
 - [`.ai/handoffs/2026-07-11-m2-6-m2-closeout.md`](./../../.ai/handoffs/2026-07-11-m2-6-m2-closeout.md)
   — the M2.6 closeout session handoff
   (the closing receipt for the M2
@@ -1035,6 +1102,17 @@ next three actionable items are:
 - [`.ai/plans/M2.5-empty-routes-responsive-accessibility.md`](./../../.ai/plans/M2.5-empty-routes-responsive-accessibility.md) —
   the M2.5 plan (Delivered,
   2026-07-11).
+- [`.ai/plans/M3-project-registration.md`](./../../.ai/plans/M3-project-registration.md) —
+  the M3 plan (M3.1 Delivered
+  2026-07-11; the first M3
+  implementation slice is the
+  contract + in-memory store +
+  UI surface + architecture test).
+- [`.ai/plans/M3.2-project-registration-slice-2.md`](./../../.ai/plans/M3.2-project-registration-slice-2.md) —
+  the M3.2 plan (Awaiting Approval
+  2026-07-11; the next M3 slice;
+  registration form + rename +
+  unregister).
 - [`.ai/plans/master-delivery-plan.md`](./../../.ai/plans/master-delivery-plan.md) —
   the master delivery plan.
 - [`.ai/reviews/M1-design-system-lavish-axi-review.md`](./../../.ai/reviews/M1-design-system-lavish-axi-review.md) —
@@ -1075,6 +1153,10 @@ next three actionable items are:
   — the M2.2 implementation report
   (the closing receipt for M2.2,
   2026-07-11).
+- [`implementation-report-m3-1-project-registration-slice-1.md`](./../../implementation-report-m3-1-project-registration-slice-1.md)
+  — the M3.1 implementation report
+  (the closing receipt for the M3.1
+  slice, 2026-07-11).
 - [`implementation-report-m2-4-project-intelligence-dashboard.md`](./../../implementation-report-m2-4-project-intelligence-dashboard.md)
   — the M2.4 implementation report
   (the closing receipt for M2.4,

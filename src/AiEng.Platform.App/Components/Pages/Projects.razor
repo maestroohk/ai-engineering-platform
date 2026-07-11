@@ -1,0 +1,34 @@
+@namespace AiEng.Platform.App.Components.Pages
+
+@page "/projects"
+@attribute [RouteMetadata("/projects", "Projects", Order = 1, ShowInSidebar = true, Icon = "▢", Description = "Registered projects. The smallest piece of state the platform needs to be useful. M3 ships the contract, the in-memory store, and the surface; M4-A swaps in durable storage behind the same contract.")]
+@layout AppLayout
+@rendermode InteractiveServer
+@using AiEng.Platform.App.Components.Common
+@using AiEng.Platform.App.Components.Layout
+@using AiEng.Platform.App.Components.Primitive
+@using AiEng.Platform.App.Components.Display
+@using AiEng.Platform.App.Components.Feedback
+@using AiEng.Platform.App.Components.Shell
+@using AiEng.Platform.App.Components.Navigation
+@using AiEng.Platform.App.Components.Projects
+@using AiEng.Platform.App.Layouts
+
+<PageTitle>Projects — AI Engineering Platform</PageTitle>
+
+<AppPageHeader>
+    <Breadcrumbs>
+        <AppBreadcrumb />
+    </Breadcrumbs>
+    <Title>Projects</Title>
+    <Description>Registered project folders. The platform owns the project list through the IProjectService contract; the M3 in-memory store is the smoke test for the contract, the M4-A on-disk store replaces it behind the same seam.</Description>
+    <Actions>
+        <AppButton Variant="AppButtonVariant.Primary"
+                   Disabled="true"
+                   Title="The registration form lands in M3.2. The action is wired to the seam today.">
+            Register a project
+        </AppButton>
+    </Actions>
+</AppPageHeader>
+
+<AppProjectList />

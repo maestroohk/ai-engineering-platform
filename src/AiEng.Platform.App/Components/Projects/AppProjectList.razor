@@ -1,0 +1,85 @@
+@namespace AiEng.Platform.App.Components.Projects
+
+@inject IProjectService ProjectService
+
+@if (IsLoading)
+{
+    <div class="app-project-list-slot" data-state="loading">
+        <AppLoading>
+            <Label>Loading projects…</Label>
+        </AppLoading>
+    </div>
+}
+else if (LoadError is { } error)
+{
+    <div class="app-project-list-slot" data-state="error">
+        <AppErrorState ErrorCode="m3.load_failed" CorrelationId="@CorrelationId">
+            <Title>Cannot load projects</Title>
+            <Description>@error</Description>
+            <PrimaryAction>
+                <AppButton Variant="AppButtonVariant.Primary" @onclick="OnRetryAsync">Retry</AppButton>
+            </PrimaryAction>
+        </AppErrorState>
+    </div>
+}
+else if (Projects.Count == 0)
+{
+    <div class="app-project-list-slot" data-state="empty">
+        <AppEmptyState>
+            <Title>No projects yet</Title>
+            <Description>Register a project folder to begin. The platform stores the project in memory for the lifetime of the current process; the durable store lands in M4-A.</Description>
+            <Actions>
+                <AppButton Variant="AppButtonVariant.Primary" Disabled="true" Title="The registration form lands in M3.2. The action is wired to the seam today.">
+                    Register a project
+                </AppButton>
+            </Actions>
+        </AppEmptyState>
+    </div>
+}
+else
+{
+    <div class="app-project-list-slot" data-state="populated">
+        <AppStack Direction="AppStackDirection.Vertical" Gap="AppStackGap.Medium">
+            @foreach (var project in Projects)
+            {
+                <AppProjectCard Project="project" />
+            }
+        </AppStack>
+    </div>
+}
+
+@code {
+    private static readonly string CorrelationId = $"m3-list-{Guid.NewGuid():N}";
+
+    private IReadOnlyList<AiEng.Platform.Domain.Projects.Project> Projects { get; set; } = Array.Empty<AiEng.Platform.Domain.Projects.Project>();
+
+    private bool IsLoading { get; set; } = true;
+
+    private string? LoadError { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadAsync();
+    }
+
+    private async Task LoadAsync()
+    {
+        IsLoading = true;
+        LoadError = null;
+        try
+        {
+            Projects = await ProjectService.ListAsync();
+        }
+        catch (Exception ex)
+        {
+            LoadError = ex.Message;
+            Projects = Array.Empty<AiEng.Platform.Domain.Projects.Project>();
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+
+    private async Task OnRetryAsync() => await LoadAsync();
+}

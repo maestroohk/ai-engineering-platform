@@ -1,0 +1,68 @@
+@namespace AiEng.Platform.App.Components.Projects
+
+@using AiEng.Platform.Domain.Projects
+
+<AppCard Class="app-project-card" @attributes="AdditionalAttributes">
+    <Header>
+        <div class="app-project-card-header">
+            <span class="app-project-card-title">@Project.Name</span>
+            <AppBadge Variant="@StatusBadgeVariant" Size="AppBadgeSize.Small" Dot="true">
+                @StatusLabel
+            </AppBadge>
+        </div>
+    </Header>
+    <ChildContent>
+        <AppStack Direction="AppStackDirection.Vertical" Gap="AppStackGap.Small">
+            <div class="app-project-card-path" title="@Project.Path">@Project.Path</div>
+            <dl class="app-project-card-meta">
+                <div class="app-project-card-meta-row">
+                    <dt class="app-project-card-meta-label">Created</dt>
+                    <dd class="app-project-card-meta-value">@Project.CreatedAt.LocalDateTime.ToString("yyyy-MM-dd HH:mm")</dd>
+                </div>
+                @if (Project.LastUsedAt is { } lastUsed)
+                {
+                    <div class="app-project-card-meta-row">
+                        <dt class="app-project-card-meta-label">Last used</dt>
+                        <dd class="app-project-card-meta-value">@lastUsed.LocalDateTime.ToString("yyyy-MM-dd HH:mm")</dd>
+                    </div>
+                }
+            </dl>
+        </AppStack>
+    </ChildContent>
+    <Footer>
+        <div class="app-project-card-actions">
+            <AppButton Size="AppButtonSize.Small"
+                       Variant="AppButtonVariant.Primary"
+                       Disabled="true"
+                       Title="Project opening lands in M4-A. The card is wired to the seam today.">
+                Open
+            </AppButton>
+            <AppButton Size="AppButtonSize.Small"
+                       Variant="AppButtonVariant.Outline"
+                       Disabled="true"
+                       Title="Rename lands in M3.2. The action is wired to the seam today.">
+                Rename
+            </AppButton>
+            <AppButton Size="AppButtonSize.Small"
+                       Variant="AppButtonVariant.Ghost"
+                       Disabled="true"
+                       Title="Unregister lands in M3.2. The action is wired to the seam today.">
+                Unregister
+            </AppButton>
+        </div>
+    </Footer>
+</AppCard>
+
+@code {
+    [Parameter, EditorRequired]
+    public Project Project { get; set; } = null!;
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private string StatusLabel => Project.LastUsedAt is null ? "New" : "Active";
+
+    private AppBadgeVariant StatusBadgeVariant => Project.LastUsedAt is null
+        ? AppBadgeVariant.Neutral
+        : AppBadgeVariant.Success;
+}

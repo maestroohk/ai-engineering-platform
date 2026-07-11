@@ -40,7 +40,7 @@ A milestone is **complete** only when:
 | M0  | Doc foundation                                        | Done       | This document set exists.                                                  |
 | M1  | Design System Core                                    | **Done (closed 2026-07-10)** | A runnable Blazor shell with the base design-system components.            |
 | M2  | Application Shell and Navigation                      | **Done (closed 2026-07-11)** | A navigable app shell on Windows desktop; pages reach an empty state; the layout is responsive and accessible. |
-| M3  | Project Registration                                  | Planned    | A user can register a project; the platform owns a `Project` entity.       |
+| M3  | Project Registration                                  | **Active (M3.1 Delivered 2026-07-11)** | A user can register a project; the platform owns a `Project` entity.       |
 | M4  | Process Execution, Capability Detection, Provider Registry | Planned | The platform spawns processes safely, detects capabilities, registers providers. Divided into four slices: |
 |     | &nbsp;&nbsp;M4-A: Infrastructure / Process Execution   | Planned    | `AiEng.Platform.Infrastructure` lands; `IProcessRunner`, `ICredentialVault`, `IClock`, on-disk `IProjectStore`. |
 |     | &nbsp;&nbsp;M4-B: Capability Detection                | Planned    | `IHostCapabilitiesService` detects `git`, `ollama`, `powershell.exe`, `wsl.exe`, `wt.exe`, `bash.exe`. |
@@ -354,8 +354,10 @@ no page reads the JSON directly.
   the 13 required sections; the M2.6 implementation report is
   written; the closeout commit is coherent; the `m2` annotated
   milestone tag is at the M2 closeout commit on `main`; the
-  M3 plan is in `Awaiting Approval` with the first M3 task in
-  `Ready`. (Delivered 2026-07-11;
+  M3 plan is delivered (M3.1 Delivered
+  2026-07-11) and M3 is **Active**; the
+  M3.2 plan is in `Awaiting Approval` with
+  T-019 in `Ready`. (Delivered 2026-07-11;
   `implementation-report-m2-6-m2-closeout.md` and
   `retrospective-m2-application-shell-and-navigation.md`.)
 
@@ -429,7 +431,12 @@ presentational container and does not.
 **Definition of done:**
 
 - A user can register a project (name + folder path).
+  **M3.1 status (2026-07-11):** the
+  `IProjectService.RegisterAsync` is wired
+  to the seam; the registration **form**
+  is M3.2 (T-019, `Ready`).
 - The project appears in the projects list.
+  **M3.1 status (2026-07-11):** shipped.
 - The project does **not** persist across application
   restart. The M3 in-memory store is a smoke test for the
   `IProjectStore` contract; the durable store that
@@ -440,7 +447,28 @@ presentational container and does not.
   in-memory to on-disk behind the same contract.
 - The project service returns `Project` entities through
   the application layer; the UI does not touch the store
-  directly.
+  directly. **M3.1 status (2026-07-11):** the
+  `Pages_Resolve_Projects_Through_Service`
+  architecture test is active and green;
+  the page and the list resolve projects
+  through `IProjectService` (the contract),
+  not through `InMemoryProjectStore` or the
+  file system directly.
+- A user can rename a registered project.
+  **M3.1 status (2026-07-11):** the
+  `IProjectService.RenameAsync` is wired
+  to the seam; the **rename** action is
+  M3.2 (T-019, `Ready`).
+- A user can unregister a registered project.
+  **M3.1 status (2026-07-11):** the
+  `IProjectService.UnregisterAsync` is
+  wired to the seam; the **unregister**
+  action is M3.2 (T-019, `Ready`).
+- The Open action on the project card is
+  **M4-A's** responsibility; the durable
+  store replaces the in-memory store and
+  the platform can resolve a process
+  runner against the project's path.
 
 **Dogfooding checkpoint (M3):** When the build and test
 suite are stable, the development team may initialise and

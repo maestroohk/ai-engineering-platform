@@ -37,6 +37,85 @@
 
 ## Ready
 
+### M3.2 — Project Registration Slice 2 (form, rename, unregister)
+
+- **Task ID:** `T-019`
+- **Milestone:** M3 — Project Registration
+- **Title:** Project Registration Slice 2
+  (the registration form, the rename
+  action, the unregister action; the
+  `AppDialog` primitive if missing from
+  M1.2)
+- **Why it matters:** M3.1 wired the M3
+  surface to the contract but left the
+  Register, Rename, and Unregister
+  actions disabled on the seam. M3.2
+  enables the actions end-to-end: a
+  user can register a new project
+  (name + folder path), rename a
+  registered project, and unregister a
+  registered project. M3.2 is the
+  write side of the project list; M3.1
+  is the read side.
+- **Objective:** Ship the registration
+  form (a modal / inline form that
+  creates a new project through
+  `IProjectService.RegisterAsync`), the
+  rename form (a modal that updates
+  the project name through
+  `IProjectService.RenameAsync`), and
+  the unregister confirmation (a modal
+  that removes the project through
+  `IProjectService.UnregisterAsync`).
+  Introduce `AppDialog` (a small
+  composition) if missing from the
+  M1.2 design system. Enable the
+  Rename + Unregister buttons on
+  `AppProjectCard`; enable the Register
+  button on the page header. The Open
+  button remains disabled (M4-A's
+  responsibility).
+- **Acceptance criteria:** see
+  `.ai/plans/M3.2-project-registration-slice-2.md`
+  § 4.
+- **Dependencies:** M3.1 (Delivered
+  2026-07-11). No new dependencies.
+- **Expected affected areas:**
+  `src/AiEng.Platform.App/Components/Projects/RegisterProjectForm.razor`,
+  `src/AiEng.Platform.App/Components/Projects/RenameProjectForm.razor`,
+  `src/AiEng.Platform.App/Components/Projects/ConfirmUnregisterProject.razor`,
+  `src/AiEng.Platform.App/Components/Common/AppDialog.razor`
+  (if missing),
+  `src/AiEng.Platform.App/Components/Projects/AppProjectList.razor`
+  (modified — exposes `Refresh`),
+  `src/AiEng.Platform.App/Components/Projects/AppProjectCard.razor`
+  (modified — buttons enabled),
+  `src/AiEng.Platform.App/Components/Pages/Projects.razor`
+  (modified — Register button enabled),
+  `tests/AiEng.Platform.UnitTests/Projects/`,
+  `tests/AiEng.Platform.ComponentTests/Projects/`,
+  `tests/AiEng.Platform.ArchitectureTests/Pages/`,
+  `docs/projects.md` (updated to mark
+  the M3.2 actions as enabled).
+- **Validation:** `npm run css:build`;
+  `dotnet restore`; `dotnet build` (0
+  warnings, 0 errors); `dotnet test`
+  (every active test passing);
+  `dotnet format --verify-no-changes`;
+  visual smoke on `/projects`
+  (Register modal opens; registering
+  navigates to populated state;
+  renaming updates the name;
+  unregistering removes the project).
+- **Approved plan path:**
+  `.ai/plans/M3.2-project-registration-slice-2.md`
+  (Status: Awaiting Approval; awaits
+  the user's `Approve` command per the
+  command protocol).
+- **Status:** Ready (the M3.1 closeout
+  promoted T-019 to Ready per the
+  Progressive Coding Rule).
+
 ### M3.1 — Project Registration Slice 1 (first M3 task)
 
 - **Task ID:** `T-018`
@@ -188,6 +267,103 @@ Progressive Coding Rule.)
 ---
 
 ## Done Recently
+
+### M3.1 closeout session — 2026-07-11
+
+- **Task ID:** `T-018`
+- **Milestone:** M3 — Project Registration
+  (Active 2026-07-11)
+- **Title:** Project registration slice 1
+  (the contract, the in-memory store, the
+  project-registration page, the projects
+  list)
+- **Status:** **Done (delivered 2026-07-11).**
+  M3.1 is the first M3 implementation slice.
+  M3 is **Active**; M3.2 is the next
+  `Ready` task.
+- **Outcome:** M3 surface lands end-to-end
+  as a single slice: (1) **The contract**
+  (`IProjectStore`, `IProjectService`) at
+  `src/AiEng.Platform.Application/Projects/`;
+  (2) **The in-memory store**
+  (`InMemoryProjectStore`;
+  `ConcurrentDictionary<Guid, Project>`;
+  the M3 smoke test for the contract; M4-A
+  swaps the `IProjectStore` registration
+  in `AddProjects`); (3) **The domain
+  entity** (`Project` aggregate root;
+  immutable `Id`, human `Name`, absolute
+  `Path`, immutable `CreatedAt`, mutable
+  `LastUsedAt?`); (4) **The composition
+  root**
+  (`ProjectsServiceCollectionExtensions.AddProjects`); (5)
+  **The UI surface** (`AppProjectCard`,
+  `AppProjectList`, `/projects` page;
+  page composes `AppPageHeader` +
+  `AppBreadcrumb` (M2.3) +
+  `AppProjectList`; sidebar entry
+  registered through the M2.2
+  `INavigationRegistry`); (6) **The
+  architecture test**
+  `Pages_Resolve_Projects_Through_Service`
+  (enforces the single-seam rule on the
+  page and the list); (7) **The unit + bUnit
+  test coverage** (27 new unit tests: 16
+  `IProjectServiceTests` + 11
+  `InMemoryProjectStoreTests`; 13 new bUnit
+  tests: 5 `AppProjectCardTests` + 4
+  `AppProjectListTests` + 4
+  `ProjectsPageTests`; 2 new architecture
+  tests in
+  `PagesResolveProjectsThroughServiceTests`);
+  (8) **The surface documentation** at
+  `docs/projects.md` (9 sections: Goals,
+  Project Entity, Contract, M3/M4-A
+  Boundary, UI Surface, Composition Root,
+  Tests, Out of Scope, Acceptance Criteria).
+  240 total tests pass (34 unit + 198
+  bUnit + 8 architecture); 7 skipped per
+  ADR-016 / M4-D; 0 warnings, 0 errors;
+  format clean; visual smoke
+  (`curl http://localhost:5286/projects`
+  returns 200 with the expected markers).
+  Three documented deviations: (1)
+  `ValidationError` is a class, not a
+  struct (`T?` semantics on the
+  `Result<T>.Error` slot forced the
+  change); (2) `IClock` is realised
+  through .NET 8+ `TimeProvider`; (3)
+  Disabled tests unchanged.
+- **Report:**
+  `implementation-report-m3-1-project-registration-slice-1.md`.
+- **Handoff:**
+  `.ai/handoffs/2026-07-11-m3-1-project-registration-slice-1.md`
+  (mirrored at `.ai/handoffs/latest.md`).
+- **Git:** branch
+  `feature/m3-1-project-registration-slice-1`
+  (created from `main` at the M2.6
+  closeout commit; the M3.1 closeout
+  commit
+  `feat(m3.1): add project registration surface`
+  is on this branch; the branch is
+  fast-forwarded into `main` per the
+  branching strategy rule 6; the branch
+  is deleted per rule 7). No remote
+  push (push is not authorised in this
+  session; the user may push in a
+  follow-up command per the command
+  protocol).
+- **Next action:** the M3.1 closeout
+  promotes M3.2 (T-019) to `Ready`
+  and creates the M3.2 plan at
+  `.ai/plans/M3.2-project-registration-slice-2.md`
+  (Status: Awaiting Approval); the
+  next session approves the M3.2 plan
+  and starts the M3.2 implementation
+  per the Progressive Coding Rule. The
+  M3.1 session does **not** implement
+  M3.2 (per the brief: "Do not begin
+  the following task").
 
 ### M2.6 closeout session — 2026-07-11
 
@@ -706,15 +882,17 @@ task board does not become a speculative
 backlog. Each summary task is fleshed out into
 detailed tasks when the milestone approaches.
 
-### M3 — Project Registration (summary) — moved to Ready
+### M3 — Project Registration (summary) — Active
 
-- **Milestone:** M3.
-- **Status:** Ready (the M3 plan is at
-  `.ai/plans/M3-project-registration.md`
-  Status: Awaiting Approval; the first
-  M3 task T-018 is Ready).
-- **First action (later):** approve the
-  M3 plan; start M3.1 (T-018) per the
+- **Milestone:** M3 — Project Registration
+  (Active 2026-07-11).
+- **Status:** Active (M3.1 Delivered
+  2026-07-11; M3.2 is the next `Ready`
+  task; M3 closes when M3.x — the M3
+  retrospective per the Milestone Closeout
+  Standard — is delivered).
+- **First action (later):** M3.2
+  implementation (T-019) per the
   Progressive Coding Rule.
 
 ### M4-A — Infrastructure / Process Execution (summary)

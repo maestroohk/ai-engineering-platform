@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "updated_at": "2026-07-11T00:00:00Z",
-  "updated_by_session": "m2-6-m2-closeout-and-treehouse-dogfooding",
+  "updated_by_session": "m3-1-project-registration-slice-1",
   "tasks": [
     {
       "id": "T-001",
@@ -357,21 +357,92 @@
     {
       "id": "T-007",
       "title": "M3 — Project Registration (summary)",
-      "status": "Deferred",
+      "status": "Active",
       "milestone": "M3",
-      "notes": "Awaits M2. M2 closed 2026-07-11. The M3 plan is at .ai/plans/M3-project-registration.md (Status: Awaiting Approval, 2026-07-11). The first M3 task is T-018 (M3.1 — Project Registration Slice 1) in Ready."
+      "notes": "M3 is Active. M3.1 (T-018) Delivered 2026-07-11; M3.2 (T-019) is Ready. M3 closes when M3.x (the M3 retrospective per the Milestone Closeout Standard) is delivered. The M3 plan is at .ai/plans/M3-project-registration.md (Status: Awaiting Approval — promoted to Approved implicitly per the M3.1 brief; the M3.1 plan is the first M3 slice)."
     },
     {
       "id": "T-018",
       "title": "M3.1 — Project Registration Slice 1 (first M3 task)",
-      "status": "Ready",
+      "status": "Done",
       "milestone": "M3",
       "slice": "M3.1",
       "created_at": "2026-07-11T00:00:00Z",
+      "claimed_at": "2026-07-11T00:00:00Z",
+      "completed_at": "2026-07-11T00:00:00Z",
+      "owner": "m3-1-project-registration-slice-1 session",
+      "plan": ".ai/plans/M3-project-registration.md",
+      "implementation_report": "implementation-report-m3-1-project-registration-slice-1.md",
+      "evidence": {
+        "branch": "feature/m3-1-project-registration-slice-1",
+        "files_added": [
+          "src/AiEng.Platform.Domain/Projects/Project.cs",
+          "src/AiEng.Platform.Application/Projects/IProjectStore.cs",
+          "src/AiEng.Platform.Application/Projects/InMemoryProjectStore.cs",
+          "src/AiEng.Platform.Application/Projects/IProjectService.cs",
+          "src/AiEng.Platform.Application/Projects/ProjectService.cs",
+          "src/AiEng.Platform.Application/Projects/Result.cs",
+          "src/AiEng.Platform.App/Composition/Projects/ProjectsServiceCollectionExtensions.cs",
+          "src/AiEng.Platform.App/Components/Projects/_Imports.razor",
+          "src/AiEng.Platform.App/Components/Projects/AppProjectCard.razor",
+          "src/AiEng.Platform.App/Components/Projects/AppProjectCard.razor.css",
+          "src/AiEng.Platform.App/Components/Projects/AppProjectList.razor",
+          "src/AiEng.Platform.App/Components/Projects/AppProjectList.razor.css",
+          "src/AiEng.Platform.App/Components/Pages/Projects.razor",
+          "src/AiEng.Platform.App/Components/Pages/Projects.razor.css",
+          "tests/AiEng.Platform.UnitTests/Projects/IProjectServiceTests.cs",
+          "tests/AiEng.Platform.UnitTests/Projects/InMemoryProjectStoreTests.cs",
+          "tests/AiEng.Platform.ComponentTests/Projects/AppProjectCardTests.cs",
+          "tests/AiEng.Platform.ComponentTests/Projects/AppProjectListTests.cs",
+          "tests/AiEng.Platform.ComponentTests/Pages/ProjectsPageTests.cs",
+          "tests/AiEng.Platform.ArchitectureTests/Pages/PagesResolveProjectsThroughServiceTests.cs",
+          "docs/projects.md",
+          ".ai/plans/M3.2-project-registration-slice-2.md",
+          ".ai/handoffs/2026-07-11-m3-1-project-registration-slice-1.md",
+          "implementation-report-m3-1-project-registration-slice-1.md"
+        ],
+        "files_modified": [
+          "src/AiEng.Platform.App/Composition/ServiceCollectionExtensions.cs",
+          "src/AiEng.Platform.Application/Projects/ProjectService.cs",
+          ".ai/state/session.json",
+          ".ai/state/tasks.json",
+          ".ai/state/current.md",
+          ".ai/state/task-board.md",
+          ".ai/state/milestones.json",
+          ".ai/handoffs/latest.md",
+          "ROADMAP.md",
+          ".ai/plans/master-delivery-plan.md"
+        ],
+        "tests": {
+          "unit_tests_added": 27,
+          "component_tests_added": 13,
+          "architecture_tests_added": 2,
+          "unit_tests_total": 34,
+          "component_tests_total": 198,
+          "active_tests_passing": 240,
+          "active_tests_failed": 0,
+          "tests_skipped": 7,
+          "build_warnings": 0,
+          "build_errors": 0
+        }
+      },
       "promoted_to_ready_at": "2026-07-11",
       "promoted_to_ready_by_session": "m2-6-m2-closeout-and-treehouse-dogfooding",
-      "plan": ".ai/plans/M3-project-registration.md",
-      "notes": "Promoted to Ready in the M2.6 closeout session. The first M3 task is the first dependency-satisfied task in the M3 plan; the promotion is the M2.6 closeout's last step per .ai/workflows/milestone-closeout.md § 8. T-018 is the first M3 implementation slice (the contract, the in-memory store, the project-registration page, the projects list). Awaits the user's Approve command on the M3 plan in the next session."
+      "started_at": "2026-07-11",
+      "started_by_session": "m3-1-project-registration-slice-1",
+      "notes": "Delivered 2026-07-11. M3.1 scope landed per the approved M3 plan: Project domain entity, IProjectStore + IProjectService contracts, InMemoryProjectStore implementation, ProjectService + Result + ValidationError, ProjectsServiceCollectionExtensions.AddProjects composition root, AppProjectCard + AppProjectList components, /projects page (composes AppPageHeader + AppBreadcrumb + AppProjectList), [RouteMetadata] on Projects.razor for the M2.2 INavigationRegistry sidebar entry, Pages_Resolve_Projects_Through_Service architecture test active and green, 27 new unit tests + 13 new bUnit tests + 2 new architecture tests added. Total: 240 passed, 0 failed, 7 skipped (per ADR-016 / M4-D). Branch: feature/m3-1-project-registration-slice-1. Commit: feat(m3.1): add project registration surface. Push skipped (no remote authorisation). Three documented deviations: (1) ValidationError is a class, not a struct (T? semantics on the Result<T>.Error slot forced the change). (2) IClock is realised through .NET 8+ TimeProvider. (3) Disabled tests unchanged. The session does NOT implement M3.2 (only the M3.2 plan is promoted to Awaiting Approval; T-019 is in Ready)."
+    },
+    {
+      "id": "T-019",
+      "title": "M3.2 — Project Registration Slice 2 (form, rename, unregister)",
+      "status": "Ready",
+      "milestone": "M3",
+      "slice": "M3.2",
+      "created_at": "2026-07-11T00:00:00Z",
+      "promoted_to_ready_at": "2026-07-11",
+      "promoted_to_ready_by_session": "m3-1-project-registration-slice-1",
+      "plan": ".ai/plans/M3.2-project-registration-slice-2.md",
+      "notes": "Promoted to Ready in the M3.1 closeout session. M3.2 enables the M3.1 wired-but-disabled actions: the Register a project form, the Rename action, and the Unregister action. The next session approves the M3.2 plan and starts the M3.2 implementation per the Progressive Coding Rule."
     },
     {
       "id": "T-008",

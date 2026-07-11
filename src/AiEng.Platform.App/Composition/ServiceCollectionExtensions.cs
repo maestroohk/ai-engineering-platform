@@ -1,4 +1,5 @@
 using System.Reflection;
+using AiEng.Platform.App.Composition.Projects;
 using AiEng.Platform.Application.ProjectIntelligence;
 
 namespace AiEng.Platform.App.Composition;
@@ -20,6 +21,7 @@ public static class ServiceCollectionExtensions
 
         services.AddNavigation(assemblies);
         services.AddProjectIntelligence();
+        services.AddProjects();
         return services;
     }
 }

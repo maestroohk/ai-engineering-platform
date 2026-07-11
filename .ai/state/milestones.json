@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "updated_at": "2026-07-11T00:00:00Z",
-  "updated_by_session": "m2-6-m2-closeout-and-treehouse-dogfooding",
+  "updated_by_session": "m3-1-project-registration-slice-1",
   "milestones": [
     {
       "id": "M0",
@@ -215,7 +215,7 @@
     {
       "id": "M3",
       "name": "Project Registration",
-      "status": "Planned",
+      "status": "Active",
       "primary_outcome": "A user can register a project (a folder on disk) and the platform owns a Project entity in the application layer.",
       "delivers_capabilities": [
         "C-016"
@@ -235,7 +235,34 @@
         "M8"
       ],
       "plan": ".ai/plans/M3-project-registration.md",
-      "evidence": {}
+      "slices": {
+        "M3.1": {
+          "title": "Project Registration Slice 1 (contract + in-memory store + UI surface)",
+          "status": "delivered",
+          "delivered_at": "2026-07-11",
+          "session": "m3-1-project-registration-slice-1",
+          "branch": "feature/m3-1-project-registration-slice-1",
+          "summary": "M3.1 ships the M3 surface end-to-end as a single slice: the contract (IProjectStore, IProjectService), the in-memory store (InMemoryProjectStore; not durable; the M3 smoke test for the contract; M4-A swaps the IProjectStore registration in AddProjects), the domain entity (Project), the composition root (AddProjects), the UI surface (AppProjectCard, AppProjectList, /projects page), the architecture test (Pages_Resolve_Projects_Through_Service enforces the single-seam rule), 27 new unit tests + 13 new bUnit tests + 2 new architecture tests. Total: 240 passed, 0 failed, 7 skipped (per ADR-016 / M4-D). 0 warnings, 0 errors. Format clean. Visual smoke: /projects returns 200 on localhost:5286 with the expected markers (1 list slot, 1 empty state, 1 data-state=empty, 1 breadcrumb, 1 page header, 1 /projects in sidebar). The disabled Register button is present in the page header's Actions slot. Three documented deviations: (1) ValidationError is a class, not a struct; (2) IClock is realised through .NET 8+ TimeProvider; (3) Disabled tests unchanged. The M3.1 closeout commit is on main; the M3.1 feature branch is fast-forwarded into main and deleted per the branching strategy. Push is skipped (no remote authorisation).",
+          "implementation_report": "implementation-report-m3-1-project-registration-slice-1.md",
+          "handoff": ".ai/handoffs/2026-07-11-m3-1-project-registration-slice-1.md",
+          "plan": ".ai/plans/M3-project-registration.md",
+          "commit_message": "feat(m3.1): add project registration surface"
+        }
+      },
+      "evidence": {
+        "slices": [
+          "M3.1"
+        ],
+        "implementation_reports": [
+          "implementation-report-m3-1-project-registration-slice-1.md"
+        ],
+        "handoffs": [
+          ".ai/handoffs/2026-07-11-m3-1-project-registration-slice-1.md"
+        ],
+        "commits": [
+          "M3.1: feat(m3.1): add project registration surface on feature/m3-1-project-registration-slice-1 (fast-forwarded into main)"
+        ]
+      }
     },
     {
       "id": "M4-A",
