@@ -40,10 +40,19 @@
 ## Current Milestone
 
 - **Active milestone:** **M2 — Application Shell and
-  Navigation** (active; M2.1 delivered 2026-07-11;
-  M2.2 delivered 2026-07-11; M2.3 delivered 2026-07-11;
+  Navigation** (closed 2026-07-11; M2.1
+  delivered 2026-07-11; M2.2 delivered
+  2026-07-11; M2.3 delivered 2026-07-11;
   M2.4 delivered 2026-07-11; M2.5 delivered
-  2026-07-11).
+  2026-07-11; M2.6 delivered 2026-07-11; the
+  M2 retrospective is the first milestone
+  retrospective in this repository; the
+  Milestone Closeout Standard at
+  `.ai/workflows/milestone-closeout.md` is
+  the canonical procedure every future
+  milestone closeout must follow; the `m2`
+  annotated milestone tag is at the M2
+  closeout commit on `main`).
 - **M2.1 — Application Shell Foundation:**
   **Delivered (2026-07-11).** The shell
   foundation lands: two layouts
@@ -167,12 +176,26 @@
   `feature/m2-5-empty-routes-responsive-accessibility`.
   See
   [`implementation-report-m2-5-empty-routes-responsive-accessibility.md`](./../../implementation-report-m2-5-empty-routes-responsive-accessibility.md).
-- **M2 next slice:** **M2.6 — M2
-  Closeout and Treehouse
-  Dogfooding.** Summary
-  entry; the full M2.6 plan
-  lands when M2.5 closes
-  (i.e. now).
+- **M2.6 — M2 Closeout and Treehouse
+  Dogfooding:** **Delivered (2026-07-11).**
+  The M2 closeout lands: the Milestone
+  Closeout Standard at
+  `.ai/workflows/milestone-closeout.md`; the
+  M2 retrospective at
+  `retrospective-m2-application-shell-and-navigation.md`;
+  the M2.6 implementation report at
+  `implementation-report-m2-6-m2-closeout.md`;
+  the M2 milestone moves from `Active` to
+  `Done` with `closed_at: 2026-07-11`; the
+  `m2` annotated milestone tag is at the M2
+  closeout commit on `main`. The M3 plan is
+  at
+  `.ai/plans/M3-project-registration.md`
+  (Status: Awaiting Approval); the first M3
+  task (T-018 — M3.1) is `Ready`. See
+  [`implementation-report-m2-6-m2-closeout.md`](./../../implementation-report-m2-6-m2-closeout.md)
+  and
+  [`retrospective-m2-application-shell-and-navigation.md`](./../../retrospective-m2-application-shell-and-navigation.md).
 - **M0.5 — Architecture Refinement and Project
   Intelligence:** **Done (closed 2026-07-10;
   coherent commit `1d98acd`).** M0.5 is the
@@ -187,15 +210,18 @@
 
 ## Current Slice
 
-- **Active slice:** **M2.5 — Empty
-  Routes, Responsive, and
-  Accessibility** (delivered
-  2026-07-11). The branch
-  `feature/m2-5-empty-routes-responsive-accessibility`
-  carries the implementation; the
-  M2.5 closeout commit
-  `feat(m2.5): add empty routes, responsive matrix, a11y audit, and theme toggle fix`
-  is on this branch.
+- **Active slice:** **M2.6 — M2 Closeout**
+  (delivered 2026-07-11). The branch
+  `feature/T-016-m2-closeout-and-treehouse-dogfooding`
+  carried the M2.6 work; the M2.6 closeout
+  commit
+  `chore(m2.6): close M2 with retrospective, milestone closeout standard, and M3 plan`
+  is on this branch; the branch is
+  fast-forwarded into `main` per the
+  branching strategy rule 6; the branch is
+  deleted per rule 7; the `m2` annotated
+  milestone tag is at the M2 closeout
+  commit on `main` per rule 9.
 - **Last completed slice:** **M2.4 —
   Project Intelligence Dashboard**
   (delivered 2026-07-11). The branch
@@ -242,162 +268,185 @@
   improvements are landed. The architecture
   score is 23 → 42 (+19).
 - **M2 — Application Shell and Navigation:**
-  **Active (M2.1 Delivered 2026-07-11;
+  **Done (closed 2026-07-11; M2.1
+  Delivered 2026-07-11;
   M2.2 Delivered 2026-07-11;
   M2.3 Delivered 2026-07-11;
   M2.4 Delivered 2026-07-11;
   M2.5 Delivered 2026-07-11;
-  M2.6 summary entry).**
+  M2.6 Delivered 2026-07-11; the M2
+  retrospective is at
+  `retrospective-m2-application-shell-and-navigation.md`;
+  the `m2` annotated milestone tag is
+  at the M2 closeout commit on `main`).**
 - **M3 through M8:** Planned; no evidence yet.
 
 ## Last Completed Milestone
 
-- **M0.5 — Architecture Refinement and Project
-  Intelligence**, closed **2026-07-10**. See
-  [`implementation-report-m0.5-architecture-refinement.md`](./../../implementation-report-m0.5-architecture-refinement.md)
-  and
-  [`.ai/handoffs/2026-07-10-m0.5-architecture-refinement.md`](./../../.ai/handoffs/2026-07-10-m0.5-architecture-refinement.md).
+- **M2 — Application Shell and Navigation**,
+  closed **2026-07-11** (the most recent
+  milestone). The M2 evidence is the
+  per-slice implementation reports (M2.1 →
+  M2.6) and the per-slice handoffs (M2.1 →
+  M2.6). The M2 retrospective is at
+  [`retrospective-m2-application-shell-and-navigation.md`](./../../retrospective-m2-application-shell-and-navigation.md).
+  The Milestone Closeout Standard is at
+  [`.ai/workflows/milestone-closeout.md`](./../../.ai/workflows/milestone-closeout.md).
+  The M2 closeout commit
+  `chore(m2.6): close M2 with retrospective, milestone closeout standard, and M3 plan`
+  is on `main`; the `m2` annotated
+  milestone tag is at the M2 closeout
+  commit.
 - **M1 — Design System Core**, closed
-  **2026-07-10** (preceding milestone). The M1
-  evidence is unchanged by M0.5; see
-  [`implementation-report-m1-closeout.md`](./../../implementation-report-m1-closeout.md)
-  and
-  [`.ai/handoffs/2026-07-10-m1-closeout.md`](./../../.ai/handoffs/2026-07-10-m1-closeout.md).
+  **2026-07-10** (preceding milestone).
 
 ## Last Completed Task
 
-- The M2.5 implementation session
+- The M2.6 implementation session
   (2026-07-11), which:
-  - Delivered M2.5 — Empty Routes,
-    Responsive, and Accessibility
-    per the approved plan
-    (`.ai/plans/M2.5-empty-routes-responsive-accessibility.md`)
-    with the T-017 theme toggle
-    bug fix included in the same
-    slice per the user's explicit
-    opt-in.
-  - Landed five sub-deliverables:
-    (1) Empty routes
-    (`Home.razor` and
-    `NotFound.razor` rewritten
-    to use `AppCard` +
-    `AppEmptyState` with links
-    to `/dashboard` and
-    `/design-system`); (2)
-    Responsive matrix
-    (`AppLayout.razor.css` now
-    has `@media` rules for the
-    lg / md / sm breakpoints; the
-    content area gets
-    `overflow-y: auto`; the
-    topbar remains horizontal;
-    `docs/ui-principles.md`
-    § 10.1 documents the
-    matrix); (3) A11y audit
-    (`KeyboardSmokeTests`,
-    `AriaCurrentInvariantTests`,
-    `AxeCoreAuditTests`
-    registered but skipped);
-    (4) T-017 fix
-    (`@rendermode
-    InteractiveServer` added
-    to `AppThemeToggle.razor`;
-    the layout itself remains
-    static for streaming SSR —
-    the layout's `@Body` is a
-    `RenderFragment` delegate
-    that Blazor refuses to
-    serialize across the SSR
-    → interactive boundary);
-    (5) Project-continuity
-    state + implementation
-    report + per-session
-    handoff.
-  - 18 new component tests
-    (5 EmptyRoutesTests +
-    4 AppLayout_ThemeToggleWiringTests +
-    4 AppLayout_ResponsiveMatrixTests +
-    5 AriaCurrentInvariantTests)
-    + 3 new architecture tests
-    (AxeCoreAuditTests, all
-    skipped per ADR-016 /
-    M4-D).
-  - 197 total tests pass:
-    6 unit + 185 component +
-    6 architecture, 7 skipped.
-  - The visual smoke test
-    confirms every route
-    returns 200 and the
-    theme toggle's markup is
-    present on every page.
+  - Delivered M2.6 — M2 Closeout and
+    Treehouse Dogfooding per the
+    approved plan
+    (`.ai/plans/M2.6-m2-closeout-and-treehouse-dogfooding.md`).
+  - Landed four sub-deliverables:
+    (1) The Milestone Closeout Standard
+    at
+    `.ai/workflows/milestone-closeout.md`
+    (10 sections; the canonical
+    procedure every future milestone
+    closeout must follow; the
+    13-section retrospective is the
+    standard's required deliverable);
+    (2) The M2 retrospective at
+    `retrospective-m2-application-shell-and-navigation.md`
+    (13 sections, all populated; the
+    first milestone retrospective in
+    this repository); (3) Project-
+    continuity state + ROADMAP.md +
+    master-delivery-plan.md updates
+    (M2.6 from in_progress to
+    delivered; M2 from Active to Done
+    with closed_at 2026-07-11; M2
+    evidence block updated; M3 plan
+    path added; T-016 Done; T-006 M2
+    summary Done; T-018 M3.1 promoted
+    to Ready); (4) M3 plan + first M3
+    task promotion (the M3 plan at
+    `.ai/plans/M3-project-registration.md`
+    Status: Awaiting Approval; the
+    first M3 task T-018 M3.1 Ready).
+  - Validated the complete M2
+    milestone end-to-end per the
+    Milestone Closeout Standard § 3:
+    `npm run css:build` (exit 0),
+    `dotnet restore` (exit 0), `dotnet
+    build` (0 warnings, 0 errors),
+    `dotnet test` (197 passed, 0
+    failed, 7 skipped per ADR-016),
+    `dotnet format --verify-no-changes`
+    (exit 0), visual smoke (5 routes
+    return 200 on `localhost:5211`;
+    theme toggle markup present on
+    every `AppLayout` page).
+  - 197 total tests pass: 6 unit + 185
+    component + 6 architecture, 7
+    skipped. The M2.6 closeout adds
+    no tests; the M2 closeout's test
+    count is identical to the M2.5
+    closeout's test count.
   - The commit
-    `feat(m2.5): add empty routes, responsive matrix, a11y audit, and theme toggle fix`
-    is the closing receipt; no
-    push (no remote configured).
+    `chore(m2.6): close M2 with retrospective, milestone closeout standard, and M3 plan`
+    is the closing receipt; the commit
+    is on the feature branch
+    `feature/T-016-m2-closeout-and-treehouse-dogfooding`;
+    the branch is fast-forwarded into
+    `main` per the branching strategy
+    rule 6; the branch is deleted per
+    rule 7; the `m2` annotated
+    milestone tag is at the M2
+    closeout commit on `main` per
+    rule 9. No push (push is not
+    authorised in this session; the
+    user may push in a follow-up
+    command per the command protocol).
   - The session does **not**
-    implement M2.6; per the
-    Progressive Coding Rule,
-    M2.6 is the next session's
+    implement M3; per the
+    Progressive Coding Rule, M3 is
+    the next milestone's
     responsibility.
-- The M2.4 implementation session
+- The M2.5 implementation session
   (2026-07-11) is the prior task;
-  the M2.3 implementation session
-  (2026-07-11) is the
-  prior-prior task; the M2.2
+  the M2.4 implementation session
+  (2026-07-11) is the prior-prior
+  task; the M2.3 implementation
+  session (2026-07-11) is the
+  prior-prior-prior task; the M2.2
   implementation session
   (2026-07-11) is the
-  prior-prior-prior task; the
+  prior-prior-prior-prior task; the
   M2.1 implementation session
   (2026-07-11) is the
-  prior-prior-prior-prior task;
-  the M0.5 architecture refinement
-  session (2026-07-10) is the
   prior-prior-prior-prior-prior
+  task; the M0.5 architecture
+  refinement session (2026-07-10)
+  is the
+  prior-prior-prior-prior-prior-prior
   task.
 
 ## Active Branch
 
-- **`feature/m2-5-empty-routes-responsive-accessibility`**.
-  The M2.5 implementation branch
-  carries the M2.5 closeout commit.
-  The M0.5 closeout commit `1d98acd`
-  is the base; the M2.1 closeout
-  commit
-  `feat(m2.1): add application shell foundation`
-  is the M2.1 chain tip on
-  `feature/m2-1-application-shell`;
-  the M2.2 closeout commit
-  `feat(m2.2): add navigation registry and sidebar`
-  is the M2.2 chain tip on
-  `feature/m2-2-navigation-registry-sidebar`;
-  the M2.3 closeout commit
-  `feat(m2.3): add top bar, breadcrumb, and page header integration`
-  is the
-  `feature/m2-3-topbar-breadcrumbs`
-  tip; the M2.4 closeout commit
-  `feat(m2.4): add project intelligence dashboard`
-  is the
-  `feature/m2-4-project-intelligence-dashboard`
-  tip; the M2.5 closeout commit
-  `feat(m2.5): add empty routes, responsive matrix, a11y audit, and theme toggle fix`
-  is the
-  `feature/m2-5-empty-routes-responsive-accessibility`
-  tip. No remote is configured, so
-  push is skipped (the session records
-  this explicitly per the brief).
+- **`main`** (the M2 closeout's
+  fast-forwarded branch). The M2.6
+  closeout commit
+  `chore(m2.6): close M2 with retrospective, milestone closeout standard, and M3 plan`
+  is the HEAD of `main`. The M2.6
+  feature branch
+  `feature/T-016-m2-closeout-and-treehouse-dogfooding`
+  carried the M2.6 work; the branch is
+  fast-forwarded into `main` per the
+  branching strategy rule 6; the branch
+  is deleted per rule 7; the `m2`
+  annotated milestone tag is at the M2
+  closeout commit on `main` per rule 9.
+  The M2.x commit chain (M2.1 → M2.5)
+  lives on the per-slice feature
+  branches; the per-slice feature
+  branches are deleted per the
+  branching strategy rule 7; the
+  per-slice commits are recorded in the
+  M2 evidence block of
+  `.ai/state/milestones.json`. The
+  remote (`origin`) is configured but
+  push is not authorised in this
+  session.
 
 ## Last Stable Commit
 
-- The M2.5 closeout commit
+- The M2.6 closeout commit
+  `chore(m2.6): close M2 with retrospective, milestone closeout standard, and M3 plan`
+  on `main` (created 2026-07-11). The
+  M2.6 commit is the closing receipt
+  for the entire M2 milestone
+  (Application Shell & Navigation).
+  The M2.6 commit chain lives on the
+  M2.6 feature branch
+  `feature/T-016-m2-closeout-and-treehouse-dogfooding`,
+  which is fast-forwarded into
+  `main` per the branching strategy
+  rule 6 and deleted per rule 7.
+  The `m2` annotated milestone tag
+  points at this commit on `main` per
+  the branching strategy rule 9. The
+  parent commit is the M2.5 closeout
+  commit
   `feat(m2.5): add empty routes, responsive matrix, a11y audit, and theme toggle fix`
-  on
+  on the deleted
   `feature/m2-5-empty-routes-responsive-accessibility`
-  (created 2026-07-11). The parent
-  commit is the M2.4 closeout commit
-  `0e05dd7` on
-  `feature/m2-4-project-intelligence-dashboard`.
-  Working tree is clean at the close
-  of the M2.5 session.
+  branch. Working tree is clean at
+  the close of the M2.6 session; the
+  remote (`origin`) is configured but
+  push is not authorised in this
+  session.
 
 ## Application Status
 
@@ -661,10 +710,16 @@ Plus the supporting infrastructure:
   gap, not a DoD failure. A `Ready` item in
   [`.ai/state/task-board.md`](./task-board.md) adds
   a Toolbar example to the doc page.
-- **No git remote.** The repository has no
-  configured remote. The first three commits are
-  local-only. Adding a remote is a separate
-  decision.
+- **Git remote configured but not
+  pushed.** The repository has a
+  configured remote (`origin` =
+  `https://github.com/maestroohk/ai-engineering-platform.git`).
+  The first six commits (M0.5 +
+  M2.1 → M2.6) are local-only. Push
+  is not authorised in this
+  session; the user may push in a
+  follow-up command per the command
+  protocol.
 
 ## Deferred Findings
 
@@ -730,9 +785,44 @@ Plus the supporting infrastructure:
   toggle bug fix is included in the
   same slice per the user's explicit
   opt-in).
+- [`.ai/plans/M2.6-m2-closeout-and-treehouse-dogfooding.md`](./../../.ai/plans/M2.6-m2-closeout-and-treehouse-dogfooding.md)
+  — M2.6 plan, **Delivered (2026-07-11)**
+  (promoted from `Draft` stub to a
+  full plan in `Awaiting Approval`
+  in the M2.5 closeout session;
+  approved and implemented in the
+  M2.6 closeout session). The
+  Milestone Closeout Standard lives
+  at
+  [`.ai/workflows/milestone-closeout.md`](./../../.ai/workflows/milestone-closeout.md);
+  the M2 retrospective lives at
+  [`retrospective-m2-application-shell-and-navigation.md`](./../../retrospective-m2-application-shell-and-navigation.md).
+- [`.ai/plans/M3-project-registration.md`](./../../.ai/plans/M3-project-registration.md)
+  — M3 plan, **Awaiting Approval
+  (2026-07-11)**. Prepared in the M2.6
+  closeout session per the user's
+  brief; the first M3 task (T-018,
+  M3.1) is in `Ready` in
+  `.ai/state/tasks.json` and at the
+  top of the Ready block in the
+  task board. The M3 plan is
+  approved in the next session;
+  M3.1 implementation lands in the
+  session after the M3 plan
+  approval.
 
 ## Last Implementation Report
 
+- [`implementation-report-m2-6-m2-closeout.md`](./../../implementation-report-m2-6-m2-closeout.md)
+  — the M2.6 implementation report
+  (the closing receipt for the M2
+  milestone, 2026-07-11; the M2
+  retrospective at
+  [`retrospective-m2-application-shell-and-navigation.md`](./../../retrospective-m2-application-shell-and-navigation.md)
+  is the M2 closeout's 13-section
+  retrospective per the
+  Milestone Closeout Standard at
+  [`.ai/workflows/milestone-closeout.md`](./../../.ai/workflows/milestone-closeout.md)).
 - [`implementation-report-m2-5-empty-routes-responsive-accessibility.md`](./../../implementation-report-m2-5-empty-routes-responsive-accessibility.md)
   — the M2.5 implementation report
   (the closing receipt for M2.5, 2026-07-11;
@@ -764,62 +854,102 @@ Plus the supporting infrastructure:
 
 ## Next Recommended Task
 
-> **M2.6 — M2 Closeout and Treehouse
-> Dogfooding.** Summary entry; the
-> full M2.6 plan lands now that
-> M2.5 has closed. The next session
-> promotes the M2.6 plan stub to
-> a full plan in `Awaiting
-> Approval`, then implements
-> per the plan's own order.
+> **M3.1 — Project Registration
+> (M3 first slice).** The M2.6
+> closeout session delivers the M2
+> closeout and prepares the M3 plan
+> in `Awaiting Approval`; the next
+> session approves the M3 plan and
+> implements M3.1 (the M3 first
+> slice). M3.1 introduces
+> `IProjectRegistry` (the M3
+> project-registration service) and
+> the `Project` aggregate root; the
+> `Projects` dashboard route reads
+> projects through the
+> `IProjectRegistry` per the
+> architecture test
+> `Pages_Resolve_Projects_Through_Service`
+> introduced in the M3 plan.
 > The next session follows the
 > **Progressive Coding Rule** in
 > [`.ai/workflows/progressive-coding.md`](./../../.ai/workflows/progressive-coding.md):
 > one task per session;
 > 13-step lifecycle; stop after
-> the coherent commit.
+> the coherent commit. **Do not
+> begin M3.1 implementation in
+> this session** — the M2.6 brief
+> explicitly says *"do not
+> expand into M3 implementation"*
+> and *"do not begin M3
+> implementation"*.
 
-The detailed breakdown of the M2 slices is
+The detailed breakdown of the M3 slices is
 in
 [`.ai/state/task-board.md`](./task-board.md)
-and the M2 plan files in
-[`.ai/plans/`](./../../.ai/plans/). The
+and the M3 plan file in
+[`.ai/plans/M3-project-registration.md`](./../../.ai/plans/M3-project-registration.md). The
 next three actionable items are:
 
-1. **M2.6 — M2 Closeout and
-   Treehouse Dogfooding**
-   (summary entry; promoted to
-   a full plan when M2.5 closes
-   — i.e. now).
-2. **M1 follow-up — Add
+1. **M3 plan approval** (the M3
+   plan is at
+   [`.ai/plans/M3-project-registration.md`](./../../.ai/plans/M3-project-registration.md)
+   with `Status: Awaiting
+   Approval`; the next session
+   promotes it to `Approved`).
+2. **M3.1 — Project Registration
+   first slice** (T-018, `Ready`
+   in `.ai/state/tasks.json`; the
+   first concrete M3 task).
+3. **M1 follow-up — Add
    `AppToolbar` example to
    `/design-system`** (cosmetic;
    the work is small and can be
-   folded into M2.6 if
-   appropriate).
+   folded into M3.1 or a later M3
+   slice if appropriate).
 
 ## Last Updated
 
-- **2026-07-11** (M2.5 closeout
+- **2026-07-11** (M2.6 closeout
   session). This version supersedes
-  the M2.4 closeout version
-  (2026-07-11). The M2.5 closeout
-  session delivers the empty
-  routes, the responsive matrix,
-  the accessibility audit, and the
-  T-017 theme toggle bug fix;
-  runs the validation suite (npm
-  css:build, dotnet build, dotnet
-  test, dotnet format, visual
-  smoke test); updates the
-  project-continuity state per
+  the M2.5 closeout version
+  (2026-07-11). The M2.6 closeout
+  session delivers the M2 closeout
+  end-to-end: introduces the
+  Milestone Closeout Standard at
+  [`.ai/workflows/milestone-closeout.md`](./../../.ai/workflows/milestone-closeout.md);
+  produces the M2 retrospective
+  (13 sections) at
+  [`retrospective-m2-application-shell-and-navigation.md`](./../../retrospective-m2-application-shell-and-navigation.md);
+  runs the validation suite
+  (npm css:build, dotnet build,
+  dotnet test, dotnet format,
+  visual smoke test) and confirms
+  M2 is green (197 passed, 0
+  failed, 7 skipped; 0 warnings, 0
+  errors; format clean); updates
+  the project-continuity state per
   Rule 15; produces
-  `implementation-report-m2-5-empty-routes-responsive-accessibility.md`;
-  and creates the M2.5 closeout
-  commit. The M2.5 commit is the
-  most recent commit on
-  `feature/m2-5-empty-routes-responsive-accessibility`;
-  no push (no remote configured).
+  `implementation-report-m2-6-m2-closeout.md`;
+  and creates the M2.6 closeout
+  commit. The M2 closeout commit
+  is the most recent commit on
+  `main`; the M2.6 feature branch
+  is fast-forwarded into `main`
+  and deleted per the branching
+  strategy; the `m2` annotated
+  milestone tag is at the M2
+  closeout commit on `main` per
+  rule 9. The M3 plan is prepared
+  at
+  [`.ai/plans/M3-project-registration.md`](./../../.ai/plans/M3-project-registration.md)
+  with `Status: Awaiting Approval`;
+  the first M3 task (T-018, M3.1)
+  is `Ready` in
+  `.ai/state/tasks.json`. The
+  remote (`origin`) is configured
+  but push is not authorised in
+  this session.
 
 ## Linked Artefacts
 
@@ -827,14 +957,19 @@ next three actionable items are:
   permanent vision document (M0.5;
   tier 1 of the document hierarchy).
 - [`.ai/state/task-board.md`](./task-board.md) —
-  the live work queue (M2.1, M2.2,
-  M2.3 Done; M2.4 in `Ready`, plan
-  `Awaiting Approval`; M2.5 in
-  `Deferred`).
+  the live work queue (M2.1
+  through M2.6 Done; M3.1
+  `Ready`, M3 plan `Awaiting
+  Approval`; M3 summary entry
+  noted as promoted to `Ready`).
 - [`.ai/handoffs/latest.md`](./../../.ai/handoffs/latest.md) —
-  the most recent handoff (the M2.5
+  the most recent handoff (the M2.6
   closeout handoff; mirrored from
-  `.ai/handoffs/2026-07-11-m2-5-empty-routes-responsive-accessibility.md`).
+  `.ai/handoffs/2026-07-11-m2-6-m2-closeout.md`).
+- [`.ai/handoffs/2026-07-11-m2-6-m2-closeout.md`](./../../.ai/handoffs/2026-07-11-m2-6-m2-closeout.md)
+  — the M2.6 closeout session handoff
+  (the closing receipt for the M2
+  milestone, 2026-07-11).
 - [`.ai/handoffs/2026-07-11-m2-5-empty-routes-responsive-accessibility.md`](./../../.ai/handoffs/2026-07-11-m2-5-empty-routes-responsive-accessibility.md)
   — the M2.5 closeout session handoff.
 - [`.ai/handoffs/2026-07-11-m2-4-project-intelligence-dashboard.md`](./../../.ai/handoffs/2026-07-11-m2-4-project-intelligence-dashboard.md)
@@ -847,6 +982,38 @@ next three actionable items are:
   — the M2.1 closeout session handoff.
 - [`.ai/handoffs/2026-07-10-m1-closeout.md`](./../../.ai/handoffs/2026-07-10-m1-closeout.md) —
   the M1 closeout session handoff.
+- [`.ai/workflows/milestone-closeout.md`](./../../.ai/workflows/milestone-closeout.md) —
+  the Milestone Closeout Standard
+  (10 sections; the canonical
+  procedure every future milestone
+  closeout must follow; the
+  13-section retrospective is the
+  standard's required deliverable).
+  Introduced in the M2.6 closeout
+  session, 2026-07-11.
+- [`retrospective-m2-application-shell-and-navigation.md`](./../../retrospective-m2-application-shell-and-navigation.md) —
+  the M2 retrospective
+  (13 sections: delivered
+  capabilities, deferred
+  capabilities, technical debt,
+  known issues, lessons learned,
+  architecture changes,
+  documentation changes, testing
+  summary, validation results,
+  implementation reports, commit
+  range, readiness for M3,
+  recommendations for the next
+  milestone). The first milestone
+  retrospective in the repository;
+  produced in the M2.6 closeout
+  session, 2026-07-11.
+- [`.ai/plans/M2.6-m2-closeout-and-treehouse-dogfooding.md`](./../../.ai/plans/M2.6-m2-closeout-and-treehouse-dogfooding.md) —
+  the M2.6 plan (Delivered,
+  2026-07-11).
+- [`.ai/plans/M3-project-registration.md`](./../../.ai/plans/M3-project-registration.md) —
+  the M3 plan (`Awaiting Approval`,
+  2026-07-11). The first M3 task
+  (T-018, M3.1) is in `Ready`.
 - [`.ai/plans/M2.1-application-shell-skeleton.md`](./../../.ai/plans/M2.1-application-shell-skeleton.md) —
   the revised M2.1 plan (Delivered,
   2026-07-11).
@@ -859,6 +1026,12 @@ next three actionable items are:
   M2.2 closeout session, approved and
   implemented in the M2.3 closeout
   session).
+- [`.ai/plans/M2.4-project-intelligence-dashboard.md`](./../../.ai/plans/M2.4-project-intelligence-dashboard.md) —
+  the M2.4 plan (Delivered,
+  2026-07-11; promoted from `Draft`
+  stub in the M2.3 closeout session,
+  approved and implemented in the
+  M2.4 closeout session).
 - [`.ai/plans/M2.5-empty-routes-responsive-accessibility.md`](./../../.ai/plans/M2.5-empty-routes-responsive-accessibility.md) —
   the M2.5 plan (Delivered,
   2026-07-11).
@@ -911,6 +1084,10 @@ next three actionable items are:
   (the closing receipt for M2.5,
   2026-07-11; includes the T-017
   theme toggle bug fix).
+- [`implementation-report-m2-6-m2-closeout.md`](./../../implementation-report-m2-6-m2-closeout.md)
+  — the M2.6 implementation report
+  (the closing receipt for the M2
+  milestone, 2026-07-11).
 - [`docs/dashboard.md`](./../../docs/dashboard.md)
   — the product dashboard definition (M0.5).
 - [`.ai/backlog/`](./../../.ai/backlog/) —

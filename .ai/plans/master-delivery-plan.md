@@ -23,7 +23,7 @@
 | ----- | -------------------------------------------------------- | -------------------------- | --------------------------------------------- |
 | M0    | Documentation Foundation                                | **Done**                   | This document set.                            |
 | M1    | Design System Core                                      | **Done (closed 2026-07-10)** | `implementation-report-m1-closeout.md`; first commits `1722bd2`, `2ba1fad`. |
-| M2    | Application Shell and Navigation                        | Active (M2.1, M2.2, M2.3, M2.4, M2.5 all Delivered 2026-07-11) | `implementation-report-m2-5-empty-routes-responsive-accessibility.md`; commits `de082fd`, `ef1063c` on `feature/m2-1-application-shell`; M2.5 commit on `feature/m2-5-empty-routes-responsive-accessibility`. |
+| M2    | Application Shell and Navigation                        | **Done (closed 2026-07-11)** | `implementation-report-m2-6-m2-closeout.md`; retrospective at `retrospective-m2-application-shell-and-navigation.md`; M2 closeout commit `chore(m2.6): close M2 with retrospective, milestone closeout standard, and M3 plan` on `main`; `m2` annotated milestone tag at the M2 closeout commit; per-slice commits `de082fd` and `ef1063c` on `feature/m2-1-application-shell` plus the M2.2 → M2.5 commit chain. |
 | M3    | Project Registration                                    | Planned                    | No evidence yet.                              |
 | M4-A  | Infrastructure / Process Execution                      | Planned                    | No evidence yet.                              |
 | M4-B  | Capability Detection                                    | Planned                    | No evidence yet.                              |
@@ -204,10 +204,19 @@ Process execution boundary (M4-A)
     reaches `appTheme.set` when the layout is rendered).
 - **Dependencies.** M1, M0.5 (the M2.4 reader consumes the
   structured state introduced in M0.5).
-- **Completion status.** **Active** (M2.1, M2.2, M2.3,
-  M2.4, M2.5 all Delivered 2026-07-11; M2.6 summary
-  entry in the task board; M2.6 plan stub in `Deferred`
-  in `.ai/state/task-board.md` and `.ai/state/milestones.json`).
+- **Completion status.** **Done (closed 2026-07-11).**
+  M2.1, M2.2, M2.3, M2.4, M2.5 all Delivered
+  2026-07-11; M2.6 (the M2 closeout) Delivered
+  2026-07-11; the M2 retrospective is at
+  `retrospective-m2-application-shell-and-navigation.md`;
+  the Milestone Closeout Standard is at
+  `.ai/workflows/milestone-closeout.md` (introduced in
+  M2.6; the canonical procedure every future
+  milestone closeout must follow); the M2 closeout
+  commit `chore(m2.6): close M2 with retrospective,
+  milestone closeout standard, and M3 plan` is on
+  `main`; the `m2` annotated milestone tag is at
+  the M2 closeout commit.
 - **Evidence.**
   - `.ai/plans/M2.1-application-shell-skeleton.md`
     (revised 2026-07-10; implemented 2026-07-11 per
@@ -224,12 +233,25 @@ Process execution boundary (M4-A)
   - `.ai/plans/M2.5-empty-routes-responsive-accessibility.md`
     (expanded 2026-07-11; implemented 2026-07-11 per
     `implementation-report-m2-5-empty-routes-responsive-accessibility.md`).
+  - `.ai/plans/M2.6-m2-closeout-and-treehouse-dogfooding.md`
+    (M2.6 plan, Approved 2026-07-11; implemented
+    2026-07-11 per
+    `implementation-report-m2-6-m2-closeout.md`).
+  - `.ai/workflows/milestone-closeout.md` (the
+    Milestone Closeout Standard, introduced in M2.6).
+  - `retrospective-m2-application-shell-and-navigation.md`
+    (the M2 retrospective, 13 sections, all
+    populated; the first milestone retrospective in
+    this repository).
+  - `.ai/handoffs/2026-07-11-m2-1-application-shell-foundation.md`
+    through `.ai/handoffs/2026-07-11-m2-6-m2-closeout.md`
+    (the per-slice handoffs).
   - `.ai/workflows/progressive-coding.md` (the
-    Progressive Coding Rule that governs task selection
-    across the six slices).
+    Progressive Coding Rule that governed task
+    selection across the six slices).
   - `reconciliation-report-m2-task-breakdown.md` (the
-    closing receipt for the M2 delivery-reconciliation
-    session).
+    closing receipt for the M2 delivery-
+    reconciliation session).
 - **Next milestone enabled.** M3 (project-registration page
   composes the M2 shell).
 
@@ -242,7 +264,7 @@ Process execution boundary (M4-A)
 | M2.3  | Top Bar, Breadcrumbs, and Page Headers                   | Delivered (2026-07-11). |
 | M2.4  | Project Intelligence Dashboard (read-only, `.ai/state`)  | Delivered (2026-07-11). |
 | M2.5  | Empty Routes, Responsive, and Accessibility              | Delivered (2026-07-11). |
-| M2.6  | M2 Closeout and Treehouse Dogfooding                     | Summary entry.        |
+| M2.6  | M2 Closeout and Treehouse Dogfooding                     | Delivered (2026-07-11). |
 
 ### M3 — Project Registration
 
@@ -265,8 +287,13 @@ Process execution boundary (M4-A)
   - The architecture test
     `Application_DoesNotReference_Providers_Implementations`
     remains green.
-- **Dependencies.** M2.
-- **Completion status.** **Planned.**
+- **Dependencies.** M2 (closed 2026-07-11).
+- **Completion status.** **Planned; plan Awaiting
+  Approval (2026-07-11).** The M3 plan is at
+  `.ai/plans/M3-project-registration.md`. The first
+  M3 task (T-018 — M3.1) is `Ready` in
+  `.ai/state/tasks.json`. The M3 implementation
+  lands in the next session.
 - **Evidence.** No evidence yet.
 - **Next milestone enabled.** M4 (the process runner and
   the capability detector work on registered projects).

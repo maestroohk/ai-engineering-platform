@@ -39,7 +39,7 @@ A milestone is **complete** only when:
 | --- | ----------------------------------------------------- | ---------- | -------------------------------------------------------------------------- |
 | M0  | Doc foundation                                        | Done       | This document set exists.                                                  |
 | M1  | Design System Core                                    | **Done (closed 2026-07-10)** | A runnable Blazor shell with the base design-system components.            |
-| M2  | Application Shell and Navigation                      | Active (M2.1 / M2.2 / M2.3 / M2.4 / M2.5 delivered 2026-07-11) | A navigable app shell on Windows desktop; pages reach an empty state; the layout is responsive and accessible. |
+| M2  | Application Shell and Navigation                      | **Done (closed 2026-07-11)** | A navigable app shell on Windows desktop; pages reach an empty state; the layout is responsive and accessible. |
 | M3  | Project Registration                                  | Planned    | A user can register a project; the platform owns a `Project` entity.       |
 | M4  | Process Execution, Capability Detection, Provider Registry | Planned | The platform spawns processes safely, detects capabilities, registers providers. Divided into four slices: |
 |     | &nbsp;&nbsp;M4-A: Infrastructure / Process Execution   | Planned    | `AiEng.Platform.Infrastructure` lands; `IProcessRunner`, `ICredentialVault`, `IClock`, on-disk `IProjectStore`. |
@@ -67,12 +67,15 @@ M2.4 ("Project Intelligence Dashboard") is **Delivered** (see
 M2.5 ("Empty Routes, Responsive, and Accessibility") is
 **Delivered** (see
 `implementation-report-m2-5-empty-routes-responsive-accessibility.md`).
-M2.6 is the M2 closeout and external Treehouse dogfooding
-checkpoint; the plan stub is recorded in
-`.ai/state/task-board.md` and `.ai/state/milestones.json` as
-`Deferred`; the next session promotes the stub to a full plan
-in `Awaiting Approval` and implements per the plan's own
-order.
+M2.6 ("M2 Closeout and Treehouse Dogfooding") is **Delivered** (see
+`implementation-report-m2-6-m2-closeout.md` and
+`retrospective-m2-application-shell-and-navigation.md`).
+M2 closed 2026-07-11; the `m2` milestone tag is at the M2 closeout
+commit on `main`; the M2 retrospective is the first milestone
+retrospective in this repository; the Milestone Closeout Standard at
+`.ai/workflows/milestone-closeout.md` is the canonical procedure
+every future milestone closeout must follow. M3 is the next
+milestone.
 
 The sequence is deliberate. M1 builds the design system because every
 later milestone composes its components. M2 builds the shell because
@@ -287,7 +290,7 @@ navigation).
 | M2.3  | Top Bar, Breadcrumbs, and Page Headers        | Delivered (M2.3, 2026-07-11) | `AppTopBar`, `AppThemeToggle`, `AppUserAvatarSlot`, `AppBreadcrumb`; theme toggle relocated to the top bar; breadcrumb walks the M2.2 registry's `Parent` chain; page-header integration with the navigation registry. |
 | M2.4  | Project Intelligence Dashboard                | Delivered (M2.4, 2026-07-11) | `IProjectIntelligenceReader`, `ProjectIntelligenceSnapshot`, `ProjectIntelligenceReader`, `AddProjectIntelligence`, `Dashboard.razor` at `/dashboard`; the dashboard renders the M0.5-data sections in the **Populated** state and the M3+-data sections in the **Empty** state; the theme toggle bug is fixed (`appTheme.current` JS function; synchronous `IsDark` flip; `JSDisconnectedException` handled); the `Pages_Resolve_State_Through_Reader` architecture test enforces the single-seam rule. |
 | M2.5  | Empty Routes, Responsive, and Accessibility   | Delivered (M2.5, 2026-07-11) | All routes reach an `AppEmptyState`; the shell is usable at 1280x720, 1440x900, and 1920x1080; the sidebar narrows progressively below 1280px (8rem at 1024–1279px); the top bar remains horizontal at every breakpoint; the content area scrolls vertically; keyboard navigation works; `aria-current="page"` invariant enforced on the breadcrumb last segment, the active `NavLink`, and the active sidebar link; axe-core audit harness is registered but disabled per ADR-016 / M4-D; the T-017 theme toggle bug is fixed via `@rendermode InteractiveServer` on `AppThemeToggle.razor` (the layout's `@Body` is a `RenderFragment` delegate that Blazor refuses to serialize across the SSR → interactive boundary; the directive on the toggle itself is the minimum-blast-radius fix). |
-| M2.6  | M2 Closeout and Treehouse Dogfooding          | Summary entry  | The M2 implementation report, the Treehouse dogfooding checkpoint (per `.ai/workflows/tool-dogfooding.md`), and the closeout commit. |
+| M2.6  | M2 Closeout and Treehouse Dogfooding          | Delivered (M2.6, 2026-07-11) | The Milestone Closeout Standard at `.ai/workflows/milestone-closeout.md` (10 sections; the canonical procedure every future milestone closeout must follow; the 13-section retrospective is the standard's required deliverable). The M2 retrospective at `retrospective-m2-application-shell-and-navigation.md` (13 sections, all populated; the first milestone retrospective in this repository). The M2.6 implementation report at `implementation-report-m2-6-m2-closeout.md`. The M2 closeout commit (`chore(m2.6): close M2 with retrospective, milestone closeout standard, and M3 plan`) on the feature branch `feature/T-016-m2-closeout-and-treehouse-dogfooding`, fast-forwarded into `main`; the feature branch deleted per the branching strategy rule 7; the `m2` annotated milestone tag at the M2 closeout commit on `main` per rule 9. The M3 plan at `.ai/plans/M3-project-registration.md` (Status: Awaiting Approval); the first M3 task (T-018) promoted to `Ready`. The M2 milestone is closed (`status: Done`; `closed_at: 2026-07-11`). |
 
 **Reusable components introduced (across all six slices):**
 
@@ -343,10 +346,18 @@ no page reads the JSON directly.
   axe-core audit harness is registered but disabled per
   ADR-016 / M4-D. (Delivered 2026-07-11;
   `implementation-report-m2-5-empty-routes-responsive-accessibility.md`.)
-- M2.6 is closed: the M2 implementation report is written; the
-  Treehouse dogfooding checkpoint has been exercised (or
-  explicitly deferred, recorded, and reasoned); the closeout
-  commit is coherent.
+- M2.6 is closed: the Milestone Closeout Standard is in place at
+  `.ai/workflows/milestone-closeout.md` (the canonical procedure
+  every future milestone closeout must follow); the M2
+  retrospective is written at
+  `retrospective-m2-application-shell-and-navigation.md` with
+  the 13 required sections; the M2.6 implementation report is
+  written; the closeout commit is coherent; the `m2` annotated
+  milestone tag is at the M2 closeout commit on `main`; the
+  M3 plan is in `Awaiting Approval` with the first M3 task in
+  `Ready`. (Delivered 2026-07-11;
+  `implementation-report-m2-6-m2-closeout.md` and
+  `retrospective-m2-application-shell-and-navigation.md`.)
 
 **Dogfooding checkpoint (M2):** When Git worktrees are useful
 for an isolated task on the shell, the development team may

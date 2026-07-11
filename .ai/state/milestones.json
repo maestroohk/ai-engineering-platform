@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "updated_at": "2026-07-11T00:00:00Z",
-  "updated_by_session": "m2-3-topbar-breadcrumbs",
+  "updated_by_session": "m2-6-m2-closeout-and-treehouse-dogfooding",
   "milestones": [
     {
       "id": "M0",
@@ -10,7 +10,20 @@
       "primary_outcome": "The repository contains the engineering standards, architecture foundation, and reusable development rules.",
       "delivers_capabilities": [],
       "consumes_capabilities": [],
-      "enables_milestones": ["M0.5", "M1", "M2", "M3", "M4-A", "M4-B", "M4-C", "M4-D", "M5", "M6", "M7", "M8"],
+      "enables_milestones": [
+        "M0.5",
+        "M1",
+        "M2",
+        "M3",
+        "M4-A",
+        "M4-B",
+        "M4-C",
+        "M4-D",
+        "M5",
+        "M6",
+        "M7",
+        "M8"
+      ],
       "evidence": {
         "implementation_report": "implementation-report-m1-bootstrap.md"
       }
@@ -21,13 +34,29 @@
       "status": "Done",
       "closed_at": "2026-07-10",
       "primary_outcome": "A runnable Blazor shell on .NET 10 that renders the design system documentation page. The base primitive components exist and are used by the documentation page.",
-      "delivers_capabilities": ["C-020"],
+      "delivers_capabilities": [
+        "C-020"
+      ],
       "consumes_capabilities": [],
-      "enables_milestones": ["M2", "M3", "M4-A", "M4-B", "M4-C", "M4-D", "M5", "M6", "M7", "M8"],
+      "enables_milestones": [
+        "M2",
+        "M3",
+        "M4-A",
+        "M4-B",
+        "M4-C",
+        "M4-D",
+        "M5",
+        "M6",
+        "M7",
+        "M8"
+      ],
       "evidence": {
         "implementation_report": "implementation-report-m1-closeout.md",
         "handoff": ".ai/handoffs/2026-07-10-m1-closeout.md",
-        "commits": ["1722bd235830cfd8b180191953116c058c92edef", "2ba1fad3cc45bee513ba38c7269e024bf8667ef9"]
+        "commits": [
+          "1722bd235830cfd8b180191953116c058c92edef",
+          "2ba1fad3cc45bee513ba38c7269e024bf8667ef9"
+        ]
       }
     },
     {
@@ -36,23 +65,48 @@
       "status": "Done",
       "closed_at": "2026-07-10",
       "primary_outcome": "Strengthen the long-term engineering foundation: introduce VISION.md, the engineering backlog, structured state, decision log, capability mapping, dashboard definition, self-awareness state, and the dogfooding evolution. Validate the documentation architecture.",
-      "delivers_capabilities": ["C-020", "C-019"],
-      "consumes_capabilities": ["C-020"],
-      "enables_milestones": ["M2"],
+      "delivers_capabilities": [
+        "C-020",
+        "C-019"
+      ],
+      "consumes_capabilities": [
+        "C-020"
+      ],
+      "enables_milestones": [
+        "M2"
+      ],
       "evidence": {
         "implementation_report": "implementation-report-m0.5-architecture-refinement.md",
         "handoff": ".ai/handoffs/2026-07-10-m0.5-architecture-refinement.md",
-        "commits": ["1d98acd"]
+        "commits": [
+          "1d98acd"
+        ]
       }
     },
     {
       "id": "M2",
       "name": "Application Shell and Navigation",
-      "status": "Active",
+      "status": "Done",
+      "closed_at": "2026-07-11",
       "primary_outcome": "The shell has a sidebar, a top bar, and a content panel. The platform is navigable; every navigation target renders an empty state that uses the design system.",
-      "delivers_capabilities": ["C-019"],
-      "consumes_capabilities": ["C-020"],
-      "enables_milestones": ["M3", "M4-A", "M4-B", "M4-C", "M4-D", "M5", "M6", "M7", "M8"],
+      "delivers_capabilities": [
+        "C-019",
+        "C-022"
+      ],
+      "consumes_capabilities": [
+        "C-020"
+      ],
+      "enables_milestones": [
+        "M3",
+        "M4-A",
+        "M4-B",
+        "M4-C",
+        "M4-D",
+        "M5",
+        "M6",
+        "M7",
+        "M8"
+      ],
       "slices": {
         "M2.1": {
           "title": "Application Shell Foundation",
@@ -90,6 +144,9 @@
         "M2.4": {
           "title": "Project Intelligence Dashboard",
           "status": "delivered",
+          "delivered_at": "2026-07-11",
+          "session": "m2-4-project-intelligence-dashboard",
+          "branch": "feature/m2-4-project-intelligence-dashboard",
           "summary": "IProjectIntelligenceReader + ProjectIntelligenceSnapshot + ProjectIntelligenceReader in src/AiEng.Platform.Application/ProjectIntelligence/; ProjectIntelligenceServiceCollectionExtensions in src/AiEng.Platform.App/Composition/; Dashboard.razor + Dashboard.razor.css in src/AiEng.Platform.App/Components/Pages/; theme toggle bug fixed (added appTheme.current JS function, IsDark updated synchronously before JSInterop, JSDisconnectedException handled); 6 unit + 13 bUnit + 2 architecture tests added (175 total passing). Architecture test Pages_Resolve_State_Through_Reader confirms the Dashboard consumes state only through IProjectIntelligenceReader.",
           "implementation_report": "implementation-report-m2-4-project-intelligence-dashboard.md",
           "plan": ".ai/plans/M2.4-project-intelligence-dashboard.md",
@@ -108,24 +165,50 @@
         },
         "M2.6": {
           "title": "M2 Closeout and Treehouse Dogfooding",
-          "status": "deferred"
+          "status": "delivered",
+          "delivered_at": "2026-07-11",
+          "session": "m2-6-m2-closeout-and-treehouse-dogfooding",
+          "branch": "feature/T-016-m2-closeout-and-treehouse-dogfooding",
+          "summary": "M2 closeout slice. Introduces the Milestone Closeout Standard at .ai/workflows/milestone-closeout.md (the canonical procedure every future milestone closeout must follow; the 13-section retrospective is the standard's required deliverable). Ships the M2 retrospective at retrospective-m2-application-shell-and-navigation.md (the first milestone retrospective in the repository). Validates the complete M2 milestone end-to-end: npm run css:build (0), dotnet restore (0), dotnet build (0 warnings, 0 errors), dotnet test (197 passed, 0 failed, 7 skipped per ADR-016), dotnet format --verify-no-changes (clean), visual smoke (5 routes return 200, theme toggle present on every AppLayout page). Closes M2 (status Done; closed_at 2026-07-11). Updates ROADMAP.md § 2 (M2 row Done) and § 3 (M2.6 row Delivered; M2 DoD expanded). Updates the master delivery plan § 1 (M2 row Done) and § 3 (M2 completion status Done; M2.6 slice row Delivered). Prepares the M3 plan at .ai/plans/M3-project-registration.md (Status: Awaiting Approval). The first M3 task (T-018) is promoted to Ready. The M2 closeout commit is created on the feature branch and fast-forwarded into main. The m2 annotated milestone tag is created at the M2 closeout commit on main. The feature branch is deleted per the branching strategy. Push is skipped (no explicit authorisation in this session).",
+          "implementation_report": "implementation-report-m2-6-m2-closeout.md",
+          "handoff": ".ai/handoffs/2026-07-11-m2-6-m2-closeout.md",
+          "plan": ".ai/plans/M2.6-m2-closeout-and-treehouse-dogfooding.md",
+          "commit_message": "chore(m2.6): close M2 with retrospective, milestone closeout standard, and M3 plan"
         }
       },
       "evidence": {
-        "slices": ["M2.1", "M2.2", "M2.3", "M2.4", "M2.5"],
+        "slices": [
+          "M2.1",
+          "M2.2",
+          "M2.3",
+          "M2.4",
+          "M2.5",
+          "M2.6"
+        ],
         "implementation_reports": [
           "implementation-report-m2-1-application-shell-foundation.md",
           "implementation-report-m2-2-navigation-registry-sidebar.md",
           "implementation-report-m2-3-topbar-breadcrumbs.md",
           "implementation-report-m2-4-project-intelligence-dashboard.md",
-          "implementation-report-m2-5-empty-routes-responsive-accessibility.md"
+          "implementation-report-m2-5-empty-routes-responsive-accessibility.md",
+          "implementation-report-m2-6-m2-closeout.md"
         ],
         "handoffs": [
           ".ai/handoffs/2026-07-11-m2-1-application-shell-foundation.md",
           ".ai/handoffs/2026-07-11-m2-2-navigation-registry-sidebar.md",
           ".ai/handoffs/2026-07-11-m2-3-topbar-breadcrumbs.md",
           ".ai/handoffs/2026-07-11-m2-4-project-intelligence-dashboard.md",
-          ".ai/handoffs/2026-07-11-m2-5-empty-routes-responsive-accessibility.md"
+          ".ai/handoffs/2026-07-11-m2-5-empty-routes-responsive-accessibility.md",
+          ".ai/handoffs/2026-07-11-m2-6-m2-closeout.md"
+        ],
+        "retrospective": "retrospective-m2-application-shell-and-navigation.md",
+        "commits": [
+          "M2.1: feat(m2.1): add application shell foundation on feature/m2-1-application-shell",
+          "M2.2: feat(m2.2): add navigation registry and sidebar on feature/m2-2-navigation-registry-sidebar",
+          "M2.3: feat(m2.3): add top bar, breadcrumb, and page header integration on feature/m2-3-topbar-breadcrumbs",
+          "M2.4: feat(m2.4): add project intelligence dashboard on feature/m2-4-project-intelligence-dashboard",
+          "M2.5: feat(m2.5): add empty routes, responsive matrix, a11y audit, and theme toggle fix on feature/m2-5-empty-routes-responsive-accessibility",
+          "M2.6: chore(m2.6): close M2 with retrospective, milestone closeout standard, and M3 plan on feature/T-016-m2-closeout-and-treehouse-dogfooding (fast-forwarded into main at the m2 milestone tag)"
         ]
       }
     },
@@ -134,9 +217,24 @@
       "name": "Project Registration",
       "status": "Planned",
       "primary_outcome": "A user can register a project (a folder on disk) and the platform owns a Project entity in the application layer.",
-      "delivers_capabilities": ["C-016"],
-      "consumes_capabilities": ["C-019", "C-020"],
-      "enables_milestones": ["M4-A", "M4-B", "M4-C", "M4-D", "M5", "M6", "M7", "M8"],
+      "delivers_capabilities": [
+        "C-016"
+      ],
+      "consumes_capabilities": [
+        "C-019",
+        "C-020"
+      ],
+      "enables_milestones": [
+        "M4-A",
+        "M4-B",
+        "M4-C",
+        "M4-D",
+        "M5",
+        "M6",
+        "M7",
+        "M8"
+      ],
+      "plan": ".ai/plans/M3-project-registration.md",
       "evidence": {}
     },
     {
@@ -144,9 +242,25 @@
       "name": "Infrastructure / Process Execution",
       "status": "Planned",
       "primary_outcome": "AiEng.Platform.Infrastructure is created. IProcessRunner, ICredentialVault, IClock, and the on-disk IProjectStore land. M3 in-memory store is replaced.",
-      "delivers_capabilities": ["C-012", "C-013", "C-014"],
-      "consumes_capabilities": ["C-016", "C-019", "C-020"],
-      "enables_milestones": ["M4-B", "M4-C", "M4-D", "M5", "M6", "M7", "M8"],
+      "delivers_capabilities": [
+        "C-012",
+        "C-013",
+        "C-014"
+      ],
+      "consumes_capabilities": [
+        "C-016",
+        "C-019",
+        "C-020"
+      ],
+      "enables_milestones": [
+        "M4-B",
+        "M4-C",
+        "M4-D",
+        "M5",
+        "M6",
+        "M7",
+        "M8"
+      ],
       "evidence": {}
     },
     {
@@ -154,9 +268,24 @@
       "name": "Capability Detection",
       "status": "Planned",
       "primary_outcome": "The host detects git, ollama, powershell.exe, wsl.exe, wt.exe, bash.exe through IProcessRunner and produces a typed HostCapabilities report.",
-      "delivers_capabilities": ["C-015"],
-      "consumes_capabilities": ["C-012", "C-013", "C-014", "C-019", "C-020"],
-      "enables_milestones": ["M4-C", "M4-D", "M5", "M6", "M7", "M8"],
+      "delivers_capabilities": [
+        "C-015"
+      ],
+      "consumes_capabilities": [
+        "C-012",
+        "C-013",
+        "C-014",
+        "C-019",
+        "C-020"
+      ],
+      "enables_milestones": [
+        "M4-C",
+        "M4-D",
+        "M5",
+        "M6",
+        "M7",
+        "M8"
+      ],
       "evidence": {}
     },
     {
@@ -164,9 +293,27 @@
       "name": "Provider Registry Foundation",
       "status": "Planned",
       "primary_outcome": "IProviderRegistry and the family-scoped registries are introduced with fake providers; the composition root pattern is in place.",
-      "delivers_capabilities": ["C-001", "C-010", "C-011", "C-018"],
-      "consumes_capabilities": ["C-012", "C-013", "C-014", "C-015", "C-019", "C-020"],
-      "enables_milestones": ["M4-D", "M5", "M6", "M7", "M8"],
+      "delivers_capabilities": [
+        "C-001",
+        "C-010",
+        "C-011",
+        "C-018"
+      ],
+      "consumes_capabilities": [
+        "C-012",
+        "C-013",
+        "C-014",
+        "C-015",
+        "C-019",
+        "C-020"
+      ],
+      "enables_milestones": [
+        "M4-D",
+        "M5",
+        "M6",
+        "M7",
+        "M8"
+      ],
       "evidence": {}
     },
     {
@@ -174,9 +321,28 @@
       "name": "First Concrete Process Providers",
       "status": "Planned",
       "primary_outcome": "GitProvider and OllamaLaunchProvider land as concrete process-boundary providers; the contract test framework is established; the four composition-root architecture tests activate; the No_DirectProcessStart_OutsideInfrastructure test activates.",
-      "delivers_capabilities": ["C-002", "C-003"],
-      "consumes_capabilities": ["C-001", "C-010", "C-011", "C-012", "C-013", "C-014", "C-015", "C-018", "C-019", "C-020"],
-      "enables_milestones": ["M5", "M6", "M7", "M8"],
+      "delivers_capabilities": [
+        "C-002",
+        "C-003"
+      ],
+      "consumes_capabilities": [
+        "C-001",
+        "C-010",
+        "C-011",
+        "C-012",
+        "C-013",
+        "C-014",
+        "C-015",
+        "C-018",
+        "C-019",
+        "C-020"
+      ],
+      "enables_milestones": [
+        "M5",
+        "M6",
+        "M7",
+        "M8"
+      ],
       "evidence": {}
     },
     {
@@ -184,9 +350,28 @@
       "name": "Native Git Worktrees",
       "status": "Planned",
       "primary_outcome": "A user can create a native Git worktree from a registered project; the worktree is the unit of work for later milestones.",
-      "delivers_capabilities": ["C-005"],
-      "consumes_capabilities": ["C-001", "C-002", "C-003", "C-010", "C-011", "C-012", "C-013", "C-014", "C-016", "C-018", "C-019", "C-020"],
-      "enables_milestones": ["M6", "M7", "M8"],
+      "delivers_capabilities": [
+        "C-005"
+      ],
+      "consumes_capabilities": [
+        "C-001",
+        "C-002",
+        "C-003",
+        "C-010",
+        "C-011",
+        "C-012",
+        "C-013",
+        "C-014",
+        "C-016",
+        "C-018",
+        "C-019",
+        "C-020"
+      ],
+      "enables_milestones": [
+        "M6",
+        "M7",
+        "M8"
+      ],
       "evidence": {}
     },
     {
@@ -194,9 +379,30 @@
       "name": "Agent Runtime Launching",
       "status": "Planned",
       "primary_outcome": "A user can launch an agent runtime against a registered project's worktree; the launch is cancellable mid-stream; the terminal output is rendered; the execution history is persisted.",
-      "delivers_capabilities": ["C-004", "C-017", "C-021"],
-      "consumes_capabilities": ["C-001", "C-002", "C-003", "C-005", "C-010", "C-011", "C-012", "C-013", "C-014", "C-016", "C-018", "C-019", "C-020"],
-      "enables_milestones": ["M7", "M8"],
+      "delivers_capabilities": [
+        "C-004",
+        "C-017",
+        "C-021"
+      ],
+      "consumes_capabilities": [
+        "C-001",
+        "C-002",
+        "C-003",
+        "C-005",
+        "C-010",
+        "C-011",
+        "C-012",
+        "C-013",
+        "C-014",
+        "C-016",
+        "C-018",
+        "C-019",
+        "C-020"
+      ],
+      "enables_milestones": [
+        "M7",
+        "M8"
+      ],
       "evidence": {}
     },
     {
@@ -204,9 +410,30 @@
       "name": "Review and Quality Gates",
       "status": "Planned",
       "primary_outcome": "A launched run can be reviewed (IReviewProvider) and gated (IQualityGateProvider). The native baselines are the first implementations; external tools (Lavish Axi, No Mistakes) are added through the registry when the user opts in.",
-      "delivers_capabilities": ["C-006", "C-007"],
-      "consumes_capabilities": ["C-001", "C-002", "C-003", "C-005", "C-010", "C-011", "C-012", "C-013", "C-014", "C-016", "C-017", "C-018", "C-019", "C-020", "C-021"],
-      "enables_milestones": ["M8"],
+      "delivers_capabilities": [
+        "C-006",
+        "C-007"
+      ],
+      "consumes_capabilities": [
+        "C-001",
+        "C-002",
+        "C-003",
+        "C-005",
+        "C-010",
+        "C-011",
+        "C-012",
+        "C-013",
+        "C-014",
+        "C-016",
+        "C-017",
+        "C-018",
+        "C-019",
+        "C-020",
+        "C-021"
+      ],
+      "enables_milestones": [
+        "M8"
+      ],
       "evidence": {}
     },
     {
@@ -214,8 +441,31 @@
       "name": "Autonomous Loops, Orchestration, Production Hardening",
       "status": "Planned",
       "primary_outcome": "The platform ships its remaining provider families (IAutonomousLoopProvider, IOrchestrationProvider) through native baselines, and the production-hardening work lands.",
-      "delivers_capabilities": ["C-008", "C-009"],
-      "consumes_capabilities": ["C-001", "C-002", "C-003", "C-004", "C-005", "C-006", "C-007", "C-010", "C-011", "C-012", "C-013", "C-014", "C-015", "C-016", "C-017", "C-018", "C-019", "C-020", "C-021"],
+      "delivers_capabilities": [
+        "C-008",
+        "C-009"
+      ],
+      "consumes_capabilities": [
+        "C-001",
+        "C-002",
+        "C-003",
+        "C-004",
+        "C-005",
+        "C-006",
+        "C-007",
+        "C-010",
+        "C-011",
+        "C-012",
+        "C-013",
+        "C-014",
+        "C-015",
+        "C-016",
+        "C-017",
+        "C-018",
+        "C-019",
+        "C-020",
+        "C-021"
+      ],
       "enables_milestones": [],
       "evidence": {}
     }

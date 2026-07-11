@@ -80,6 +80,7 @@ treated as a bug.
 ├── workflows/             # multi-step operating procedures
 │   ├── branching-strategy.md
 │   ├── feature-lifecycle.md
+│   ├── milestone-closeout.md
 │   ├── ui-design-review.md
 │   ├── provider-onboarding.md
 │   ├── tool-dogfooding.md
@@ -115,6 +116,7 @@ documents for the task at hand.
 | Architecture decision               | `architecture.md`                   | `documentation-update.md`           | `ARCHITECTURE.md`, `DECISIONS.md`                                                                    |
 | Release                             | `release.md`                        | `release-checklist.md`              | `CONTRIBUTING.md`, `ROADMAP.md`                                                                      |
 | Branching / merging decision        | (none — read directly)              | (none — read directly)              | [`.ai/workflows/branching-strategy.md`](../.ai/workflows/branching-strategy.md) (single source of truth) |
+| Milestone closeout / retrospective  | (none — read directly)              | (none — read directly)              | [`.ai/workflows/milestone-closeout.md`](../.ai/workflows/milestone-closeout.md) (single source of truth) |
 | Documentation update                | `refactor.md` (as guidance)         | `documentation-update.md`           | The documents affected by the change                                                                 |
 | Tool dogfooding (development-time)  | `feature.md` + workflow note        | `tool-dogfooding.md`                | `docs/provider-guidelines.md` (for the boundary)                                                     |
 | Product integration of a tool       | `provider.md`                       | `provider-onboarding.md`            | `docs/provider-guidelines.md`                                                                        |

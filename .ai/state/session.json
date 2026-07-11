@@ -1,50 +1,54 @@
 {
   "schema_version": "1.0.0",
   "updated_at": "2026-07-11T00:00:00Z",
-  "session_id": "repo-infrastructure-main-branch-rename",
-  "session_type": "infrastructure",
+  "session_id": "m2-6-m2-closeout-and-treehouse-dogfooding",
+  "session_type": "milestone_closeout",
   "previous_session": "m2-5-empty-routes-responsive-accessibility",
   "scope": {
-    "milestone": "infrastructure",
-    "task_id": "T-INFRA-1",
-    "slice": "main-branch-rename-and-branching-strategy",
-    "plan": "(none; one-time repository infrastructure change per the user's brief on 2026-07-11)",
-    "branch": "main",
+    "milestone": "M2",
+    "task_id": "T-016",
+    "slice": "M2.6",
+    "plan": ".ai/plans/M2.6-m2-closeout-and-treehouse-dogfooding.md",
+    "branch": "feature/T-016-m2-closeout-and-treehouse-dogfooding (fast-forwarded into main; deleted per the branching strategy rule 7)",
     "in_scope": [
-      "Rename the default branch from master to main; main is created at the M2.5 closeout commit (the latest stable, releasable state of the product).",
-      "Re-key all Git-branch references to the word master in the working tree (13 markdown files; 1 JSON file). The phrase 'master delivery plan' (the file master-delivery-plan.md) is preserved; the Git branch is what changed, not the file name.",
-      "Adopt the permanent branching strategy (12 rules; one canonical location at .ai/workflows/branching-strategy.md; no duplication). Update CONTRIBUTING.md § 3 and .ai/README.md to reference the new strategy instead of restating branch-name conventions.",
-      "Add the GitHub remote at https://github.com/maestroohk/ai-engineering-platform.git as 'origin'. Do not push (per the brief and the command protocol: push requires explicit user authorisation).",
-      "Tag the M2.5 closeout commit as m2.5 (the first milestone tag; per rule 9 of the new branching strategy, every milestone receives a milestone tag).",
-      "Delete the legacy master branch.",
-      "Verify the Git identity: the existing authenticated identity (Kasozi Henry <20888838+maestroohk@users.noreply.github.com>) is the host's user, not a Claude-specific identity. No Claude identity to remove. The repository inherits the host's identity.",
-      "Single coherent commit on main: chore(repo): adopt main as the default branch and document the branching strategy."
+      "Introduce the Milestone Closeout Standard at .ai/workflows/milestone-closeout.md (10 sections; the canonical procedure every future milestone closeout must follow; the 13-section retrospective is the standard's required deliverable).",
+      "Generate the M2 retrospective at retrospective-m2-application-shell-and-navigation.md (13 sections: delivered capabilities, deferred capabilities, technical debt, known issues, lessons learned, architecture changes, documentation changes, testing summary, validation results, implementation reports, commit range, readiness for M3, recommendations for the next milestone).",
+      "Validate the complete M2 milestone end-to-end: npm run css:build (exit 0), dotnet restore (exit 0), dotnet build (0 warnings, 0 errors), dotnet test (197 passed, 0 failed, 7 skipped per ADR-016), dotnet format --verify-no-changes (exit 0), visual smoke (5 routes return 200 on localhost:5211; theme toggle present on every AppLayout page).",
+      "Update the project-continuity state per Rule 15: session.json, tasks.json (T-016 Done; T-006 M2 summary Done; T-018 M3.1 promoted to Ready; T-007 M3 summary note updated), current.md (active milestone M2 closed; last completed task T-016; active branch main; last stable commit the M2 closeout commit; active plan status M3 Awaiting Approval; next recommended task T-018; linked artefacts updated), task-board.md (In Progress block empty; M2.6 added to Done Recently; M3 promoted to Ready), milestones.json (M2.6 from in_progress to delivered; M2 from Active to Done with closed_at 2026-07-11; M2 evidence block updated with M2.6 handoff + report + retrospective + slice entry; M3 plan path added), ROADMAP.md (§ 2 M2 row Done; § 3 M2.6 row Delivered; M2 DoD expanded), .ai/plans/master-delivery-plan.md (§ 1 M2 row Done; § 3 M2 completion status Done; M2 evidence list updated; M2.6 slice row Delivered), .ai/handoffs/latest.md (mirror of the M2.6 handoff).",
+      "Write the M2.6 implementation report at implementation-report-m2-6-m2-closeout.md and the M2.6 per-session handoff at .ai/handoffs/2026-07-11-m2-6-m2-closeout.md.",
+      "Create the focused M2 closeout commit on the feature branch: chore(m2.6): close M2 with retrospective, milestone closeout standard, and M3 plan.",
+      "Fast-forward merge the M2.6 feature branch into main per the branching strategy rule 6.",
+      "Delete the M2.6 feature branch per the branching strategy rule 7.",
+      "Create the m2 annotated milestone tag at the M2 closeout commit on main per the branching strategy rule 9.",
+      "Prepare the M3 plan at .ai/plans/M3-project-registration.md with Status: Awaiting Approval; promote the first M3 task (T-018 — M3.1) to Ready in tasks.json."
     ],
     "out_of_scope": [
-      "Renaming legacy feature branches (the M0.5 → M2.5 branches use the older feature/<milestone>-<short-kebab> naming; they are preserved as historical record per the strategy's § 6).",
-      "Pushing to the remote (no push in this session; the user controls merges and pushes per the command protocol).",
-      "Renaming the file master-delivery-plan.md (the file is a delivery artefact, not a Git branch; renaming the file would cascade into many references and is out of scope for this one-time infrastructure change).",
-      "M2.6 or any other M2/M3 work (per the Progressive Coding Rule: one task per session; the M2.5 closeout is the previous session's work, and the next session is M2.6)."
+      "M3 implementation. The brief explicitly says 'do not expand into M3 implementation' and 'Do not begin M3 implementation.' M2.6 ends with the M3 plan in Awaiting Approval and the first M3 task in Ready; the M3 implementation lands in the next session.",
+      "Pushing to the remote. The brief says 'Push only if a remote is configured and pushing is authorised.' The remote (origin = https://github.com/maestroohk/ai-engineering-platform.git) is configured but pushing is not authorised in this session; the prior session's rule (push requires explicit user authorisation per the command protocol) is preserved. Push is deferred to a follow-up user command.",
+      "Renaming legacy feature branches. The M0.5 → M2.5 feature branches use the older feature/<milestone>-<short-kebab> naming. They remain as historical record per .ai/workflows/branching-strategy.md § 6.",
+      "The lavish-axi M1 design-system review. The tool is not installed on the host; the review is Blocked in .ai/state/task-board.md and the T-005 entry of .ai/state/tasks.json. The M2 retrospective records the deferral. The M3 plan does not assume the review lands.",
+      "The Treehouse M2 dogfooding checkpoint. The M2.6 slice records the checkpoint in the M2 retrospective's § 4 Known Issues; the M2 milestone is closed with the checkpoint deferred to a future session (the user may exercise the dogfooding externally at any time)."
     ]
   },
   "current_understanding": {
-    "active_milestone": "infrastructure",
-    "active_slice": "main-branch-rename-and-branching-strategy (delivered 2026-07-11)",
-    "active_task": "T-INFRA-1 (Done, 2026-07-11)",
-    "last_completed_milestone": "M2.5 (delivered 2026-07-11)",
-    "last_completed_task": "T-INFRA-1 (infrastructure, 2026-07-11)",
+    "active_milestone": "M2 (closed 2026-07-11)",
+    "next_milestone": "M3 — Project Registration (Status: Awaiting Approval)",
+    "active_slice": "M2.6 — M2 Closeout (delivered 2026-07-11)",
+    "active_task": "T-016 (Done, 2026-07-11)",
+    "last_completed_milestone": "M2 (closed 2026-07-11)",
+    "last_completed_task": "T-016 (M2.6 closeout, 2026-07-11)",
     "default_branch": "main",
-    "default_branch_head": "the M2.5 closeout commit + the master→main doc re-keying + the canonical branching strategy + the m2.5 milestone tag",
+    "default_branch_head": "the M2.6 closeout commit (chore(m2.6): close M2 with retrospective, milestone closeout standard, and M3 plan) on main; the m2 annotated milestone tag is at this commit",
     "remote": "origin = https://github.com/maestroohk/ai-engineering-platform.git (added; not pushed)",
-    "build_status": "passing at M2.5 closeout (0 warnings, 0 errors; no code changes in this session)",
-    "test_status": "197 passed, 0 failed (6 unit + 185 component + 6 architecture, 7 skipped) at M2.5 closeout; the infrastructure change is docs + Git topology; no test changes"
+    "build_status": "passing at M2 closeout (0 warnings, 0 errors; M2.6 is docs + workflow + state)",
+    "test_status": "197 passed, 0 failed (6 unit + 185 component + 6 architecture, 7 skipped) at M2 closeout; the M2.6 closeout adds no tests; M2.6 is docs + workflow + state"
   },
   "last_action": {
     "at": "2026-07-11T00:00:00Z",
-    "kind": "repository infrastructure change",
+    "kind": "milestone closeout",
     "target": "main",
-    "outcome": "main is the new default branch; the legacy master branch is deleted; the GitHub remote is added as origin (no push); the m2.5 milestone tag is created at the M2.5 closeout commit; the canonical branching strategy is documented at .ai/workflows/branching-strategy.md (12 rules, one place, no duplication); CONTRIBUTING.md § 3 is updated to reference the strategy and remove the conflicting branch-name conventions; .ai/README.md is updated to add the workflow to the directory layout and the task-routing table. 20 branch references to master are re-keyed to main across 13 markdown files and 1 JSON file. The 'master delivery plan' (the file master-delivery-plan.md) is preserved; the Git branch is what changed, not the file name. The Git identity is verified: Kasozi Henry <20888838+maestroohk@users.noreply.github.com> (the host's authenticated user, not a Claude-specific identity)."
+    "outcome": "M2 is closed 2026-07-11. The Milestone Closeout Standard is at .ai/workflows/milestone-closeout.md (10 sections; canonical procedure every future milestone closeout must follow; the 13-section retrospective is the standard's required deliverable; the standard is the single source of truth for milestone closeout procedures). The M2 retrospective is at retrospective-m2-application-shell-and-navigation.md (13 sections, all populated; the first milestone retrospective in the repository). The M2.6 implementation report is at implementation-report-m2-6-m2-closeout.md. The M2.6 per-session handoff is at .ai/handoffs/2026-07-11-m2-6-m2-closeout.md (mirrored to latest.md). The M3 plan is at .ai/plans/M3-project-registration.md (Status: Awaiting Approval). The first M3 task (T-018 — M3.1) is Ready in tasks.json. The M2 closeout commit is on main; the m2 annotated milestone tag is at the M2 closeout commit on main; the M2.6 feature branch is deleted per the branching strategy. Validation results: 197 passed, 0 failed, 7 skipped (per ADR-016); 0 warnings, 0 errors; format clean; visual smoke green. No push (not authorised)."
   },
-  "intended_next_action": "Stop. The next session is M2.6 (the M2 closeout and external Treehouse dogfooding checkpoint). The new branching strategy applies to M2.6: the M2.6 work starts on a new feature branch created from the latest main; the branch is named feature/T-<task-id>-<short-kebab-description> per rule 4; the work ends with one coherent commit that is fast-forwarded into main; the feature branch is deleted. The M2.6 plan stub is recorded in .ai/state/task-board.md and .ai/state/milestones.json as Deferred. Do NOT begin M2.6 in this session.",
-  "session_notes": "Repository infrastructure session (2026-07-11). The user's brief was to (1) rename the default branch from master to main, (2) inspect the Git identity (no Claude identity was present; the host's authenticated identity is Kasozi Henry <20888838+maestroohk@users.noreply.github.com>), (3) add the GitHub remote at https://github.com/maestroohk/ai-engineering-platform.git as origin (no push), and (4) adopt a permanent branching strategy (12 rules; one canonical location; no duplication). The session executes the brief in the order: (a) commit the master→main re-keyings on the M2.5 feature branch (the doc/state changes ride on the existing branch); (b) create main at the M2.5 feature branch's tip (which carries the M2.5 closeout + the re-keying); (c) switch to main; (d) write the canonical branching strategy at .ai/workflows/branching-strategy.md; (e) update CONTRIBUTING.md § 3 and .ai/README.md to reference the strategy (the conflicting branch-name conventions in CONTRIBUTING.md are removed); (f) add the GitHub remote; (g) tag the M2.5 closeout as m2.5 (the first milestone tag); (h) delete the legacy master branch; (i) create the single coherent commit on main. The session follows the Progressive Coding Rule: one task per session; stop after the coherent commit. Push is skipped (no push in this session; the user controls pushes per the command protocol)."
+  "intended_next_action": "Stop. The next session is the M3 plan approval and M3.1 implementation. The M3 plan is in Awaiting Approval; the first M3 task (T-018) is in Ready. Do NOT begin M3 implementation in this session.",
+  "session_notes": "M2 closeout session (2026-07-11). The user's brief was to (1) reconcile Git, structured state, the roadmap, the task board, the latest handoff, and the M2 milestone; (2) confirm M2.6 is the first dependency-satisfied Ready task; (3) mark M2.6 In Progress; (4) implement M2.6 within planned scope; (5) complete the M2 milestone; (6) not expand into M3 implementation; (7) introduce the Milestone Closeout Standard; (8) make milestone retrospectives a required deliverable; (9) generate the M2 retrospective with 13 sections; (10) validate the complete M2 milestone (npm run css:build, dotnet restore, dotnet build, dotnet test, dotnet format --verify-no-changes, visual smoke); (11) update capability evidence, milestone evidence, task state, session state, structured JSON state, markdown projections, ROADMAP.md, master delivery plan, current state, task board, latest handoff, milestone history, implementation report, retrospective; (12) review the complete diff before committing; (13) create a focused M2 closeout commit; (14) merge the M2 work into main; (15) create the m2 milestone tag; (16) push only if remote is configured and pushing is authorised; (17) prepare the M3 plan in .ai/plans/ with Status: Awaiting Approval; (18) promote the first M3 task to Ready; (19) stop. The session executes the brief in the order: (a) reconcile state with the repository; (b) introduce the Milestone Closeout Standard at .ai/workflows/milestone-closeout.md; (c) generate the M2 retrospective at retrospective-m2-application-shell-and-navigation.md (13 sections); (d) validate the complete M2 milestone end-to-end (6 gates, all green); (e) update the project-continuity state per Rule 15 (session.json, tasks.json, current.md, task-board.md, milestones.json, ROADMAP.md, master-delivery-plan.md, handoffs/latest.md); (f) write the M2.6 implementation report at implementation-report-m2-6-m2-closeout.md; (g) write the M2.6 per-session handoff at .ai/handoffs/2026-07-11-m2-6-m2-closeout.md (mirrored to latest.md); (h) prepare the M3 plan at .ai/plans/M3-project-registration.md (Status: Awaiting Approval); (i) promote the first M3 task (T-018 — M3.1) to Ready in tasks.json; (j) create the single coherent commit on the feature branch (chore(m2.6): close M2 with retrospective, milestone closeout standard, and M3 plan); (k) fast-forward the feature branch into main per the branching strategy rule 6; (l) delete the feature branch per rule 7; (m) create the m2 annotated milestone tag at the M2 closeout commit on main per rule 9; (n) stop. Push is skipped (no push in this session; the user controls pushes per the command protocol)."
 }

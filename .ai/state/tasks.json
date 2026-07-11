@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "updated_at": "2026-07-11T00:00:00Z",
-  "updated_by_session": "m2-5-empty-routes-responsive-accessibility",
+  "updated_by_session": "m2-6-m2-closeout-and-treehouse-dogfooding",
   "tasks": [
     {
       "id": "T-001",
@@ -286,10 +286,48 @@
     {
       "id": "T-016",
       "title": "M2.6 — M2 Closeout and Treehouse Dogfooding",
-      "status": "Deferred",
+      "status": "Done",
       "milestone": "M2",
       "slice": "M2.6",
-      "notes": "Summary entry. M2 closeout per the M1 closeout template (verification, gap-fixing, deferred-review record, handoff, project-continuity update, M3 plan preparation) plus the external Treehouse dogfooding checkpoint per ROADMAP.md M2. Will be planned in detail after M2.5 closes."
+      "created_at": "2026-07-11T00:00:00Z",
+      "claimed_at": "2026-07-11T00:00:00Z",
+      "completed_at": "2026-07-11T00:00:00Z",
+      "owner": "m2-6-m2-closeout-and-treehouse-dogfooding session",
+      "plan": ".ai/plans/M2.6-m2-closeout-and-treehouse-dogfooding.md",
+      "implementation_report": "implementation-report-m2-6-m2-closeout.md",
+      "evidence": {
+        "branch": "feature/T-016-m2-closeout-and-treehouse-dogfooding",
+        "files_added": [
+          ".ai/workflows/milestone-closeout.md",
+          "retrospective-m2-application-shell-and-navigation.md",
+          "implementation-report-m2-6-m2-closeout.md",
+          ".ai/plans/M3-project-registration.md",
+          ".ai/handoffs/2026-07-11-m2-6-m2-closeout.md"
+        ],
+        "files_modified": [
+          ".ai/README.md",
+          ".ai/state/session.json",
+          ".ai/state/tasks.json",
+          ".ai/state/current.md",
+          ".ai/state/task-board.md",
+          ".ai/state/milestones.json",
+          ".ai/handoffs/latest.md",
+          "ROADMAP.md",
+          ".ai/plans/master-delivery-plan.md"
+        ],
+        "tests": {
+          "build_warnings": 0,
+          "build_errors": 0,
+          "active_tests_passing": 197,
+          "active_tests_failed": 0,
+          "tests_skipped": 7
+        }
+      },
+      "promoted_to_ready_at": "2026-07-11",
+      "promoted_to_ready_by_session": "m2-6-m2-closeout-and-treehouse-dogfooding",
+      "started_at": "2026-07-11",
+      "started_by_session": "m2-6-m2-closeout-and-treehouse-dogfooding",
+      "notes": "M2 closeout delivered 2026-07-11. Introduces the Milestone Closeout Standard at .ai/workflows/milestone-closeout.md (the canonical procedure every future milestone closeout must follow; 10 sections; the 13-section retrospective is the standard's required deliverable). Ships the M2 retrospective at retrospective-m2-application-shell-and-navigation.md (the first milestone retrospective in the repository). Validates the complete M2 milestone end-to-end: npm run css:build (0), dotnet restore (0), dotnet build (0 warnings, 0 errors), dotnet test (197 passed, 0 failed, 7 skipped per ADR-016), dotnet format --verify-no-changes (clean), visual smoke (5 routes return 200, theme toggle present on every AppLayout page). Closes M2 in .ai/state/milestones.json (status Done; closed_at 2026-07-11). Updates ROADMAP.md § 2 (M2 row Done) and § 3 (M2.6 row Delivered; M2 DoD expanded with the retrospective + the standard). Updates the master delivery plan § 1 (M2 row Done) and § 3 (M2 completion status Done; M2.6 slice row Delivered; M2 evidence list updated). Prepares the M3 plan at .ai/plans/M3-project-registration.md (Status: Awaiting Approval). The first M3 task (T-018 — M3.1) is promoted to Ready. The M2 closeout commit (chore(m2.6): close M2 with retrospective, milestone closeout standard, and M3 plan) is created on the feature branch and fast-forwarded into main. The m2 annotated milestone tag is created at the M2 closeout commit on main. The feature branch is deleted per the branching strategy. Push is skipped (no explicit authorisation in this session)."
     },
     {
       "id": "T-004",
@@ -311,16 +349,29 @@
     {
       "id": "T-006",
       "title": "M2 — Application Shell and Navigation (summary)",
-      "status": "Deferred",
+      "status": "Done",
       "milestone": "M2",
-      "notes": "M2.1, M2.2, M2.3, M2.4, M2.5, M2.6 in the master delivery plan. Awaiting T-001 (M2.1)."
+      "completed_at": "2026-07-11T00:00:00Z",
+      "notes": "M2 closed 2026-07-11. Slices M2.1 (T-001), M2.2 (T-002), M2.3 (T-003), M2.4 (T-014), M2.5 (T-015), M2.6 (T-016) all Done. The M2 retrospective is at retrospective-m2-application-shell-and-navigation.md. The Milestone Closeout Standard is at .ai/workflows/milestone-closeout.md. The m2 milestone tag is at the M2 closeout commit on main. M3 is the next milestone."
     },
     {
       "id": "T-007",
       "title": "M3 — Project Registration (summary)",
       "status": "Deferred",
       "milestone": "M3",
-      "notes": "Awaits M2."
+      "notes": "Awaits M2. M2 closed 2026-07-11. The M3 plan is at .ai/plans/M3-project-registration.md (Status: Awaiting Approval, 2026-07-11). The first M3 task is T-018 (M3.1 — Project Registration Slice 1) in Ready."
+    },
+    {
+      "id": "T-018",
+      "title": "M3.1 — Project Registration Slice 1 (first M3 task)",
+      "status": "Ready",
+      "milestone": "M3",
+      "slice": "M3.1",
+      "created_at": "2026-07-11T00:00:00Z",
+      "promoted_to_ready_at": "2026-07-11",
+      "promoted_to_ready_by_session": "m2-6-m2-closeout-and-treehouse-dogfooding",
+      "plan": ".ai/plans/M3-project-registration.md",
+      "notes": "Promoted to Ready in the M2.6 closeout session. The first M3 task is the first dependency-satisfied task in the M3 plan; the promotion is the M2.6 closeout's last step per .ai/workflows/milestone-closeout.md § 8. T-018 is the first M3 implementation slice (the contract, the in-memory store, the project-registration page, the projects list). Awaits the user's Approve command on the M3 plan in the next session."
     },
     {
       "id": "T-008",
@@ -368,7 +419,9 @@
       "completed_at": "2026-07-10T00:00:00Z",
       "implementation_report": "implementation-report-m0.5-architecture-refinement.md",
       "evidence": {
-        "commits": ["1d98acd"]
+        "commits": [
+          "1d98acd"
+        ]
       },
       "notes": "The 10 required improvements landed: VISION.md, .ai/backlog/, structured state, decision log, capability mapping, dashboard definition, self-awareness state, dogfooding evolution, doc architecture validation, architecture review. Closed 2026-07-10 with the coherent commit 1d98acd (docs(m0.5): add project intelligence and structured delivery state)."
     },
@@ -383,7 +436,9 @@
       "closed_in_slice": "M2.5",
       "closed_by_task": "T-015",
       "blocked_by": [],
-      "depends_on_capabilities": ["C-022"],
+      "depends_on_capabilities": [
+        "C-022"
+      ],
       "links_to_capability": "AppShellRegion / AppThemeToggle (shell/theme capability; the M2.1 AppShellRegion and the M2.3 AppThemeToggle form the shell/theme surface; the bug was in the interactive render seam, not in the JS contract)",
       "bug_status": "fixed",
       "severity": "medium",
