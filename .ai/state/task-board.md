@@ -37,58 +37,97 @@
 
 ## Ready
 
-### M2.3 — Top bar, breadcrumbs, and page
-  headers
+### M2.4 — Project Intelligence Dashboard
 
-- **Task ID:** `M2.3`
+- **Task ID:** `M2.4`
 - **Milestone:** M2 — Application Shell and
   Navigation
-- **Title:** Top bar, breadcrumbs, and page
-  header integration
-- **Why it matters:** The top bar hosts the
-  theme toggle, the user avatar, and the
-  application-level actions; the page header
-  is the consistent first line of every page;
-  the breadcrumb follows the M2.2 registry's
-  `Parent` chain. Both are reached on every
-  route; both must compose the M1.2 design
-  system.
-- **Objective:** Land `AppTopBar` with its
-  `Leading` and `Trailing` slots. Move the
-  theme toggle (M1.1) into the `Trailing`
-  slot. Land `AppBreadcrumb` and wire it into
-  `AppPageHeader`'s `Breadcrumbs` parameter
-  (M1.2 placeholder).
-- **Acceptance criteria:** the top bar
-  composes `AppToolbar`; the breadcrumb
-  follows the current route's `Parent` chain
-  (from the M2.2 registry); the theme toggle
-  flips light/dark and persists; the
-  `AppPageHeader.Breadcrumbs` placeholder is
-  no longer a placeholder.
-- **Dependencies:** M2.1 (Done), M2.2 (Done).
+- **Title:** Project intelligence
+  dashboard
+- **Why it matters:** The M2 landing
+  page is the read-only
+  `/dashboard` page; the contract is
+  in `docs/dashboard.md`. The
+  dashboard renders the M0.5
+  structured-state sections in the
+  **Populated** state (per ADR-014)
+  and the M3+-data sections in the
+  **Empty** state. The
+  `IProjectIntelligenceReader` is the
+  read-side service the M2.4 slice
+  introduces; M3+ slices add new
+  data sources but do not modify
+  the reader.
+- **Objective:** Land
+  `IProjectIntelligenceReader` in
+  `src/AiEng.Platform.Application/ProjectIntelligence/`;
+  the
+  `ProjectIntelligenceServiceCollectionExtensions`
+  composition-root extension in
+  `src/AiEng.Platform.App/Composition/`;
+  the `/dashboard` page at
+  `src/AiEng.Platform.App/Components/Pages/Dashboard.razor`
+  that uses the M2.1 `AppLayout`;
+  the M0.5-data sections in the
+  **Populated** state; the M3+-data
+  sections in the **Empty** state;
+  a new navigation item in the M2.2
+  registry for `/dashboard`.
+- **Acceptance criteria:** the
+  `/dashboard` route exists in the
+  M2.2 navigation registry;
+  `IProjectIntelligenceReader` is
+  registered in the composition
+  root and resolves through DI; the
+  dashboard renders the M0.5-data
+  sections in the **Populated**
+  state; the dashboard renders the
+  M3+-data sections in the
+  **Empty** state with a clear
+  "M3 fills this section" message;
+  every data-owning section exposes
+  the four slots per ADR-014;
+  `dotnet build` → 0 warnings, 0
+  errors; `dotnet test` → all bUnit
+  tests pass (M2.4 tests add to the
+  count; the
+  `Application_DoesNotReference_ConcreteProviders`
+  architecture test remains
+  green); `dotnet format
+  --verify-no-changes` → clean;
+  `npm run css:build` → clean; the
+  app starts; `/dashboard` returns
+  200; the keyboard smoke test
+  passes.
+- **Dependencies:** M2.1 (Done),
+  M2.2 (Done), M2.3 (Done).
 - **Expected affected areas:**
-  `src/AiEng.Platform.App/Components/Shell/AppTopBar*`
-  (replaces `AppTopBarSlot`),
-  `src/AiEng.Platform.App/Components/Navigation/AppBreadcrumb*`
+  `src/AiEng.Platform.Application/ProjectIntelligence/`
   (new),
-  `src/AiEng.Platform.App/Components/Pages/*`
-  (page header integration).
-- **Validation:** `dotnet build`, `dotnet
-  test`, `dotnet format
-  --verify-no-changes`, visual smoke test,
-  theme-toggle smoke test.
+  `src/AiEng.Platform.App/Composition/ProjectIntelligenceServiceCollectionExtensions.cs`
+  (new),
+  `src/AiEng.Platform.App/Components/Pages/Dashboard.razor`
+  (new),
+  `src/AiEng.Platform.App/Components/Navigation/AppBreadcrumb.razor`
+  (reused — the M2.3 breadcrumb
+  composes against the same
+  navigation registry).
+- **Validation:** `dotnet build`,
+  `dotnet test`, `dotnet format
+  --verify-no-changes`, visual
+  smoke test on `/dashboard`.
 - **Approved plan path:**
-  [`.ai/plans/M2.3-topbar-breadcrumbs.md`](./../../.ai/plans/M2.3-topbar-breadcrumbs.md)
-  (the plan, 2026-07-11; promoted from
-  `Draft` stub to a full plan in
-  `Awaiting Approval` in the M2.2 closeout
-  session).
+  [`.ai/plans/M2.4-project-intelligence-dashboard.md`](./../../.ai/plans/M2.4-project-intelligence-dashboard.md)
+  (the plan, 2026-07-11; promoted
+  from `Draft` stub to a full plan
+  in `Awaiting Approval` in the
+  M2.3 closeout session).
 - **Status:** Ready (plan `Awaiting
-  Approval`; promoted from `Draft` stub
-  to a full plan in the M2.2 closeout
-  session; first action of the next
-  session is plan approval).
+  Approval`; promoted from `Draft`
+  stub to a full plan in the M2.3
+  closeout session; first action
+  of the next session is plan
+  approval).
 
 ### M1 follow-up — Add `AppToolbar` example to `/design-system`
 
@@ -135,8 +174,8 @@
 
 ## In Progress
 
-(none — M2.2 closed in the M2.2 closeout
-session, 2026-07-11; M2.3 awaits the next
+(none — M2.3 closed in the M2.3 closeout
+session, 2026-07-11; M2.4 awaits the next
 session's explicit authorisation per the
 Progressive Coding Rule.)
 
@@ -181,6 +220,81 @@ Progressive Coding Rule.)
 ---
 
 ## Done Recently
+
+### M2.3 closeout session — 2026-07-11
+
+- **Task ID:** `M2.3`
+- **Milestone:** M2 — Application Shell and
+  Navigation
+- **Title:** Top bar, breadcrumbs, and
+  page header integration
+- **Status:** **Done (closed 2026-07-11).**
+- **Outcome:** 4 new components in
+  `src/AiEng.Platform.App/Components/`:
+  `AppTopBar` (replaces the M2.1
+  `AppTopBarSlot` placeholder), the
+  relocated `AppThemeToggle`
+  (light/dark theme toggle; persists
+  to `localStorage`; reads
+  `data-theme` on `documentElement`),
+  `AppUserAvatarSlot` (the user
+  avatar placeholder; M3+ replaces
+  it with the real user identity
+  surface), and `AppBreadcrumb` (walks
+  the M2.2 registry's `Parent` chain;
+  `aria-current="page"` on the current
+  item; separators are `aria-hidden`).
+  `AppBreadcrumb` wired into
+  `AppPageHeader.Breadcrumbs` on
+  `DesignSystem.razor`. `AppTopBarSlot`
+  and `AppTopBarSlotTests.cs` deleted;
+  `AppLayout` updated to use
+  `AppTopBar`. 27 new bUnit tests
+  across 4 test files
+  (`AppTopBarTests`,
+  `AppThemeToggleTests`,
+  `AppUserAvatarSlotTests`,
+  `AppBreadcrumbTests`); 6 obsolete
+  `AppTopBarSlotTests` removed. Total
+  test count is now 150 passing + 4
+  skipped, 0 failed (77 M1.2 + 25
+  M2.1 + 23 M2.2 bUnit + 27 M2.3
+  bUnit − 6 obsolete removed + 4
+  active architecture). Two
+  documented deviations: (1)
+  `AppTopBar` uses `div.app-topbar`
+  + `Leading` / `Trailing` slots
+  rather than `AppStack` +
+  `AppPageHeader`; the surface still
+  composes `AppTopBar` +
+  `AppPageHeader` + `AppBreadcrumb`,
+  matching the plan's intent. (2)
+  Optional architecture test
+  `Breadcrumb_Follows_Registry_Parent_Chain`
+  was skipped per plan § 8 step 11
+  which marked it optional.
+- **Report:**
+  `implementation-report-m2-3-topbar-breadcrumbs.md`.
+- **Handoff:**
+  `.ai/handoffs/2026-07-11-m2-3-topbar-breadcrumbs.md`
+  (mirrored at
+  `.ai/handoffs/latest.md`).
+- **Git:** branch
+  `feature/m2-3-topbar-breadcrumbs`;
+  closeout commit
+  `feat(m2.3): add top bar, breadcrumb, and page header integration`.
+  No remote configured; push skipped (per
+  the brief).
+- **Next action:** the M2.3 closeout
+  promotes T-014 (M2.4) to `Ready`
+  and promotes the M2.4 plan stub
+  to a full plan in `Awaiting
+  Approval`; the next session
+  approves the M2.4 plan and starts
+  M2.4 implementation. The M2.3
+  session does **not** implement
+  M2.4 (per the Progressive Coding
+  Rule).
 
 ### M2.2 closeout session — 2026-07-11
 

@@ -18,6 +18,21 @@
             }
         })();
     </script>
+    <script>
+        window.appTheme = {
+            get: function () {
+                try { return localStorage.getItem("app-theme"); }
+                catch (e) { return null; }
+            },
+            set: function (theme) {
+                try {
+                    document.documentElement.setAttribute("data-theme", theme);
+                    localStorage.setItem("app-theme", theme);
+                } catch (e) {
+                }
+            }
+        };
+    </script>
     <ResourcePreloader />
     <link rel="stylesheet" href="@Assets["css/app.css"]" />
     <link rel="stylesheet" href="@Assets["AiEng.Platform.App.styles.css"]" />

@@ -1,0 +1,112 @@
+@namespace AiEng.Platform.App.Components.Navigation
+
+@using AiEng.Platform.Application.Navigation
+
+@inject NavigationManager NavigationManager
+@inject INavigationRegistry Registry
+
+<nav class="app-breadcrumb" aria-label="Breadcrumb" @attributes="AdditionalAttributes">
+    <ol class="app-breadcrumb-list">
+        @if (_segments.Count == 0)
+        {
+            <li class="app-breadcrumb-item">
+                <span class="app-breadcrumb-current">@_currentTitle</span>
+            </li>
+        }
+        else
+        {
+            @for (var i = 0; i < _segments.Count; i++)
+            {
+                var segment = _segments[i];
+                <li class="app-breadcrumb-item">
+                    @if (i < _segments.Count - 1)
+                    {
+                        <a class="app-breadcrumb-link" href="@segment.Href">@segment.Title</a>
+                        <span class="app-breadcrumb-separator" aria-hidden="true">/</span>
+                    }
+                    else
+                    {
+                        <span class="app-breadcrumb-current" aria-current="page">@segment.Title</span>
+                    }
+                </li>
+            }
+        }
+    </ol>
+</nav>
+
+@code {
+    [Parameter(CaptureUnmatchedValues = true)]
+    public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private readonly List<RouteMetadata> _segments = new();
+    private string _currentTitle = string.Empty;
+
+    protected override void OnParametersSet()
+    {
+        BuildSegments();
+    }
+
+    private void BuildSegments()
+    {
+        _segments.Clear();
+
+        var currentHref = NormalizePath(NavigationManager.Uri);
+        var current = Registry.FindByHref(currentHref);
+        if (current is null)
+        {
+            _currentTitle = FallbackTitle(currentHref);
+            return;
+        }
+
+        var chain = new List<RouteMetadata>();
+        var visited = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var node = current;
+        while (node is not null && !visited.Contains(node.Href))
+        {
+            visited.Add(node.Href);
+            chain.Insert(0, node);
+            if (string.IsNullOrEmpty(node.Parent))
+            {
+                node = null;
+                break;
+            }
+            node = Registry.FindByHref(node.Parent);
+        }
+
+        foreach (var item in chain)
+        {
+            _segments.Add(item);
+        }
+
+        _currentTitle = current.Title;
+    }
+
+    private static string NormalizePath(string uri)
+    {
+        if (string.IsNullOrEmpty(uri))
+        {
+            return "/";
+        }
+        if (Uri.TryCreate(uri, UriKind.Absolute, out var absolute))
+        {
+            return absolute.AbsolutePath;
+        }
+        var idx = uri.IndexOfAny(new[] { '?', '#' });
+        return idx >= 0 ? uri[..idx] : uri;
+    }
+
+    private static string FallbackTitle(string path)
+    {
+        if (string.IsNullOrEmpty(path) || path == "/")
+        {
+            return "Home";
+        }
+        var trimmed = path.Trim('/');
+        var lastSegment = trimmed[(trimmed.LastIndexOf('/') + 1)..];
+        if (string.IsNullOrEmpty(lastSegment))
+        {
+            return "Home";
+        }
+        return lastSegment.Replace('-', ' ');
+    }
+}

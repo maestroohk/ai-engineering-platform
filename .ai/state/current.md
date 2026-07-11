@@ -41,7 +41,7 @@
 
 - **Active milestone:** **M2 — Application Shell and
   Navigation** (active; M2.1 delivered 2026-07-11;
-  M2.2 delivered 2026-07-11).
+  M2.2 delivered 2026-07-11; M2.3 delivered 2026-07-11).
 - **M2.1 — Application Shell Foundation:**
   **Delivered (2026-07-11).** The shell
   foundation lands: two layouts
@@ -72,24 +72,43 @@
   `AppSidebarSlotTests` deleted; the
   `Pages_AreReachable_Through_Registry`
   architecture test is active and green.
-  The top bar, breadcrumb, page header
-  integration, and self-awareness
-  dashboard remain in M2.3, M2.4, and
-  M2.5. See
+  The self-awareness dashboard
+  remains in M2.4. See
   [`implementation-report-m2-2-navigation-registry-sidebar.md`](./../../implementation-report-m2-2-navigation-registry-sidebar.md).
-- **M2 next slice:** **M2.3 — Top Bar,
-  Breadcrumbs, and Page Headers.** The
-  plan at
-  [`.ai/plans/M2.3-topbar-breadcrumbs.md`](./../../.ai/plans/M2.3-topbar-breadcrumbs.md)
+- **M2.3 — Top Bar, Breadcrumbs, and Page
+  Headers:** **Delivered (2026-07-11).**
+  The top bar, breadcrumb, and page header
+  integration land: `AppTopBar`
+  (replaces the M2.1 `AppTopBarSlot`
+  placeholder), `AppThemeToggle`
+  (relocated to the top bar's `Trailing`
+  slot), `AppUserAvatarSlot`, and
+  `AppBreadcrumb` in
+  `src/AiEng.Platform.App/Components/`.
+  `AppBreadcrumb` walks the M2.2
+  `INavigationRegistry`'s `Parent`
+  chain; `aria-current="page"` is set
+  on the current item; separators are
+  `aria-hidden`. `AppBreadcrumb` is
+  wired into `AppPageHeader.Breadcrumbs`
+  on `DesignSystem.razor`. The 27 new
+  bUnit tests across 4 test files bring
+  the total to 146 component tests
+  passing; the 6 obsolete
+  `AppTopBarSlotTests` are removed; the
+  `Pages_AreReachable_Through_Registry`
+  architecture test remains active
+  and green. The self-awareness
+  dashboard remains in M2.4. See
+  [`implementation-report-m2-3-topbar-breadcrumbs.md`](./../../implementation-report-m2-3-topbar-breadcrumbs.md).
+- **M2 next slice:** **M2.4 — Project
+  Intelligence Dashboard.** The plan
+  at
+  [`.ai/plans/M2.4-project-intelligence-dashboard.md`](./../../.ai/plans/M2.4-project-intelligence-dashboard.md)
   is now a full plan in `Awaiting
   Approval` state (promoted from the
-  Draft stub in the M2.2 closeout
+  `Draft` stub in the M2.3 closeout
   session).
-- **M2.4 plan stub:** remains a concise
-  summary
-  (`.ai/plans/M2.4-project-intelligence-dashboard.md`);
-  promoted to a full plan when M2.3
-  closes.
 - **M2.5 / M2.6:** summary entries in
   the task board; planned in detail
   after M2.4 / M2.5 close.
@@ -107,22 +126,31 @@
 
 ## Current Slice
 
-- **Active slice:** **M2.3 — Top Bar,
-  Breadcrumbs, and Page Headers** (plan
-  promoted 2026-07-11 from the Draft
-  stub to a full plan in
+- **Active slice:** **M2.4 — Project
+  Intelligence Dashboard** (plan
+  promoted 2026-07-11 from the
+  `Draft` stub to a full plan in
   `Awaiting Approval`). Implementation
   has not started; per the Progressive
-  Coding Rule, M2.3 waits for explicit
+  Coding Rule, M2.4 waits for explicit
   user authorisation in the next
   session.
-- **Last completed slice:** **M2.2 —
-  Navigation Registry and Sidebar**
-  (delivered 2026-07-11). The branch
-  `feature/m2-2-navigation-registry-sidebar`
+- **Last completed slice:** **M2.3 —
+  Top Bar, Breadcrumbs, and Page
+  Headers** (delivered 2026-07-11).
+  The branch
+  `feature/m2-3-topbar-breadcrumbs`
   carries the implementation; the
   closeout commit is produced on this
   branch.
+- **M2.2 — Navigation Registry and
+  Sidebar** (delivered 2026-07-11).
+  The branch
+  `feature/m2-2-navigation-registry-sidebar`
+  carries the implementation; the M2.2
+  closeout commit
+  `feat(m2.2): add navigation registry and sidebar`
+  is on this branch.
 - **M2.1 — Application Shell
   Foundation** (delivered 2026-07-11).
   The branch
@@ -155,8 +183,8 @@
 - **M2 — Application Shell and Navigation:**
   **Active (M2.1 Delivered 2026-07-11;
   M2.2 Delivered 2026-07-11;
-  M2.3 plan Awaiting Approval;
-  M2.4 plan stub in Draft).**
+  M2.3 Delivered 2026-07-11;
+  M2.4 plan Awaiting Approval).**
 - **M3 through M8:** Planned; no evidence yet.
 
 ## Last Completed Milestone
@@ -175,45 +203,36 @@
 
 ## Last Completed Task
 
-- The M2.2 implementation session
+- The M2.3 implementation session
   (2026-07-11), which:
-  - Delivered M2.2 — Navigation Registry
-    and Sidebar per the approved plan
-    (`.ai/plans/M2.2-navigation-registry-sidebar.md`).
-    The plan was approved 2026-07-11 and
-    implementation followed § 16 (24-step
-    order) of the plan.
-  - Added the navigation registry
-    (`INavigationRegistry`,
-    `RouteMetadata`,
-    `RouteMetadataAttribute`,
-    `RouteRegistry`) in
-    `src/AiEng.Platform.Application/Navigation/`.
-  - Added the composition root
-    (`AddPlatformServices` +
-    `AddNavigation`) in
-    `src/AiEng.Platform.App/Composition/`.
-  - Added `AppSidebar`, `AppSidebarItem`,
-    `AppNavItem` in
-    `src/AiEng.Platform.App/Components/Navigation/`.
-  - Replaced `AppSidebarSlot` with
-    `AppSidebar` in `AppLayout.razor`;
-    deleted `AppSidebarSlot.razor` and
-    `AppSidebarSlotTests.cs`.
-  - Applied `[RouteMetadata]` to all
-    six pages (Home, Counter, Weather,
-    Error, NotFound, DesignSystem);
-    Error and NotFound use
-    `ShowInSidebar = false`.
-  - Wired `Program.cs` to call
-    `AddPlatformServices(typeof(Program).Assembly)`.
-  - Activated the
-    `Pages_AreReachable_Through_Registry`
-    architecture test (1 new test,
-    active and green).
-  - Added 28 new bUnit / integration
-    tests + 1 new architecture test;
-    125 total component tests pass.
+  - Delivered M2.3 — Top Bar,
+    Breadcrumbs, and Page Headers
+    per the approved plan
+    (`.ai/plans/M2.3-topbar-breadcrumbs.md`).
+    The plan was approved 2026-07-11
+    and implementation followed § 8
+    (13-step order) of the plan.
+  - Added `AppTopBar` (replaces
+    `AppTopBarSlot`), `AppThemeToggle`
+    (relocated to the top bar's
+    `Trailing` slot), `AppUserAvatarSlot`,
+    and `AppBreadcrumb` in
+    `src/AiEng.Platform.App/Components/`.
+  - Replaced `AppTopBarSlot` with
+    `AppTopBar` in `AppLayout.razor`;
+    deleted `AppTopBarSlot.razor` and
+    `AppTopBarSlotTests.cs`.
+  - Wired `AppBreadcrumb` into
+    `AppPageHeader.Breadcrumbs` on
+    `DesignSystem.razor`.
+  - Added 27 new bUnit tests
+    across 4 test files
+    (`AppTopBarTests`,
+    `AppThemeToggleTests`,
+    `AppUserAvatarSlotTests`,
+    `AppBreadcrumbTests`); removed
+    6 obsolete `AppTopBarSlotTests`.
+    146 total component tests pass.
   - Updated the project-continuity
     state per Rule 15 (`current.md`,
     `task-board.md`, `session.json`,
@@ -221,60 +240,85 @@
     `capabilities.json`, `ROADMAP.md`,
     `handoffs/latest.md`), and
     produced
-    `implementation-report-m2-2-navigation-registry-sidebar.md`.
-  - Promoted the M2.3 plan stub to a
-    full plan in `Awaiting Approval`
-    state. T-003 is `Ready`.
-  - The session does **not** implement
-    M2.3; per the Progressive Coding
-    Rule, M2.3 is the next session's
+    `implementation-report-m2-3-topbar-breadcrumbs.md`.
+  - Promoted the M2.4 plan stub to
+    a full plan in `Awaiting
+    Approval` state. T-014 is
+    `Ready`.
+  - The session does **not**
+    implement M2.4; per the
+    Progressive Coding Rule, M2.4
+    is the next session's
     responsibility.
+  - Two documented deviations:
+    (1) `AppTopBar` uses
+    `div.app-topbar` + `Leading` /
+    `Trailing` slots rather than
+    `AppStack` + `AppPageHeader`;
+    the surface still composes
+    `AppTopBar` + `AppPageHeader` +
+    `AppBreadcrumb`, matching the
+    plan's intent. (2) Optional
+    architecture test
+    `Breadcrumb_Follows_Registry_Parent_Chain`
+    was skipped per plan § 8 step
+    11 which marked it optional.
   - The commit
-    `feat(m2.2): add navigation registry and sidebar`
+    `feat(m2.3): add top bar, breadcrumb, and page header integration`
     is the closing receipt; no push
     (no remote configured).
-- The M2.1 implementation session
+- The M2.2 implementation session
   (2026-07-11) is the prior task; the
-  M2 delivery-reconciliation session
-  (2026-07-10) is the prior-prior task;
-  the M0.5 architecture refinement
+  M2.1 implementation session
+  (2026-07-11) is the prior-prior task;
+  the M2 delivery-reconciliation session
+  (2026-07-10) is the prior-prior-prior
+  task; the M0.5 architecture refinement
   session (2026-07-10) is the
-  prior-prior-prior task.
+  prior-prior-prior-prior task.
 
 ## Active Branch
 
-- **`feature/m2-2-navigation-registry-sidebar`**.
-  The M2.2 implementation branch
-  carries the M2.2 closeout commit. The
+- **`feature/m2-3-topbar-breadcrumbs`**.
+  The M2.3 implementation branch
+  carries the M2.3 closeout commit. The
   M0.5 closeout commit `1d98acd` is the
   base; the M2.1 closeout commit
   `feat(m2.1): add application shell foundation`
   is the M2.1 chain tip on
   `feature/m2-1-application-shell`; the
-  M2.2 commit is the
-  `feature/m2-2-navigation-registry-sidebar`
+  M2.2 closeout commit
+  `feat(m2.2): add navigation registry and sidebar`
+  is the M2.2 chain tip on
+  `feature/m2-2-navigation-registry-sidebar`;
+  the M2.3 closeout commit
+  `feat(m2.3): add top bar, breadcrumb, and page header integration`
+  is the
+  `feature/m2-3-topbar-breadcrumbs`
   tip. No remote is configured, so push
   is skipped (the session records this
   explicitly per the brief).
 
 ## Last Stable Commit
 
-- The M2.2 closeout commit
-  `feat(m2.2): add navigation registry and sidebar`
-  on `feature/m2-2-navigation-registry-sidebar`
+- The M2.3 closeout commit
+  `feat(m2.3): add top bar, breadcrumb, and page header integration`
+  on `feature/m2-3-topbar-breadcrumbs`
   (created 2026-07-11). The parent
-  commit is the project-intelligence
-  refinement commit
-  `docs(state): refine project-intelligence for command-driven reporting`
-  on `feature/m2-1-application-shell`
+  commit is the M2.2 closeout commit
+  `feat(m2.2): add navigation registry and sidebar`
+  on
+  `feature/m2-2-navigation-registry-sidebar`
   (the closeout chain is
   `de082fd` → `ef1063c` →
   `32ab73d` on
   `feature/m2-1-application-shell`,
-  then the M2.2 commit on
-  `feature/m2-2-navigation-registry-sidebar`).
+  then `3a2c3cb` on
+  `feature/m2-2-navigation-registry-sidebar`,
+  then the M2.3 commit on
+  `feature/m2-3-topbar-breadcrumbs`).
   Working tree is clean at the close of
-  the M2.2 session.
+  the M2.3 session.
 
 ## Application Status
 
@@ -284,16 +328,29 @@
   `/design-system`, `/not-found`) all return 200.
   The M2 application shell is in place: `AppLayout`
   composes the registry-driven `AppSidebar` (M2.2
-  the real sidebar), the `AppTopBarSlot` (M2.3
-  placeholder), and the content area. The sidebar
-  renders four nav items (Home, Counter, Weather,
-  Design system) for the four sidebar-visible
-  routes; Error and NotFound are correctly hidden
-  (`ShowInSidebar = false`). The
-  `data-app-region` attributes are present on
-  every region. `/design-system` and `/not-found`
-  use `AppEmptyLayout`. Light and dark themes
-  render correctly (the design-token contract is
+  the real sidebar), the `AppTopBar` (M2.3 the
+  real top bar, with the theme toggle and the
+  user avatar slot in the `Trailing` slot, and
+  the current route's title in the `Leading`
+  slot, sourced from the M2.2
+  `INavigationRegistry`), and the content area.
+  The sidebar renders four nav items (Home,
+  Counter, Weather, Design system) for the four
+  sidebar-visible routes; Error and NotFound are
+  correctly hidden (`ShowInSidebar = false`).
+  The `data-app-region` attributes are present
+  on every region. `/design-system` and
+  `/not-found` use `AppEmptyLayout`. The
+  `AppBreadcrumb` walks the M2.2 registry's
+  `Parent` chain (e.g. `/` → `Home`,
+  `/breadcrumb-dashboard/projects` → `Home →
+  BreadcrumbDashboard → Projects`); `aria-current="page"`
+  is set on the current item; separators are
+  `aria-hidden`. The theme toggle flips
+  light/dark and persists to `localStorage`; the
+  choice is applied via the `data-theme`
+  attribute. Light and dark themes render
+  correctly (the design-token contract is
   unchanged from M1.1). The keyboard smoke test
   passes: Tab through the shell; every
   interactive element is reachable; focus is
@@ -325,19 +382,22 @@
 ## Test Status
 
 - `dotnet test AiEng.Platform.slnx --no-build` →
-  **129 passed, 4 skipped, 0 failed.**
+  **150 passed, 4 skipped, 0 failed.**
   - `AiEng.Platform.UnitTests`: 0 tests (no
-    Domain logic in M1, M2.1, or M2.2).
-  - `AiEng.Platform.ComponentTests`: 125
+    Domain logic in M1, M2.1, M2.2, or M2.3).
+  - `AiEng.Platform.ComponentTests`: 146
     bUnit / integration tests, all passing
-    (77 M1.2 + 25 M2.1 + 23 M2.2 bUnit).
+    (77 M1.2 + 25 M2.1 + 23 M2.2 bUnit + 27 M2.3 bUnit −
+    6 obsolete M2.1 `AppTopBarSlotTests`
+    removed in M2.3).
   - `AiEng.Platform.ArchitectureTests`: 8
     tests in total — 4 active (passing)
     and 4 registered-but-disabled
     (skipped) per ADR-016 and the M4-D
     activation milestone. The
     `Pages_AreReachable_Through_Registry`
-    test is the new M2.2 active test.
+    test (M2.2) remains the active
+    architecture test.
 
 ## Implemented Capabilities
 
@@ -357,23 +417,20 @@ The 19 M1.2 components, in five categories:
 - **Inputs (1):** `AppInputLabel`.
 
 Plus the M2.1 application shell foundation
-(2 layouts + 2 placeholder shell components + 1
-presentational helper):
+(2 layouts + 1 presentational helper; the
+M2 placeholder shell components are
+replaced by the M2.2 / M2.3
+implementations):
 
 - **Layouts (2):** `AppLayout` (the M2 layout
   root; three-region composition:
   `AppSidebar` (M2.2 the real
   registry-driven sidebar) +
-  `AppTopBarSlot` (M2.3 placeholder) +
+  `AppTopBar` (M2.3 the real
+  top bar) +
   content area) and `AppEmptyLayout` (the
   M2 alternate layout; no sidebar, no top
   bar).
-- **Shell placeholder components (1):**
-  `AppTopBarSlot` (renders an
-  `AppPageHeader` and an `AppAlert` saying
-  "Top bar lands in M2.3"; M2.2 removed
-  `AppSidebarSlot`, replaced by the real
-  `AppSidebar`).
 - **Presentational helper (1):**
   `AppShellRegion` (renders
   `data-app-region="<name>"` and
@@ -433,6 +490,46 @@ registry-driven sidebar (replaces the M2.1
   `[RouteMetadata]` attribute whose
   `Href` is in the registry.
 
+Plus the M2.3 top bar, theme toggle,
+user avatar, and breadcrumb (replaces
+the M2.1 `AppTopBarSlot` placeholder):
+
+- **Shell components (3):**
+  `AppTopBar` (the real top bar;
+  injects `INavigationRegistry` to
+  read the current route's title in
+  the `Leading` slot; renders the
+  theme toggle and the user avatar
+  slot in the `Trailing` slot by
+  default; `Leading` and `Trailing`
+  are `RenderFragment` slots for
+  page-level overrides),
+  `AppThemeToggle` (light / dark
+  theme toggle; persists to
+  `localStorage["app-theme"]`; reads
+  `data-theme` on `documentElement`),
+  `AppUserAvatarSlot` (the user
+  avatar placeholder; the M3+
+  session replaces it with the real
+  user identity surface).
+- **Navigation components (1):**
+  `AppBreadcrumb` (renders one
+  breadcrumb item per parent in
+  the M2.2 registry's `Parent`
+  chain; `aria-current="page"` on
+  the current item; separators are
+  `aria-hidden`; injects
+  `INavigationRegistry` and
+  `NavigationManager`).
+- **Page header integration (1):**
+  `AppBreadcrumb` is wired into
+  `AppPageHeader.Breadcrumbs` on
+  `DesignSystem.razor` (the
+  remaining M1 template pages do
+  not use `AppPageHeader`; the
+  wiring is in place for every page
+  that opts in).
+
 Plus the supporting infrastructure:
 
 - The Tailwind v3 + PostCSS pipeline
@@ -442,9 +539,12 @@ Plus the supporting infrastructure:
 - The light and dark themes via the data-attribute
   theme switcher.
 - The `/design-system` documentation page.
-- The 3 active + 4 registered-but-disabled
+- The 4 active + 4 registered-but-disabled
   architecture tests in
-  `tests/AiEng.Platform.ArchitectureTests/Boundaries/`.
+  `tests/AiEng.Platform.ArchitectureTests/Boundaries/`
+  (the M2.2
+  `Pages_AreReachable_Through_Registry`
+  test is the 4th active test).
 
 ## External Tools Dogfooded
 
@@ -515,15 +615,23 @@ Plus the supporting infrastructure:
   session; approved and implemented in
   the M2.2 closeout session).
 - [`.ai/plans/M2.3-topbar-breadcrumbs.md`](./../../.ai/plans/M2.3-topbar-breadcrumbs.md)
-  — M2.3 plan, **Awaiting Approval**
+  — M2.3 plan, **Delivered (2026-07-11)**
   (promoted from `Draft` stub to a
-  full plan in the M2.2 closeout
-  session, 2026-07-11).
+  full plan in `Awaiting Approval` in
+  the M2.2 closeout session;
+  approved and implemented in the M2.3
+  closeout session).
 - [`.ai/plans/M2.4-project-intelligence-dashboard.md`](./../../.ai/plans/M2.4-project-intelligence-dashboard.md)
-  — M2.4 plan stub, status `Draft`.
+  — M2.4 plan, **Awaiting Approval**
+  (promoted from `Draft` stub to a
+  full plan in the M2.3 closeout
+  session, 2026-07-11).
 
 ## Last Implementation Report
 
+- [`implementation-report-m2-3-topbar-breadcrumbs.md`](./../../implementation-report-m2-3-topbar-breadcrumbs.md)
+  — the M2.3 implementation report
+  (the closing receipt for M2.3, 2026-07-11).
 - [`implementation-report-m2-2-navigation-registry-sidebar.md`](./../../implementation-report-m2-2-navigation-registry-sidebar.md)
   — the M2.2 implementation report
   (the closing receipt for M2.2, 2026-07-11).
@@ -545,16 +653,16 @@ Plus the supporting infrastructure:
 
 ## Next Recommended Task
 
-> **M2.3 — Top Bar, Breadcrumbs, and Page
-> Headers.** Read
-> [`.ai/plans/M2.3-topbar-breadcrumbs.md`](./../../.ai/plans/M2.3-topbar-breadcrumbs.md).
+> **M2.4 — Project Intelligence
+> Dashboard.** Read
+> [`.ai/plans/M2.4-project-intelligence-dashboard.md`](./../../.ai/plans/M2.4-project-intelligence-dashboard.md).
 > The plan was promoted from the
 > `Draft` stub to a full plan in
-> `Awaiting Approval` (the M2.2
+> `Awaiting Approval` (the M2.3
 > closeout session produced the
 > promotion). The first action in the
 > next session is to either approve
-> the M2.3 plan (and start M2.3
+> the M2.4 plan (and start M2.4
 > implementation per the plan's own
 > order) or amend the plan and
 > re-submit it.
@@ -571,42 +679,43 @@ and the M2 plan files in
 [`.ai/plans/`](./../../.ai/plans/). The
 next three actionable items are:
 
-1. **M2.3 — Top Bar, Breadcrumbs, and
-   Page Headers** (plan `Awaiting
+1. **M2.4 — Project Intelligence
+   Dashboard** (plan `Awaiting
    Approval`; implementation follows
    the plan's own order).
-2. **M2.4 — Project Intelligence
-   Dashboard** (plan stub `Draft`;
-   promoted to a full plan when M2.3
-   closes).
+2. **M2.5 — Empty Routes, Responsive,
+   and Accessibility** (summary
+   entry; promoted to a full plan
+   when M2.4 closes).
 3. **M1 follow-up — Add `AppToolbar`
    example to `/design-system`**
    (cosmetic; the work is small and can
-   be folded into M2.3 if appropriate).
+   be folded into M2.4 if appropriate).
 
 ## Last Updated
 
-- **2026-07-11** (M2.2 closeout
+- **2026-07-11** (M2.3 closeout
   session). This version supersedes
-  the M2.1 closeout version
+  the M2.2 closeout version
   (2026-07-11) and the M2
   delivery-reconciliation version
-  (2026-07-10). The M2.2 closeout
-  session delivers the M2.2
-  navigation registry and
-  registry-driven sidebar, runs the
+  (2026-07-10). The M2.3 closeout
+  session delivers the M2.3 top bar,
+  breadcrumb, theme toggle
+  relocation, user avatar slot, and
+  page header integration, runs the
   validation suite (npm css:build,
   dotnet build, dotnet test, dotnet
   format, visual smoke test),
   updates the project-continuity
   state per Rule 15, produces
-  `implementation-report-m2-2-navigation-registry-sidebar.md`,
-  promotes the M2.3 plan stub to a
+  `implementation-report-m2-3-topbar-breadcrumbs.md`,
+  promotes the M2.4 plan stub to a
   full plan in `Awaiting Approval`,
-  and creates the M2.2 closeout
-  commit. The M2.2 commit is the
+  and creates the M2.3 closeout
+  commit. The M2.3 commit is the
   most recent commit on
-  `feature/m2-2-navigation-registry-sidebar`;
+  `feature/m2-3-topbar-breadcrumbs`;
   no push (no remote configured).
 
 ## Linked Artefacts
@@ -615,14 +724,20 @@ next three actionable items are:
   permanent vision document (M0.5;
   tier 1 of the document hierarchy).
 - [`.ai/state/task-board.md`](./task-board.md) —
-  the live work queue (M2.1, M2.2
-  Done; M2.3 in `Ready`, plan
-  `Awaiting Approval`; M2.4 in
-  `Draft`).
+  the live work queue (M2.1, M2.2,
+  M2.3 Done; M2.4 in `Ready`, plan
+  `Awaiting Approval`; M2.5 in
+  `Deferred`).
 - [`.ai/handoffs/latest.md`](./../../.ai/handoffs/latest.md) —
-  the most recent handoff.
-- [`.ai/handoffs/2026-07-10-m0.5-architecture-refinement.md`](./../../.ai/handoffs/2026-07-10-m0.5-architecture-refinement.md)
-  — the M0.5 closeout session handoff.
+  the most recent handoff (the M2.3
+  closeout handoff; mirrored from
+  `.ai/handoffs/2026-07-11-m2-3-topbar-breadcrumbs.md`).
+- [`.ai/handoffs/2026-07-11-m2-3-topbar-breadcrumbs.md`](./../../.ai/handoffs/2026-07-11-m2-3-topbar-breadcrumbs.md)
+  — the M2.3 closeout session handoff.
+- [`.ai/handoffs/2026-07-11-m2-2-navigation-registry-sidebar.md`](./../../.ai/handoffs/2026-07-11-m2-2-navigation-registry-sidebar.md)
+  — the M2.2 closeout session handoff.
+- [`.ai/handoffs/2026-07-11-m2-1-application-shell-foundation.md`](./../../.ai/handoffs/2026-07-11-m2-1-application-shell-foundation.md)
+  — the M2.1 closeout session handoff.
 - [`.ai/handoffs/2026-07-10-m1-closeout.md`](./../../.ai/handoffs/2026-07-10-m1-closeout.md) —
   the M1 closeout session handoff.
 - [`.ai/plans/M2.1-application-shell-skeleton.md`](./../../.ai/plans/M2.1-application-shell-skeleton.md) —
@@ -632,11 +747,15 @@ next three actionable items are:
   the M2.2 plan (Delivered,
   2026-07-11).
 - [`.ai/plans/M2.3-topbar-breadcrumbs.md`](./../../.ai/plans/M2.3-topbar-breadcrumbs.md) —
-  the M2.3 plan (Awaiting Approval,
-  2026-07-11; promoted from `Draft`
-  stub in the M2.2 closeout session).
+  the M2.3 plan (Delivered, 2026-07-11;
+  promoted from `Draft` stub in the
+  M2.2 closeout session, approved and
+  implemented in the M2.3 closeout
+  session).
 - [`.ai/plans/M2.4-project-intelligence-dashboard.md`](./../../.ai/plans/M2.4-project-intelligence-dashboard.md) —
-  the M2.4 plan stub (Draft, 2026-07-10).
+  the M2.4 plan (Awaiting Approval,
+  2026-07-11; promoted from `Draft`
+  stub in the M2.3 closeout session).
 - [`.ai/plans/master-delivery-plan.md`](./../../.ai/plans/master-delivery-plan.md) —
   the master delivery plan.
 - [`.ai/reviews/M1-design-system-lavish-axi-review.md`](./../../.ai/reviews/M1-design-system-lavish-axi-review.md) —
@@ -676,6 +795,10 @@ next three actionable items are:
 - [`implementation-report-m2-2-navigation-registry-sidebar.md`](./../../implementation-report-m2-2-navigation-registry-sidebar.md)
   — the M2.2 implementation report
   (the closing receipt for M2.2,
+  2026-07-11).
+- [`implementation-report-m2-3-topbar-breadcrumbs.md`](./../../implementation-report-m2-3-topbar-breadcrumbs.md)
+  — the M2.3 implementation report
+  (the closing receipt for M2.3,
   2026-07-11).
 - [`docs/dashboard.md`](./../../docs/dashboard.md)
   — the product dashboard definition (M0.5).

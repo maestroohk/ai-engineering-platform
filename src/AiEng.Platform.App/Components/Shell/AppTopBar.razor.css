@@ -1,0 +1,36 @@
+.app-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    width: 100%;
+    min-height: 3.5rem;
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid var(--app-color-border, rgba(0, 0, 0, 0.08));
+    background-color: var(--app-color-surface, transparent);
+}
+
+.app-topbar-leading {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-width: 0;
+    flex: 1 1 auto;
+}
+
+.app-topbar-title {
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.25;
+    color: var(--app-color-text, currentColor);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.app-topbar-trailing {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex: 0 0 auto;
+}

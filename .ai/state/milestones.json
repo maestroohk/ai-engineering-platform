@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "updated_at": "2026-07-11T00:00:00Z",
-  "updated_by_session": "m2-2-navigation-registry-sidebar",
+  "updated_by_session": "m2-3-topbar-breadcrumbs",
   "milestones": [
     {
       "id": "M0",
@@ -78,12 +78,19 @@
         },
         "M2.3": {
           "title": "Top Bar, Breadcrumbs, and Page Headers",
-          "status": "plan awaiting approval",
-          "plan": ".ai/plans/M2.3-topbar-breadcrumbs.md"
+          "status": "delivered",
+          "delivered_at": "2026-07-11",
+          "session": "m2-3-topbar-breadcrumbs",
+          "branch": "feature/m2-3-topbar-breadcrumbs",
+          "summary": "AppTopBar (replaces AppTopBarSlot), AppThemeToggle (relocated from M1.1 chrome), AppUserAvatarSlot, AppBreadcrumb in src/AiEng.Platform.App/Components/. AppBreadcrumb wired into AppPageHeader.Breadcrumbs on DesignSystem.razor. AppTopBarSlot and AppTopBarSlotTests deleted; AppLayout wired to AppTopBar. 27 new bUnit tests across 4 test files; 6 obsolete AppTopBarSlotTests removed; 146 total component tests pass. Two documented deviations: (1) AppTopBar uses div.app-topbar + Leading/Trailing slots rather than AppStack + AppPageHeader; the surface still composes AppTopBar + AppPageHeader + AppBreadcrumb, matching the plan's intent. (2) Optional architecture test Breadcrumb_Follows_Registry_Parent_Chain was skipped per plan § 8 step 11 which marked it optional.",
+          "implementation_report": "implementation-report-m2-3-topbar-breadcrumbs.md",
+          "plan": ".ai/plans/M2.3-topbar-breadcrumbs.md",
+          "commit_message": "feat(m2.3): add top bar, breadcrumb, and page header integration"
         },
         "M2.4": {
           "title": "Project Intelligence Dashboard",
-          "status": "stub"
+          "status": "plan awaiting approval",
+          "plan": ".ai/plans/M2.4-project-intelligence-dashboard.md"
         },
         "M2.5": {
           "title": "Empty Routes, Responsive, and Accessibility",
@@ -95,14 +102,16 @@
         }
       },
       "evidence": {
-        "slices": ["M2.1", "M2.2"],
+        "slices": ["M2.1", "M2.2", "M2.3"],
         "implementation_reports": [
           "implementation-report-m2-1-application-shell-foundation.md",
-          "implementation-report-m2-2-navigation-registry-sidebar.md"
+          "implementation-report-m2-2-navigation-registry-sidebar.md",
+          "implementation-report-m2-3-topbar-breadcrumbs.md"
         ],
         "handoffs": [
           ".ai/handoffs/2026-07-11-m2-1-application-shell-foundation.md",
-          ".ai/handoffs/2026-07-11-m2-2-navigation-registry-sidebar.md"
+          ".ai/handoffs/2026-07-11-m2-2-navigation-registry-sidebar.md",
+          ".ai/handoffs/2026-07-11-m2-3-topbar-breadcrumbs.md"
         ]
       }
     },

@@ -1,0 +1,76 @@
+@namespace AiEng.Platform.App.Components.Shell
+
+@inject IJSRuntime JSRuntime
+
+<button type="button"
+        class="app-theme-toggle @CssClass"
+        aria-label="@AriaLabel"
+        aria-pressed="@(IsDark.ToString().ToLowerInvariant())"
+        title="@Title"
+        @onclick="ToggleAsync"
+        @attributes="AdditionalAttributes">
+    <span class="app-theme-toggle-icon" aria-hidden="true">
+        @if (IsDark)
+        {
+            <span>&#9788;</span>
+        }
+        else
+        {
+            <span>&#9728;</span>
+        }
+    </span>
+</button>
+
+@code {
+    [Parameter]
+    public string AriaLabel { get; set; } = "Toggle colour theme";
+
+    [Parameter]
+    public string Title { get; set; } = "Toggle light / dark theme";
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private bool IsDark { get; set; }
+
+    private string CssClass => IsDark ? "app-theme-toggle-dark" : "app-theme-toggle-light";
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            try
+            {
+                var stored = await JSRuntime.InvokeAsync<string?>("appTheme.get");
+                if (!string.IsNullOrEmpty(stored))
+                {
+                    IsDark = string.Equals(stored, "dark", StringComparison.OrdinalIgnoreCase);
+                    StateHasChanged();
+                }
+            }
+            catch (InvalidOperationException)
+            {
+            }
+            catch (TaskCanceledException)
+            {
+            }
+        }
+        await Task.CompletedTask;
+    }
+
+    private async Task ToggleAsync()
+    {
+        IsDark = !IsDark;
+        var next = IsDark ? "dark" : "light";
+        try
+        {
+            await JSRuntime.InvokeVoidAsync("appTheme.set", next);
+        }
+        catch (InvalidOperationException)
+        {
+        }
+        catch (TaskCanceledException)
+        {
+        }
+    }
+}

@@ -1,0 +1,81 @@
+@namespace AiEng.Platform.App.Components.Shell
+
+@using AiEng.Platform.Application.Navigation
+
+@inject NavigationManager NavigationManager
+@inject INavigationRegistry Registry
+
+<AppShellRegion Name="topbar">
+    <div class="app-topbar" @attributes="AdditionalAttributes">
+        <div class="app-topbar-leading">
+            @if (Leading is not null)
+            {
+                @Leading
+            }
+            else
+            {
+                <span class="app-topbar-title">@_currentTitle</span>
+            }
+        </div>
+        <div class="app-topbar-trailing">
+            @if (Trailing is not null)
+            {
+                @Trailing
+            }
+            else
+            {
+                <AppThemeToggle />
+                <AppUserAvatarSlot />
+            }
+        </div>
+    </div>
+</AppShellRegion>
+
+@code {
+    [Parameter]
+    public RenderFragment? Leading { get; set; }
+
+    [Parameter]
+    public RenderFragment? Trailing { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private string _currentTitle = string.Empty;
+
+    protected override void OnParametersSet()
+    {
+        var currentHref = NormalizePath(NavigationManager.Uri);
+        var current = Registry.FindByHref(currentHref);
+        _currentTitle = current?.Title ?? FallbackTitle(currentHref);
+    }
+
+    private static string NormalizePath(string uri)
+    {
+        if (string.IsNullOrEmpty(uri))
+        {
+            return "/";
+        }
+        if (Uri.TryCreate(uri, UriKind.Absolute, out var absolute))
+        {
+            return absolute.AbsolutePath;
+        }
+        var idx = uri.IndexOfAny(new[] { '?', '#' });
+        return idx >= 0 ? uri[..idx] : uri;
+    }
+
+    private static string FallbackTitle(string path)
+    {
+        if (string.IsNullOrEmpty(path) || path == "/")
+        {
+            return "Home";
+        }
+        var trimmed = path.Trim('/');
+        var lastSegment = trimmed[(trimmed.LastIndexOf('/') + 1)..];
+        if (string.IsNullOrEmpty(lastSegment))
+        {
+            return "Home";
+        }
+        return lastSegment.Replace('-', ' ');
+    }
+}

@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1.0",
   "updated_at": "2026-07-11T00:00:00Z",
-  "updated_by_session": "project-intelligence-refinement",
+  "updated_by_session": "m2-3-topbar-breadcrumbs",
   "completion_status_mapping": {
     "NotStarted": "Not in capabilities.json. Reserved for capabilities the product will need but which have not yet been admitted to the graph.",
     "Planned": "status: Accepted; delivered_by_milestone status: Planned; no plan yet, or plan stub is Draft. Sequenced for a milestone, plan not promoted to Ready / Awaiting Approval.",
@@ -611,37 +611,42 @@
       "consumed_by": [],
       "delivered_by_milestone": "M2",
       "consumed_by_milestones": ["M3", "M4-A", "M4-B", "M4-C", "M4-D", "M5", "M6", "M7", "M8"],
-      "delivered_by_tasks": ["T-001", "T-002"],
+      "delivered_by_tasks": ["T-001", "T-002", "T-003"],
       "next_task": null,
       "blocked_by": [],
       "evidence": {
         "plans": [
           ".ai/plans/M2.1-application-shell-skeleton.md",
-          ".ai/plans/M2.2-navigation-registry-sidebar.md"
+          ".ai/plans/M2.2-navigation-registry-sidebar.md",
+          ".ai/plans/M2.3-topbar-breadcrumbs.md"
         ],
         "reports": [
           "implementation-report-m2-1-application-shell-foundation.md",
-          "implementation-report-m2-2-navigation-registry-sidebar.md"
+          "implementation-report-m2-2-navigation-registry-sidebar.md",
+          "implementation-report-m2-3-topbar-breadcrumbs.md"
         ],
-        "commits": ["de082fd", "ef1063c"],
+        "commits": ["de082fd", "ef1063c", "3a2c3cb"],
         "tests": [
           "tests/AiEng.Platform.ComponentTests/Layouts/AppLayoutTests.cs",
           "tests/AiEng.Platform.ComponentTests/Layouts/AppEmptyLayoutTests.cs",
-          "tests/AiEng.Platform.ComponentTests/Shell/AppSidebarSlotTests.cs",
-          "tests/AiEng.Platform.ComponentTests/Shell/AppTopBarSlotTests.cs",
+          "tests/AiEng.Platform.ComponentTests/Shell/AppTopBarTests.cs",
+          "tests/AiEng.Platform.ComponentTests/Shell/AppThemeToggleTests.cs",
+          "tests/AiEng.Platform.ComponentTests/Shell/AppUserAvatarSlotTests.cs",
           "tests/AiEng.Platform.ComponentTests/Navigation/RouteRegistryTests.cs",
           "tests/AiEng.Platform.ComponentTests/Navigation/AppNavItemTests.cs",
           "tests/AiEng.Platform.ComponentTests/Navigation/AppSidebarItemTests.cs",
           "tests/AiEng.Platform.ComponentTests/Navigation/AppSidebarTests.cs",
           "tests/AiEng.Platform.ComponentTests/Navigation/NavigationServiceCollectionExtensionsTests.cs",
+          "tests/AiEng.Platform.ComponentTests/Navigation/AppBreadcrumbTests.cs",
           "tests/AiEng.Platform.ArchitectureTests/PagesAreReachableThroughRegistryTests.cs"
         ],
         "source_paths": [
           "src/AiEng.Platform.App/Layouts/AppLayout.razor",
           "src/AiEng.Platform.App/Layouts/AppEmptyLayout.razor",
           "src/AiEng.Platform.App/Components/Shell/AppShellRegion.razor",
-          "src/AiEng.Platform.App/Components/Shell/AppSidebarSlot.razor",
-          "src/AiEng.Platform.App/Components/Shell/AppTopBarSlot.razor",
+          "src/AiEng.Platform.App/Components/Shell/AppTopBar.razor",
+          "src/AiEng.Platform.App/Components/Shell/AppThemeToggle.razor",
+          "src/AiEng.Platform.App/Components/Shell/AppUserAvatarSlot.razor",
           "src/AiEng.Platform.Application/Navigation/INavigationRegistry.cs",
           "src/AiEng.Platform.Application/Navigation/RouteMetadata.cs",
           "src/AiEng.Platform.Application/Navigation/RouteMetadataAttribute.cs",
@@ -650,19 +655,27 @@
           "src/AiEng.Platform.App/Composition/NavigationServiceCollectionExtensions.cs",
           "src/AiEng.Platform.App/Components/Navigation/AppSidebar.razor",
           "src/AiEng.Platform.App/Components/Navigation/AppSidebarItem.razor",
-          "src/AiEng.Platform.App/Components/Navigation/AppNavItem.razor"
+          "src/AiEng.Platform.App/Components/Navigation/AppNavItem.razor",
+          "src/AiEng.Platform.App/Components/Navigation/AppBreadcrumb.razor"
         ]
       },
       "acceptance_criteria": [
         "INavigationRegistry, RouteMetadata, RouteRegistry exist; the AppSidebar is data-driven from the registry.",
         "Every page declares its route metadata through RouteMetadataAttribute.",
-        "Pages_AreReachable_Through_Registry architecture test is active and green."
+        "Pages_AreReachable_Through_Registry architecture test is active and green.",
+        "AppTopBar exists with Leading and Trailing slots; the trailing slot hosts AppThemeToggle and AppUserAvatarSlot (M2.3).",
+        "AppBreadcrumb walks the M2.2 registry's Parent chain (M2.3).",
+        "AppBreadcrumb is wired into AppPageHeader.Breadcrumbs on pages that use AppPageHeader (M2.3)."
       ],
       "completed_criteria": [
-        "AppLayout, AppEmptyLayout, AppShellRegion, AppSidebarSlot, AppTopBarSlot exist (M2.1 — the shell foundation the navigation registry composes against).",
+        "AppLayout, AppEmptyLayout, AppShellRegion exist (M2.1 — the shell foundation the navigation registry composes against).",
         "INavigationRegistry, RouteMetadata, RouteRegistry, RouteMetadataAttribute exist; AppSidebar, AppSidebarItem, AppNavItem are data-driven from the registry (M2.2).",
         "Every page in Components/Pages/ declares its route metadata through RouteMetadataAttribute (M2.2).",
-        "Pages_AreReachable_Through_Registry architecture test is active and green (M2.2)."
+        "Pages_AreReachable_Through_Registry architecture test is active and green (M2.2).",
+        "AppTopBar exists with Leading and Trailing slots; the trailing slot hosts AppThemeToggle and AppUserAvatarSlot (M2.3 — replaces the M2.1 AppTopBarSlot placeholder).",
+        "AppThemeToggle relocated to the top bar; the theme state persists via localStorage and applies via the data-theme attribute (M2.3).",
+        "AppBreadcrumb walks the M2.2 registry's Parent chain; aria-current=page is set on the current item; separators are aria-hidden (M2.3).",
+        "AppBreadcrumb is wired into AppPageHeader.Breadcrumbs on DesignSystem.razor (M2.3)."
       ],
       "adr": null,
       "architecture_tests": ["Pages_AreReachable_Through_Registry"],

@@ -1,44 +1,44 @@
 {
   "schema_version": "1.0.0",
   "updated_at": "2026-07-11T00:00:00Z",
-  "session_id": "m2-2-navigation-registry-sidebar-closeout",
+  "session_id": "m2-3-topbar-breadcrumbs-closeout",
   "session_type": "closeout",
   "scope": {
     "milestone": "M2",
-    "task_id": "T-002",
-    "slice": "M2.2",
-    "plan": ".ai/plans/M2.2-navigation-registry-sidebar.md",
-    "branch": "feature/m2-2-navigation-registry-sidebar",
+    "task_id": "T-003",
+    "slice": "M2.3",
+    "plan": ".ai/plans/M2.3-topbar-breadcrumbs.md",
+    "branch": "feature/m2-3-topbar-breadcrumbs",
     "in_scope": [
-      "M2.2 closeout reconciliation: T-002 -> Done in tasks.json; M2.2 slice -> delivered in milestones.json; C-019 -> Verified in capabilities.json; M2.2 row -> Delivered in ROADMAP.md; current.md and task-board.md updated to the M2.2 closeout state",
-      "Promote M2.3 plan stub to a full M2.3 plan in Awaiting Approval (do not implement M2.3)",
-      "Implementation report implementation-report-m2-2-navigation-registry-sidebar.md at the repo root",
-      "Per-session handoff .ai/handoffs/2026-07-11-m2-2-navigation-registry-sidebar.md mirrored to latest.md",
-      "Single coherent commit feat(m2.2): add navigation registry and sidebar"
+      "M2.3 closeout reconciliation: T-003 -> Done in tasks.json; M2.3 slice -> delivered in milestones.json; C-019 -> Verified (preserved from M2.2) in capabilities.json; M2.3 row -> Delivered in ROADMAP.md; current.md and task-board.md updated to the M2.3 closeout state",
+      "Promote M2.4 plan stub to a full M2.4 plan in Awaiting Approval (do not implement M2.4)",
+      "Implementation report implementation-report-m2-3-topbar-breadcrumbs.md at the repo root",
+      "Per-session handoff .ai/handoffs/2026-07-11-m2-3-topbar-breadcrumbs.md mirrored to latest.md",
+      "Single coherent commit feat(m2.3): add top bar, breadcrumb, and page header integration"
     ],
     "out_of_scope": [
-      "M2.3 implementation (only the M2.3 plan is promoted; no code is written for M2.3)",
-      "M2.4 / M2.5 / M2.6 (deferred)",
+      "M2.4 implementation (only the M2.4 plan is promoted; no code is written for M2.4)",
+      "M2.5 / M2.6 (deferred)",
       "Providers.<X> projects, IProjectService, IProjectStore, IProvider (M3+ and M4-A through M4-D)",
       "Pushing (no remote configured; push is skipped per the brief)"
     ]
   },
   "current_understanding": {
     "active_milestone": "M2",
-    "active_slice": "M2.3 (plan Awaiting Approval; next slice)",
-    "active_task": "T-003 (M2.3, Ready)",
+    "active_slice": "M2.4 (plan Awaiting Approval; next slice)",
+    "active_task": "T-014 (M2.4, Ready)",
     "last_completed_milestone": "M0.5",
-    "last_completed_task": "T-002 (M2.2 closeout, 2026-07-11)",
-    "last_stable_commit": "feat(m2.2): add navigation registry and sidebar on feature/m2-2-navigation-registry-sidebar",
+    "last_completed_task": "T-003 (M2.3 closeout, 2026-07-11)",
+    "last_stable_commit": "feat(m2.3): add top bar, breadcrumb, and page header integration on feature/m2-3-topbar-breadcrumbs",
     "build_status": "passing at closeout (0 warnings, 0 errors)",
-    "test_status": "125 passed, 0 failed (component); 4 passed, 4 skipped, 0 failed (architecture) at closeout"
+    "test_status": "146 passed, 0 failed (component); 4 passed, 4 skipped, 0 failed (architecture) at closeout"
   },
   "last_action": {
     "at": "2026-07-11T00:00:00Z",
-    "kind": "m2.2 closeout",
-    "target": "feature/m2-2-navigation-registry-sidebar",
-    "outcome": "M2.2 implementation complete (T-002 Done; M2.2 slice delivered; C-019 Verified; ROADMAP M2.2 row Delivered; 28 new bUnit/integration tests + 1 new architecture test; 125 component tests + 4 active architecture tests pass; npm run css:build, dotnet build, dotnet format --verify-no-changes all clean; visual smoke test 5/5 routes 200). Stale projections (current.md, task-board.md, session.json) reconciled to the M2.2 closeout state. M2.3 plan stub promoted to a full M2.3 plan in Awaiting Approval. Per-session handoff and implementation report written. Coherent commit feat(m2.2): add navigation registry and sidebar produced on feature/m2-2-navigation-registry-sidebar. No push (no remote)."
+    "kind": "m2.3 closeout",
+    "target": "feature/m2-3-topbar-breadcrumbs",
+    "outcome": "M2.3 implementation complete (T-003 Done; M2.3 slice delivered; C-019 Verified preserved; ROADMAP M2.3 row Delivered; 27 new bUnit tests + 6 obsolete tests removed; 146 component tests + 4 active architecture tests pass; npm run css:build, dotnet build, dotnet format --verify-no-changes all clean; visual smoke test 4/4 routes 200; top bar title tracks INavigationRegistry, theme toggle flips light/dark, breadcrumb walks the parent chain). Stale projections (current.md, task-board.md, session.json) reconciled to the M2.3 closeout state. M2.4 plan stub promoted to a full M2.4 plan in Awaiting Approval. Per-session handoff and implementation report written. Coherent commit feat(m2.3): add top bar, breadcrumb, and page header integration produced on feature/m2-3-topbar-breadcrumbs. No push (no remote). Two documented deviations from the plan: (1) AppTopBar uses div.app-topbar + Leading/Trailing slots rather than AppStack + AppPageHeader; the surface still composes AppTopBar + AppPageHeader + AppBreadcrumb, matching the plan's intent. (2) Optional architecture test Breadcrumb_Follows_Registry_Parent_Chain was skipped per plan § 8 step 11 which marked it optional."
   },
-  "intended_next_action": "The next session approves the M2.3 plan and starts M2.3 implementation per the plan's own order. The session stops after the M2.3 coherent commit and does NOT begin M2.4.",
-  "session_notes": "M2.2 closeout session. All M2.2 acceptance criteria satisfied per the approved plan .ai/plans/M2.2-navigation-registry-sidebar.md. The session reconciles the stale projections (current.md, task-board.md, session.json) into the M2.2 closeout per the user instruction, and adds an implementation report and per-session handoff at session end. Push is skipped (no remote). The session does NOT implement M2.3 (only the M2.3 plan is promoted to Awaiting Approval)."
+  "intended_next_action": "The next session approves the M2.4 plan and starts M2.4 implementation per the plan's own order. The session stops after the M2.4 coherent commit and does NOT begin M2.5.",
+  "session_notes": "M2.3 closeout session. All M2.3 acceptance criteria satisfied per the approved plan .ai/plans/M2.3-topbar-breadcrumbs.md. The session reconciles the stale projections (current.md, task-board.md, session.json) into the M2.3 closeout per the user instruction, and adds an implementation report and per-session handoff at session end. Push is skipped (no remote). The session does NOT implement M2.4 (only the M2.4 plan is promoted to Awaiting Approval). Two documented deviations: (1) AppTopBar uses div.app-topbar + Leading/Trailing slots rather than AppStack + AppPageHeader (the plan § 8 step 4 wording was ambiguous; the implementation matches the plan's intent). (2) Optional architecture test Breadcrumb_Follows_Registry_Parent_Chain was skipped (plan § 8 step 11 marked it optional)."
 }

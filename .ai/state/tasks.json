@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "updated_at": "2026-07-11T00:00:00Z",
-  "updated_by_session": "m2-2-navigation-registry-sidebar",
+  "updated_by_session": "m2-3-topbar-breadcrumbs",
   "tasks": [
     {
       "id": "T-001",
@@ -132,23 +132,67 @@
     {
       "id": "T-003",
       "title": "M2.3 — Top Bar, Breadcrumbs, and Page Headers",
-      "status": "Ready",
+      "status": "Done",
       "milestone": "M2",
       "slice": "M2.3",
       "created_at": "2026-07-10T00:00:00Z",
       "claimed_at": "2026-07-11T00:00:00Z",
-      "owner": "TBD (next session after M2.2 closeout)",
+      "completed_at": "2026-07-11T00:00:00Z",
+      "owner": "m2-3-topbar-breadcrumbs session",
       "plan": ".ai/plans/M2.3-topbar-breadcrumbs.md",
-      "notes": "Plan promoted from Draft stub to a full plan (Awaiting Approval) in the M2.2 closeout session, 2026-07-11. The full plan is at .ai/plans/M2.3-topbar-breadcrumbs.md. T-001 (M2.1) and T-002 (M2.2) are Done, so the dependencies are satisfied. The M2.3 plan still requires the user's explicit approval before implementation begins (per the Progressive Coding Rule)."
+      "implementation_report": "implementation-report-m2-3-topbar-breadcrumbs.md",
+      "evidence": {
+        "branch": "feature/m2-3-topbar-breadcrumbs",
+        "files_added": [
+          "src/AiEng.Platform.App/Components/Shell/AppTopBar.razor",
+          "src/AiEng.Platform.App/Components/Shell/AppTopBar.razor.css",
+          "src/AiEng.Platform.App/Components/Shell/AppThemeToggle.razor",
+          "src/AiEng.Platform.App/Components/Shell/AppThemeToggle.razor.css",
+          "src/AiEng.Platform.App/Components/Shell/AppUserAvatarSlot.razor",
+          "src/AiEng.Platform.App/Components/Shell/AppUserAvatarSlot.razor.css",
+          "src/AiEng.Platform.App/Components/Navigation/AppBreadcrumb.razor",
+          "src/AiEng.Platform.App/Components/Navigation/AppBreadcrumb.razor.css",
+          "tests/AiEng.Platform.ComponentTests/Shell/AppTopBarTests.cs",
+          "tests/AiEng.Platform.ComponentTests/Shell/AppThemeToggleTests.cs",
+          "tests/AiEng.Platform.ComponentTests/Shell/AppUserAvatarSlotTests.cs",
+          "tests/AiEng.Platform.ComponentTests/Navigation/AppBreadcrumbTests.cs"
+        ],
+        "files_modified": [
+          "src/AiEng.Platform.App/Components/App.razor",
+          "src/AiEng.Platform.App/Components/Pages/DesignSystem.razor",
+          "src/AiEng.Platform.App/Layouts/AppLayout.razor",
+          "tests/AiEng.Platform.ComponentTests/Layouts/AppLayoutTests.cs",
+          ".ai/plans/M2.3-topbar-breadcrumbs.md"
+        ],
+        "files_deleted": [
+          "src/AiEng.Platform.App/Components/Shell/AppTopBarSlot.razor",
+          "tests/AiEng.Platform.ComponentTests/Shell/AppTopBarSlotTests.cs"
+        ],
+        "tests": {
+          "component_tests_added": 27,
+          "component_tests_removed": 6,
+          "component_tests_total": 146,
+          "component_tests_passing": 146,
+          "component_tests_failed": 0,
+          "architecture_tests_passing": 4,
+          "architecture_tests_skipped": 4,
+          "build_warnings": 0,
+          "build_errors": 0
+        }
+      },
+      "notes": "Delivered 2026-07-11. M2.3 scope landed per the approved plan: AppTopBar (replaces AppTopBarSlot), AppThemeToggle (relocated from M1.1 chrome), AppUserAvatarSlot, AppBreadcrumb in src/AiEng.Platform.App/Components/. AppBreadcrumb wired into AppPageHeader.Breadcrumbs on DesignSystem.razor. AppTopBarSlot and AppTopBarSlotTests deleted; AppLayout updated to use AppTopBar. 27 new bUnit tests across 4 test files; 6 obsolete AppTopBarSlotTests removed. Branch: feature/m2-3-topbar-breadcrumbs. Commit: feat(m2.3): add top bar, breadcrumb, and page header integration. Push skipped (no remote configured). The session does NOT implement M2.4 (only the M2.4 plan is promoted to Awaiting Approval). Two documented deviations: (1) AppTopBar uses div.app-topbar + Leading/Trailing slots rather than AppStack + AppPageHeader; the surface still composes AppTopBar + AppPageHeader + AppBreadcrumb, matching the plan's intent. (2) Optional architecture test Breadcrumb_Follows_Registry_Parent_Chain was skipped per plan § 8 step 11 which marked it optional."
     },
     {
       "id": "T-014",
       "title": "M2.4 — Project Intelligence Dashboard",
-      "status": "Draft",
+      "status": "Ready",
       "milestone": "M2",
       "slice": "M2.4",
+      "created_at": "2026-07-10T00:00:00Z",
+      "claimed_at": "2026-07-11T00:00:00Z",
+      "owner": "TBD (next session after M2.3 closeout)",
       "plan": ".ai/plans/M2.4-project-intelligence-dashboard.md",
-      "notes": "Plan stub (2026-07-10). Implements the read-only /dashboard page (the M2 landing page per docs/dashboard.md). Introduces IProjectIntelligenceReader that reads .ai/state/*.json. Renders M0.5-data sections in the Populated state; M3+-data sections in the Empty state. Promoted to a full plan when M2.3 closes."
+      "notes": "Plan promoted from Draft stub to a full plan (Awaiting Approval) in the M2.3 closeout session, 2026-07-11. The full plan is at .ai/plans/M2.4-project-intelligence-dashboard.md. T-001 (M2.1), T-002 (M2.2), and T-003 (M2.3) are Done, so the dependencies are satisfied. The M2.4 plan still requires the user's explicit approval before implementation begins (per the Progressive Coding Rule)."
     },
     {
       "id": "T-015",

@@ -39,7 +39,7 @@ A milestone is **complete** only when:
 | --- | ----------------------------------------------------- | ---------- | -------------------------------------------------------------------------- |
 | M0  | Doc foundation                                        | Done       | This document set exists.                                                  |
 | M1  | Design System Core                                    | **Done (closed 2026-07-10)** | A runnable Blazor shell with the base design-system components.            |
-| M2  | Application Shell and Navigation                      | Active (M2.1 delivered 2026-07-11) | A navigable app shell on Windows desktop; pages reach an empty state.      |
+| M2  | Application Shell and Navigation                      | Active (M2.1 delivered 2026-07-11; M2.2 delivered 2026-07-11; M2.3 delivered 2026-07-11) | A navigable app shell on Windows desktop; pages reach an empty state.      |
 | M3  | Project Registration                                  | Planned    | A user can register a project; the platform owns a `Project` entity.       |
 | M4  | Process Execution, Capability Detection, Provider Registry | Planned | The platform spawns processes safely, detects capabilities, registers providers. Divided into four slices: |
 |     | &nbsp;&nbsp;M4-A: Infrastructure / Process Execution   | Planned    | `AiEng.Platform.Infrastructure` lands; `IProcessRunner`, `ICredentialVault`, `IClock`, on-disk `IProjectStore`. |
@@ -58,13 +58,16 @@ and detailed below. **As of 2026-07-11, M1 is done** (see
 and is divided into six sequential slices. M2.1 ("Application Shell
 Foundation") is **Delivered** (see
 `implementation-report-m2-1-application-shell-foundation.md`);
-M2.2 ("Navigation Registry and Sidebar") is the next
+M2.2 ("Navigation Registry and Sidebar") is **Delivered** (see
+`implementation-report-m2-2-navigation-registry-sidebar.md`);
+M2.3 ("Top Bar, Breadcrumbs, and Page Headers") is **Delivered**
+(see `implementation-report-m2-3-topbar-breadcrumbs.md`).
+M2.4 ("Project Intelligence Dashboard") is the next
 `Ready` capability (plan
-`.ai/plans/M2.2-navigation-registry-sidebar.md` status
-`Awaiting Approval`; T-002 in
-`.ai/state/tasks.json` status `Ready`); M2.3, M2.4
-remain plan stubs in `Draft`; M2.5 and M2.6 are summary entries in
-the task board.
+`.ai/plans/M2.4-project-intelligence-dashboard.md` status
+`Awaiting Approval`; T-014 in
+`.ai/state/tasks.json` status `Ready`); M2.5 and M2.6 are summary
+entries in the task board.
 
 The sequence is deliberate. M1 builds the design system because every
 later milestone composes its components. M2 builds the shell because
@@ -276,8 +279,8 @@ navigation).
 | ----- | --------------------------------------------- | -------------- | ------------------------------------------------------------------------ |
 | M2.1  | Application Shell Foundation                  | Delivered (M2.1, 2026-07-11) | Two layouts (`AppLayout`, `AppEmptyLayout`), two placeholder shell components (`AppSidebarSlot`, `AppTopBarSlot`), one presentational helper (`AppShellRegion`), and the M1.1 chrome migration. |
 | M2.2  | Navigation Registry and Sidebar               | Delivered (M2.2, 2026-07-11) | `INavigationRegistry`, `RouteMetadata`, `RouteMetadataAttribute`, `RouteRegistry`, `AppSidebar`, `AppSidebarItem`, `AppNavItem`, the `Pages_AreReachable_Through_Registry` architecture test. |
-| M2.3  | Top Bar, Breadcrumbs, and Page Headers        | Plan `Awaiting Approval` | `AppTopBar`, `AppBreadcrumb`, theme toggle relocation to the top bar, user avatar slot, page-header integration with the navigation registry. |
-| M2.4  | Project Intelligence Dashboard                | Plan stub Draft | A read-only `/dashboard` page backed by `IProjectIntelligenceReader` that consumes `.ai/state/*.json`. No new abstractions beyond the reader. |
+| M2.3  | Top Bar, Breadcrumbs, and Page Headers        | Delivered (M2.3, 2026-07-11) | `AppTopBar`, `AppThemeToggle`, `AppUserAvatarSlot`, `AppBreadcrumb`; theme toggle relocated to the top bar; breadcrumb walks the M2.2 registry's `Parent` chain; page-header integration with the navigation registry. |
+| M2.4  | Project Intelligence Dashboard                | Plan `Awaiting Approval` | A read-only `/dashboard` page backed by `IProjectIntelligenceReader` that consumes `.ai/state/*.json`. No new abstractions beyond the reader. |
 | M2.5  | Empty Routes, Responsive, and Accessibility   | Summary entry  | All routes reach an `AppEmptyState`; the shell is usable down to 1280x720 (per ADR-005); keyboard navigation works across the sidebar. |
 | M2.6  | M2 Closeout and Treehouse Dogfooding          | Summary entry  | The M2 implementation report, the Treehouse dogfooding checkpoint (per `.ai/workflows/tool-dogfooding.md`), and the closeout commit. |
 
@@ -311,13 +314,17 @@ no page reads the JSON directly.
 **Definition of done:**
 
 - M2.1 is closed: the shell foundation renders; the existing
-  M1.1 chrome is migrated to `AppLayout`.
+  M1.1 chrome is migrated to `AppLayout`. (Delivered 2026-07-11;
+  `implementation-report-m2-1-application-shell-foundation.md`.)
 - M2.2 is closed: sidebar items are data-driven from a registry,
   not hard-coded; the `Pages_AreReachable_Through_Registry`
   architecture test passes. (Delivered 2026-07-11;
   `implementation-report-m2-2-navigation-registry-sidebar.md`.)
 - M2.3 is closed: the top bar, breadcrumb, and page header are
-  integrated; the theme toggle is relocated to the top bar.
+  integrated; the theme toggle is relocated to the top bar; the
+  `AppTopBar` replaces the M2.1 `AppTopBarSlot` placeholder; the
+  `AppBreadcrumb` walks the M2.2 registry's `Parent` chain. (Delivered
+  2026-07-11; `implementation-report-m2-3-topbar-breadcrumbs.md`.)
 - M2.4 is closed: the `/dashboard` page renders the current
   milestone, the active slice, the test status, and the
   self-awareness state read through `IProjectIntelligenceReader`.

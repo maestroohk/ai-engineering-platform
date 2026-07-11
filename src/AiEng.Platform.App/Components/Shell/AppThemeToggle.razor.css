@@ -1,0 +1,27 @@
+.app-theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 9999px;
+    border: 1px solid var(--app-color-border, rgba(0, 0, 0, 0.1));
+    background-color: var(--app-color-surface, transparent);
+    color: var(--app-color-text, currentColor);
+    cursor: pointer;
+    transition: background-color 120ms ease, border-color 120ms ease;
+}
+
+.app-theme-toggle:hover {
+    background-color: var(--app-color-surface-hover, rgba(0, 0, 0, 0.05));
+}
+
+.app-theme-toggle:focus-visible {
+    outline: 2px solid var(--app-color-focus, #2563eb);
+    outline-offset: 2px;
+}
+
+.app-theme-toggle-icon {
+    font-size: 1rem;
+    line-height: 1;
+}
