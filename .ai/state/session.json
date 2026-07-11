@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
   "updated_at": "2026-07-11T00:00:00Z",
-  "session_id": "m2-4-project-intelligence-dashboard",
-  "session_type": "implementation",
+  "session_id": "m2-4-followup-theme-toggle-bug-record",
+  "session_type": "followup",
   "scope": {
     "milestone": "M2",
     "task_id": "T-014",
@@ -45,10 +45,10 @@
   },
   "last_action": {
     "at": "2026-07-11T00:00:00Z",
-    "kind": "m2.4 closeout",
+    "kind": "theme toggle bug recorded; M2.5 plan awaiting approval",
     "target": "feature/m2-4-project-intelligence-dashboard",
-    "outcome": "Landed IProjectIntelligenceReader + ProjectIntelligenceSnapshot + ProjectIntelligenceReader in Application; ProjectIntelligenceServiceCollectionExtensions in Composition; Dashboard.razor + Dashboard.razor.css at /dashboard; theme toggle bug fixed (appTheme.current JS function, IsDark updated synchronously before JSInterop, JSDisconnectedException handled); 6 unit + 13 bUnit + 2 architecture tests added (175 total passing). T-014 marked Done; C-022 promoted to completion_status: Verified. Branch ready for focused commit feat(m2.4): add project intelligence dashboard. M2.5 plan promoted to Awaiting Approval; implementation of M2.5 NOT started per the brief."
+    "outcome": "The M2.4 closeout reported the theme toggle bug as fixed (JS contract changes; synchronous IsDark flip; bUnit tests). Running the actual app reveals the bug is NOT fixed: the AppLayout / AppTopBar / AppThemeToggle chain is missing @rendermode InteractiveServer, so the @onclick handler is never wired to an interactive circuit. The bUnit tests pass because they render in isolation. Bug recorded as T-017 in tasks.json (status: Ready, severity: medium, bug_status: non-blocking, links_to_capability: shell/theme), added to task-board.md (Ready, top of list) and to current.md (Known Issues, top of section). The M2.4 implementation report has an ERRATUM appended. Per the user's instruction: do NOT fix the bug in this session; record it and continue with the first dependency-satisfied Ready task (M2.5 plan approval). The M2.5 plan is at .ai/plans/M2.5-empty-routes-responsive-accessibility.md (status: Awaiting Approval). The session is now presenting the M2.5 plan summary, risks, and acceptance criteria, and waiting for user approval before implementing."
   },
-  "intended_next_action": "The next session approves the M2.5 plan and begins M2.5 implementation per the Progressive Coding Rule and the command protocol. The M2.5 plan is at .ai/plans/M2.5-empty-routes-responsive-accessibility.md (status: Awaiting Approval). T-015 is Deferred and will move to Ready when the plan is approved.",
+  "intended_next_action": "Wait for the user to approve the M2.5 plan. After approval, the M2.5 implementation session follows per the Progressive Coding Rule and the M2.5 plan's 13-step order. The T-017 theme toggle bug is NOT part of the M2.5 scope unless the user explicitly opts in.",
   "session_notes": "M2.4 implementation session. The M2.4 plan was approved by the user on 2026-07-11. The session implements the M2.4 slice per the plan (.ai/plans/M2.4-project-intelligence-dashboard.md). The session also addresses the theme toggle bug: the M2.3 AppThemeToggle's state must propagate to the documentElement.data-theme attribute so light/dark switching is visible immediately, persists across navigation and browser refresh, and remains consistent throughout the application. The session follows the Progressive Coding Rule: one task per session; 13-step lifecycle; stop after the coherent commit. The session does NOT implement M2.5 (only the M2.5 plan is promoted to Awaiting Approval). Push is skipped (no remote)."
 }

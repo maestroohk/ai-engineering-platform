@@ -568,6 +568,63 @@ Plus the supporting infrastructure:
 
 ## Known Issues
 
+- **Theme toggle is not interactive
+  in the running app** (M2.4
+  follow-up bug, recorded 2026-07-11
+  in the M2.4 follow-up session;
+  non-blocking; will be picked up
+  in a future session; **not** part
+  of the M2.5 scope unless the
+  approved M2.5 plan explicitly
+  includes it). The toggle control
+  is visible in the top bar; the
+  bUnit tests for the toggle
+  (`AppThemeToggleTests`,
+  `AppLayoutTests`,
+  `AppTopBarTests`) all pass. But
+  clicking the toggle in the
+  running app does not change the
+  document theme — the click
+  fires, but no handler runs
+  because the
+  `AppLayout` / `AppTopBar` /
+  `AppThemeToggle` chain is not
+  marked `@rendermode
+  InteractiveServer`, so the
+  `@onclick` is never wired up in
+  the browser. The bUnit tests
+  pass because they render the
+  component in isolation under
+  `InteractiveServer` inherited
+  from the test render context.
+  Expected behaviour: theme
+  changes immediately on click;
+  persists across navigation;
+  persists across browser refresh
+  (the IIFE in `App.razor` reads
+  `localStorage` on every page
+  load, but only if the user can
+  flip the toggle in the first
+  place). Linked capability: the
+  shell/theme capability
+  (`AppShellRegion` from M2.1 +
+  `AppThemeToggle` from M2.3).
+  Linked task: T-017 in
+  `.ai/state/tasks.json`. The
+  fix is to add `@rendermode
+  InteractiveServer` to the
+  layout (or to the
+  `AppTopBar` + `AppThemeToggle`
+  pair if the layout must remain
+  static for streaming SSR
+  reasons) and add a bUnit test
+  that asserts the click handler
+  is wired in the running app
+  context. Recorded in
+  `.ai/state/tasks.json` (T-017,
+  status `Ready`, severity
+  `medium`, bug_status
+  `non-blocking`).
 - **`AppToolbar` example missing on
   `/design-system`.** The `AppToolbar` component
   ships and is unit-tested, but the

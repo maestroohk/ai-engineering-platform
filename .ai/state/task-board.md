@@ -37,6 +37,144 @@
 
 ## Ready
 
+### Theme toggle is not interactive in the running app (M2.4 follow-up bug)
+
+- **Task ID:** `M2.4-BUG-1`
+- **Milestone:** M2 — Application Shell and
+  Navigation
+- **Title:** Theme toggle is not
+  interactive in the running app
+- **Linked capability:** the
+  shell/theme capability
+  (`AppShellRegion` from M2.1 +
+  `AppThemeToggle` from M2.3).
+- **Why it matters:** The user
+  reported that the light / dark
+  theme toggle was added in M2.3
+  but does not actually switch
+  themes in the running app. The
+  toggle control is present in the
+  top bar, the bUnit tests all
+  pass, but clicking the toggle in
+  the browser does not change the
+  document theme. The M2.4 closeout
+  thought the bug was fixed by
+  adding `appTheme.current` and
+  flipping `IsDark` synchronously,
+  but those fixes targeted the JS
+  contract — the actual defect is
+  the missing `@rendermode
+  InteractiveServer` on the
+  `AppLayout` / `AppTopBar` /
+  `AppThemeToggle` chain, so the
+  `@onclick` handler is never
+  wired up in the running app.
+- **Bug status:** non-blocking.
+  The product is usable; the user
+  can still read the dashboard
+  and navigate the shell. The
+  theme does not change, but the
+  default light theme renders
+  correctly.
+- **Severity:** medium.
+- **Reproduction:**
+  1. `dotnet run` on
+     `http://localhost:5170`.
+  2. Open the home page.
+  3. The toggle is visible in the
+     top bar's `Trailing` slot
+     (`button.app-theme-toggle-light`,
+     `aria-pressed="false"`).
+  4. Click the toggle.
+  - **Expected:** `data-theme`
+     on `documentElement` changes
+     from `"light"` to `"dark"`
+     immediately; the CSS
+     variables swap to the dark
+     tokens; `localStorage["app-theme"]`
+     is set to `"dark"`; the
+     toggle's class changes to
+     `app-theme-toggle-dark`; the
+     change persists across
+     navigation and browser
+     refresh.
+  - **Actual:** the click does
+     not change the document
+     theme; the toggle visually
+     stays as
+     `app-theme-toggle-light`
+     with `aria-pressed="false"`.
+  - **Tests:** all 10
+     `AppThemeToggleTests` +
+     3 `AppLayoutTests` +
+     2 `AppTopBarTests` pass
+     (the bUnit tests render the
+     component in isolation under
+     `InteractiveServer` inherited
+     from the test render context;
+     the running app renders the
+     layout under the default
+     static SSR mode, so the
+     `@onclick` handler is not
+     wired up).
+- **Expected behaviour (the
+  acceptance criteria for the
+  fix):**
+  1. Clicking the toggle
+     changes the document theme
+     immediately.
+  2. The theme persists across
+     navigation (Blazor Server
+     is a single-page app; the
+     IIFE on reconnect / page
+     mount reads `localStorage`
+     and applies the theme).
+  3. The theme persists across
+     browser refresh (the IIFE
+     in `App.razor` reads
+     `localStorage` on every
+     page load).
+- **Objective:** Add
+  `@rendermode InteractiveServer`
+  to `AppLayout.razor` (or to
+  `AppTopBar.razor` +
+  `AppThemeToggle.razor` if the
+  layout must remain static for
+  streaming SSR reasons); add a
+  bUnit test that asserts the
+  toggle's click handler is wired
+  up in the running app (e.g.
+  using `bUnit`'s `Render`
+  helpers with the layout's
+  render mode); rerun the
+  visual smoke test and confirm
+  the theme changes on click.
+- **Dependencies:** M2.4 (Done).
+  No new dependencies.
+- **Expected affected areas:**
+  `src/AiEng.Platform.App/Layouts/AppLayout.razor`
+  (or
+  `src/AiEng.Platform.App/Components/Shell/AppTopBar.razor`
+  + `AppThemeToggle.razor`),
+  plus the relevant bUnit test.
+- **Validation:** `dotnet build`,
+  `dotnet test`, `dotnet format
+  --verify-no-changes`, visual
+  smoke test (toggle the theme in
+  the browser; refresh the page;
+  navigate to `/dashboard` and
+  back; the theme persists).
+- **Approved plan path:** (none
+  yet; record the bug, then plan
+  the fix in a future session; the
+  user explicitly asked NOT to fix
+  in this task).
+- **Status:** Ready (non-blocking
+  bug; will be picked up in a
+  future session; not part of M2.5
+  unless the approved M2.5 plan
+  explicitly includes it).
+
 ### M2.5 — Empty Routes, Responsive, and Accessibility
 
 - **Task ID:** `M2.5`

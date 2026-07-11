@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "updated_at": "2026-07-11T00:00:00Z",
-  "updated_by_session": "m2-4-project-intelligence-dashboard",
+  "updated_by_session": "m2-4-followup-theme-toggle-bug-record",
   "tasks": [
     {
       "id": "T-001",
@@ -327,6 +327,22 @@
         "commits": ["1d98acd"]
       },
       "notes": "The 10 required improvements landed: VISION.md, .ai/backlog/, structured state, decision log, capability mapping, dashboard definition, self-awareness state, dogfooding evolution, doc architecture validation, architecture review. Closed 2026-07-10 with the coherent commit 1d98acd (docs(m0.5): add project intelligence and structured delivery state)."
+    },
+    {
+      "id": "T-017",
+      "title": "Theme toggle is not interactive in the running app (M2.4 follow-up bug)",
+      "status": "Ready",
+      "milestone": "M2",
+      "slice": "M2.4-followup",
+      "created_at": "2026-07-11T00:00:00Z",
+      "blocked_by": [],
+      "depends_on_capabilities": ["C-022"],
+      "links_to_capability": "AppShellRegion / AppThemeToggle (shell/theme capability; the M2.1 AppShellRegion and the M2.3 AppThemeToggle form the shell/theme surface; the bug is in the interactive render seam, not in the JS contract)",
+      "bug_status": "non-blocking",
+      "severity": "medium",
+      "owner": null,
+      "plan": null,
+      "notes": "Reproduction: (1) dotnet run on http://localhost:5170. (2) Open the home page. (3) The theme toggle control is visible in the top bar's Trailing slot (button.app-theme-toggle-light, aria-pressed=false). (4) Click the toggle. Expected: the data-theme attribute on documentElement changes from 'light' to 'dark' immediately, the CSS variables swap to the dark tokens, the localStorage 'app-theme' key is set to 'dark', the toggle's class changes to 'app-theme-toggle-dark', and the change persists across navigation and browser refresh. Actual: the click does not change the document theme; the toggle visually stays as 'app-theme-toggle-light' with aria-pressed=false. The bUnit tests (AppThemeToggleTests.cs) all pass; the JSInterop contract is correct; the bug is the missing @rendermode InteractiveServer on the AppLayout / AppTopBar / AppThemeToggle chain. The bUnit tests render the component in isolation under InteractiveServer (inherited from the test render context), so they pass; the running app renders the layout under the default static SSR mode, so the @onclick handler is not wired up. Tests: passing (10 in AppThemeToggleTests.cs + 3 in AppLayoutTests.cs + 2 in AppTopBarTests.cs). Toggle control: present. Actual theme: does not change reliably in the running app. Expected behaviour: (1) theme changes immediately on click; (2) persists across navigation (Blazor Server is a single-page app, so this means the IIFE on reconnect / page mount reads localStorage and applies the theme); (3) persists across browser refresh (the IIFE in App.razor reads localStorage on every page load). The fix is to add @rendermode InteractiveServer to AppLayout.razor (or to AppTopBar.razor + AppThemeToggle.razor if the layout must remain static), so the @onclick handler is wired to the interactive circuit. Do NOT fix in this task; this is a non-blocking bug recorded for a future session. The user explicitly asked to record the bug and continue with the first dependency-satisfied Ready task (M2.5 plan approval)."
     }
   ]
 }
