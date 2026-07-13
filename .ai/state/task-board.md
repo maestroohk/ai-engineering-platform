@@ -97,148 +97,280 @@
   session if the M4-B / M4-C / M4-D
   work requires a third M4-A slice).
 
-### M4-B.2 — AppCapabilityList + AppKeyValueList data-owning design-system components + bUnit tests
+### M4-B.3 — /diagnostics page + startup log + Capabilities_Resolved_Through_Service architecture test + docs/capabilities.md — 2026-07-13 (Done)
 
-- **Task ID:** T-025.
+- **Task ID:** T-026.
 - **Milestone:** M4-B — Capability
   Detection (Active 2026-07-13; the
   M4-B plan is in Awaiting Approval at
   `.ai/plans/M4-B-capability-detection.md`).
-- **Title:** M4-B.2 — AppCapabilityList +
-  AppKeyValueList data-owning design-system
-  components + bUnit tests.
+- **Title:** M4-B.3 — `/diagnostics`
+  page + startup capability-report log
+  + `Capabilities_Resolved_Through_Service`
+  architecture test + `docs/capabilities.md`
+  + 3+ bUnit page tests.
 - **Why it matters:** M4-B.1 shipped the
   `IHostCapabilitiesService` contract +
   the `HostCapabilities` +
   `HostCapability` records + the
   `SystemHostCapabilitiesService`
-  implementation. M4-B.2 ships the
-  `AppCapabilityList` data-owning
-  four-state design-system component
-  (renders an
-  `IReadOnlyList<HostCapability>` as a
-  list of `AppCard` entries with
-  `AppStatusDot` Success/Error, the
-  `Version` in a monospaced muted font,
-  and an `AppBadge` "Credential set" for
-  `CredentialAvailable=true`; the
-  populated list has `aria-live="polite"`)
-  + the `AppKeyValueList` data-owning
-  four-state design-system component
-  (renders an
-  `IReadOnlyList<KeyValuePair<string,
-  string>>` as a definition list
-  `<dl>`/`<dt>`/`<dd>` of key-value
-  rows; the `Format` parameter (Plain /
-  Boolean / Code) controls value
-  rendering; the populated container has
-  `aria-live="polite"`) + the
-  `AppKeyValueListFormat` enum (Plain,
-  Boolean, Code) in
-  `src/AiEng.Platform.App/Components/Common/Enums.cs`
-  + the
-  `Diagnostics/_Imports.razor` mirroring
-  `Projects/_Imports.razor` + 13 bUnit
-  tests for `AppCapabilityList` + 15 bUnit
-  tests for `AppKeyValueList`. M4-B.2 is
-  the second M4-B implementation slice;
-  M4-B.3 ships the `/diagnostics` page
-  composing the new components, the
-  startup log, the documentation, and
-  the architecture test (deferred from
-  M4-B.1).
+  implementation. M4-B.2 shipped the
+  `AppCapabilityList` + `AppKeyValueList`
+  data-owning design-system components.
+  M4-B.3 ships the user-visible surface
+  (the `/diagnostics` page in
+  `src/AiEng.Platform.App/Components/Pages/Diagnostics.razor`
+  composing the M4-B.1 contract + the
+  M4-B.2 components), the startup
+  capability-report log (a 10-second
+  timeout `await
+  IHostCapabilitiesService.DetectAsync`
+  in `Program.cs` between `app.Build()`
+  and `app.Run()`; logs at `Information`
+  level through `ILogger<Program>`;
+  failures are caught and logged at
+  `Warning` level so startup never
+  fails), the `Capabilities_Resolved_Through_Service`
+  architecture test (Active per the M4-B
+  plan § 2 item 9; deferred from M4-B.1
+  per the M4-B.1 plan § 14.1 Deviations;
+  asserts `Diagnostics.razor` contains
+  `@inject IHostCapabilitiesService` and
+  no `RunToCompletionAsync` /
+  `ICredentialVault` / `new
+  SystemHostCapabilitiesService` tokens
+  in `App/Components/Diagnostics/`), the
+  `docs/capabilities.md` 10-section
+  documentation mirroring
+  `docs/infrastructure.md` § 1-10
+  structure, and 3+ bUnit tests in
+  `tests/AiEng.Platform.ComponentTests/Pages/DiagnosticsPageTests.cs`.
+  M4-B.3 also resolves the M4-B.2
+  deferred `docs/design-system.md` § 4.5
+  component status updates (the
+  `AppCapabilityList` + `AppKeyValueList`
+  rows transition from `Planned (M4)`
+  to `Implemented (M4-B.2)`). M4-B.3 is
+  the third M4-B implementation slice;
+  the next slice is the **M4-B closeout
+  session** (T-027) which writes the
+  M4-B closeout report and hands off to
+  M4-C.
 - **Objective:** Land the
-  `AppCapabilityList` component in
-  `src/AiEng.Platform.App/Components/Diagnostics/AppCapabilityList.razor`
-  (+ .razor.cs + .razor.css); land the
-  `AppKeyValueList` component in
-  `src/AiEng.Platform.App/Components/Diagnostics/AppKeyValueList.razor`
-  (+ .razor.cs + .razor.css); land the
-  `Diagnostics/_Imports.razor`; append
-  the `AppKeyValueListFormat` enum to
-  `Enums.cs`; land 13 bUnit tests for
-  `AppCapabilityList` in
-  `tests/AiEng.Platform.ComponentTests/Components/Diagnostics/AppCapabilityListTests.cs`;
-  land 15 bUnit tests for
-  `AppKeyValueList` in
-  `tests/AiEng.Platform.ComponentTests/Components/Diagnostics/AppKeyValueListTests.cs`.
+  `Diagnostics.razor` page in
+  `src/AiEng.Platform.App/Components/Pages/Diagnostics.razor`
+  (+ `.razor.css`); add the startup
+  capability-report log to
+  `src/AiEng.Platform.App/Program.cs`;
+  land the `Capabilities_Resolved_Through_Service`
+  architecture test in
+  `tests/AiEng.Platform.ArchitectureTests/Capabilities/Capabilities_Resolved_Through_Service.cs`;
+  land 3+ bUnit tests in
+  `tests/AiEng.Platform.ComponentTests/Pages/DiagnosticsPageTests.cs`;
+  land `docs/capabilities.md` (10
+  sections); update
+  `docs/design-system.md` § 4.5.
 - **Acceptance criteria:**
-  - `AppCapabilityList` renders an
-    `IReadOnlyList<HostCapability>` as
-    a list of `AppCard` entries; one
-    card per capability.
-  - `AppCapabilityList` renders an
-    `AppStatusDot` Success for
-    `Available=true` and Error for
-    `Available=false`.
-  - `AppCapabilityList` renders an
-    `AppBadge` "Credential set" when
-    `CredentialAvailable` is true;
-    omits the badge when
-    `CredentialAvailable` is false.
-  - `AppCapabilityList` supports the
-    four child-content slots (Loading,
-    Empty, Error, Populated) per
-    `docs/design-system.md` § 5.4.
-  - The `AppCapabilityList` populated
-    list has `aria-live="polite"`.
-  - `AppKeyValueList` renders an
-    `IReadOnlyList<KeyValuePair<string,
-    string>>` as a definition list
-    (`<dl>`/`<dt>`/`<dd>`) of key-value
-    rows.
-  - `AppKeyValueList` supports the
-    `AppKeyValueListFormat` enum
-    (Plain, Boolean, Code); Boolean
-    renders a check/cross icon for
-    true/false (case-insensitive; non-
-    boolean values render as literal
-    text); Code renders in a monospaced
-    `<code>` element.
-  - `AppKeyValueList` supports the
-    four child-content slots (Loading,
-    Empty, Error, Populated) per
-    `docs/design-system.md` § 5.4.
-  - The `AppKeyValueList` populated
-    container has `aria-live="polite"`.
-  - The M4-B.1 343 tests remain green
-    (regression gate).
+  - `Diagnostics.razor` is registered
+    via
+    `[RouteMetadata("/diagnostics",
+    "Diagnostics", Order = 4,
+    ShowInSidebar = true, Icon = "◆",
+    Description = "Detected host
+    capabilities (tools, versions,
+    provider credentials).")]`.
+  - `Diagnostics.razor` `@inject`s
+    `IHostCapabilitiesService` (the
+    single allowed seam) +
+    `IPlatformInfo` (the host metadata
+    accessor).
+  - `OnInitializedAsync` calls
+    `Service.DetectAsync()` and
+    renders the 6 host tools + 6
+    provider credentials via
+    `AppCapabilityList`.
+  - The page renders
+    `AppKeyValueList` with the
+    `DetectedAt` + `Data directory` +
+    `Config directory` + `Is Windows
+    host` rows.
+  - The page renders a Refresh
+    `AppButton` that re-runs
+    `DetectAsync`.
+  - `Program.cs` logs the host
+    capability report at startup
+    through `ILogger<Program>` at
+    `Information` level with a
+    10-second timeout; failures are
+    caught and logged at `Warning`
+    level.
+  - The
+    `Capabilities_Resolved_Through_Service`
+    architecture test is **Active**
+    (not registered-but-disabled per
+    ADR-016 / M4-D) and passes; the
+    test is scoped to
+    `App/Components/Diagnostics/` to
+    avoid the M4-A.2 Open Action
+    false positive.
+  - `docs/capabilities.md` mirrors
+    `docs/infrastructure.md` § 1-10
+    structure.
+  - `docs/design-system.md` § 4.5
+    `AppCapabilityList` +
+    `AppKeyValueList` rows are
+    `Implemented (M4-B.2)`.
+  - The M4-B.2 370 tests remain
+    green (regression gate); M4-B.3
+    ships 3+ new bUnit tests + 1 new
+    active architecture test.
 - **Dependencies:** M4-B.1
   (T-024, Done 2026-07-13);
-  `IHostCapabilitiesService` (C-015).
+  M4-B.2 (T-025, Done 2026-07-13);
+  `IHostCapabilitiesService`
+  (C-015);
+  `AppCapabilityList` (C-023);
+  `AppKeyValueList` (C-024).
 - **Expected affected areas:**
-  `src/AiEng.Platform.App/Components/Diagnostics/`
-  (new directory; 6 new files +
-  `_Imports.razor`);
-  `src/AiEng.Platform.App/Components/Common/Enums.cs`
-  (the `AppKeyValueListFormat` enum
-  appended);
-  `tests/AiEng.Platform.ComponentTests/Components/Diagnostics/`
-  (new directory; 2 new test files).
+  `src/AiEng.Platform.App/Components/Pages/Diagnostics.razor`
+  (+ `.razor.css`) (new file);
+  `src/AiEng.Platform.App/Program.cs`
+  (startup capability-report log);
+  `tests/AiEng.Platform.ArchitectureTests/Capabilities/Capabilities_Resolved_Through_Service.cs`
+  (new file; 1 Active architecture
+  test);
+  `tests/AiEng.Platform.ComponentTests/Pages/DiagnosticsPageTests.cs`
+  (new file; 3+ bUnit tests);
+  `docs/capabilities.md` (new file;
+  10 sections);
+  `docs/design-system.md` § 4.5
+  (component status updates);
+  `src/AiEng.Platform.App/Composition/ServiceCollectionExtensions.cs`
+  is **not** modified (M4-B.1 already
+  wired `AddHostCapabilities`).
 - **Validation:** `dotnet restore`
   (exit 0); `dotnet build` (0 warnings,
-  0 errors); `dotnet test` (343 + 28
-  new = 371+ passed, 0 failed, 9
+  0 errors); `dotnet test` (370 + 3+
+  new = 373+ passed, 0 failed, 9
   skipped per ADR-016 / M4-D);
   `dotnet format --verify-no-changes`
-  (exit 0). The M4-B.2 first session
-  does not run the `App/Components/`
-  pages (the page is in M4-B.3); the
-  visual smoke is in M4-B.3.
+  (exit 0). The M4-B.3 first session
+  runs the `App/Components/Pages/`
+  smoke (the `/diagnostics` page
+  renders; the Refresh button re-runs
+  `DetectAsync`; the page survives a
+  non-Windows host with `IPlatformInfo.IsWindows
+  == false`).
 - **Approved plan path:**
   `.ai/plans/M4-B-capability-detection.md`
   (Awaiting Approval 2026-07-13);
-  the M4-B.2 first session plan is
+  the M4-B.3 first session plan is
   at
   `.claude/plans/generic-seeking-oasis.md`
   (approved via ExitPlanMode).
-- **Status:** **Ready** (the M4-B.1
-  first session is `Done`; the M4-B.2
+- **Status:** **Done** (the
+  M4-B.3 first session is `Done`
+  2026-07-13; the branch
+  `feature/T-026-m4-b-3-diagnostics-page-startup-log-and-architecture-test`
+  is fast-forwarded into `main` and
+  deleted; the M4-B closeout session
+  is T-027, the next concrete step on
+  the user's `Approve` or `Next`
+  invocation).
+
+### T-027 — M4-B closeout session — M4-B closeout report + handoff to M4-C
+
+- **Task ID:** T-027.
+- **Milestone:** M4-B — Capability
+  Detection (Active 2026-07-13).
+- **Title:** M4-B closeout — M4-B
+  closeout report + handoff to M4-C.
+- **Why it matters:** M4-B.1 + M4-B.2 +
+  M4-B.3 ship the M4-B boundary
+  slice. T-027 writes the M4-B closeout
+  report (15+ sections mirroring the
+  M4-A closeout reports; aggregates
+  the M4-B.1 + M4-B.2 + M4-B.3 evidence
+  blocks; finalises the M4-B status to
+  `Delivered`; transitions the
+  next-milestone handoff to M4-C). T-027
+  is the fourth M4-B session; the
+  session does **not** begin M4-C /
+  M4-D / provider creation. M4-C is
+  the next milestone after M4-B
+  (provider registry +
+  `IProvider` family contract +
+  provider eligibility checks).
+- **Objective:** Write the M4-B
+  closeout report at
+  `implementation-report-m4-b-closeout.md`;
+  write the M4-B per-session handoff
+  at
+  `.ai/handoffs/2026-07-13-m4-b-closeout.md`
+  (mirrored to `latest.md`); update
+  the project-continuity state per
+  Rule 15 (`session.json` closeout
+  envelope; `tasks.json` T-027
+  InProgress → Done with evidence;
+  `current.md` active slice M4-B.3 →
+  M4-B closeout; `task-board.md` M4-B
+  closeout row in Done Recently;
+  `milestones.json` M4-B status to
+  `Delivered` + C-015 + C-023 + C-024
+  evidence blocks finalised + M4-B
+  closeout commit + handoff + report
+  added to top-level `commits` +
+  `handoffs` + `implementation_reports`
+  arrays; `capabilities.json` C-015
+  + C-023 + C-024 status to
+  `Verified` + `next_task` cleared).
+- **Acceptance criteria:**
+  - M4-B closeout report mirrors
+    M4-A closeout reports (15+
+    sections).
+  - M4-B status is `Delivered` in
+    `milestones.json`; the C-015 +
+    C-023 + C-024 status is `Verified`
+    in `capabilities.json`.
+  - M4-B does **not** begin M4-C,
+    M4-D, or any provider creation.
+  - M4-B.3 373+ tests remain green
+    (regression gate).
+- **Dependencies:** M4-B.3
+  (T-026, InProgress 2026-07-13);
+  M4-B.1 (T-024, Done 2026-07-13);
+  M4-B.2 (T-025, Done 2026-07-13);
+  `IHostCapabilitiesService`
+  (C-015);
+  `AppCapabilityList` (C-023);
+  `AppKeyValueList` (C-024).
+- **Expected affected areas:**
+  `.ai/state/session.json`;
+  `.ai/state/tasks.json`;
+  `.ai/state/current.md`;
+  `.ai/state/task-board.md`;
+  `.ai/state/milestones.json`;
+  `.ai/state/capabilities.json`;
+  `.ai/handoffs/2026-07-13-m4-b-closeout.md`;
+  `implementation-report-m4-b-closeout.md`.
+- **Validation:** `dotnet restore`;
+  `dotnet build` (0 warnings, 0
+  errors); `dotnet test` (373+ passed,
+  0 failed, 9 skipped per ADR-016 /
+  M4-D); `dotnet format --verify-no-changes`
+  (exit 0); JSON validation; CRLF
+  validation.
+- **Approved plan path:** TBD
+  (the M4-B closeout plan is drafted
+  in the M4-B closeout session; the
+  plan mirrors the M4-A closeout
+  structure).
+- **Status:** **Ready** (the M4-B.3
   first session is the next concrete
   step on the user's `Approve` or
-  `Next` invocation).
-
-### M1 follow-up — Add `AppToolbar` example to `/design-system`
+  `Next` invocation; T-027 is staged
+  for the user's `Approve` or `Next`
+  invocation after T-026 is Done).
 
 ### M1 follow-up — Add `AppToolbar` example to `/design-system`
 
@@ -359,6 +491,19 @@ promotion, or any provider creation.)
 - **Validation:** 0 warnings, 0 errors; format clean; all new + modified files are CRLF; `capabilities.json` valid (24 records; C-023 + C-024 added).
 - **One documented deviation:** the `AppCapabilityList` default Populated uses an `AppStack` of `AppCard` entries with the `AppStatusDot` in the header (not the `AppBadge`-style credential slot), and the `AppKeyValueList` default Populated uses a definition list (`<dl>`/`<dt>`/`<dd>`) with monospaced `<code>` elements for the Code format; the plan's intent (one card per capability with status dot + version + credential badge; one row per item with key left + value right) is preserved.
 - **Session does NOT begin:** M4-B.3 (`/diagnostics` page + startup log + documentation + architecture test) / M4-C / M4-D / provider creation. The next session is M4-B.3 on the user's `Approve` or `Next` invocation.
+
+### M4-B.3 — /diagnostics page + startup log + Capabilities_Resolved_Through_Service architecture test + docs/capabilities.md — 2026-07-13
+
+- **Task ID:** `T-026`
+- **Milestone:** M4-B — Capability Detection (Active 2026-07-13; the M4-B plan is at `.ai/plans/M4-B-capability-detection.md`).
+- **Title:** `/diagnostics` page + startup capability-report log + `Capabilities_Resolved_Through_Service` architecture test + `docs/capabilities.md` + 4 bUnit page tests — the surface slice of M4-B.3 (the third M4-B implementation slice).
+- **Why it matters:** M4-B.1 shipped the `IHostCapabilitiesService` contract + the `HostCapabilities` + `HostCapability` records + the `SystemHostCapabilitiesService` implementation. M4-B.2 shipped the `AppCapabilityList` + `AppKeyValueList` data-owning design-system components. M4-B.3 ships the user-visible surface: the `/diagnostics` page at `src/AiEng.Platform.App/Components/Pages/Diagnostics.razor` (+ `.razor.css`) composing the M4-B.1 contract + the M4-B.2 components + the M1.2 `AppPageHeader` + `AppButton` + `AppCard` + `AppBreadcrumb`; the startup capability-report log in `Program.cs` (10-second `CancellationTokenSource` timeout; `ILogger<Program>`; Information level; try/catch with Warning on failure); the `Capabilities_Resolved_Through_Service` architecture test (Active per the M4-B plan § 2 item 9; deferred from M4-B.1 per the M4-B.1 plan § 14.1 Deviations; scoped to `App/Components/Diagnostics/` to avoid the M4-A.2 Open Action false positive; the test passes — `Diagnostics.razor` correctly uses `@inject IHostCapabilitiesService` and no file in `App/Components/Diagnostics/` contains the forbidden tokens `RunToCompletionAsync` / `ICredentialVault` / `new SystemHostCapabilitiesService`); the `docs/capabilities.md` 10-section documentation mirroring `docs/infrastructure.md` § 1-10; 4 bUnit page tests in `tests/AiEng.Platform.ComponentTests/Pages/DiagnosticsPageTests.cs`; the `docs/design-system.md` § 4.5 update resolving the M4-B.2 deferred decision (`AppCapabilityList` + `AppKeyValueList` rows from `Planned (M4)` to `Implemented (M4-B.2)`).
+- **Branch:** `feature/T-026-m4-b-3-diagnostics-page-startup-log-and-architecture-test` (created from `main` at the M4-B.2 closeout commit `b1f0ec8`; fast-forwarded into `main`; deleted per the branching strategy rule 7).
+- **Commit:** `feat(m4-b.3): add /diagnostics page, startup capability log, and Capabilities_Resolved_Through_Service architecture test` (push is staged for push, not authorised in this session).
+- **Test count:** 376 passed (was 370 pre-M4-B.3; +4 new bUnit page tests + +2 new architecture tests), 0 failed, 9 skipped (per ADR-016 / M4-D). Breakdown: 99 unit + 263 component + 14 architecture.
+- **Validation:** 0 warnings, 0 errors; format clean; all new + modified files are CRLF; the 4 state JSON files (`session.json` + `tasks.json` + `milestones.json` + `capabilities.json`) are valid JSON.
+- **One documented deviation:** the `Diagnostics.razor` page uses a 1-card-per-capability layout (the M4-B.2 `AppCapabilityList` renders 12 capability list items — 6 host tools + 6 provider credentials). The plan anticipated 6; the actual list size is 12 (6 tools × 2). The 4 bUnit page tests assert the 12-item list; the architecture test scopes the forbidden-token check to the `App/Components/Diagnostics/` folder (not `App/Components/`) to avoid the M4-A.2 Open Action false positive on `AppProjectCard.razor` (which is in `App/Components/Projects/`, not in `App/Components/Diagnostics/`).
+- **Session does NOT begin:** M4-C (provider registry) / M4-D (first concrete process providers) / provider creation. The next session is the M4-B closeout session (T-027) on the user's `Approve` or `Next` invocation.
 
 ### M4-B.1 — IHostCapabilitiesService contract + implementation + composition root + unit tests — 2026-07-13
 

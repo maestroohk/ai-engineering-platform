@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1.0",
-  "updated_at": "2026-07-13T12:00:00Z",
-  "updated_by_session": "m4-b-2-capability-list-components",
+  "updated_at": "2026-07-13T13:00:00Z",
+  "updated_by_session": "m4-b-3-diagnostics-page-startup-log-and-architecture-test",
   "completion_status_mapping": {
     "NotStarted": "Not in capabilities.json. Reserved for capabilities the product will need but which have not yet been admitted to the graph.",
     "Planned": "status: Accepted; delivered_by_milestone status: Planned; no plan yet, or plan stub is Draft. Sequenced for a milestone, plan not promoted to Ready / Awaiting Approval.",
@@ -23,18 +23,39 @@
       "description": "The base metadata contract every family contract inherits from. Carries Id, DisplayName, DescribeAsync, HealthAsync, ConfigureAsync.",
       "product_outcome": "Every family contract (IAgentRuntimeProvider, IGitProvider, etc.) shares a single base shape that the registry can enumerate, the health service can poll, and the composition root can configure.",
       "depends_on": [],
-      "consumed_by": ["C-002", "C-003", "C-004", "C-005", "C-006", "C-007", "C-008", "C-009", "C-010", "C-018"],
+      "consumed_by": [
+        "C-002",
+        "C-003",
+        "C-004",
+        "C-005",
+        "C-006",
+        "C-007",
+        "C-008",
+        "C-009",
+        "C-010",
+        "C-018"
+      ],
       "delivered_by_milestone": "M4-C",
-      "consumed_by_milestones": ["M4-D", "M5", "M6", "M7", "M8"],
+      "consumed_by_milestones": [
+        "M4-D",
+        "M5",
+        "M6",
+        "M7",
+        "M8"
+      ],
       "delivered_by_tasks": [],
       "next_task": null,
       "blocked_by": [],
       "evidence": {
-        "plans": [".ai/plans/M2.1-application-shell-skeleton.md"],
+        "plans": [
+          ".ai/plans/M2.1-application-shell-skeleton.md"
+        ],
         "reports": [],
         "commits": [],
         "tests": [],
-        "source_paths": ["src/AiEng.Platform.Providers.Abstractions/IProvider.cs"]
+        "source_paths": [
+          "src/AiEng.Platform.Providers.Abstractions/IProvider.cs"
+        ]
       },
       "acceptance_criteria": [
         "IProvider carries Id, DisplayName, DescribeAsync, HealthAsync, ConfigureAsync.",
@@ -55,10 +76,19 @@
       "category": "ProviderModel",
       "description": "Providers that execute agent models (Ollama Launch, Ollama API, Claude, OpenAI, Codex, custom command runtimes).",
       "product_outcome": "The platform can launch a coding agent through a registered runtime provider; users pick a runtime and a model from the registry, not from a hard-coded list.",
-      "depends_on": ["C-001"],
-      "consumed_by": ["C-008", "C-021"],
+      "depends_on": [
+        "C-001"
+      ],
+      "consumed_by": [
+        "C-008",
+        "C-021"
+      ],
       "delivered_by_milestone": "M4-D",
-      "consumed_by_milestones": ["M6", "M7", "M8"],
+      "consumed_by_milestones": [
+        "M6",
+        "M7",
+        "M8"
+      ],
       "delivered_by_tasks": [],
       "next_task": null,
       "blocked_by": [],
@@ -76,7 +106,10 @@
       ],
       "completed_criteria": [],
       "adr": "ADR-012",
-      "architecture_tests": ["Only_CompositionRoot_MayReference_ConcreteProviders", "Pages_Resolve_Providers_Through_Registry"],
+      "architecture_tests": [
+        "Only_CompositionRoot_MayReference_ConcreteProviders",
+        "Pages_Resolve_Providers_Through_Registry"
+      ],
       "last_updated": "2026-07-11"
     },
     {
@@ -88,10 +121,19 @@
       "category": "ProviderModel",
       "description": "Providers that read and operate on source control (Git).",
       "product_outcome": "The platform can read repository state, list branches, and compute diffs through a registered IGitProvider, so the worktree, review, and disposition surfaces can render Git data without bypassing the registry.",
-      "depends_on": ["C-001"],
-      "consumed_by": ["C-005"],
+      "depends_on": [
+        "C-001"
+      ],
+      "consumed_by": [
+        "C-005"
+      ],
       "delivered_by_milestone": "M4-D",
-      "consumed_by_milestones": ["M5", "M6", "M7", "M8"],
+      "consumed_by_milestones": [
+        "M5",
+        "M6",
+        "M7",
+        "M8"
+      ],
       "delivered_by_tasks": [],
       "next_task": null,
       "blocked_by": [],
@@ -109,7 +151,10 @@
       ],
       "completed_criteria": [],
       "adr": "ADR-012",
-      "architecture_tests": ["Only_CompositionRoot_MayReference_ConcreteProviders", "NativeProviders_Use_Contracts_Not_Implementations"],
+      "architecture_tests": [
+        "Only_CompositionRoot_MayReference_ConcreteProviders",
+        "NativeProviders_Use_Contracts_Not_Implementations"
+      ],
       "last_updated": "2026-07-11"
     },
     {
@@ -121,10 +166,16 @@
       "category": "ProviderModel",
       "description": "Providers that run shell commands (PowerShell, Windows Terminal, WSL, Git Bash).",
       "product_outcome": "The platform can open a terminal in the developer's preferred shell through a registered ITerminalProvider, so the user can drop into a worktree from the application without leaving it.",
-      "depends_on": ["C-001"],
+      "depends_on": [
+        "C-001"
+      ],
       "consumed_by": [],
       "delivered_by_milestone": "M6",
-      "consumed_by_milestones": ["M6", "M7", "M8"],
+      "consumed_by_milestones": [
+        "M6",
+        "M7",
+        "M8"
+      ],
       "delivered_by_tasks": [],
       "next_task": null,
       "blocked_by": [],
@@ -141,7 +192,9 @@
       ],
       "completed_criteria": [],
       "adr": "ADR-012",
-      "architecture_tests": ["Only_CompositionRoot_MayReference_ConcreteProviders"],
+      "architecture_tests": [
+        "Only_CompositionRoot_MayReference_ConcreteProviders"
+      ],
       "last_updated": "2026-07-11"
     },
     {
@@ -153,10 +206,20 @@
       "category": "ProviderModel",
       "description": "Providers that create and manage isolated Git worktrees (native Git worktree, Treehouse).",
       "product_outcome": "The platform can create, list, and dispose isolated Git worktrees through a registered IWorktreeProvider, so every run gets its own working tree without contaminating the developer's main checkout.",
-      "depends_on": ["C-001", "C-003"],
-      "consumed_by": ["C-009", "C-021"],
+      "depends_on": [
+        "C-001",
+        "C-003"
+      ],
+      "consumed_by": [
+        "C-009",
+        "C-021"
+      ],
       "delivered_by_milestone": "M5",
-      "consumed_by_milestones": ["M6", "M7", "M8"],
+      "consumed_by_milestones": [
+        "M6",
+        "M7",
+        "M8"
+      ],
       "delivered_by_tasks": [],
       "next_task": null,
       "blocked_by": [],
@@ -174,7 +237,10 @@
       ],
       "completed_criteria": [],
       "adr": "ADR-012",
-      "architecture_tests": ["Only_CompositionRoot_MayReference_ConcreteProviders", "NativeProviders_Use_Contracts_Not_Implementations"],
+      "architecture_tests": [
+        "Only_CompositionRoot_MayReference_ConcreteProviders",
+        "NativeProviders_Use_Contracts_Not_Implementations"
+      ],
       "last_updated": "2026-07-11"
     },
     {
@@ -186,10 +252,17 @@
       "category": "ProviderModel",
       "description": "Providers that run a quality gate against a worktree (No Mistakes, built-in pass-through or disabled provider).",
       "product_outcome": "The platform can run a quality gate against an isolated worktree through a registered IQualityGateProvider; the gate's pass / fail is rendered in the run surface and is part of the worktree's disposition.",
-      "depends_on": ["C-001"],
-      "consumed_by": ["C-008"],
+      "depends_on": [
+        "C-001"
+      ],
+      "consumed_by": [
+        "C-008"
+      ],
       "delivered_by_milestone": "M7",
-      "consumed_by_milestones": ["M7", "M8"],
+      "consumed_by_milestones": [
+        "M7",
+        "M8"
+      ],
       "delivered_by_tasks": [],
       "next_task": null,
       "blocked_by": [],
@@ -207,7 +280,12 @@
       ],
       "completed_criteria": [],
       "adr": "ADR-012",
-      "architecture_tests": ["Only_CompositionRoot_MayReference_ConcreteProviders", "Pages_Resolve_Providers_Through_Registry", "No_Secrets_In_Configuration", "No_Secrets_In_Logs"],
+      "architecture_tests": [
+        "Only_CompositionRoot_MayReference_ConcreteProviders",
+        "Pages_Resolve_Providers_Through_Registry",
+        "No_Secrets_In_Configuration",
+        "No_Secrets_In_Logs"
+      ],
       "last_updated": "2026-07-11"
     },
     {
@@ -219,10 +297,15 @@
       "category": "ProviderModel",
       "description": "Providers that review an artefact (native HTML review, Lavish Axi).",
       "product_outcome": "The platform can route an artefact (a design-system page, a generated report) to a registered IReviewProvider; the review's findings are rendered and persisted as part of the artefact's history.",
-      "depends_on": ["C-001"],
+      "depends_on": [
+        "C-001"
+      ],
       "consumed_by": [],
       "delivered_by_milestone": "M7",
-      "consumed_by_milestones": ["M7", "M8"],
+      "consumed_by_milestones": [
+        "M7",
+        "M8"
+      ],
       "delivered_by_tasks": [],
       "next_task": null,
       "blocked_by": [],
@@ -240,7 +323,12 @@
       ],
       "completed_criteria": [],
       "adr": "ADR-012",
-      "architecture_tests": ["Only_CompositionRoot_MayReference_ConcreteProviders", "Pages_Resolve_Providers_Through_Registry", "No_Secrets_In_Configuration", "No_Secrets_In_Logs"],
+      "architecture_tests": [
+        "Only_CompositionRoot_MayReference_ConcreteProviders",
+        "Pages_Resolve_Providers_Through_Registry",
+        "No_Secrets_In_Configuration",
+        "No_Secrets_In_Logs"
+      ],
       "last_updated": "2026-07-11"
     },
     {
@@ -252,10 +340,18 @@
       "category": "ProviderModel",
       "description": "Providers that perform bounded autonomous iteration (GNHF).",
       "product_outcome": "The platform can drive a bounded series of agent launches and quality gates under a registered IAutonomousLoopProvider; the loop is observable, cancellable, and recoverable.",
-      "depends_on": ["C-001", "C-002", "C-006"],
-      "consumed_by": ["C-009"],
+      "depends_on": [
+        "C-001",
+        "C-002",
+        "C-006"
+      ],
+      "consumed_by": [
+        "C-009"
+      ],
       "delivered_by_milestone": "M8",
-      "consumed_by_milestones": ["M8"],
+      "consumed_by_milestones": [
+        "M8"
+      ],
       "delivered_by_tasks": [],
       "next_task": null,
       "blocked_by": [],
@@ -273,7 +369,10 @@
       ],
       "completed_criteria": [],
       "adr": "ADR-012",
-      "architecture_tests": ["Only_CompositionRoot_MayReference_ConcreteProviders", "NativeProviders_Use_ApplicationServices_Not_Implementation"],
+      "architecture_tests": [
+        "Only_CompositionRoot_MayReference_ConcreteProviders",
+        "NativeProviders_Use_ApplicationServices_Not_Implementation"
+      ],
       "last_updated": "2026-07-11"
     },
     {
@@ -285,10 +384,16 @@
       "category": "ProviderModel",
       "description": "Providers that perform multi-agent orchestration (native orchestration, Firstmate through WSL).",
       "product_outcome": "The platform can coordinate a graph of agents, worktrees, and gates under a registered IOrchestrationProvider; the orchestration is observable, recoverable, and bounded.",
-      "depends_on": ["C-001", "C-005", "C-008"],
+      "depends_on": [
+        "C-001",
+        "C-005",
+        "C-008"
+      ],
       "consumed_by": [],
       "delivered_by_milestone": "M8",
-      "consumed_by_milestones": ["M8"],
+      "consumed_by_milestones": [
+        "M8"
+      ],
       "delivered_by_tasks": [],
       "next_task": null,
       "blocked_by": [],
@@ -306,7 +411,10 @@
       ],
       "completed_criteria": [],
       "adr": "ADR-012",
-      "architecture_tests": ["Only_CompositionRoot_MayReference_ConcreteProviders", "NativeProviders_Use_ApplicationServices_Not_Implementation"],
+      "architecture_tests": [
+        "Only_CompositionRoot_MayReference_ConcreteProviders",
+        "NativeProviders_Use_ApplicationServices_Not_Implementation"
+      ],
       "last_updated": "2026-07-11"
     },
     {
@@ -318,10 +426,20 @@
       "category": "ProviderModel",
       "description": "The cross-family registry and the eight family-scoped registries. Enumerate registered providers, resolve by ProviderId, apply Enabled/Healthy filter.",
       "product_outcome": "Every family has a typed registry; pages and services resolve providers by ProviderId, never by importing a concrete implementation directly. The cross-family registry surfaces the health state to the dashboard.",
-      "depends_on": ["C-001"],
-      "consumed_by": ["C-018"],
+      "depends_on": [
+        "C-001"
+      ],
+      "consumed_by": [
+        "C-018"
+      ],
       "delivered_by_milestone": "M4-C",
-      "consumed_by_milestones": ["M4-D", "M5", "M6", "M7", "M8"],
+      "consumed_by_milestones": [
+        "M4-D",
+        "M5",
+        "M6",
+        "M7",
+        "M8"
+      ],
       "delivered_by_tasks": [],
       "next_task": null,
       "blocked_by": [],
@@ -339,7 +457,13 @@
       ],
       "completed_criteria": [],
       "adr": "ADR-012, ADR-016",
-      "architecture_tests": ["Only_CompositionRoot_MayReference_ConcreteProviders", "Pages_Resolve_Providers_Through_Registry", "Pages_DoNotReference_ConcreteProviders", "Application_DoesNotReference_ConcreteProviders", "Components_DoNotInject_ConcreteProviders"],
+      "architecture_tests": [
+        "Only_CompositionRoot_MayReference_ConcreteProviders",
+        "Pages_Resolve_Providers_Through_Registry",
+        "Pages_DoNotReference_ConcreteProviders",
+        "Application_DoesNotReference_ConcreteProviders",
+        "Components_DoNotInject_ConcreteProviders"
+      ],
       "last_updated": "2026-07-11"
     },
     {
@@ -351,10 +475,18 @@
       "category": "ProviderModel",
       "description": "The set of files in AiEng.Platform.App/Composition/ that wire concrete provider implementations into DI. The only place in the solution that may reference Providers.<X> projects directly.",
       "product_outcome": "Every concrete provider implementation is wired into DI in a single, audited location; Pages, Components, Application, and Domain never reference a concrete provider directly.",
-      "depends_on": ["C-010"],
+      "depends_on": [
+        "C-010"
+      ],
       "consumed_by": [],
       "delivered_by_milestone": "M4-C",
-      "consumed_by_milestones": ["M4-D", "M5", "M6", "M7", "M8"],
+      "consumed_by_milestones": [
+        "M4-D",
+        "M5",
+        "M6",
+        "M7",
+        "M8"
+      ],
       "delivered_by_tasks": [],
       "next_task": null,
       "blocked_by": [],
@@ -372,7 +504,12 @@
       ],
       "completed_criteria": [],
       "adr": "ADR-016",
-      "architecture_tests": ["Only_CompositionRoot_MayReference_ConcreteProviders", "Pages_DoNotReference_ConcreteProviders", "Application_DoesNotReference_ConcreteProviders", "Components_DoNotInject_ConcreteProviders"],
+      "architecture_tests": [
+        "Only_CompositionRoot_MayReference_ConcreteProviders",
+        "Pages_DoNotReference_ConcreteProviders",
+        "Application_DoesNotReference_ConcreteProviders",
+        "Components_DoNotInject_ConcreteProviders"
+      ],
       "last_updated": "2026-07-11"
     },
     {
@@ -385,18 +522,52 @@
       "description": "The only legal caller of Process.Start in the platform. Exposes RunAsync (streaming) and RunToCompletionAsync (one-shot).",
       "product_outcome": "Every process the platform spawns goes through IProcessRunner; no module outside AiEng.Platform.Infrastructure calls Process.Start directly.",
       "depends_on": [],
-      "consumed_by": ["C-003", "C-015"],
+      "consumed_by": [
+        "C-003",
+        "C-015"
+      ],
       "delivered_by_milestone": "M4-A",
-      "consumed_by_milestones": ["M4-D", "M5", "M6", "M7", "M8"],
-      "delivered_by_tasks": ["T-021", "T-022"],
+      "consumed_by_milestones": [
+        "M4-D",
+        "M5",
+        "M6",
+        "M7",
+        "M8"
+      ],
+      "delivered_by_tasks": [
+        "T-021",
+        "T-022"
+      ],
       "next_task": null,
       "blocked_by": [],
       "evidence": {
-        "plans": [".ai/plans/M4-A-infrastructure-process-execution.md"],
-        "reports": ["implementation-report-m4-a-1-infrastructure-project-skeleton.md", "implementation-report-m4-a-2-open-action.md"],
-        "commits": ["feat(m4-a.1): add infrastructure project skeleton with IProcessRunner, ICredentialVault, IPlatformInfo, and on-disk IProjectStore", "feat(m4-a.2): enable AppProjectCard.Open action via IProcessRunner"],
-        "tests": ["IProcessRunnerTests", "Open_Button_Is_Enabled_When_Host_Is_Windows", "Open_Button_Is_Disabled_When_Host_Is_Not_Windows", "Clicking_Open_Invokes_IProcessRunner_With_Explorer_And_ProjectPath", "Open_Click_Passes_ProjectPath_Single_Element_As_Argument", "Open_Click_Swallows_Process_Exceptions", "AppProjectCard_resolves_open_through_IProcessRunner"],
-        "source_paths": ["src/AiEng.Platform.Application/Infrastructure/IProcessRunner.cs", "src/AiEng.Platform.Application/Infrastructure/ProcessResult.cs", "src/AiEng.Platform.Infrastructure/ProcessRunner/SystemProcessRunner.cs", "src/AiEng.Platform.App/Composition/Infrastructure/InfrastructureServiceCollectionExtensions.cs", "src/AiEng.Platform.App/Components/Projects/AppProjectCard.razor"]
+        "plans": [
+          ".ai/plans/M4-A-infrastructure-process-execution.md"
+        ],
+        "reports": [
+          "implementation-report-m4-a-1-infrastructure-project-skeleton.md",
+          "implementation-report-m4-a-2-open-action.md"
+        ],
+        "commits": [
+          "feat(m4-a.1): add infrastructure project skeleton with IProcessRunner, ICredentialVault, IPlatformInfo, and on-disk IProjectStore",
+          "feat(m4-a.2): enable AppProjectCard.Open action via IProcessRunner"
+        ],
+        "tests": [
+          "IProcessRunnerTests",
+          "Open_Button_Is_Enabled_When_Host_Is_Windows",
+          "Open_Button_Is_Disabled_When_Host_Is_Not_Windows",
+          "Clicking_Open_Invokes_IProcessRunner_With_Explorer_And_ProjectPath",
+          "Open_Click_Passes_ProjectPath_Single_Element_As_Argument",
+          "Open_Click_Swallows_Process_Exceptions",
+          "AppProjectCard_resolves_open_through_IProcessRunner"
+        ],
+        "source_paths": [
+          "src/AiEng.Platform.Application/Infrastructure/IProcessRunner.cs",
+          "src/AiEng.Platform.Application/Infrastructure/ProcessResult.cs",
+          "src/AiEng.Platform.Infrastructure/ProcessRunner/SystemProcessRunner.cs",
+          "src/AiEng.Platform.App/Composition/Infrastructure/InfrastructureServiceCollectionExtensions.cs",
+          "src/AiEng.Platform.App/Components/Projects/AppProjectCard.razor"
+        ]
       },
       "acceptance_criteria": [
         "AiEng.Platform.Infrastructure is created (M4-A); IProcessRunner has RunAsync and RunToCompletionAsync.",
@@ -408,7 +579,10 @@
         "At least one IProcessRunner call site exists in the App layer (M4-A.2: the Open action on AppProjectCard)."
       ],
       "adr": "ADR-011, ADR-016",
-      "architecture_tests": ["No_DirectProcessStart_OutsideInfrastructure", "AppProjectCard_resolves_open_through_IProcessRunner"],
+      "architecture_tests": [
+        "No_DirectProcessStart_OutsideInfrastructure",
+        "AppProjectCard_resolves_open_through_IProcessRunner"
+      ],
       "last_updated": "2026-07-11"
     },
     {
@@ -421,9 +595,18 @@
       "description": "The contract for reading and writing secrets. Real backing store is Windows Credential Manager.",
       "product_outcome": "Every secret the platform reads or writes goes through ICredentialVault; the application never embeds a credential in configuration, code, or a log line.",
       "depends_on": [],
-      "consumed_by": ["C-006", "C-007"],
+      "consumed_by": [
+        "C-006",
+        "C-007"
+      ],
       "delivered_by_milestone": "M4-A",
-      "consumed_by_milestones": ["M4-D", "M5", "M6", "M7", "M8"],
+      "consumed_by_milestones": [
+        "M4-D",
+        "M5",
+        "M6",
+        "M7",
+        "M8"
+      ],
       "delivered_by_tasks": [],
       "next_task": null,
       "blocked_by": [],
@@ -440,7 +623,10 @@
       ],
       "completed_criteria": [],
       "adr": "ADR-011",
-      "architecture_tests": ["No_Secrets_In_Logs", "No_Secrets_In_Configuration"],
+      "architecture_tests": [
+        "No_Secrets_In_Logs",
+        "No_Secrets_In_Configuration"
+      ],
       "last_updated": "2026-07-11"
     },
     {
@@ -455,7 +641,13 @@
       "depends_on": [],
       "consumed_by": [],
       "delivered_by_milestone": "M4-A",
-      "consumed_by_milestones": ["M4-D", "M5", "M6", "M7", "M8"],
+      "consumed_by_milestones": [
+        "M4-D",
+        "M5",
+        "M6",
+        "M7",
+        "M8"
+      ],
       "delivered_by_tasks": [],
       "next_task": null,
       "blocked_by": [],
@@ -478,22 +670,47 @@
       "id": "C-015",
       "title": "IHostCapabilitiesService",
       "status": "Accepted",
-      "completion_status": "Partial (M4-B.1 delivered; M4-B.2 + M4-B.3 pending)",
+      "completion_status": "Delivered",
       "layer": 0,
       "category": "Infrastructure",
       "description": "The host's capability detection. Detects git, ollama, powershell.exe, wsl.exe, wt.exe, bash.exe. Produces a typed HostCapabilities report at host startup.",
       "product_outcome": "At host startup the platform reports which external tools are installed and reachable; the dashboard renders the report and the registry disables providers whose binaries are absent.",
-      "depends_on": ["C-012"],
-      "consumed_by": ["C-010"],
+      "depends_on": [
+        "C-012"
+      ],
+      "consumed_by": [
+        "C-010"
+      ],
       "delivered_by_milestone": "M4-B",
-      "consumed_by_milestones": ["M4-C", "M4-D", "M5", "M6", "M7", "M8"],
-      "delivered_by_tasks": ["T-024 (M4-B.1 first session, Done 2026-07-13)"],
-      "next_task": "T-025 (M4-B.2 first session — AppCapabilityList + AppKeyValueList design-system components; Ready)",
+      "consumed_by_milestones": [
+        "M4-C",
+        "M4-D",
+        "M5",
+        "M6",
+        "M7",
+        "M8"
+      ],
+      "delivered_by_tasks": [
+        "T-024 (M4-B.1 first session, Done 2026-07-13)",
+        "T-025 (M4-B.2 first session, Done 2026-07-13)",
+        "T-026 (M4-B.3 first session, Done 2026-07-13)"
+      ],
+      "next_task": "T-027 (M4-B closeout session; Ready)",
       "blocked_by": [],
       "evidence": {
-        "plans": [".ai/plans/M4-B-capability-detection.md"],
-        "reports": ["implementation-report-m4-b-1-host-capabilities-contract-and-service.md"],
-        "commits": ["feat(m4-b.1): add IHostCapabilitiesService contract and SystemHostCapabilitiesService implementation"],
+        "plans": [
+          ".ai/plans/M4-B-capability-detection.md"
+        ],
+        "reports": [
+          "implementation-report-m4-b-1-host-capabilities-contract-and-service.md",
+          "implementation-report-m4-b-2-capability-list-components.md",
+          "implementation-report-m4-b-3-diagnostics-page-startup-log-and-architecture-test.md"
+        ],
+        "commits": [
+          "feat(m4-b.1): add IHostCapabilitiesService contract and SystemHostCapabilitiesService implementation",
+          "feat(m4-b.2): add AppCapabilityList + AppKeyValueList data-owning design-system components",
+          "feat(m4-b.3): add /diagnostics page, startup capability log, and Capabilities_Resolved_Through_Service architecture test"
+        ],
         "tests": [
           "Constructor_throws_ArgumentNullException_when_processRunner_is_null",
           "Constructor_throws_ArgumentNullException_when_credentialVault_is_null",
@@ -514,14 +731,30 @@
           "DetectAsync_returns_capabilities_in_deterministic_order",
           "DetectAsync_throws_OperationCanceledException_when_cancellation_token_is_cancelled_before_call",
           "DetectAsync_propagates_cancellation_when_cancellation_token_is_cancelled_during_call",
-          "DetectAsync_swallows_timeout_without_propagating_when_cancellation_token_is_not_cancelled"
+          "DetectAsync_swallows_timeout_without_propagating_when_cancellation_token_is_not_cancelled",
+          "DiagnosticsPage_calls_DetectAsync_on_init",
+          "DiagnosticsPage_renders_AppCapabilityList_with_capabilities",
+          "DiagnosticsPage_Refresh_button_reruns_DetectAsync",
+          "DiagnosticsPage_renders_AppKeyValueList_with_host_metadata",
+          "Diagnostics_page_resolves_capabilities_through_IHostCapabilitiesService",
+          "Diagnostics_folder_does_not_reference_process_or_credential_boundary_directly"
         ],
         "source_paths": [
           "src/AiEng.Platform.Application/Capabilities/IHostCapabilitiesService.cs",
           "src/AiEng.Platform.Application/Capabilities/HostCapabilities.cs",
           "src/AiEng.Platform.Infrastructure/Capabilities/CapabilityProbe.cs",
           "src/AiEng.Platform.Infrastructure/Capabilities/SystemHostCapabilitiesService.cs",
-          "src/AiEng.Platform.App/Composition/Capabilities/CapabilitiesServiceCollectionExtensions.cs"
+          "src/AiEng.Platform.App/Composition/Capabilities/CapabilitiesServiceCollectionExtensions.cs",
+          "src/AiEng.Platform.App/Components/Pages/Diagnostics.razor",
+          "src/AiEng.Platform.App/Components/Pages/Diagnostics.razor.css",
+          "src/AiEng.Platform.App/Components/Diagnostics/AppCapabilityList.razor",
+          "src/AiEng.Platform.App/Components/Diagnostics/AppCapabilityList.razor.cs",
+          "src/AiEng.Platform.App/Components/Diagnostics/AppCapabilityList.razor.css",
+          "src/AiEng.Platform.App/Components/Diagnostics/AppKeyValueList.razor",
+          "src/AiEng.Platform.App/Components/Diagnostics/AppKeyValueList.razor.cs",
+          "src/AiEng.Platform.App/Components/Diagnostics/AppKeyValueList.razor.css",
+          "src/AiEng.Platform.App/Components/Diagnostics/_Imports.razor",
+          "src/AiEng.Platform.App/Components/Common/Enums.cs (AppKeyValueListFormat enum)"
         ]
       },
       "acceptance_criteria": [
@@ -529,10 +762,15 @@
         "Capabilities_Resolved_Through_Service architecture test is active and green."
       ],
       "completed_criteria": [
-        "M4-B.1 (T-024): IHostCapabilitiesService contract + SystemHostCapabilitiesService implementation + AddHostCapabilities composition root + 20 unit tests are delivered. 343 passed, 0 failed, 9 skipped (per ADR-016 / M4-D). Pre-M4-B.1 baseline was 323 passed; +20 new M4-B.1 unit tests."
+        "M4-B.1 (T-024): IHostCapabilitiesService contract + SystemHostCapabilitiesService implementation + AddHostCapabilities composition root + 20 unit tests are delivered. 343 passed, 0 failed, 9 skipped (per ADR-016 / M4-D). Pre-M4-B.1 baseline was 323 passed; +20 new M4-B.1 unit tests.",
+        "M4-B.2 (T-025): AppCapabilityList + AppKeyValueList data-owning four-state design-system components + AppKeyValueListFormat enum + 28 bUnit tests are delivered. 370 passed, 0 failed, 9 skipped. Pre-M4-B.2 baseline was 343 passed; +28 new M4-B.2 bUnit tests.",
+        "M4-B.3 (T-026): /diagnostics page (Diagnostics.razor + .razor.css) composing the M4-B.1 contract + the M4-B.2 components + the M1.2 primitives; startup capability-report log in Program.cs; Capabilities_Resolved_Through_Service Active architecture test (2 tests pass); docs/capabilities.md 10 sections; 4 bUnit page tests. 376 passed, 0 failed, 9 skipped. Pre-M4-B.3 baseline was 370 passed; +4 new bUnit page tests + +2 new architecture tests.",
+        "M4-B complete: the IHostCapabilitiesService is the single allowed seam for host capability access; the seam is enforced by the Capabilities_Resolved_Through_Service architecture test (Active); the /diagnostics page is the user-visible surface; the startup log is the early signal; the M4-C provider registry will consume the seam through DI."
       ],
       "adr": null,
-      "architecture_tests": ["Capabilities_Resolved_Through_Service (deferred to M4-B.3 per the M4-B.1 plan section 14.1 Deviations)"],
+      "architecture_tests": [
+        "Capabilities_Resolved_Through_Service (Active; 2 tests pass; scoped to App/Components/Diagnostics/ to avoid the M4-A.2 Open Action false positive on AppProjectCard.razor)"
+      ],
       "last_updated": "2026-07-13"
     },
     {
@@ -545,9 +783,20 @@
       "description": "The application service for projects and the persistence contract. M3 in-memory; M4-A durable.",
       "product_outcome": "A developer can register a Git repository (a folder on disk) through the project service; the platform owns the Project entity end-to-end (register, list, rename, delete).",
       "depends_on": [],
-      "consumed_by": ["C-005"],
+      "consumed_by": [
+        "C-005"
+      ],
       "delivered_by_milestone": "M3",
-      "consumed_by_milestones": ["M4-A", "M4-B", "M4-C", "M4-D", "M5", "M6", "M7", "M8"],
+      "consumed_by_milestones": [
+        "M4-A",
+        "M4-B",
+        "M4-C",
+        "M4-D",
+        "M5",
+        "M6",
+        "M7",
+        "M8"
+      ],
       "delivered_by_tasks": [],
       "next_task": null,
       "blocked_by": [],
@@ -564,7 +813,9 @@
       ],
       "completed_criteria": [],
       "adr": null,
-      "architecture_tests": ["Providers_Resolve_Project_Through_Service"],
+      "architecture_tests": [
+        "Providers_Resolve_Project_Through_Service"
+      ],
       "last_updated": "2026-07-11"
     },
     {
@@ -579,7 +830,11 @@
       "depends_on": [],
       "consumed_by": [],
       "delivered_by_milestone": "M6",
-      "consumed_by_milestones": ["M6", "M7", "M8"],
+      "consumed_by_milestones": [
+        "M6",
+        "M7",
+        "M8"
+      ],
       "delivered_by_tasks": [],
       "next_task": null,
       "blocked_by": [],
@@ -596,7 +851,9 @@
       ],
       "completed_criteria": [],
       "adr": null,
-      "architecture_tests": ["History_Routed_Through_Store"],
+      "architecture_tests": [
+        "History_Routed_Through_Store"
+      ],
       "last_updated": "2026-07-11"
     },
     {
@@ -608,10 +865,18 @@
       "category": "ProviderModel",
       "description": "The periodic health-check service. Polls every registered provider and reports ProviderHealth (Healthy, Degraded, Unhealthy) through the registries.",
       "product_outcome": "Every registered provider is polled periodically; the dashboard renders the health state; the registries hide Unhealthy providers from selection.",
-      "depends_on": ["C-010"],
+      "depends_on": [
+        "C-010"
+      ],
       "consumed_by": [],
       "delivered_by_milestone": "M4-C",
-      "consumed_by_milestones": ["M4-D", "M5", "M6", "M7", "M8"],
+      "consumed_by_milestones": [
+        "M4-D",
+        "M5",
+        "M6",
+        "M7",
+        "M8"
+      ],
       "delivered_by_tasks": [],
       "next_task": null,
       "blocked_by": [],
@@ -643,8 +908,22 @@
       "depends_on": [],
       "consumed_by": [],
       "delivered_by_milestone": "M2",
-      "consumed_by_milestones": ["M3", "M4-A", "M4-B", "M4-C", "M4-D", "M5", "M6", "M7", "M8"],
-      "delivered_by_tasks": ["T-001", "T-002", "T-003"],
+      "consumed_by_milestones": [
+        "M3",
+        "M4-A",
+        "M4-B",
+        "M4-C",
+        "M4-D",
+        "M5",
+        "M6",
+        "M7",
+        "M8"
+      ],
+      "delivered_by_tasks": [
+        "T-001",
+        "T-002",
+        "T-003"
+      ],
       "next_task": null,
       "blocked_by": [],
       "evidence": {
@@ -658,7 +937,11 @@
           "implementation-report-m2-2-navigation-registry-sidebar.md",
           "implementation-report-m2-3-topbar-breadcrumbs.md"
         ],
-        "commits": ["de082fd", "ef1063c", "3a2c3cb"],
+        "commits": [
+          "de082fd",
+          "ef1063c",
+          "3a2c3cb"
+        ],
         "tests": [
           "tests/AiEng.Platform.ComponentTests/Layouts/AppLayoutTests.cs",
           "tests/AiEng.Platform.ComponentTests/Layouts/AppEmptyLayoutTests.cs",
@@ -711,7 +994,9 @@
         "AppBreadcrumb is wired into AppPageHeader.Breadcrumbs on DesignSystem.razor (M2.3)."
       ],
       "adr": null,
-      "architecture_tests": ["Pages_AreReachable_Through_Registry"],
+      "architecture_tests": [
+        "Pages_AreReachable_Through_Registry"
+      ],
       "last_updated": "2026-07-11"
     },
     {
@@ -726,16 +1011,45 @@
       "depends_on": [],
       "consumed_by": [],
       "delivered_by_milestone": "M1",
-      "consumed_by_milestones": ["M2", "M3", "M4-A", "M4-B", "M4-C", "M4-D", "M5", "M6", "M7", "M8"],
-      "delivered_by_tasks": ["T-013"],
+      "consumed_by_milestones": [
+        "M2",
+        "M3",
+        "M4-A",
+        "M4-B",
+        "M4-C",
+        "M4-D",
+        "M5",
+        "M6",
+        "M7",
+        "M8"
+      ],
+      "delivered_by_tasks": [
+        "T-013"
+      ],
       "next_task": null,
       "blocked_by": [],
       "evidence": {
-        "plans": [".ai/plans/M1.1-frontend-foundation.md", ".ai/plans/M1.2-design-system-core.md"],
-        "reports": ["implementation-report-m1-closeout.md", "implementation-report-m0.5-architecture-refinement.md"],
-        "commits": ["1722bd235830cfd8b180191953116c058c92edef", "2ba1fad3cc45bee513ba38c7269e024bf8667ef9", "1d98acd"],
-        "tests": ["tests/AiEng.Platform.ComponentTests/DesignSystemTests.cs"],
-        "source_paths": ["src/AiEng.Platform.App/Components/", "docs/design-system.md", "docs/component-guidelines.md"]
+        "plans": [
+          ".ai/plans/M1.1-frontend-foundation.md",
+          ".ai/plans/M1.2-design-system-core.md"
+        ],
+        "reports": [
+          "implementation-report-m1-closeout.md",
+          "implementation-report-m0.5-architecture-refinement.md"
+        ],
+        "commits": [
+          "1722bd235830cfd8b180191953116c058c92edef",
+          "2ba1fad3cc45bee513ba38c7269e024bf8667ef9",
+          "1d98acd"
+        ],
+        "tests": [
+          "tests/AiEng.Platform.ComponentTests/DesignSystemTests.cs"
+        ],
+        "source_paths": [
+          "src/AiEng.Platform.App/Components/",
+          "docs/design-system.md",
+          "docs/component-guidelines.md"
+        ]
       },
       "acceptance_criteria": [
         "docs/design-system.md is the catalogue; every reusable component has a public surface, a class slot, and a versioning rule.",
@@ -748,7 +1062,10 @@
         "The /design-system page renders the catalogue."
       ],
       "adr": "ADR-014, ADR-015",
-      "architecture_tests": ["Pages_Use_DesignSystem_Components_Not_DOM", "App_DoesNotReference_Providers_Implementations"],
+      "architecture_tests": [
+        "Pages_Use_DesignSystem_Components_Not_DOM",
+        "App_DoesNotReference_Providers_Implementations"
+      ],
       "last_updated": "2026-07-11"
     },
     {
@@ -763,7 +1080,11 @@
       "depends_on": [],
       "consumed_by": [],
       "delivered_by_milestone": "M6",
-      "consumed_by_milestones": ["M6", "M7", "M8"],
+      "consumed_by_milestones": [
+        "M6",
+        "M7",
+        "M8"
+      ],
       "delivered_by_tasks": [],
       "next_task": null,
       "blocked_by": [],
@@ -792,19 +1113,47 @@
       "category": "DomainOrchestration",
       "description": "The read-side application service that exposes a typed ProjectIntelligenceSnapshot built from the M0.5 structured state (.ai/state/*.json). The dashboard consumes only this abstraction; no page parses JSON or Markdown directly.",
       "product_outcome": "The /dashboard page renders the project intelligence state (current milestone, current task, current slice, branch, last commit, build status, test status, product progress, capability progress, implemented capabilities, plans awaiting approval, next recommended action) by consuming IProjectIntelligenceReader through DI. M3+ slices add new data sources but do not modify the reader.",
-      "depends_on": ["C-019"],
+      "depends_on": [
+        "C-019"
+      ],
       "consumed_by": [],
       "delivered_by_milestone": "M2",
-      "consumed_by_milestones": ["M3", "M4-A", "M4-B", "M4-C", "M4-D", "M5", "M6", "M7", "M8"],
-      "delivered_by_tasks": ["T-014"],
+      "consumed_by_milestones": [
+        "M3",
+        "M4-A",
+        "M4-B",
+        "M4-C",
+        "M4-D",
+        "M5",
+        "M6",
+        "M7",
+        "M8"
+      ],
+      "delivered_by_tasks": [
+        "T-014"
+      ],
       "next_task": null,
       "blocked_by": [],
       "evidence": {
-        "plans": [".ai/plans/M2.4-project-intelligence-dashboard.md"],
-        "reports": ["implementation-report-m2-4-project-intelligence-dashboard.md"],
+        "plans": [
+          ".ai/plans/M2.4-project-intelligence-dashboard.md"
+        ],
+        "reports": [
+          "implementation-report-m2-4-project-intelligence-dashboard.md"
+        ],
         "commits": [],
-        "tests": ["tests/AiEng.Platform.UnitTests/ProjectIntelligence/ProjectIntelligenceReaderTests.cs", "tests/AiEng.Platform.ComponentTests/Pages/DashboardTests.cs", "tests/AiEng.Platform.ArchitectureTests/PagesResolveStateThroughReaderTests.cs"],
-        "source_paths": ["src/AiEng.Platform.Application/ProjectIntelligence/IProjectIntelligenceReader.cs", "src/AiEng.Platform.Application/ProjectIntelligence/ProjectIntelligenceSnapshot.cs", "src/AiEng.Platform.Application/ProjectIntelligence/ProjectIntelligenceReader.cs", "src/AiEng.Platform.App/Components/Pages/Dashboard.razor", "src/AiEng.Platform.App/Composition/ProjectIntelligenceServiceCollectionExtensions.cs"]
+        "tests": [
+          "tests/AiEng.Platform.UnitTests/ProjectIntelligence/ProjectIntelligenceReaderTests.cs",
+          "tests/AiEng.Platform.ComponentTests/Pages/DashboardTests.cs",
+          "tests/AiEng.Platform.ArchitectureTests/PagesResolveStateThroughReaderTests.cs"
+        ],
+        "source_paths": [
+          "src/AiEng.Platform.Application/ProjectIntelligence/IProjectIntelligenceReader.cs",
+          "src/AiEng.Platform.Application/ProjectIntelligence/ProjectIntelligenceSnapshot.cs",
+          "src/AiEng.Platform.Application/ProjectIntelligence/ProjectIntelligenceReader.cs",
+          "src/AiEng.Platform.App/Components/Pages/Dashboard.razor",
+          "src/AiEng.Platform.App/Composition/ProjectIntelligenceServiceCollectionExtensions.cs"
+        ]
       },
       "acceptance_criteria": [
         "IProjectIntelligenceReader.GetSnapshotAsync returns a typed ProjectIntelligenceSnapshot.",
@@ -821,29 +1170,52 @@
         "The dashboard renders the M0.5-data sections in the Populated state (per ADR-014) and the M3+-data sections in the Empty state."
       ],
       "adr": null,
-      "architecture_tests": ["Pages_Resolve_State_Through_Reader"],
+      "architecture_tests": [
+        "Pages_Resolve_State_Through_Reader"
+      ],
       "last_updated": "2026-07-11"
     },
     {
       "id": "C-023",
       "title": "AppCapabilityList",
       "status": "Accepted",
-      "completion_status": "Delivered",
+      "completion_status": "Delivered (M4-B.2 + M4-B.3)",
       "layer": 3,
       "category": "DesignSystem",
       "description": "The data-owning four-state design-system component that renders an IReadOnlyList<HostCapability> as a list of AppCard entries. Each card shows the Key, an AppStatusDot (Success for Available=true, Error for Available=false), the Version (font-mono, muted), and an AppBadge 'Credential set' when CredentialAvailable is true. Supports the four child-content slots (Loading, Empty, Error, Populated) per docs/design-system.md section 5.4.",
       "product_outcome": "The /diagnostics page (M4-B.3) renders the host capability report through AppCapabilityList; the user can see at a glance which host tools are installed, their versions, and which credentials are available. The component is also consumed by M5+ worktree and agent launch pages to surface provider dependencies.",
-      "depends_on": ["C-015"],
-      "consumed_by": [],
+      "depends_on": [
+        "C-015"
+      ],
+      "consumed_by": [
+        "Diagnostics.razor (M4-B.3; the /diagnostics page consumes AppCapabilityList through IHostCapabilitiesService)"
+      ],
       "delivered_by_milestone": "M4-B",
-      "consumed_by_milestones": ["M4-B.3", "M5", "M6", "M7", "M8"],
-      "delivered_by_tasks": ["T-025 (M4-B.2 first session, Done 2026-07-13)"],
+      "consumed_by_milestones": [
+        "M4-B.3",
+        "M5",
+        "M6",
+        "M7",
+        "M8"
+      ],
+      "delivered_by_tasks": [
+        "T-025 (M4-B.2 first session, Done 2026-07-13)",
+        "T-026 (M4-B.3 first session, Done 2026-07-13; the /diagnostics page consumes AppCapabilityList)"
+      ],
       "next_task": null,
       "blocked_by": [],
       "evidence": {
-        "plans": [".ai/plans/M4-B-capability-detection.md"],
-        "reports": ["implementation-report-m4-b-2-capability-list-components.md"],
-        "commits": ["feat(m4-b.2): add AppCapabilityList + AppKeyValueList data-owning design-system components"],
+        "plans": [
+          ".ai/plans/M4-B-capability-detection.md"
+        ],
+        "reports": [
+          "implementation-report-m4-b-2-capability-list-components.md",
+          "implementation-report-m4-b-3-diagnostics-page-startup-log-and-architecture-test.md"
+        ],
+        "commits": [
+          "feat(m4-b.2): add AppCapabilityList + AppKeyValueList data-owning design-system components",
+          "feat(m4-b.3): add /diagnostics page, startup capability log, and Capabilities_Resolved_Through_Service architecture test"
+        ],
         "tests": [
           "Renders_Populated_Slot_With_One_Card_Per_Capability",
           "Renders_Empty_Slot_When_No_Capabilities",
@@ -857,14 +1229,19 @@
           "Custom_Loading_Slot_Overrides_Default_Loading",
           "Custom_Empty_Slot_Overrides_Default_Empty",
           "Custom_Error_Slot_Overrides_Default_Error",
-          "Populated_List_Has_AriaLive_Polite"
+          "Populated_List_Has_AriaLive_Polite",
+          "DiagnosticsPage_calls_DetectAsync_on_init",
+          "DiagnosticsPage_renders_AppCapabilityList_with_capabilities",
+          "DiagnosticsPage_Refresh_button_reruns_DetectAsync"
         ],
         "source_paths": [
           "src/AiEng.Platform.App/Components/Diagnostics/AppCapabilityList.razor",
           "src/AiEng.Platform.App/Components/Diagnostics/AppCapabilityList.razor.cs",
           "src/AiEng.Platform.App/Components/Diagnostics/AppCapabilityList.razor.css",
           "src/AiEng.Platform.App/Components/Diagnostics/_Imports.razor",
-          "src/AiEng.Platform.App/Components/Common/Enums.cs"
+          "src/AiEng.Platform.App/Components/Common/Enums.cs",
+          "src/AiEng.Platform.App/Components/Pages/Diagnostics.razor",
+          "src/AiEng.Platform.App/Components/Pages/Diagnostics.razor.css"
         ]
       },
       "acceptance_criteria": [
@@ -881,7 +1258,8 @@
         "AppCapabilityList renders an AppStatusDot Success for Available=true and Error for Available=false.",
         "AppCapabilityList renders an AppBadge 'Credential set' when CredentialAvailable is true.",
         "The populated list has aria-live=polite for screen reader announcements.",
-        "M4-B.2 (T-025): 13 bUnit tests for AppCapabilityList are delivered and green; 13 bUnit tests for AppKeyValueList are delivered and green. The new files are CRLF and the format is canonical."
+        "M4-B.2 (T-025): 13 bUnit tests for AppCapabilityList are delivered and green; 13 bUnit tests for AppKeyValueList are delivered and green. The new files are CRLF and the format is canonical.",
+        "M4-B.3 (T-026): the /diagnostics page (Diagnostics.razor) consumes AppCapabilityList through DI of IHostCapabilitiesService. 4 bUnit page tests assert the page wiring."
       ],
       "adr": null,
       "architecture_tests": [],
@@ -891,22 +1269,41 @@
       "id": "C-024",
       "title": "AppKeyValueList",
       "status": "Accepted",
-      "completion_status": "Delivered",
+      "completion_status": "Delivered (M4-B.2 + M4-B.3)",
       "layer": 3,
       "category": "DesignSystem",
       "description": "The data-owning four-state design-system component that renders an IReadOnlyList<KeyValuePair<string, string>> as a definition list (dl) of key-value rows. Supports an AppKeyValueListFormat enum (Plain, Boolean, Code) that controls value rendering: Plain renders literal text, Boolean renders a check/cross icon for true/false, Code renders in a monospaced font. Supports the four child-content slots (Loading, Empty, Error, Populated) per docs/design-system.md section 5.4.",
       "product_outcome": "The /diagnostics page (M4-B.3) renders host metadata (hostname, OS, architecture, time provider, etc.) through AppKeyValueList. The component is also consumed by M5+ pages that need to surface key-value configuration data (e.g., worktree settings, agent launch parameters).",
       "depends_on": [],
-      "consumed_by": [],
+      "consumed_by": [
+        "Diagnostics.razor (M4-B.3; the /diagnostics page consumes AppKeyValueList for the host metadata block)"
+      ],
       "delivered_by_milestone": "M4-B",
-      "consumed_by_milestones": ["M4-B.3", "M5", "M6", "M7", "M8"],
-      "delivered_by_tasks": ["T-025 (M4-B.2 first session, Done 2026-07-13)"],
+      "consumed_by_milestones": [
+        "M4-B.3",
+        "M5",
+        "M6",
+        "M7",
+        "M8"
+      ],
+      "delivered_by_tasks": [
+        "T-025 (M4-B.2 first session, Done 2026-07-13)",
+        "T-026 (M4-B.3 first session, Done 2026-07-13; the /diagnostics page consumes AppKeyValueList)"
+      ],
       "next_task": null,
       "blocked_by": [],
       "evidence": {
-        "plans": [".ai/plans/M4-B-capability-detection.md"],
-        "reports": ["implementation-report-m4-b-2-capability-list-components.md"],
-        "commits": ["feat(m4-b.2): add AppCapabilityList + AppKeyValueList data-owning design-system components"],
+        "plans": [
+          ".ai/plans/M4-B-capability-detection.md"
+        ],
+        "reports": [
+          "implementation-report-m4-b-2-capability-list-components.md",
+          "implementation-report-m4-b-3-diagnostics-page-startup-log-and-architecture-test.md"
+        ],
+        "commits": [
+          "feat(m4-b.2): add AppCapabilityList + AppKeyValueList data-owning design-system components",
+          "feat(m4-b.3): add /diagnostics page, startup capability log, and Capabilities_Resolved_Through_Service architecture test"
+        ],
         "tests": [
           "Renders_Populated_Slot_With_One_Row_Per_Item",
           "Renders_Empty_Slot_When_No_Items",
@@ -921,14 +1318,17 @@
           "Custom_Loading_Slot_Overrides_Default_Loading",
           "Custom_Empty_Slot_Overrides_Default_Empty",
           "Custom_Error_Slot_Overrides_Default_Error",
-          "Populated_List_Has_AriaLive_Polite"
+          "Populated_List_Has_AriaLive_Polite",
+          "DiagnosticsPage_renders_AppKeyValueList_with_host_metadata"
         ],
         "source_paths": [
           "src/AiEng.Platform.App/Components/Diagnostics/AppKeyValueList.razor",
           "src/AiEng.Platform.App/Components/Diagnostics/AppKeyValueList.razor.cs",
           "src/AiEng.Platform.App/Components/Diagnostics/AppKeyValueList.razor.css",
           "src/AiEng.Platform.App/Components/Diagnostics/_Imports.razor",
-          "src/AiEng.Platform.App/Components/Common/Enums.cs"
+          "src/AiEng.Platform.App/Components/Common/Enums.cs",
+          "src/AiEng.Platform.App/Components/Pages/Diagnostics.razor",
+          "src/AiEng.Platform.App/Components/Pages/Diagnostics.razor.css"
         ]
       },
       "acceptance_criteria": [
@@ -941,7 +1341,8 @@
         "AppKeyValueList renders an IReadOnlyList<KeyValuePair<string, string>> as a definition list (dl).",
         "AppKeyValueList supports an AppKeyValueListFormat enum (Plain, Boolean, Code).",
         "AppKeyValueList supports the four child-content slots (Loading, Empty, Error, Populated) per docs/design-system.md section 5.4.",
-        "M4-B.2 (T-025): 15 bUnit tests for AppKeyValueList are delivered and green; the AppKeyValueListFormat enum is added to Enums.cs. The new files are CRLF and the format is canonical."
+        "M4-B.2 (T-025): 15 bUnit tests for AppKeyValueList are delivered and green; the AppKeyValueListFormat enum is added to Enums.cs. The new files are CRLF and the format is canonical.",
+        "M4-B.3 (T-026): the /diagnostics page (Diagnostics.razor) consumes AppKeyValueList for the host metadata block (Detected at + Data directory + Config directory + Is Windows host)."
       ],
       "adr": null,
       "architecture_tests": [],

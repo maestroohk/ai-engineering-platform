@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
-  "updated_at": "2026-07-13T12:00:00Z",
-  "updated_by_session": "m4-b-2-capability-list-components",
+  "updated_at": "2026-07-13T13:00:00Z",
+  "updated_by_session": "m4-b-3-diagnostics-page-startup-log-and-architecture-test",
   "tasks": [
     {
       "id": "T-001",
@@ -683,7 +683,7 @@
       "title": "M4 — Process Execution, Capability Detection, Provider Registry (summary)",
       "status": "In Progress",
       "milestone": "M4",
-      "notes": "Slices M4-A, M4-B, M4-C, M4-D in the master delivery plan. M4-A.1 (T-021) + M4-A.2 (T-022) Delivered 2026-07-11 (the first IProcessRunner activation is on AppProjectCard.Open in M4-A.2). M4-A.3 is not yet defined; M4-B is now Active (the M4-B plan promotion is T-023, Done 2026-07-13; the M4-B plan is in Awaiting Approval at .ai/plans/M4-B-capability-detection.md; M4-B.1 (T-024) + M4-B.2 (T-025) Delivered 2026-07-13; M4-B.3 (T-026) is the next concrete step on the user's Approve / Next invocation); M4-C / M4-D remain Planned."
+      "notes": "Slices M4-A, M4-B, M4-C, M4-D in the master delivery plan. M4-A.1 (T-021) + M4-A.2 (T-022) Delivered 2026-07-11 (the first IProcessRunner activation is on AppProjectCard.Open in M4-A.2). M4-A.3 is not yet defined; M4-B is now Active (the M4-B plan promotion is T-023, Done 2026-07-13; the M4-B plan is in Awaiting Approval at .ai/plans/M4-B-capability-detection.md; M4-B.1 (T-024) + M4-B.2 (T-025) Delivered 2026-07-13; M4-B.3 (T-026) is In Progress 2026-07-13; the M4-B closeout session is T-027, the next concrete step after T-026 Done); M4-C / M4-D remain Planned."
     },
     {
       "id": "T-023",
@@ -854,25 +854,102 @@
     {
       "id": "T-026",
       "title": "M4-B.3 first session — /diagnostics page + startup log + documentation + architecture test",
-      "status": "Ready",
+      "status": "Done",
       "milestone": "M4-B",
       "slice": "M4-B.3",
       "created_at": "2026-07-13T00:00:00Z",
       "promoted_to_ready_at": "2026-07-13",
       "promoted_to_ready_by_session": "m4-b-2-capability-list-components",
+      "promoted_to_in_progress_at": "2026-07-13T12:00:00Z",
+      "promoted_to_in_progress_by_session": "m4-b-3-diagnostics-page-startup-log-and-architecture-test",
       "depends_on_milestone": "M4-B (Active)",
-      "depends_on_task": "T-025 (M4-B.2, InProgress 2026-07-13)",
+      "depends_on_task": "T-025 (M4-B.2, Done 2026-07-13)",
       "depends_on_capabilities": [
         "C-015 (IHostCapabilitiesService)",
         "C-023 (AppCapabilityList)",
         "C-024 (AppKeyValueList)"
       ],
-      "plan": ".ai/plans/M4-B.3-diagnostics-page-startup-log-and-architecture-test.md (to be drafted in a later session)",
+      "plan": ".claude/plans/generic-seeking-oasis.md (M4-B.3 first session plan; approved 2026-07-13; mirrors the M4-B.1 + M4-B.2 plan structures)",
+      "branch": "feature/T-026-m4-b-3-diagnostics-page-startup-log-and-architecture-test (created from main at the M4-B.2 closeout commit b1f0ec8; the M4-B.3 closeout commit feat(m4-b.3): add /diagnostics page, startup capability log, and Capabilities_Resolved_Through_Service architecture test is on this branch; the branch is fast-forwarded into main per the branching strategy rule 6; the branch is deleted per rule 7)",
+      "evidence": {
+        "implementation_report": "implementation-report-m4-b-3-diagnostics-page-startup-log-and-architecture-test.md",
+        "session_handoff": ".ai/handoffs/2026-07-13-m4-b-3-diagnostics-page-startup-log-and-architecture-test.md",
+        "files_added": [
+          "src/AiEng.Platform.App/Components/Pages/Diagnostics.razor",
+          "src/AiEng.Platform.App/Components/Pages/Diagnostics.razor.css",
+          "tests/AiEng.Platform.ArchitectureTests/Capabilities/Capabilities_Resolved_Through_Service.cs",
+          "tests/AiEng.Platform.ComponentTests/Pages/DiagnosticsPageTests.cs",
+          "docs/capabilities.md",
+          ".ai/handoffs/2026-07-13-m4-b-3-diagnostics-page-startup-log-and-architecture-test.md",
+          "implementation-report-m4-b-3-diagnostics-page-startup-log-and-architecture-test.md"
+        ],
+        "files_modified": [
+          "src/AiEng.Platform.App/Program.cs",
+          "docs/design-system.md",
+          ".ai/state/session.json",
+          ".ai/state/tasks.json",
+          ".ai/state/current.md",
+          ".ai/state/task-board.md",
+          ".ai/state/milestones.json",
+          ".ai/state/capabilities.json"
+        ],
+        "commit": {
+          "hash": "pending (lands on main via fast-forward merge from feature/T-026-m4-b-3-diagnostics-page-startup-log-and-architecture-test)",
+          "subject": "feat(m4-b.3): add /diagnostics page, startup capability log, and Capabilities_Resolved_Through_Service architecture test",
+          "branch": "feature/T-026-m4-b-3-diagnostics-page-startup-log-and-architecture-test",
+          "base": "main at the M4-B.2 closeout commit b1f0ec8",
+          "fast_forward_merged_into_main": true,
+          "feature_branch_deleted": true,
+          "pushed": false,
+          "push_decision": "Staged for push (not authorised in this session)"
+        },
+        "tests_added": 6,
+        "tests_total_after": 376,
+        "tests_total_before": 370,
+        "tests_failed_after": 0,
+        "tests_skipped_after": 9,
+        "capabilities_advanced": [
+          "C-015",
+          "C-023",
+          "C-024"
+        ],
+        "architecture_test_status": "Active (registered-but-disabled per ADR-016 / M4-D NOT applicable; the M4-B.3 Capabilities_Resolved_Through_Service test is Active by design per the M4-B plan section 2 item 9)",
+        "validation": {
+          "format": "dotnet format --verify-no-changes: OK",
+          "build": "dotnet build: 0 warnings, 0 errors",
+          "test": "dotnet test: 376 passed, 0 failed, 9 skipped",
+          "json": "session.json + tasks.json + milestones.json + capabilities.json: valid JSON",
+          "crlf": "all new + modified files: CRLF (unix2dos applied)",
+          "architecture_boundary": "no System.Diagnostics.Process usage introduced outside src/AiEng.Platform.Infrastructure/; no advapi32.dll P/Invoke introduced outside src/AiEng.Platform.Infrastructure/; no Microsoft.Extensions.DependencyInjection IServiceCollection extension introduced outside src/AiEng.Platform.App/Composition/"
+        },
+        "next_step": "M4-B closeout session (T-027) on the user Approve / Next invocation"
+      },
+      "notes": "M4-B.3 first session is delivered 2026-07-13. The /diagnostics page is at src/AiEng.Platform.App/Components/Pages/Diagnostics.razor (+ .razor.css); it composes the M4-B.1 IHostCapabilitiesService + the M4-B.2 AppCapabilityList + AppKeyValueList + the M1.2 AppPageHeader + AppButton + AppCard + AppBreadcrumb. The startup capability-report log is at src/AiEng.Platform.App/Program.cs. The Capabilities_Resolved_Through_Service architecture test is at tests/AiEng.Platform.ArchitectureTests/Capabilities/Capabilities_Resolved_Through_Service.cs (Active; 2 tests pass). 4 bUnit page tests are at tests/AiEng.Platform.ComponentTests/Pages/DiagnosticsPageTests.cs. docs/capabilities.md is at docs/capabilities.md (10 sections). docs/design-system.md section 4.5 is updated. The M4-B.3 closeout commit is on main; the M4-B.3 feature branch is fast-forwarded into main and deleted. No push (not authorised in this session). The session does NOT begin M4-C / M4-D / provider creation (per the brief: Do not begin the following task). The next session is the M4-B closeout session (T-027) on the user Approve / Next invocation.",
+      "promoted_to_done_at": "2026-07-13T13:00:00Z",
+      "promoted_to_done_by_session": "m4-b-3-diagnostics-page-startup-log-and-architecture-test"
+    },
+    {
+      "id": "T-027",
+      "title": "M4-B closeout session — M4-B closeout report + handoff to M4-C",
+      "status": "Ready",
+      "milestone": "M4-B",
+      "slice": "M4-B.closeout",
+      "created_at": "2026-07-13T12:00:00Z",
+      "promoted_to_ready_at": "2026-07-13",
+      "promoted_to_ready_by_session": "m4-b-3-diagnostics-page-startup-log-and-architecture-test",
+      "depends_on_milestone": "M4-B (Active)",
+      "depends_on_task": "T-026 (M4-B.3, InProgress 2026-07-13)",
+      "depends_on_capabilities": [
+        "C-015 (IHostCapabilitiesService)",
+        "C-023 (AppCapabilityList)",
+        "C-024 (AppKeyValueList)"
+      ],
+      "plan": ".ai/plans/M4-B-closeout.md (to be drafted in the M4-B closeout session; the M4-B closeout session writes the M4-B closeout report and hands off to M4-C)",
       "evidence": {
         "implementation_report": null,
         "session_handoff": null
       },
-      "notes": "M4-B.3 is the third M4-B implementation slice. The slice ships the /diagnostics page (Diagnostics.razor) + the AppDiagnosticsPage composition in App/Components/Pages/; the startup capability-report log through ILogger<Program>; the docs/capabilities.md documentation; the Capabilities_Resolved_Through_Service architecture test (deferred from M4-B.1 per the M4-B.1 plan section 14.1 Deviations; the test asserts Diagnostics.razor contains @inject IHostCapabilitiesService). The slice does NOT create providers (per the M4-B brief). M4-B.3 is staged for the user's Approve / Next invocation after T-025 is Done."
+      "notes": "M4-B closeout session is the fourth M4-B session. The session writes the M4-B closeout report (15+ sections mirroring the M4-A closeout reports; aggregates the M4-B.1 + M4-B.2 + M4-B.3 evidence blocks; finalises the M4-B status to Delivered; transitions the next-milestone handoff to M4-C). The session does NOT begin M4-C / M4-D / provider creation. M4-B closeout is staged for the user's Approve / Next invocation after T-026 is Done."
     },
     {
       "id": "T-009",

@@ -239,8 +239,8 @@ to.
 | `AppMetricCard`   | Single metric with label and trend     | Planned (M4) | For dashboards                 |
 | `AppProviderCard` | Provider summary card                  | Planned (M4) | Name, status, capabilities     |
 | `AppHealthDot`    | Provider health indicator              | Planned (M4) | Renders `ProviderHealth`       |
-| `AppCapabilityList` | Provider capability list             | Planned (M4) | Renders `RuntimeCapabilities`  |
-| `AppKeyValueList` | Generic key/value list                | Planned (M4) | Used in diagnostics            |
+| `AppCapabilityList` | Provider capability list             | Implemented (M4-B.2) | Renders `HostCapability[]` from `IHostCapabilitiesService.DetectAsync`; data-owning four-state |
+| `AppKeyValueList` | Generic key/value list                | Implemented (M4-B.2) | Used in diagnostics; data-owning four-state |
 | `AppProjectCard`  | Project card                           | Planned (M3) | Name, path, last opened        |
 | `AppProjectList`  | Virtualised project list               | Planned (M3) | Data-owning (four-state)       |
 | `AppWorktreeCard` | Worktree card                          | Planned (M5) | Branch, status, path           |

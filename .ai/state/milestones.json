@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
-  "updated_at": "2026-07-13T12:00:00Z",
-  "updated_by_session": "m4-b-2-capability-list-components",
+  "updated_at": "2026-07-13T13:00:00Z",
+  "updated_by_session": "m4-b-3-diagnostics-page-startup-log-and-architecture-test",
   "milestones": [
     {
       "id": "M0",
@@ -479,7 +479,10 @@
               "crlf": "all new + modified files are CRLF (unix2dos applied)",
               "json_validation": "capabilities.json valid (24 records; C-023 + C-024 added)"
             },
-            "delivers_capabilities": ["C-023", "C-024"],
+            "delivers_capabilities": [
+              "C-023",
+              "C-024"
+            ],
             "deviations": [
               "The AppCapabilityList default Populated uses an AppStack of AppCard entries with the AppStatusDot in the header (not the AppBadge-style credential slot), and the AppKeyValueList default Populated uses a definition list (<dl>/<dt>/<dd>) with monospaced <code> elements for the Code format; the plan's intent (one card per capability with status dot + version + credential badge; one row per item with key left + value right) is preserved."
             ]
@@ -488,6 +491,59 @@
             "id": "M4-B.3",
             "title": "/diagnostics page + composition-root wiring + startup log + documentation + Capabilities_Resolved_Through_Service architecture test (Diagnostics.razor + Program.cs startup log + docs/capabilities.md + 3+ bUnit tests for the page + the deferred architecture test from M4-B.1)",
             "status": "Planned"
+          },
+          {
+            "id": "M4-B.3",
+            "title": "/diagnostics page + startup capability-report log + Capabilities_Resolved_Through_Service architecture test + docs/capabilities.md (Diagnostics.razor + Diagnostics.razor.css + Program.cs startup log + Capabilities_Resolved_Through_Service architecture test + 4 bUnit page tests + docs/capabilities.md 10 sections; resolves the M4-B.2 deferred docs/design-system.md section 4.5 update)",
+            "status": "Done",
+            "delivered_at": "2026-07-13",
+            "delivered_by_session": "m4-b-3-diagnostics-page-startup-log-and-architecture-test",
+            "branch": "feature/T-026-m4-b-3-diagnostics-page-startup-log-and-architecture-test (created from main at the M4-B.2 closeout commit b1f0ec8; fast-forwarded into main per the branching strategy rule 6; deleted per rule 7)",
+            "commit": "feat(m4-b.3): add /diagnostics page, startup capability log, and Capabilities_Resolved_Through_Service architecture test",
+            "files_added": [
+              "src/AiEng.Platform.App/Components/Pages/Diagnostics.razor",
+              "src/AiEng.Platform.App/Components/Pages/Diagnostics.razor.css",
+              "tests/AiEng.Platform.ArchitectureTests/Capabilities/Capabilities_Resolved_Through_Service.cs",
+              "tests/AiEng.Platform.ComponentTests/Pages/DiagnosticsPageTests.cs",
+              "docs/capabilities.md",
+              ".ai/handoffs/2026-07-13-m4-b-3-diagnostics-page-startup-log-and-architecture-test.md",
+              "implementation-report-m4-b-3-diagnostics-page-startup-log-and-architecture-test.md"
+            ],
+            "files_modified": [
+              "src/AiEng.Platform.App/Program.cs (startup capability-report log block inserted between app.Build() and the middleware pipeline)",
+              "docs/design-system.md section 4.5 (AppCapabilityList + AppKeyValueList rows from Planned (M4) to Implemented (M4-B.2))",
+              ".ai/state/session.json (M4-B.3 envelope)",
+              ".ai/state/tasks.json (T-026 Done with full evidence; T-027 stub row in Ready)",
+              ".ai/state/current.md (active slice M4-B.2 to M4-B.3; last completed task T-025 to T-026; next recommended task T-026 to T-027)",
+              ".ai/state/task-board.md (M4-B.3 row in Done Recently; T-027 stub row in Ready)",
+              ".ai/state/milestones.json (M4-B.3 slice block; top-level updated_at + updated_by_session)",
+              ".ai/state/capabilities.json (C-015 + C-023 + C-024 evidence blocks finalised; top-level updated_at + updated_by_session; C-015 next_task cleared on close)"
+            ],
+            "tests_added": 6,
+            "tests_total_after": 376,
+            "tests_failed_after": 0,
+            "tests_skipped_after": 9,
+            "capabilities_advanced": [
+              "C-015 (next_task cleared on close)",
+              "C-023 (next_task: T-027 on close)",
+              "C-024 (next_task: T-027 on close)"
+            ],
+            "architecture_test_status": "Active (Capabilities_Resolved_Through_Service; 2 tests pass; the test asserts Diagnostics.razor contains @inject IHostCapabilitiesService; no .razor or .razor.cs file in App/Components/Diagnostics/ contains the forbidden tokens RunToCompletionAsync / ICredentialVault / new SystemHostCapabilitiesService)",
+            "validation": {
+              "format": "dotnet format --verify-no-changes: OK",
+              "build": "dotnet build: 0 warnings, 0 errors",
+              "test": "dotnet test: 376 passed, 0 failed, 9 skipped (per ADR-016 / M4-D)",
+              "json": "session.json + tasks.json + milestones.json + capabilities.json: valid JSON",
+              "crlf": "all new + modified files: CRLF (unix2dos applied)",
+              "architecture_boundary": "no System.Diagnostics.Process usage introduced outside src/AiEng.Platform.Infrastructure/; no advapi32.dll P/Invoke introduced outside src/AiEng.Platform.Infrastructure/; no Microsoft.Extensions.DependencyInjection IServiceCollection extension introduced outside src/AiEng.Platform.App/Composition/"
+            },
+            "deviations": [
+              "The Diagnostics.razor page renders 12 capability list items (6 host tools + 6 provider credentials) per the M4-B.1 contract; the M4-B plan prose example mentioned 6 in passing; the actual list size is 12 (6 tools x 2). The 4 bUnit page tests assert the 12-item list.",
+              "The Capabilities_Resolved_Through_Service architecture test scopes the forbidden-token check to App/Components/Diagnostics/ (not App/Components/) to avoid the M4-A.2 Open Action false positive on AppProjectCard.razor (which is in App/Components/Projects/, not in App/Components/Diagnostics/).",
+              "The docs/capabilities.md 10 sections mirror docs/infrastructure.md 1-10; section 11 (M4-B Consumers) is not added because docs/infrastructure.md already has section 11 from the M4-A.2 handoff (the M4-B.2 handoff section 13 anticipated this; the M4-B.3 closeout confirms the no-scope-creep decision).",
+              "The M4-B.3 first session does NOT begin M4-C (provider registry) / M4-D (first concrete process providers) / provider creation (per the brief: Do not create providers + Do not begin the following task). The next session is the M4-B closeout session (T-027) on the user Approve / Next invocation."
+            ],
+            "next_step": "M4-B closeout session (T-027) on the user Approve / Next invocation"
           }
         ],
         "implementation_reports": [

@@ -1,0 +1,113 @@
+@namespace AiEng.Platform.App.Components.Pages
+
+@page "/diagnostics"
+@attribute [RouteMetadata("/diagnostics", "Diagnostics", Order = 4, ShowInSidebar = true, Icon = "◆", Description = "Detected host capabilities (tools, versions, provider credentials).")]
+@layout AppLayout
+@rendermode InteractiveServer
+@using AiEng.Platform.App.Components.Common
+@using AiEng.Platform.App.Components.Layout
+@using AiEng.Platform.App.Components.Primitive
+@using AiEng.Platform.App.Components.Display
+@using AiEng.Platform.App.Components.Feedback
+@using AiEng.Platform.App.Components.Shell
+@using AiEng.Platform.App.Components.Navigation
+@using AiEng.Platform.App.Components.Diagnostics
+@using AiEng.Platform.App.Layouts
+@using AiEng.Platform.Application.Capabilities
+@using AiEng.Platform.Application.Infrastructure
+@inject IHostCapabilitiesService Service
+@inject IPlatformInfo PlatformInfo
+
+<PageTitle>Diagnostics — AI Engineering Platform</PageTitle>
+
+<AppPageHeader>
+    <Breadcrumbs>
+        <AppBreadcrumb />
+    </Breadcrumbs>
+    <Title>Diagnostics</Title>
+    <Description>The host's detected capabilities. The capability report is consumed by the provider registry (M4-C) to decide which providers are eligible for enablement.</Description>
+    <Actions>
+        <AppButton Variant="AppButtonVariant.Outline"
+                   data-testid="refresh-diagnostics"
+                   Title="Re-run host capability detection."
+                   @onclick="OnRefresh"
+                   Disabled="@_isLoading"
+                   Loading="@_isLoading">
+            Refresh
+        </AppButton>
+    </Actions>
+</AppPageHeader>
+
+<AppCard Class="app-diagnostics-card">
+    <Header>Host tools and provider credentials</Header>
+    <ChildContent>
+        <AppCapabilityList Capabilities="@(GetCapabilities())"
+                           IsLoading="@_isLoading"
+                           ErrorMessage="@_error"
+                           ErrorCode="@_errorCode" />
+    </ChildContent>
+</AppCard>
+
+@if (_result is not null)
+{
+    <AppCard Class="app-diagnostics-card">
+        <Header>Host metadata</Header>
+        <ChildContent>
+            <AppKeyValueList Items="@_meta" />
+        </ChildContent>
+    </AppCard>
+}
+
+@code {
+    private HostCapabilities? _result;
+    private IReadOnlyList<KeyValuePair<string, string>> _meta = Array.Empty<KeyValuePair<string, string>>();
+    private bool _isLoading = true;
+    private string? _error;
+    private string? _errorCode;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadAsync();
+    }
+
+    private async Task OnRefresh()
+    {
+        await LoadAsync();
+    }
+
+    private async Task LoadAsync()
+    {
+        _isLoading = true;
+        _error = null;
+        _errorCode = null;
+        try
+        {
+            _result = await Service.DetectAsync();
+            _meta = BuildMetadata(_result);
+        }
+        catch (Exception ex)
+        {
+            _result = null;
+            _meta = Array.Empty<KeyValuePair<string, string>>();
+            _error = ex.Message;
+            _errorCode = "HOST_PROBE_FAILED";
+        }
+        finally
+        {
+            _isLoading = false;
+        }
+    }
+
+    private IReadOnlyList<HostCapability> GetCapabilities() => _result?.Capabilities ?? Array.Empty<HostCapability>();
+
+    private IReadOnlyList<KeyValuePair<string, string>> BuildMetadata(HostCapabilities report)
+    {
+        return new KeyValuePair<string, string>[]
+        {
+            new("Detected at", report.DetectedAt.LocalDateTime.ToString("yyyy-MM-dd HH:mm:ss")),
+            new("Data directory", PlatformInfo.GetDataDirectory()),
+            new("Config directory", PlatformInfo.GetConfigDirectory()),
+            new("Is Windows host", PlatformInfo.IsWindows.ToString())
+        };
+    }
+}
