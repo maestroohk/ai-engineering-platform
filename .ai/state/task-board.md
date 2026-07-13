@@ -97,280 +97,165 @@
   session if the M4-B / M4-C / M4-D
   work requires a third M4-A slice).
 
-### M4-B.3 — /diagnostics page + startup log + Capabilities_Resolved_Through_Service architecture test + docs/capabilities.md — 2026-07-13 (Done)
+### T-028 — M4-C.1 first session — IProviderRegistry contract + family registries + composition root + unit tests
 
-- **Task ID:** T-026.
-- **Milestone:** M4-B — Capability
-  Detection (Active 2026-07-13; the
-  M4-B plan is in Awaiting Approval at
-  `.ai/plans/M4-B-capability-detection.md`).
-- **Title:** M4-B.3 — `/diagnostics`
-  page + startup capability-report log
-  + `Capabilities_Resolved_Through_Service`
-  architecture test + `docs/capabilities.md`
-  + 3+ bUnit page tests.
-- **Why it matters:** M4-B.1 shipped the
-  `IHostCapabilitiesService` contract +
-  the `HostCapabilities` +
-  `HostCapability` records + the
-  `SystemHostCapabilitiesService`
-  implementation. M4-B.2 shipped the
+- **Task ID:** T-028.
+- **Milestone:** M4-C — Provider
+  Registry Foundation (Awaiting
+  Approval 2026-07-13; the M4-C plan
+  is at
+  `.ai/plans/M4-C-provider-registry-foundation.md`).
+- **Title:** M4-C.1 — `IProviderRegistry`
+  contract + 6 family registries +
+  `SystemProviderRegistry` implementation
+  + 6 family fakes + `AddProviderRegistry`
+  composition root + 9+ unit tests —
+  the boundary slice of M4-C (the first
+  M4-C implementation slice).
+- **Why it matters:** M4-B shipped the
+  `IHostCapabilitiesService` + the
   `AppCapabilityList` + `AppKeyValueList`
-  data-owning design-system components.
-  M4-B.3 ships the user-visible surface
-  (the `/diagnostics` page in
-  `src/AiEng.Platform.App/Components/Pages/Diagnostics.razor`
-  composing the M4-B.1 contract + the
-  M4-B.2 components), the startup
-  capability-report log (a 10-second
-  timeout `await
-  IHostCapabilitiesService.DetectAsync`
-  in `Program.cs` between `app.Build()`
-  and `app.Run()`; logs at `Information`
-  level through `ILogger<Program>`;
-  failures are caught and logged at
-  `Warning` level so startup never
-  fails), the `Capabilities_Resolved_Through_Service`
-  architecture test (Active per the M4-B
-  plan § 2 item 9; deferred from M4-B.1
-  per the M4-B.1 plan § 14.1 Deviations;
-  asserts `Diagnostics.razor` contains
-  `@inject IHostCapabilitiesService` and
-  no `RunToCompletionAsync` /
-  `ICredentialVault` / `new
-  SystemHostCapabilitiesService` tokens
-  in `App/Components/Diagnostics/`), the
-  `docs/capabilities.md` 10-section
-  documentation mirroring
-  `docs/infrastructure.md` § 1-10
-  structure, and 3+ bUnit tests in
-  `tests/AiEng.Platform.ComponentTests/Pages/DiagnosticsPageTests.cs`.
-  M4-B.3 also resolves the M4-B.2
-  deferred `docs/design-system.md` § 4.5
-  component status updates (the
-  `AppCapabilityList` + `AppKeyValueList`
-  rows transition from `Planned (M4)`
-  to `Implemented (M4-B.2)`). M4-B.3 is
-  the third M4-B implementation slice;
-  the next slice is the **M4-B closeout
-  session** (T-027) which writes the
-  M4-B closeout report and hands off to
-  M4-C.
+  + the `/diagnostics` page + the
+  startup capability-report log + the
+  `Capabilities_Resolved_Through_Service`
+  architecture test + `docs/capabilities.md`.
+  M4-C ships the provider registry
+  foundation: the `IProviderRegistry`
+  contract (the single allowed seam
+  between the application and the
+  provider layer; the M4-C
+  architecture requires that all
+  provider access flows through
+  `IProviderRegistry`, never through
+  the concrete `SystemProviderRegistry`
+  or any `IProvider` implementation);
+  the 6 family registries
+  (`ShellProviderRegistry` +
+  `EditorProviderRegistry` +
+  `AgentRuntimeProviderRegistry` +
+  `TerminalProviderRegistry` +
+  `WorktreeProviderRegistry` +
+  `CredentialProviderRegistry`); the
+  `SystemProviderRegistry`
+  implementation that composes the 6
+  family registries and consumes
+  `IHostCapabilitiesService` through
+  DI to filter eligible providers per
+  host capabilities; the 6 family
+  fakes; the `AddProviderRegistry`
+  composition root extension; 9+ unit
+  tests in
+  `tests/AiEng.Platform.UnitTests/Providers/`.
+  M4-C.1 does **not** ship the
+  `AppProviderList` component, the
+  `/providers` page, the startup
+  provider-report log, the
+  `Providers_Resolve_Through_Registry`
+  architecture test, or
+  `docs/providers.md` — those are in
+  M4-C.2.
 - **Objective:** Land the
-  `Diagnostics.razor` page in
-  `src/AiEng.Platform.App/Components/Pages/Diagnostics.razor`
-  (+ `.razor.css`); add the startup
-  capability-report log to
-  `src/AiEng.Platform.App/Program.cs`;
-  land the `Capabilities_Resolved_Through_Service`
-  architecture test in
-  `tests/AiEng.Platform.ArchitectureTests/Capabilities/Capabilities_Resolved_Through_Service.cs`;
-  land 3+ bUnit tests in
-  `tests/AiEng.Platform.ComponentTests/Pages/DiagnosticsPageTests.cs`;
-  land `docs/capabilities.md` (10
-  sections); update
-  `docs/design-system.md` § 4.5.
+  `IProviderRegistry` contract in
+  `src/AiEng.Platform.Application/Providers/`;
+  land the 6 family registry contracts
+  in
+  `src/AiEng.Platform.Application/Providers/Families/`;
+  land the `ProviderDescriptor` +
+  `ProviderFamily` + `ProviderStatus`
+  records in
+  `src/AiEng.Platform.Application/Providers/`;
+  land the 6 family registry
+  implementations in
+  `src/AiEng.Platform.Infrastructure/Providers/Families/`;
+  land the `SystemProviderRegistry`
+  implementation in
+  `src/AiEng.Platform.Infrastructure/Providers/`;
+  land the `AddProviderRegistry`
+  composition root extension in
+  `src/AiEng.Platform.App/Composition/Providers/`;
+  wire `AddProviderRegistry` into
+  `AddPlatformServices`; land 9+ unit
+  tests + 6 family fakes in
+  `tests/AiEng.Platform.UnitTests/Providers/`.
 - **Acceptance criteria:**
-  - `Diagnostics.razor` is registered
-    via
-    `[RouteMetadata("/diagnostics",
-    "Diagnostics", Order = 4,
-    ShowInSidebar = true, Icon = "◆",
-    Description = "Detected host
-    capabilities (tools, versions,
-    provider credentials).")]`.
-  - `Diagnostics.razor` `@inject`s
-    `IHostCapabilitiesService` (the
-    single allowed seam) +
-    `IPlatformInfo` (the host metadata
-    accessor).
-  - `OnInitializedAsync` calls
-    `Service.DetectAsync()` and
-    renders the 6 host tools + 6
-    provider credentials via
-    `AppCapabilityList`.
-  - The page renders
-    `AppKeyValueList` with the
-    `DetectedAt` + `Data directory` +
-    `Config directory` + `Is Windows
-    host` rows.
-  - The page renders a Refresh
-    `AppButton` that re-runs
-    `DetectAsync`.
-  - `Program.cs` logs the host
-    capability report at startup
-    through `ILogger<Program>` at
-    `Information` level with a
-    10-second timeout; failures are
-    caught and logged at `Warning`
-    level.
-  - The
-    `Capabilities_Resolved_Through_Service`
-    architecture test is **Active**
-    (not registered-but-disabled per
-    ADR-016 / M4-D) and passes; the
-    test is scoped to
-    `App/Components/Diagnostics/` to
-    avoid the M4-A.2 Open Action
-    false positive.
-  - `docs/capabilities.md` mirrors
-    `docs/infrastructure.md` § 1-10
-    structure.
-  - `docs/design-system.md` § 4.5
-    `AppCapabilityList` +
-    `AppKeyValueList` rows are
-    `Implemented (M4-B.2)`.
-  - The M4-B.2 370 tests remain
-    green (regression gate); M4-B.3
-    ships 3+ new bUnit tests + 1 new
-    active architecture test.
-- **Dependencies:** M4-B.1
-  (T-024, Done 2026-07-13);
-  M4-B.2 (T-025, Done 2026-07-13);
+  - `IProviderRegistry` exposes
+    `Task<IReadOnlyList<ProviderDescriptor>>
+    ListAsync(CancellationToken)` +
+    `Task<ProviderStatus>
+    GetStatusAsync(string providerId,
+    CancellationToken)` + `bool
+    IsEligible(string providerId,
+    HostCapabilities capabilities)`.
+  - The 6 family registries are
+    registered in
+    `AddProviderRegistry` via
+    `TryAddSingleton` (one per family).
+  - `SystemProviderRegistry` consumes
+    `IHostCapabilitiesService` through
+    DI to gate eligibility per host
+    capabilities; the eligibility
+    check is the only side-effect the
+    M4-C contract has on M4-B.
+  - The 6 family registries return
+    empty `IReadOnlyList` by default
+    (no concrete providers are
+    shipped; the providers come in
+    M4-D per the M4-B brief: 'Do not
+    create providers').
+  - The 9+ unit tests cover
+    `ListAsync` (empty) + per-family
+    `ListAsync` (empty) + `GetStatusAsync`
+    (not found) + `IsEligible` (per
+    family + cross-family).
+  - The M4-B closeout 376 tests
+    remain green (regression gate);
+    M4-C.1 ships 9+ new unit tests.
+- **Dependencies:** M4-B
+  (T-027, Done 2026-07-13);
   `IHostCapabilitiesService`
-  (C-015);
-  `AppCapabilityList` (C-023);
-  `AppKeyValueList` (C-024).
+  (C-015, Verified).
 - **Expected affected areas:**
-  `src/AiEng.Platform.App/Components/Pages/Diagnostics.razor`
-  (+ `.razor.css`) (new file);
-  `src/AiEng.Platform.App/Program.cs`
-  (startup capability-report log);
-  `tests/AiEng.Platform.ArchitectureTests/Capabilities/Capabilities_Resolved_Through_Service.cs`
-  (new file; 1 Active architecture
-  test);
-  `tests/AiEng.Platform.ComponentTests/Pages/DiagnosticsPageTests.cs`
-  (new file; 3+ bUnit tests);
-  `docs/capabilities.md` (new file;
-  10 sections);
-  `docs/design-system.md` § 4.5
-  (component status updates);
+  `src/AiEng.Platform.Application/Providers/`
+  (new);
+  `src/AiEng.Platform.Infrastructure/Providers/`
+  (new);
+  `src/AiEng.Platform.App/Composition/Providers/`
+  (new);
   `src/AiEng.Platform.App/Composition/ServiceCollectionExtensions.cs`
-  is **not** modified (M4-B.1 already
-  wired `AddHostCapabilities`).
+  (wire `AddProviderRegistry`);
+  `tests/AiEng.Platform.UnitTests/Providers/`
+  (new).
 - **Validation:** `dotnet restore`
-  (exit 0); `dotnet build` (0 warnings,
-  0 errors); `dotnet test` (370 + 3+
-  new = 373+ passed, 0 failed, 9
-  skipped per ADR-016 / M4-D);
-  `dotnet format --verify-no-changes`
-  (exit 0). The M4-B.3 first session
-  runs the `App/Components/Pages/`
-  smoke (the `/diagnostics` page
-  renders; the Refresh button re-runs
-  `DetectAsync`; the page survives a
-  non-Windows host with `IPlatformInfo.IsWindows
-  == false`).
-- **Approved plan path:**
-  `.ai/plans/M4-B-capability-detection.md`
-  (Awaiting Approval 2026-07-13);
-  the M4-B.3 first session plan is
-  at
-  `.claude/plans/generic-seeking-oasis.md`
-  (approved via ExitPlanMode).
-- **Status:** **Done** (the
-  M4-B.3 first session is `Done`
-  2026-07-13; the branch
-  `feature/T-026-m4-b-3-diagnostics-page-startup-log-and-architecture-test`
-  is fast-forwarded into `main` and
-  deleted; the M4-B closeout session
-  is T-027, the next concrete step on
-  the user's `Approve` or `Next`
-  invocation).
-
-### T-027 — M4-B closeout session — M4-B closeout report + handoff to M4-C
-
-- **Task ID:** T-027.
-- **Milestone:** M4-B — Capability
-  Detection (Active 2026-07-13).
-- **Title:** M4-B closeout — M4-B
-  closeout report + handoff to M4-C.
-- **Why it matters:** M4-B.1 + M4-B.2 +
-  M4-B.3 ship the M4-B boundary
-  slice. T-027 writes the M4-B closeout
-  report (15+ sections mirroring the
-  M4-A closeout reports; aggregates
-  the M4-B.1 + M4-B.2 + M4-B.3 evidence
-  blocks; finalises the M4-B status to
-  `Delivered`; transitions the
-  next-milestone handoff to M4-C). T-027
-  is the fourth M4-B session; the
-  session does **not** begin M4-C /
-  M4-D / provider creation. M4-C is
-  the next milestone after M4-B
-  (provider registry +
-  `IProvider` family contract +
-  provider eligibility checks).
-- **Objective:** Write the M4-B
-  closeout report at
-  `implementation-report-m4-b-closeout.md`;
-  write the M4-B per-session handoff
-  at
-  `.ai/handoffs/2026-07-13-m4-b-closeout.md`
-  (mirrored to `latest.md`); update
-  the project-continuity state per
-  Rule 15 (`session.json` closeout
-  envelope; `tasks.json` T-027
-  InProgress → Done with evidence;
-  `current.md` active slice M4-B.3 →
-  M4-B closeout; `task-board.md` M4-B
-  closeout row in Done Recently;
-  `milestones.json` M4-B status to
-  `Delivered` + C-015 + C-023 + C-024
-  evidence blocks finalised + M4-B
-  closeout commit + handoff + report
-  added to top-level `commits` +
-  `handoffs` + `implementation_reports`
-  arrays; `capabilities.json` C-015
-  + C-023 + C-024 status to
-  `Verified` + `next_task` cleared).
-- **Acceptance criteria:**
-  - M4-B closeout report mirrors
-    M4-A closeout reports (15+
-    sections).
-  - M4-B status is `Delivered` in
-    `milestones.json`; the C-015 +
-    C-023 + C-024 status is `Verified`
-    in `capabilities.json`.
-  - M4-B does **not** begin M4-C,
-    M4-D, or any provider creation.
-  - M4-B.3 373+ tests remain green
-    (regression gate).
-- **Dependencies:** M4-B.3
-  (T-026, InProgress 2026-07-13);
-  M4-B.1 (T-024, Done 2026-07-13);
-  M4-B.2 (T-025, Done 2026-07-13);
-  `IHostCapabilitiesService`
-  (C-015);
-  `AppCapabilityList` (C-023);
-  `AppKeyValueList` (C-024).
-- **Expected affected areas:**
-  `.ai/state/session.json`;
-  `.ai/state/tasks.json`;
-  `.ai/state/current.md`;
-  `.ai/state/task-board.md`;
-  `.ai/state/milestones.json`;
-  `.ai/state/capabilities.json`;
-  `.ai/handoffs/2026-07-13-m4-b-closeout.md`;
-  `implementation-report-m4-b-closeout.md`.
-- **Validation:** `dotnet restore`;
-  `dotnet build` (0 warnings, 0
-  errors); `dotnet test` (373+ passed,
+  (exit 0); `dotnet build` (0
+  warnings, 0 errors); `dotnet test`
+  (376 + 9+ new = 385+ passed,
   0 failed, 9 skipped per ADR-016 /
-  M4-D); `dotnet format --verify-no-changes`
-  (exit 0); JSON validation; CRLF
-  validation.
-- **Approved plan path:** TBD
-  (the M4-B closeout plan is drafted
-  in the M4-B closeout session; the
-  plan mirrors the M4-A closeout
-  structure).
-- **Status:** **Ready** (the M4-B.3
-  first session is the next concrete
-  step on the user's `Approve` or
-  `Next` invocation; T-027 is staged
-  for the user's `Approve` or `Next`
-  invocation after T-026 is Done).
+  M4-D); `dotnet format
+  --verify-no-changes` (exit 0);
+  JSON validation; CRLF validation.
+- **Approved plan path:**
+  `.ai/plans/M4-C-provider-registry-foundation.md`
+  (Awaiting Approval 2026-07-13; the
+  M4-C plan is produced by the M4-B
+  closeout session 2026-07-13).
+- **Status:** **Ready** (M4-B
+  closeout is `Done` 2026-07-13; the
+  M4-C plan is in `Awaiting Approval`
+  at
+  `.ai/plans/M4-C-provider-registry-foundation.md`;
+  T-028 is the next concrete step on
+  the user's `Approve` or `Next`
+  invocation after T-027 is Done).
+  The M4-C.1 first session reviews
+  and revises the M4-C plan as
+  needed; approves the M4-C plan;
+  begins the M4-C.1 implementation
+  per the M4-C plan. The M4-B
+  closeout does NOT begin M4-C / M4-D
+  / provider creation (per the brief:
+  'Do not begin the following task').
+
+### M1 follow-up — Add `AppToolbar` example to `/design-system`
 
 ### M1 follow-up — Add `AppToolbar` example to `/design-system`
 
@@ -417,25 +302,35 @@
 
 ## In Progress
 
-(none — the M4-B plan promotion
-delivered in the m4-b-plan-promotion
-session, 2026-07-13; T-023 (M4-B plan
-promotion) is `Done` in
-`.ai/state/tasks.json`; the M4-B plan
-is in Awaiting Approval at
-`.ai/plans/M4-B-capability-detection.md`;
-the next milestone work is M4-B.1
-(T-024; contract + implementation +
-composition root + unit tests +
-architecture test) in `Ready`. The
-next session is the M4-B.1 first
-session on the user's `Approve` or
-`Next` invocation. Per the
-Progressive Coding Rule, the M4-B
-plan promotion session does **not**
-begin the M4-B implementation, the
-M4-C plan promotion, the M4-D plan
-promotion, or any provider creation.)
+(none — the M4-B closeout delivered
+in the m4-b-closeout session,
+2026-07-13; T-027 (M4-B closeout) is
+`Done` in `.ai/state/tasks.json`; M4-B
+is `Done` with `closed_at:
+2026-07-13` in
+`.ai/state/milestones.json`; the
+`m4-b` annotated milestone tag is at
+the M4-B closeout commit on `main`
+per the branching strategy rule 9;
+the M4-C plan is in `Awaiting
+Approval` at
+`.ai/plans/M4-C-provider-registry-foundation.md`;
+the next concrete step is the
+M4-C.1 first session (T-028,
+`Ready`; the `IProviderRegistry`
+contract + the 6 family registries +
+the `SystemProviderRegistry`
+implementation + the 6 family fakes
++ the `AddProviderRegistry`
+composition root + 9+ unit tests) on
+the user's `Approve` or `Next`
+invocation. Per the Progressive
+Coding Rule + the M4-B brief: 'Do
+not begin the following task', the
+M4-B closeout session does **not**
+begin the M4-C implementation, the
+M4-D plan promotion, or any provider
+creation.)
 
 ---
 
@@ -504,6 +399,20 @@ promotion, or any provider creation.)
 - **Validation:** 0 warnings, 0 errors; format clean; all new + modified files are CRLF; the 4 state JSON files (`session.json` + `tasks.json` + `milestones.json` + `capabilities.json`) are valid JSON.
 - **One documented deviation:** the `Diagnostics.razor` page uses a 1-card-per-capability layout (the M4-B.2 `AppCapabilityList` renders 12 capability list items — 6 host tools + 6 provider credentials). The plan anticipated 6; the actual list size is 12 (6 tools × 2). The 4 bUnit page tests assert the 12-item list; the architecture test scopes the forbidden-token check to the `App/Components/Diagnostics/` folder (not `App/Components/`) to avoid the M4-A.2 Open Action false positive on `AppProjectCard.razor` (which is in `App/Components/Projects/`, not in `App/Components/Diagnostics/`).
 - **Session does NOT begin:** M4-C (provider registry) / M4-D (first concrete process providers) / provider creation. The next session is the M4-B closeout session (T-027) on the user's `Approve` or `Next` invocation.
+
+### M4-B closeout — M4-B retrospective + M4-B -> Done + m4-b tag + M4-C plan + project-continuity state — 2026-07-13
+
+- **Task ID:** `T-027`
+- **Milestone:** M4-B — Capability Detection (Done 2026-07-13; the M4-B plan is at `.ai/plans/M4-B-capability-detection.md`; the M4-B closeout plan is at `.ai/plans/M4-B-closeout.md`; the M4-B retrospective is at `retrospective-m4-b-capability-detection.md`).
+- **Title:** M4-B closeout — M4-B retrospective (13 sections per the Milestone Closeout Standard § 4) + M4-B status `Active` → `Done` with `closed_at: 2026-07-13` in `.ai/state/milestones.json` + `m4-b` annotated milestone tag at the M4-B closeout commit on `main` per the branching strategy rule 9 + the M4-C plan in `Awaiting Approval` at `.ai/plans/M4-C-provider-registry-foundation.md` (12 sections mirroring the M4-A + M4-B plans) + the project-continuity state update per Rule 15 (the 6 state files: `session.json` + `tasks.json` + `current.md` + `task-board.md` + `milestones.json` + `capabilities.json`; + `ROADMAP.md` + `.ai/plans/master-delivery-plan.md`) + the M4-B closeout handoff at `.ai/handoffs/2026-07-13-m4-b-closeout.md` (mirrored to `latest.md`) + the M4-B closeout implementation report at `implementation-report-m4-b-closeout.md`.
+- **Why it matters:** M4-B.1 + M4-B.2 + M4-B.3 ship the M4-B boundary slice (the contract + the data-owning components + the user-visible surface + the startup log + the architecture test + the documentation). The M4-B closeout is the closeout slice that aggregates the M4-B.1 + M4-B.2 + M4-B.3 evidence blocks; finalises the M4-B status to `Done`; transitions the next-milestone handoff to M4-C. The M4-B closeout follows the Milestone Closeout Standard (`.ai/workflows/milestone-closeout.md`): the M4-B retrospective aggregates the M4-B.1 + M4-B.2 + M4-B.3 evidence blocks; the M4-C plan is the first next-milestone plan; the `m4-b` annotated milestone tag marks the M4-B boundary in git history (per the branching strategy rule 9); the project-continuity state update clears `C-015` `next_task` on close (the M4-B boundary is closed; the M4-C.1 first session is the next concrete step on the user's `Approve` or `Next` invocation).
+- **Branch:** `feature/T-027-m4-b-closeout` (created from `main` at the M4-B.3 closeout commit `ec428cd`; the M4-B closeout commit `chore(m4-b.closeout): close M4-B with retrospective, M4-C plan, and m4-b milestone tag` is on this branch; the branch is fast-forwarded into `main` per the branching strategy rule 6; the branch is deleted per rule 7).
+- **Commit:** `chore(m4-b.closeout): close M4-B with retrospective, M4-C plan, and m4-b milestone tag` (push is staged for push, not authorised in this session).
+- **Tag:** `m4-b` (annotated; at the M4-B closeout commit on `main` per the branching strategy rule 9; the tag message references the M4-B retrospective path: `M4-B closeout: capability detection. See retrospective-m4-b-capability-detection.md`).
+- **Test count:** 376 passed (identical to the M4-B.3 closeout; the M4-B closeout is a docs + workflow + state change with no new tests), 0 failed, 9 skipped (per ADR-016 / M4-D). Breakdown: 99 unit + 263 component + 14 architecture.
+- **Validation:** 0 warnings, 0 errors; format clean; all new + modified files are CRLF (unix2dos applied); the 4 state JSON files (`session.json` + `tasks.json` + `milestones.json` + `capabilities.json`) are valid JSON; the `current.md` + `task-board.md` + `ROADMAP.md` + `.ai/plans/master-delivery-plan.md` are CRLF.
+- **Zero deviations.** The M4-B closeout follows the Milestone Closeout Standard as-is (the standard is mature enough to be reused without modification; the M2.6 closeout's "introduce the standard" is amortised). The M4-B closeout mirrors the M3 closeout's structure with M4-B-specific evidence; the M4-B retrospective mirrors the M3 retrospective's structure with M4-B-specific evidence.
+- **Session does NOT begin:** M4-C.1 (provider registry implementation; T-028 is the next concrete step in the next session on the user's `Approve` or `Next` invocation) / M4-D (first concrete process providers) / provider creation. The M4-B closeout does NOT begin any of the M4-C work (per the brief: 'Do not begin the following task' + the Progressive Coding Rule). The M4-C plan is in `Awaiting Approval` (the M4-C.1 first session begins in a future session on the user's `Approve` or `Next` invocation after the user has approved the M4-C plan).
 
 ### M4-B.1 — IHostCapabilitiesService contract + implementation + composition root + unit tests — 2026-07-13
 
@@ -1682,22 +1591,63 @@ detailed tasks when the milestone approaches.
 ### M4-B — Capability Detection (summary)
 
 - **Milestone:** M4-B — Capability
-  Detection (Active 2026-07-13; the
-  M4-B plan is in Awaiting Approval at
-  `.ai/plans/M4-B-capability-detection.md`).
+  Detection (Done 2026-07-13; the
+  M4-B plan is Approved at
+  `.ai/plans/M4-B-capability-detection.md`;
+  the M4-B closeout plan is at
+  `.ai/plans/M4-B-closeout.md`; the
+  M4-B retrospective is at
+  `retrospective-m4-b-capability-detection.md`;
+  the `m4-b` annotated milestone tag
+  is at the M4-B closeout commit on
+  `main` per the branching strategy
+  rule 9).
 - **First action (later):** the M4-B
-  plan is drafted (T-023, Done
-  2026-07-13); the M4-B implementation
-  begins in M4-B.1 (T-024, `Ready`;
-  contract + implementation +
-  composition root + unit tests +
-  architecture test).
+  plan was drafted (T-023, Done
+  2026-07-13); the M4-B
+  implementation was delivered in
+  M4-B.1 + M4-B.2 + M4-B.3 (T-024 +
+  T-025 + T-026, all Done
+  2026-07-13); the M4-B closeout was
+  delivered in T-027 (Done
+  2026-07-13). M4-B is closed.
+  The next milestone is M4-C
+  (Provider Registry Foundation) in
+  `Awaiting Approval` at
+  `.ai/plans/M4-C-provider-registry-foundation.md`;
+  the next concrete step on the
+  user's `Approve` or `Next`
+  invocation is the M4-C.1 first
+  session (T-028, `Ready`; the
+  `IProviderRegistry` contract + the
+  6 family registries + the
+  `SystemProviderRegistry`
+  implementation + the 6 family
+  fakes + the `AddProviderRegistry`
+  composition root + 9+ unit
+  tests).
 
 ### M4-C — Provider Registry Foundation (summary)
 
-- **Milestone:** M4-C.
-- **First action (later):** draft
-  `.ai/plans/M4-C-provider-registry-foundation.md`.
+- **Milestone:** M4-C — Provider
+  Registry Foundation (Awaiting
+  Approval 2026-07-13; the M4-C plan
+  is in Awaiting Approval at
+  `.ai/plans/M4-C-provider-registry-foundation.md`;
+  Status: Awaiting Approval; the
+  M4-C plan is produced by the M4-B
+  closeout session 2026-07-13).
+- **First action (later):** the
+  M4-C.1 first session (T-028,
+  `Ready`; the `IProviderRegistry`
+  contract + the 6 family registries
+  + the `SystemProviderRegistry`
+  implementation + the 6 family
+  fakes + the `AddProviderRegistry`
+  composition root + 9+ unit
+  tests) on the user's `Approve` or
+  `Next` invocation after the user
+  has approved the M4-C plan.
 
 ### M4-D — First Concrete Process Providers (summary)
 

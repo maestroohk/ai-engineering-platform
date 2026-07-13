@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1.0",
-  "updated_at": "2026-07-13T13:00:00Z",
-  "updated_by_session": "m4-b-3-diagnostics-page-startup-log-and-architecture-test",
+  "updated_at": "2026-07-13T14:00:00Z",
+  "updated_by_session": "m4-b-closeout",
   "completion_status_mapping": {
     "NotStarted": "Not in capabilities.json. Reserved for capabilities the product will need but which have not yet been admitted to the graph.",
     "Planned": "status: Accepted; delivered_by_milestone status: Planned; no plan yet, or plan stub is Draft. Sequenced for a milestone, plan not promoted to Ready / Awaiting Approval.",
@@ -670,7 +670,7 @@
       "id": "C-015",
       "title": "IHostCapabilitiesService",
       "status": "Accepted",
-      "completion_status": "Delivered",
+      "completion_status": "Delivered (M4-B closed 2026-07-13; C-015 verified by T-024 + T-025 + T-026 + T-027)",
       "layer": 0,
       "category": "Infrastructure",
       "description": "The host's capability detection. Detects git, ollama, powershell.exe, wsl.exe, wt.exe, bash.exe. Produces a typed HostCapabilities report at host startup.",
@@ -693,23 +693,28 @@
       "delivered_by_tasks": [
         "T-024 (M4-B.1 first session, Done 2026-07-13)",
         "T-025 (M4-B.2 first session, Done 2026-07-13)",
-        "T-026 (M4-B.3 first session, Done 2026-07-13)"
+        "T-026 (M4-B.3 first session, Done 2026-07-13)",
+        "T-027 (M4-B closeout, Done 2026-07-13)"
       ],
-      "next_task": "T-027 (M4-B closeout session; Ready)",
+      "next_task": null,
       "blocked_by": [],
       "evidence": {
         "plans": [
-          ".ai/plans/M4-B-capability-detection.md"
+          ".ai/plans/M4-B-capability-detection.md",
+          ".ai/plans/M4-C-provider-registry-foundation.md"
         ],
         "reports": [
           "implementation-report-m4-b-1-host-capabilities-contract-and-service.md",
           "implementation-report-m4-b-2-capability-list-components.md",
-          "implementation-report-m4-b-3-diagnostics-page-startup-log-and-architecture-test.md"
+          "implementation-report-m4-b-3-diagnostics-page-startup-log-and-architecture-test.md",
+          "implementation-report-m4-b-closeout.md",
+          "retrospective-m4-b-capability-detection.md"
         ],
         "commits": [
           "feat(m4-b.1): add IHostCapabilitiesService contract and SystemHostCapabilitiesService implementation",
           "feat(m4-b.2): add AppCapabilityList + AppKeyValueList data-owning design-system components",
-          "feat(m4-b.3): add /diagnostics page, startup capability log, and Capabilities_Resolved_Through_Service architecture test"
+          "feat(m4-b.3): add /diagnostics page, startup capability log, and Capabilities_Resolved_Through_Service architecture test",
+          "chore(m4-b.closeout): close M4-B with retrospective, M4-C plan, and m4-b milestone tag"
         ],
         "tests": [
           "Constructor_throws_ArgumentNullException_when_processRunner_is_null",
@@ -1179,7 +1184,7 @@
       "id": "C-023",
       "title": "AppCapabilityList",
       "status": "Accepted",
-      "completion_status": "Delivered (M4-B.2 + M4-B.3)",
+      "completion_status": "Delivered (M4-B closed 2026-07-13; C-023 verified by T-025 + T-026 + T-027)",
       "layer": 3,
       "category": "DesignSystem",
       "description": "The data-owning four-state design-system component that renders an IReadOnlyList<HostCapability> as a list of AppCard entries. Each card shows the Key, an AppStatusDot (Success for Available=true, Error for Available=false), the Version (font-mono, muted), and an AppBadge 'Credential set' when CredentialAvailable is true. Supports the four child-content slots (Loading, Empty, Error, Populated) per docs/design-system.md section 5.4.",
@@ -1200,7 +1205,8 @@
       ],
       "delivered_by_tasks": [
         "T-025 (M4-B.2 first session, Done 2026-07-13)",
-        "T-026 (M4-B.3 first session, Done 2026-07-13; the /diagnostics page consumes AppCapabilityList)"
+        "T-026 (M4-B.3 first session, Done 2026-07-13; the /diagnostics page consumes AppCapabilityList)",
+        "T-027 (M4-B closeout, Done 2026-07-13)"
       ],
       "next_task": null,
       "blocked_by": [],
@@ -1210,11 +1216,13 @@
         ],
         "reports": [
           "implementation-report-m4-b-2-capability-list-components.md",
-          "implementation-report-m4-b-3-diagnostics-page-startup-log-and-architecture-test.md"
+          "implementation-report-m4-b-3-diagnostics-page-startup-log-and-architecture-test.md",
+          "retrospective-m4-b-capability-detection.md"
         ],
         "commits": [
           "feat(m4-b.2): add AppCapabilityList + AppKeyValueList data-owning design-system components",
-          "feat(m4-b.3): add /diagnostics page, startup capability log, and Capabilities_Resolved_Through_Service architecture test"
+          "feat(m4-b.3): add /diagnostics page, startup capability log, and Capabilities_Resolved_Through_Service architecture test",
+          "chore(m4-b.closeout): close M4-B with retrospective, M4-C plan, and m4-b milestone tag"
         ],
         "tests": [
           "Renders_Populated_Slot_With_One_Card_Per_Capability",
@@ -1269,7 +1277,7 @@
       "id": "C-024",
       "title": "AppKeyValueList",
       "status": "Accepted",
-      "completion_status": "Delivered (M4-B.2 + M4-B.3)",
+      "completion_status": "Delivered (M4-B closed 2026-07-13; C-024 verified by T-025 + T-026 + T-027)",
       "layer": 3,
       "category": "DesignSystem",
       "description": "The data-owning four-state design-system component that renders an IReadOnlyList<KeyValuePair<string, string>> as a definition list (dl) of key-value rows. Supports an AppKeyValueListFormat enum (Plain, Boolean, Code) that controls value rendering: Plain renders literal text, Boolean renders a check/cross icon for true/false, Code renders in a monospaced font. Supports the four child-content slots (Loading, Empty, Error, Populated) per docs/design-system.md section 5.4.",
@@ -1288,7 +1296,8 @@
       ],
       "delivered_by_tasks": [
         "T-025 (M4-B.2 first session, Done 2026-07-13)",
-        "T-026 (M4-B.3 first session, Done 2026-07-13; the /diagnostics page consumes AppKeyValueList)"
+        "T-026 (M4-B.3 first session, Done 2026-07-13; the /diagnostics page consumes AppKeyValueList)",
+        "T-027 (M4-B closeout, Done 2026-07-13)"
       ],
       "next_task": null,
       "blocked_by": [],
@@ -1298,11 +1307,13 @@
         ],
         "reports": [
           "implementation-report-m4-b-2-capability-list-components.md",
-          "implementation-report-m4-b-3-diagnostics-page-startup-log-and-architecture-test.md"
+          "implementation-report-m4-b-3-diagnostics-page-startup-log-and-architecture-test.md",
+          "retrospective-m4-b-capability-detection.md"
         ],
         "commits": [
           "feat(m4-b.2): add AppCapabilityList + AppKeyValueList data-owning design-system components",
-          "feat(m4-b.3): add /diagnostics page, startup capability log, and Capabilities_Resolved_Through_Service architecture test"
+          "feat(m4-b.3): add /diagnostics page, startup capability log, and Capabilities_Resolved_Through_Service architecture test",
+          "chore(m4-b.closeout): close M4-B with retrospective, M4-C plan, and m4-b milestone tag"
         ],
         "tests": [
           "Renders_Populated_Slot_With_One_Row_Per_Item",

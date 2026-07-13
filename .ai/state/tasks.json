@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
-  "updated_at": "2026-07-13T13:00:00Z",
-  "updated_by_session": "m4-b-3-diagnostics-page-startup-log-and-architecture-test",
+  "updated_at": "2026-07-13T14:00:00Z",
+  "updated_by_session": "m4-b-closeout",
   "tasks": [
     {
       "id": "T-001",
@@ -931,7 +931,7 @@
     {
       "id": "T-027",
       "title": "M4-B closeout session — M4-B closeout report + handoff to M4-C",
-      "status": "Ready",
+      "status": "Done",
       "milestone": "M4-B",
       "slice": "M4-B.closeout",
       "created_at": "2026-07-13T12:00:00Z",
@@ -946,10 +946,40 @@
       ],
       "plan": ".ai/plans/M4-B-closeout.md (to be drafted in the M4-B closeout session; the M4-B closeout session writes the M4-B closeout report and hands off to M4-C)",
       "evidence": {
-        "implementation_report": null,
-        "session_handoff": null
+        "branch": "feature/T-027-m4-b-closeout",
+        "files_added": [
+          "retrospective-m4-b-capability-detection.md",
+          ".ai/plans/M4-C-provider-registry-foundation.md",
+          ".ai/plans/M4-B-closeout.md",
+          "implementation-report-m4-b-closeout.md",
+          ".ai/handoffs/2026-07-13-m4-b-closeout.md"
+        ],
+        "files_modified": [
+          ".ai/state/session.json",
+          ".ai/state/tasks.json",
+          ".ai/state/current.md",
+          ".ai/state/task-board.md",
+          ".ai/state/milestones.json",
+          ".ai/state/capabilities.json",
+          "ROADMAP.md",
+          ".ai/plans/master-delivery-plan.md",
+          ".ai/handoffs/latest.md"
+        ],
+        "files_deleted": [],
+        "commit": "chore(m4-b.closeout): close M4-B with retrospective, M4-C plan, and m4-b milestone tag",
+        "branch_deleted": "feature/T-027-m4-b-closeout",
+        "tag": "m4-b (annotated; at the M4-B closeout commit on main per the branching strategy rule 9)",
+        "retrospective": "retrospective-m4-b-capability-detection.md",
+        "m4_c_plan": ".ai/plans/M4-C-provider-registry-foundation.md",
+        "test_count": "376 passed, 0 failed, 9 skipped (per ADR-016 / M4-D); identical to the M4-B.3 closeout; the M4-B closeout is a docs + workflow + state change with no new tests",
+        "next_step": "The next session approves the M4-C plan and begins the M4-C.1 implementation (T-028) on the user's Approve or Next invocation. The M4-B closeout does NOT begin M4-C, M4-D, or any provider creation (per the brief: 'Do not begin the following task' and the Progressive Coding Rule)."
       },
-      "notes": "M4-B closeout session is the fourth M4-B session. The session writes the M4-B closeout report (15+ sections mirroring the M4-A closeout reports; aggregates the M4-B.1 + M4-B.2 + M4-B.3 evidence blocks; finalises the M4-B status to Delivered; transitions the next-milestone handoff to M4-C). The session does NOT begin M4-C / M4-D / provider creation. M4-B closeout is staged for the user's Approve / Next invocation after T-026 is Done."
+      "notes": "M4-B closeout session is the fourth M4-B session. The session writes the M4-B closeout report (15+ sections mirroring the M4-A closeout reports; aggregates the M4-B.1 + M4-B.2 + M4-B.3 evidence blocks; finalises the M4-B status to Delivered; transitions the next-milestone handoff to M4-C). The session does NOT begin M4-C / M4-D / provider creation. M4-B closeout is staged for the user's Approve / Next invocation after T-026 is Done.",
+      "claimed_at": "2026-07-13T14:00:00Z",
+      "completed_at": "2026-07-13T14:00:00Z",
+      "owner": "m4-b-closeout session",
+      "implementation_report": "implementation-report-m4-b-closeout.md",
+      "handoff": ".ai/handoffs/2026-07-13-m4-b-closeout.md"
     },
     {
       "id": "T-009",
@@ -1018,6 +1048,16 @@
       "implementation_report": "implementation-report-m2-5-empty-routes-responsive-accessibility.md",
       "fix_summary": "Added @rendermode InteractiveServer to AppThemeToggle.razor. The layout itself remains static for streaming SSR (the layout's @Body is a RenderFragment delegate, which cannot be serialized across the SSR → interactive boundary; Blazor throws InvalidOperationException at request time if @rendermode is applied to a LayoutComponentBase). The toggle is the only interactive component in the layout's tree, so declaring the directive on the toggle itself is the minimum-blast-radius fix. The new AppLayout_ThemeToggleWiringTests bUnit test renders the AppLayout, finds the toggle inside the topbar, clicks it, and asserts appTheme.set is invoked; this proves the click handler is wired when the layout is rendered (not the toggle in isolation). The visual smoke test confirms every route returns 200 and the toggle's markup is present on every page.",
       "notes": "Reproduction (before fix): (1) dotnet run on http://localhost:5170. (2) Open the home page. (3) The theme toggle control is visible in the top bar's Trailing slot. (4) Click the toggle. Actual: the click does not change the document theme. Expected: the data-theme attribute changes immediately, persists across navigation, persists across refresh. After the fix, the click changes the document theme immediately, and the IIFE in App.razor persists the theme via localStorage 'app-theme'. Fixed in the M2.5 slice per the user's explicit opt-in. Branch: feature/m2-5-empty-routes-responsive-accessibility. Commit: feat(m2.5): add empty routes, responsive matrix, a11y audit, and theme toggle fix."
+    },
+    {
+      "id": "T-028",
+      "title": "M4-C.1 first session — IProviderRegistry contract + family registries + composition root + unit tests",
+      "status": "Ready",
+      "milestone": "M4-C",
+      "slice": "M4-C.1",
+      "created_at": "2026-07-13T14:00:00Z",
+      "plan": ".ai/plans/M4-C-provider-registry-foundation.md",
+      "evidence": {}
     }
   ]
 }

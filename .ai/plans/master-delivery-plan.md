@@ -26,8 +26,8 @@
 | M2    | Application Shell and Navigation                        | **Done (closed 2026-07-11)** | `implementation-report-m2-6-m2-closeout.md`; retrospective at `retrospective-m2-application-shell-and-navigation.md`; M2 closeout commit `chore(m2.6): close M2 with retrospective, milestone closeout standard, and M3 plan` on `main`; `m2` annotated milestone tag at the M2 closeout commit; per-slice commits `de082fd` and `ef1063c` on `feature/m2-1-application-shell` plus the M2.2 → M2.5 commit chain. |
 | M3    | Project Registration                                    | **Done (closed 2026-07-11; M3.1 + M3.2 + M3 closeout Delivered 2026-07-11)** | `implementation-report-m3-1-project-registration-slice-1.md`; `implementation-report-m3-2-project-registration-slice-2.md`; `implementation-report-m3-closeout.md`; the M3 retrospective at `retrospective-m3-project-registration.md` (13 sections per the Milestone Closeout Standard); the M3 closeout commit `chore(m3.closeout): close M3 with retrospective, M4-A plan, and m3 milestone tag` on `main`; the `m3` annotated milestone tag at the M3 closeout commit on `main` per the branching strategy rule 9; per-slice branches `feature/m3-1-project-registration-slice-1`, `feature/T-019-m3-2-project-registration-slice-2`, `feature/T-020-m3-closeout-and-retrospective` (all fast-forwarded into `main` and deleted per the branching strategy). The M3 plan is at `.ai/plans/M3-project-registration.md`; the M3.2 plan is at `.ai/plans/M3.2-project-registration-slice-2.md`; the M3 closeout plan is at `.ai/plans/M3-closeout.md` (all Delivered). M4-A is the active milestone; the M4-A plan is at `.ai/plans/M4-A-infrastructure-process-execution.md` (Status: Approved 2026-07-11 via the 'Next' invocation per `.ai/commands.md` § 4); the M4-A tasks T-021 (M4-A.1) and T-022 (M4-A.2) are `Done` in `.ai/state/tasks.json`. |
 | M4-A  | Infrastructure / Process Execution                      | **Active (M4-A.1 + M4-A.2 Delivered 2026-07-11; the M4-A plan is at `.ai/plans/M4-A-infrastructure-process-execution.md` Status: Approved 2026-07-11)** | `implementation-report-m4-a-1-infrastructure-project-skeleton.md`; the M4-A.1 per-session handoff at `.ai/handoffs/2026-07-11-m4-a-1-infrastructure-project-skeleton.md` (mirrored to `.ai/handoffs/latest.md`); the M4-A.1 closeout commit `feat(m4-a.1): add infrastructure project skeleton with IProcessRunner, ICredentialVault, IPlatformInfo, and on-disk IProjectStore` on `main`; the M4-A.1 feature branch `feature/T-021-m4-a-1-infrastructure-project-skeleton` is fast-forwarded into `main` and deleted per the branching strategy rules 6 + 7. `implementation-report-m4-a-2-open-action.md`; the M4-A.2 per-session handoff at `.ai/handoffs/2026-07-11-m4-a-2-open-action.md` (mirrored to `.ai/handoffs/latest.md`); the M4-A.2 closeout commit `feat(m4-a.2): enable AppProjectCard.Open action via IProcessRunner` on `main`; the M4-A.2 feature branch `feature/T-022-m4-a-2-open-action` is fast-forwarded into `main` and deleted per the branching strategy rules 6 + 7. |
-| M4-B  | Capability Detection                                    | **Active (M4-B plan in Awaiting Approval 2026-07-13; the M4-B plan is at `.ai/plans/M4-B-capability-detection.md`; the M4-B plan promotion commit `chore(m4-b.plan): draft M4-B capability detection plan in Awaiting Approval` is on the feature branch `feature/m4-b-capability-detection-plan-promotion` fast-forwarded into `main`; the feature branch is deleted per the branching strategy rule 7; the M4-B per-session handoff is at `.ai/handoffs/2026-07-13-m4-b-plan-promotion.md` mirrored to `.ai/handoffs/latest.md`)** | The M4-B plan is drafted. The M4-B implementation begins in a future session when the user invokes `Approve` or `Next`. The M4-B plan covers `IHostCapabilitiesService` + `HostCapabilities` + `HostCapability` records; `SystemHostCapabilitiesService` implementation probing six host tools (`git`, `ollama`, `powershell.exe`, `wsl.exe`, `wt.exe`, `bash.exe`) via `IProcessRunner.RunToCompletionAsync(tool, new[] { "--version" }, ct)` with a 5-second per-tool timeout and reading six provider credentials via `ICredentialVault.GetAsync("provider:<key>:token", ct)`; `AppCapabilityList` + `AppKeyValueList` data-owning four-state design-system components; `/diagnostics` page registered via `[RouteMetadata]` (Href `/diagnostics`, Order 4, ShowInSidebar = true, Icon `◆`); startup capability-report log through `ILogger<Program>`; `Capabilities_Resolved_Through_Service` architecture test (scoped to `App/Components/Diagnostics/` to avoid the M4-A.2 Open Action false positive); `docs/capabilities.md` documentation. The anticipated M4-B slice breakdown is M4-B.1 (contract + implementation + composition root + unit tests + architecture test), M4-B.2 (design-system components + bUnit tests), M4-B.3 (`/diagnostics` page + composition-root wiring + startup log + documentation). |
-| M4-C  | Provider Registry Foundation                            | Planned                    | No evidence yet.                              |
+| M4-B  | Capability Detection                                    | **Done (closed 2026-07-13; M4-B.1 + M4-B.2 + M4-B.3 + M4-B closeout Delivered 2026-07-13; the M4-B plan is at `.ai/plans/M4-B-capability-detection.md` Status: Approved 2026-07-13 via the 'Next' invocation per .ai/commands.md § 4; the M4-B closeout plan is at `.ai/plans/M4-B-closeout.md` Status: Approved 2026-07-13 via the brief; the M4-B retrospective is at `retrospective-m4-b-capability-detection.md` 13 sections per the Milestone Closeout Standard § 4; the `m4-b` annotated milestone tag is at the M4-B closeout commit on `main` per the branching strategy rule 9)** | M4-B ships the host capability detection layer in 4 slices: **M4-B.1** (T-024, Done 2026-07-13) — `IHostCapabilitiesService` contract + `HostCapabilities` + `HostCapability` records + `SystemHostCapabilitiesService` implementation (probes 6 host tools `git`/`ollama`/`powershell.exe`/`wsl.exe`/`wt.exe`/`bash.exe` via `IProcessRunner.RunToCompletionAsync` with 5-second per-tool timeout; reads 6 provider credentials via `ICredentialVault.GetAsync("provider:<key>:token", ct)`; `IPlatformInfo.IsWindows` gating for Windows-only tools; outer-cancellation propagation via re-throw) + `AddHostCapabilities` composition root + 20 unit tests + 3 in-line test doubles; **M4-B.2** (T-025, Done 2026-07-13) — `AppCapabilityList` + `AppKeyValueList` data-owning four-state design-system components + `AppKeyValueListFormat` enum (Plain, Boolean, Code) + 13 + 15 bUnit tests; **M4-B.3** (T-026, Done 2026-07-13) — `/diagnostics` page (composes M4-B.1 contract + M4-B.2 components + M1.2 primitives) + startup capability-report log in `Program.cs` (10-second `CancellationTokenSource` timeout; `ILogger<Program>`; Information level; try/catch with Warning on failure) + `Capabilities_Resolved_Through_Service` architecture test (Active; scoped to `App/Components/Diagnostics/`) + 4 bUnit page tests + `docs/capabilities.md` 10-section documentation + `docs/design-system.md` § 4.5 component status update; **M4-B closeout** (T-027, Done 2026-07-13) — the M4-B retrospective aggregating the M4-B.1 + M4-B.2 + M4-B.3 evidence blocks; the M4-C plan in `Awaiting Approval` at `.ai/plans/M4-C-provider-registry-foundation.md` (12 sections mirroring the M4-A + M4-B plans); the `m4-b` annotated milestone tag; the project-continuity state update per Rule 15 (the 6 state files: `session.json` + `tasks.json` + `current.md` + `task-board.md` + `milestones.json` + `capabilities.json`; + `ROADMAP.md` + this file). Cumulative test count at M4-B closeout: 376 passed (was 323 pre-M4-B; +20 M4-B.1 unit + 28 M4-B.2 bUnit + 4 M4-B.3 bUnit + 1 M4-B.3 architecture), 0 failed, 9 skipped (per ADR-016 / M4-D). Breakdown: 99 unit + 263 component + 14 architecture. M4-B does not create any `Providers.<X>` project (per the brief: 'Do not create providers'). M4-B does not begin M4-C, M4-D, or any provider creation (per the brief: 'Do not begin the following task' + the Progressive Coding Rule). M4-C is the next milestone (Status: Awaiting Approval). |
+| M4-C  | Provider Registry Foundation                            | **Awaiting Approval (the M4-C plan is at `.ai/plans/M4-C-provider-registry-foundation.md` Status: Awaiting Approval 2026-07-13; the M4-C plan is produced by the M4-B closeout session 2026-07-13)** | The M4-C plan covers the `IProviderRegistry` contract (the single allowed seam between the application and the provider layer); the `ProviderDescriptor` + `ProviderFamily` + `ProviderStatus` records; the 6 family registries (`ShellProviderRegistry` + `EditorProviderRegistry` + `AgentRuntimeProviderRegistry` + `TerminalProviderRegistry` + `WorktreeProviderRegistry` + `CredentialProviderRegistry`); the `SystemProviderRegistry` implementation that composes the 6 family registries and consumes `IHostCapabilitiesService` through DI to filter eligible providers per host capabilities; the 6 family fakes; the `AddProviderRegistry` composition root extension; the `AppProviderList` data-owning design-system component; the `/providers` page; the startup provider-report log; the `Providers_Resolve_Through_Registry` architecture test; `docs/providers.md` documentation. The anticipated M4-C slice breakdown is M4-C.1 (contract + family registries + implementation + fakes + composition root + unit tests), M4-C.2 (AppProviderList + /providers page + bUnit tests + architecture test), M4-C.x (closeout). M4-C awaits user approval; the M4-C.1 first session (T-028, `Ready`) begins in a future session on the user's `Approve` or `Next` invocation. |
 | M4-D  | First Concrete Process Providers                        | Planned                    | No evidence yet.                              |
 | M5    | Native Git Worktrees                                     | Planned                    | No evidence yet.                              |
 | M6    | Agent Runtime Launching                                 | Planned                    | No evidence yet.                              |
@@ -562,26 +562,55 @@ Process execution boundary (M4-A)
     `App/Components/Diagnostics/`; `Active` in M4-B).
   - `docs/capabilities.md` documentation.
 - **Dependencies.** M4-A.
-- **Completion status.** **Active (M4-B plan in Awaiting
-  Approval 2026-07-13).**
+- **Completion status.** **Done (closed 2026-07-13).**
 - **Evidence.** M4-B plan promotion commit on `main`
   (2026-07-13); M4-B plan at
-  `.ai/plans/M4-B-capability-detection.md`; M4-B
-  per-session handoff at
-  `.ai/handoffs/2026-07-13-m4-b-plan-promotion.md`
-  mirrored to `.ai/handoffs/latest.md`. No
-  implementation evidence yet (the M4-B implementation
-  begins in a future session).
+  `.ai/plans/M4-B-capability-detection.md`. M4-B
+  implementation delivered in 4 slices: M4-B.1 (T-024,
+  Done 2026-07-13; `feat(m4-b.1): add
+  IHostCapabilitiesService contract and
+  SystemHostCapabilitiesService implementation` on
+  `main`); M4-B.2 (T-025, Done 2026-07-13; `feat(m4-b.2):
+  add AppCapabilityList + AppKeyValueList data-owning
+  design-system components` on `main`); M4-B.3 (T-026,
+  Done 2026-07-13; `feat(m4-b.3): add /diagnostics page,
+  startup capability log, and
+  Capabilities_Resolved_Through_Service architecture
+  test` on `main`); M4-B closeout (T-027, Done
+  2026-07-13; `chore(m4-b.closeout): close M4-B with
+  retrospective, M4-C plan, and m4-b milestone tag` on
+  `main`; the `m4-b` annotated milestone tag is at the
+  M4-B closeout commit on `main` per the branching
+  strategy rule 9). M4-B per-session handoffs at
+  `.ai/handoffs/2026-07-13-m4-b-plan-promotion.md`,
+  `.ai/handoffs/2026-07-13-m4-b-1-host-capabilities-contract-and-service.md`,
+  `.ai/handoffs/2026-07-13-m4-b-2-capability-list-components.md`,
+  `.ai/handoffs/2026-07-13-m4-b-3-diagnostics-page-startup-log-and-architecture-test.md`,
+  `.ai/handoffs/2026-07-13-m4-b-closeout.md` (the last
+  one mirrored to `.ai/handoffs/latest.md`). M4-B
+  implementation reports at
+  `implementation-report-m4-b-1-host-capabilities-contract-and-service.md`,
+  `implementation-report-m4-b-2-capability-list-components.md`,
+  `implementation-report-m4-b-3-diagnostics-page-startup-log-and-architecture-test.md`,
+  `implementation-report-m4-b-closeout.md`. M4-B
+  retrospective at
+  `retrospective-m4-b-capability-detection.md` (13
+  sections per the Milestone Closeout Standard § 4).
+  Cumulative test count at M4-B closeout: 376 passed,
+  0 failed, 9 skipped (per ADR-016 / M4-D).
 - **Next milestone enabled.** M4-C (the provider registry
-  consumes the capability report).
+  consumes the capability report through DI; the M4-C
+  plan is in `Awaiting Approval` at
+  `.ai/plans/M4-C-provider-registry-foundation.md`).
 
 #### M4-B slice breakdown
 
 | Slice  | Title                                                  | Status                                |
 | ------ | ------------------------------------------------------ | ------------------------------------- |
-| M4-B.1 | Contract + implementation + composition root + unit tests + architecture test (`Capabilities_Resolved_Through_Service`; `IHostCapabilitiesService` + `HostCapabilities` + `HostCapability` + `SystemHostCapabilitiesService` + `AddHostCapabilities` + 10+ unit tests) | Planned (M4-B plan in Awaiting Approval 2026-07-13). |
-| M4-B.2 | Design-system components + bUnit tests (`AppCapabilityList` + `AppKeyValueList` data-owning four-state components + 10+ bUnit tests; `docs/design-system.md` § 4.5 rows updated) | Planned.                              |
-| M4-B.3 | `/diagnostics` page + composition-root wiring + startup log + documentation (`Diagnostics.razor` + `Program.cs` startup log + `docs/capabilities.md` + 3+ bUnit tests for the page) | Planned.                              |
+| M4-B.1 | Contract + implementation + composition root + unit tests (20 unit tests) + 3 in-line test doubles (`IHostCapabilitiesService` + `HostCapabilities` + `HostCapability` + `SystemHostCapabilitiesService` + `AddHostCapabilities`) | **Delivered (T-024, Done 2026-07-13).** Branch `feature/T-024-m4-b-1-host-capabilities-contract-and-service` fast-forwarded into `main` and deleted. |
+| M4-B.2 | Design-system components + bUnit tests (28 bUnit tests) (`AppCapabilityList` + `AppKeyValueList` data-owning four-state components + `AppKeyValueListFormat` enum) | **Delivered (T-025, Done 2026-07-13).** Branch `feature/T-025-m4-b-2-capability-list-components` fast-forwarded into `main` and deleted. |
+| M4-B.3 | `/diagnostics` page + composition-root wiring + startup log + documentation (4 bUnit page tests + 1 Active architecture test) (`Diagnostics.razor` + `Program.cs` startup log + `docs/capabilities.md` + `Capabilities_Resolved_Through_Service` architecture test + `docs/design-system.md` § 4.5 update) | **Delivered (T-026, Done 2026-07-13).** Branch `feature/T-026-m4-b-3-diagnostics-page-startup-log-and-architecture-test` fast-forwarded into `main` and deleted. |
+| M4-B.x | M4-B closeout (M4-B retrospective + M4-B -> Done + `m4-b` tag + M4-C plan + project-continuity state; docs + workflow + state change with no new product functionality) | **Delivered (T-027, Done 2026-07-13).** Branch `feature/T-027-m4-b-closeout` fast-forwarded into `main` and deleted. The `m4-b` annotated milestone tag is at the M4-B closeout commit on `main`. |
 
 #### M4-C — Provider Registry Foundation
 
