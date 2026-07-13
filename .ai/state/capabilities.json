@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1.0",
-  "updated_at": "2026-07-13T14:00:00Z",
-  "updated_by_session": "m4-b-closeout",
+  "updated_at": "2026-07-13T16:00:00Z",
+  "updated_by_session": "m4-c-1-provider-registry-contract-and-family-registries",
   "completion_status_mapping": {
     "NotStarted": "Not in capabilities.json. Reserved for capabilities the product will need but which have not yet been admitted to the graph.",
     "Planned": "status: Accepted; delivered_by_milestone status: Planned; no plan yet, or plan stub is Draft. Sequenced for a milestone, plan not promoted to Ready / Awaiting Approval.",
@@ -421,13 +421,14 @@
       "id": "C-010",
       "title": "IProviderRegistry and family-scoped registries",
       "status": "Accepted",
-      "completion_status": "Planned",
+      "completion_status": "Delivered (M4-C.1 boundary slice delivered 2026-07-13; C-010 verification deferred to the M4-C closeout when the AppProviderList page consumes IProviderRegistry end-to-end)",
       "layer": 1,
       "category": "ProviderModel",
-      "description": "The cross-family registry and the eight family-scoped registries. Enumerate registered providers, resolve by ProviderId, apply Enabled/Healthy filter.",
-      "product_outcome": "Every family has a typed registry; pages and services resolve providers by ProviderId, never by importing a concrete implementation directly. The cross-family registry surfaces the health state to the dashboard.",
+      "description": "The cross-family registry and the six family-scoped registries. Enumerate registered providers, resolve by ProviderFamily, apply host capability filter.",
+      "product_outcome": "Every family has a typed registry; pages and services resolve providers by ProviderFamily, never by importing a concrete implementation directly. The cross-family registry surfaces the host capability state to the dashboard.",
       "depends_on": [
-        "C-001"
+        "C-001",
+        "C-015"
       ],
       "consumed_by": [
         "C-018"
@@ -440,37 +441,89 @@
         "M7",
         "M8"
       ],
-      "delivered_by_tasks": [],
-      "next_task": null,
+      "delivered_by_tasks": [
+        "T-028 (M4-C.1 first session, Done 2026-07-13)"
+      ],
+      "next_task": "T-029 (M4-C.2 first session)",
       "blocked_by": [],
       "evidence": {
-        "plans": [],
-        "reports": [],
-        "commits": [],
-        "tests": [],
-        "source_paths": []
+        "plans": [
+          ".ai/plans/M4-C-provider-registry-foundation.md"
+        ],
+        "reports": [
+          "implementation-report-m4-c-1-provider-registry-contract-and-family-registries.md"
+        ],
+        "commits": [
+          "feat(m4-c.1): add IProviderRegistry contract, family registries, SystemProviderRegistry implementation, family fakes, and AddProviderRegistry composition root"
+        ],
+        "tests": [
+          "Constructor_throws_ArgumentNullException_when_gitFamily_is_null",
+          "Constructor_throws_ArgumentNullException_when_agentRuntimeFamily_is_null",
+          "Constructor_throws_ArgumentNullException_when_reviewFamily_is_null",
+          "Constructor_throws_ArgumentNullException_when_qualityGateFamily_is_null",
+          "Constructor_throws_ArgumentNullException_when_autonomousLoopFamily_is_null",
+          "Constructor_throws_ArgumentNullException_when_orchestrationFamily_is_null",
+          "Constructor_throws_ArgumentNullException_when_capabilities_is_null",
+          "Constructor_throws_ArgumentNullException_when_logger_is_null",
+          "ListProvidersAsync_returns_descriptors_unchanged_when_family_capability_is_available",
+          "ListProvidersAsync_downgrades_descriptors_to_Unavailable_when_family_capability_is_not_available",
+          "ListProvidersAsync_preserves_Disabled_descriptors_regardless_of_capability",
+          "ListProvidersAsync_returns_empty_for_family_with_no_descriptors",
+          "ListProvidersAsync_propagates_cancellation_when_token_is_cancelled_before_call",
+          "ListProvidersAsync_logs_at_Information_level_on_success",
+          "ListProvidersAsync_calls_IGitProviderFamily_when_family_is_Git",
+          "ListProvidersAsync_calls_IReviewProviderFamily_when_family_is_Review",
+          "ListProvidersAsync_calls_IHostCapabilitiesService_once_per_invocation",
+          "ListProvidersAsync_throws_ArgumentOutOfRangeException_for_unknown_family",
+          "FakeGitProviderFamily_records_CallCount"
+        ],
+        "source_paths": [
+          "src/AiEng.Platform.Application/Providers/IProviderRegistry.cs",
+          "src/AiEng.Platform.Application/Providers/ProviderDescriptor.cs",
+          "src/AiEng.Platform.Application/Providers/ProviderFamily.cs",
+          "src/AiEng.Platform.Application/Providers/ProviderStatus.cs",
+          "src/AiEng.Platform.Application/Providers/Families/IProviderFamily.cs",
+          "src/AiEng.Platform.Application/Providers/Families/IGitProviderFamily.cs",
+          "src/AiEng.Platform.Application/Providers/Families/IAgentRuntimeProviderFamily.cs",
+          "src/AiEng.Platform.Application/Providers/Families/IReviewProviderFamily.cs",
+          "src/AiEng.Platform.Application/Providers/Families/IQualityGateProviderFamily.cs",
+          "src/AiEng.Platform.Application/Providers/Families/IAutonomousLoopProviderFamily.cs",
+          "src/AiEng.Platform.Application/Providers/Families/IOrchestrationProviderFamily.cs",
+          "src/AiEng.Platform.Infrastructure/Providers/SystemProviderRegistry.cs",
+          "src/AiEng.Platform.Infrastructure/Providers/Families/GitProviderFamily.cs",
+          "src/AiEng.Platform.Infrastructure/Providers/Families/AgentRuntimeProviderFamily.cs",
+          "src/AiEng.Platform.Infrastructure/Providers/Families/ReviewProviderFamily.cs",
+          "src/AiEng.Platform.Infrastructure/Providers/Families/QualityGateProviderFamily.cs",
+          "src/AiEng.Platform.Infrastructure/Providers/Families/AutonomousLoopProviderFamily.cs",
+          "src/AiEng.Platform.Infrastructure/Providers/Families/OrchestrationProviderFamily.cs",
+          "src/AiEng.Platform.App/Composition/Providers/ProviderRegistryServiceCollectionExtensions.cs",
+          "tests/AiEng.Platform.UnitTests/Providers/SystemProviderRegistryTests.cs"
+        ]
       },
       "acceptance_criteria": [
-        "IProviderRegistry and the eight family-scoped registries exist with Enumerate / Resolve / SetEnabled.",
-        "Pages_Resolve_Providers_Through_Registry and Pages_DoNotReference_ConcreteProviders architecture tests are active and green.",
-        "Fake providers for every family are wired in the composition root (M4-C)."
+        "IProviderRegistry and the six family-scoped registries exist with ListProvidersAsync (M4-C.1) + Enumerate / Resolve / SetEnabled (M4-C.x).",
+        "Providers_Resolve_Through_Registry architecture test is active and green (M4-C.2).",
+        "No-op family stubs are wired in the composition root (M4-C.1); M4-D replaces the stubs with concrete providers."
       ],
-      "completed_criteria": [],
+      "completed_criteria": [
+        "M4-C.1 (T-028): IProviderRegistry contract + ProviderDescriptor + ProviderFamily + ProviderStatus + 6 family registry contracts + IProviderFamily base + SystemProviderRegistry implementation + 6 no-op family stubs + AddProviderRegistry composition root + 6 family fakes + 19 unit tests are delivered. 395 passed (376 pre-M4-C.1 + 19 new), 0 failed, 9 skipped (per ADR-016 / M4-D). The IProviderRegistry is the single allowed seam for provider lookup; no App/Components/ code may bypass the seam (enforced by the M4-C.2 Providers_Resolve_Through_Registry architecture test)."
+      ],
       "adr": "ADR-012, ADR-016",
       "architecture_tests": [
-        "Only_CompositionRoot_MayReference_ConcreteProviders",
-        "Pages_Resolve_Providers_Through_Registry",
-        "Pages_DoNotReference_ConcreteProviders",
-        "Application_DoesNotReference_ConcreteProviders",
-        "Components_DoNotInject_ConcreteProviders"
+        "Providers_Resolve_Through_Registry (deferred to M4-C.2)",
+        "Only_CompositionRoot_MayReference_ConcreteProviders (registered-but-disabled per ADR-016 / M4-D)",
+        "Pages_Resolve_Providers_Through_Registry (registered-but-disabled per ADR-016 / M4-D)",
+        "Pages_DoNotReference_ConcreteProviders (registered-but-disabled per ADR-016 / M4-D)",
+        "Application_DoesNotReference_ConcreteProviders (registered-but-disabled per ADR-016 / M4-D)",
+        "Components_DoNotInject_ConcreteProviders (registered-but-disabled per ADR-016 / M4-D)"
       ],
-      "last_updated": "2026-07-11"
+      "last_updated": "2026-07-13"
     },
     {
       "id": "C-011",
       "title": "Composition root",
       "status": "Accepted",
-      "completion_status": "Planned",
+      "completion_status": "Delivered (M4-C.1 boundary slice delivered 2026-07-13; AddProviderRegistry extension is the canonical composition root for the M4-C provider layer; the C-010 IProviderRegistry is wired into DI via this extension; T-028 Done)",
       "layer": 1,
       "category": "ProviderModel",
       "description": "The set of files in AiEng.Platform.App/Composition/ that wire concrete provider implementations into DI. The only place in the solution that may reference Providers.<X> projects directly.",
@@ -487,30 +540,48 @@
         "M7",
         "M8"
       ],
-      "delivered_by_tasks": [],
-      "next_task": null,
+      "delivered_by_tasks": [
+        "T-028 (M4-C.1 first session, Done 2026-07-13)"
+      ],
+      "next_task": "T-029 (M4-C.2 first session; the M4-C.2 second session does not modify the composition root)",
       "blocked_by": [],
       "evidence": {
-        "plans": [],
-        "reports": [],
-        "commits": [],
-        "tests": [],
-        "source_paths": []
+        "plans": [
+          ".ai/plans/M4-C-provider-registry-foundation.md"
+        ],
+        "reports": [
+          "implementation-report-m4-c-1-provider-registry-contract-and-family-registries.md"
+        ],
+        "commits": [
+          "feat(m4-c.1): add IProviderRegistry contract, family registries, SystemProviderRegistry implementation, family fakes, and AddProviderRegistry composition root"
+        ],
+        "tests": [
+          "ListProvidersAsync_returns_descriptors_unchanged_when_family_capability_is_available",
+          "ListProvidersAsync_downgrades_descriptors_to_Unavailable_when_family_capability_is_not_available",
+          "ListProvidersAsync_preserves_Disabled_descriptors_regardless_of_capability",
+          "ListProvidersAsync_returns_empty_for_family_with_no_descriptors"
+        ],
+        "source_paths": [
+          "src/AiEng.Platform.App/Composition/Providers/ProviderRegistryServiceCollectionExtensions.cs",
+          "src/AiEng.Platform.App/Composition/ServiceCollectionExtensions.cs"
+        ]
       },
       "acceptance_criteria": [
-        "AiEng.Platform.App/Composition/ exists; only this folder references Providers.<X> projects.",
-        "ServiceCollectionExtensions.AddProviderComposition() is the single composition extension; called once in Program.cs.",
-        "Only_CompositionRoot_MayReference_ConcreteProviders architecture test is active and green."
+        "AiEng.Platform.App/Composition/Providers/ exists; only this folder wires the M4-C provider layer.",
+        "ServiceCollectionExtensions.AddProviderRegistry() is the single composition extension; called once in AddPlatformServices (M4-C.1).",
+        "Only_CompositionRoot_MayReference_ConcreteProviders architecture test is active and green (M4-D; M4-C.1 leaves the test registered-but-disabled per ADR-016)."
       ],
-      "completed_criteria": [],
+      "completed_criteria": [
+        "M4-C.1 (T-028): AddProviderRegistry composition root extension is the single M4-C composition root. It registers the 6 no-op family stub implementations (in src/AiEng.Platform.Infrastructure/Providers/Families/) + IProviderRegistry (SystemProviderRegistry) via TryAddSingleton. The extension is called from AddPlatformServices in ServiceCollectionExtensions.cs after AddInfrastructure + AddHostCapabilities. The Infrastructure no-op stubs return Array.Empty<ProviderDescriptor>(); M4-D replaces the stubs with concrete providers."
+      ],
       "adr": "ADR-016",
       "architecture_tests": [
-        "Only_CompositionRoot_MayReference_ConcreteProviders",
-        "Pages_DoNotReference_ConcreteProviders",
-        "Application_DoesNotReference_ConcreteProviders",
-        "Components_DoNotInject_ConcreteProviders"
+        "Only_CompositionRoot_MayReference_ConcreteProviders (registered-but-disabled per ADR-016 / M4-D)",
+        "Pages_DoNotReference_ConcreteProviders (registered-but-disabled per ADR-016 / M4-D)",
+        "Application_DoesNotReference_ConcreteProviders (registered-but-disabled per ADR-016 / M4-D)",
+        "Components_DoNotInject_ConcreteProviders (registered-but-disabled per ADR-016 / M4-D)"
       ],
-      "last_updated": "2026-07-11"
+      "last_updated": "2026-07-13"
     },
     {
       "id": "C-012",

@@ -40,12 +40,15 @@
 ## Current Milestone
 
 - **Active milestone:** **M4-C — Provider
-  Registry Foundation** (Awaiting Approval,
+  Registry Foundation** (Active,
   2026-07-13; the M4-C plan is at
   [`.ai/plans/M4-C-provider-registry-foundation.md`](../../.ai/plans/M4-C-provider-registry-foundation.md);
-  Status: Awaiting Approval; the M4-C
-  plan is produced by the M4-B closeout
-  session 2026-07-13). M4-C ships the
+  Status: Active; the M4-C plan was
+  approved at M4-B closeout 2026-07-13;
+  the M4-C.1 first session (T-028) was
+  delivered 2026-07-13 and transitioned
+  M4-C from `Awaiting Approval` to
+  `Active`). M4-C ships the
   provider registry foundation: the
   `IProviderRegistry` contract (the
   single allowed seam between the
@@ -57,12 +60,12 @@
   `IProvider` implementation); the
   `ProviderDescriptor` + `ProviderFamily`
   + `ProviderStatus` records; the 6 family
-  registries (`ShellProviderRegistry` +
-  `EditorProviderRegistry` +
-  `AgentRuntimeProviderRegistry` +
-  `TerminalProviderRegistry` +
-  `WorktreeProviderRegistry` +
-  `CredentialProviderRegistry`); the
+  registries (`GitProviderFamily` +
+  `AgentRuntimeProviderFamily` +
+  `ReviewProviderFamily` +
+  `QualityGateProviderFamily` +
+  `AutonomousLoopProviderFamily` +
+  `OrchestrationProviderFamily`); the
   `SystemProviderRegistry` implementation
   that composes the 6 family registries
   and consumes `IHostCapabilitiesService`
@@ -76,11 +79,20 @@
   provider-report log; the
   `Providers_Resolve_Through_Registry`
   architecture test; `docs/providers.md`
-  documentation. M4-C awaits user
-  approval; the M4-C.1 first session
-  (T-028, `Ready`) begins in a future
-  session on the user's `Approve` or
-  `Next` invocation.
+  documentation. The M4-C.1 first
+  session (T-028, Done 2026-07-13)
+  delivered the boundary slice: the
+  `IProviderRegistry` + the 6 family
+  registry contracts + the
+  `SystemProviderRegistry`
+  implementation + the 6 no-op family
+  stubs + the `AddProviderRegistry`
+  composition root + the 6 family
+  fakes + 19 unit tests (395 passed
+  total). The M4-C.2 first session
+  (T-029, `Ready`) is the next session
+  on the user's `Approve` or `Next`
+  invocation.
 - **Last completed milestone:** **M4-B —
   Capability Detection** (Done,
   closed 2026-07-13; the M4-B plan is
@@ -400,7 +412,8 @@
 
 ## Current Slice
 
-- **Active slice:** **M4-B closeout — M4-B retrospective + M4-B -> Done + m4-b tag + M4-C plan + project-continuity state** (delivered 2026-07-13). The branch `feature/T-027-m4-b-closeout` carried the M4-B closeout work; the M4-B closeout commit `chore(m4-b.closeout): close M4-B with retrospective, M4-C plan, and m4-b milestone tag` is on this branch; the branch is fast-forwarded into `main` per the branching strategy rule 6; the branch is deleted per rule 7. M4-B closeout ships: the M4-B retrospective at `retrospective-m4-b-capability-detection.md` (13 sections per the Milestone Closeout Standard § 4); the M4-C plan at `.ai/plans/M4-C-provider-registry-foundation.md` (12 sections mirroring the M4-A + M4-B plans; Status: Awaiting Approval); the M4-B closeout plan at `.ai/plans/M4-B-closeout.md` (12 sections); the M4-B closeout implementation report at `implementation-report-m4-b-closeout.md` (15+ sections); the M4-B closeout handoff at `.ai/handoffs/2026-07-13-m4-b-closeout.md` (mirrored to `.ai/handoffs/latest.md`); the project-continuity state update (6 state files: `session.json` + `tasks.json` + `current.md` + `task-board.md` + `milestones.json` + `capabilities.json`; `ROADMAP.md` + `.ai/plans/master-delivery-plan.md`). The `m4-b` annotated milestone tag is at the M4-B closeout commit on `main` per the branching strategy rule 9; the tag message references the M4-B retrospective path: `M4-B closeout: capability detection. See retrospective-m4-b-capability-detection.md`. Total: 376 passed, 0 failed, 9 skipped (per ADR-016 / M4-D) — identical to the M4-B.3 closeout; the M4-B closeout is a docs + workflow + state change with no new tests. M4-B closeout does NOT begin M4-C / M4-D / provider creation (per the brief: 'Do not begin the following task'). The next session is the M4-C.1 first session (T-028) on the user's `Approve` or `Next` invocation.
+- **Active slice:** **M4-C.1 — IProviderRegistry contract + ProviderDescriptor + ProviderFamily + ProviderStatus + 6 family registry contracts + IProviderFamily base + SystemProviderRegistry implementation + 6 no-op family stubs + AddProviderRegistry composition root + 6 family fakes + 19 unit tests** (delivered 2026-07-13). The branch `feature/T-028-m4-c-1-provider-registry-contract-and-family-registries` carried the M4-C.1 work; the M4-C.1 closeout commit `feat(m4-c.1): add IProviderRegistry contract, family registries, SystemProviderRegistry implementation, family fakes, and AddProviderRegistry composition root` is on this branch; the branch is fast-forwarded into `main` per the branching strategy rule 6; the branch is deleted per rule 7. M4-C.1 ships: the IProviderRegistry contract + the ProviderDescriptor sealed record + the ProviderFamily + ProviderStatus enums in `src/AiEng.Platform.Application/Providers/`; the IProviderFamily base interface + the 6 family-specific subinterfaces (IGitProviderFamily, IAgentRuntimeProviderFamily, IReviewProviderFamily, IQualityGateProviderFamily, IAutonomousLoopProviderFamily, IOrchestrationProviderFamily) in `src/AiEng.Platform.Application/Providers/Families/`; the SystemProviderRegistry implementation in `src/AiEng.Platform.Infrastructure/Providers/` (aggregates the 6 family registries through IProviderFamily; consumes IHostCapabilitiesService through DI; downgrades Available descriptors to Unavailable when the family capability is not available; preserves Disabled; logs at Information level); the 6 no-op family stub implementations in `src/AiEng.Platform.Infrastructure/Providers/Families/`; the AddProviderRegistry composition root extension in `src/AiEng.Platform.App/Composition/Providers/`; the AddProviderRegistry wire-up in AddPlatformServices after AddInfrastructure + AddHostCapabilities; the 6 family fakes in `tests/AiEng.Platform.UnitTests/Providers/`; 19 unit tests in `SystemProviderRegistryTests.cs`. Total: 395 passed (376 pre-M4-C.1 + 19 new), 0 failed, 9 skipped (per ADR-016 / M4-D). M4-C.1 does NOT begin M4-C.2 / M4-C closeout / M4-D / provider creation (per the brief: 'Do not begin the following task'). The next session is the M4-C.2 first session (T-029) on the user's `Approve` or `Next` invocation.
+- **Last completed slice:** **M4-B closeout — M4-B retrospective + M4-B -> Done + m4-b tag + M4-C plan + project-continuity state** (delivered 2026-07-13). The branch `feature/T-027-m4-b-closeout` carried the M4-B closeout work; the M4-B closeout commit `chore(m4-b.closeout): close M4-B with retrospective, M4-C plan, and m4-b milestone tag` is on this branch; the branch is fast-forwarded into `main` per the branching strategy rule 6; the branch is deleted per rule 7. M4-B closeout ships: the M4-B retrospective at `retrospective-m4-b-capability-detection.md` (13 sections per the Milestone Closeout Standard § 4); the M4-C plan at `.ai/plans/M4-C-provider-registry-foundation.md` (12 sections mirroring the M4-A + M4-B plans; Status: Awaiting Approval); the M4-B closeout plan at `.ai/plans/M4-B-closeout.md` (12 sections); the M4-B closeout implementation report at `implementation-report-m4-b-closeout.md` (15+ sections); the M4-B closeout handoff at `.ai/handoffs/2026-07-13-m4-b-closeout.md` (mirrored to `.ai/handoffs/latest.md`); the project-continuity state update (6 state files: `session.json` + `tasks.json` + `current.md` + `task-board.md` + `milestones.json` + `capabilities.json`; `ROADMAP.md` + `.ai/plans/master-delivery-plan.md`). The `m4-b` annotated milestone tag is at the M4-B closeout commit on `main` per the branching strategy rule 9; the tag message references the M4-B retrospective path: `M4-B closeout: capability detection. See retrospective-m4-b-capability-detection.md`. Total: 376 passed, 0 failed, 9 skipped (per ADR-016 / M4-D) — identical to the M4-B.3 closeout; the M4-B closeout is a docs + workflow + state change with no new tests. M4-B closeout does NOT begin M4-C / M4-D / provider creation (per the brief: 'Do not begin the following task'). The next session is the M4-C.1 first session (T-028) on the user's `Approve` or `Next` invocation.
 - **Last completed slice:** **M4-B.1 — IHostCapabilitiesService contract + implementation + composition root + unit tests** (delivered 2026-07-13). The branch `feature/T-024-m4-b-1-host-capabilities-contract-and-service` carried the M4-B.1 work; the M4-B.1 closeout commit `feat(m4-b.1): add IHostCapabilitiesService contract and SystemHostCapabilitiesService implementation` is on this branch; the branch is fast-forwarded into `main` per the branching strategy rule 6; the branch is deleted per rule 7. M4-B.1 ships the IHostCapabilitiesService contract + the HostCapabilities + HostCapability records in `src/AiEng.Platform.Application/Capabilities/`; the SystemHostCapabilitiesService implementation in `src/AiEng.Platform.Infrastructure/Capabilities/` (6 host tool probes + 6 provider credential probes; 5-second per-tool linked CancellationTokenSource timeout; per-tool Regex version parsing; IPlatformInfo.IsWindows gating for Windows-only tools; outer-cancellation propagation via re-throw); the CapabilityProbe internal record types; the AddHostCapabilities composition root extension; the wire-up in AddPlatformServices; 20 unit tests in `tests/AiEng.Platform.UnitTests/Capabilities/SystemHostCapabilitiesServiceTests.cs`. Total: 343 passed, 0 failed, 9 skipped (per ADR-016 / M4-D). M4-B.1 does NOT begin M4-B.2 / M4-B.3 / M4-C / M4-D (per the brief: 'Do not begin the following task').
 - **Last completed slice:** **M4-B plan promotion (Capability Detection plan drafted in Awaiting Approval)** (delivered 2026-07-13). The branch `feature/m4-b-capability-detection-plan-promotion` carried the M4-B plan promotion work; the M4-B plan promotion commit `chore(m4-b.plan): draft M4-B capability detection plan in Awaiting Approval` is on this branch; the branch is fast-forwarded into `main` per the branching strategy rule 6; the branch is deleted per rule 7. The M4-B plan is in Awaiting Approval at `.ai/plans/M4-B-capability-detection.md` (12 sections mirroring the M4-A plan's 12-section structure).
 - **Last completed slice:** **M4-A.2 — Open

@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
-  "updated_at": "2026-07-13T14:00:00Z",
-  "updated_by_session": "m4-b-closeout",
+  "updated_at": "2026-07-13T16:00:00Z",
+  "updated_by_session": "m4-c-1-provider-registry-contract-and-family-registries",
   "tasks": [
     {
       "id": "T-001",
@@ -1052,11 +1052,93 @@
     {
       "id": "T-028",
       "title": "M4-C.1 first session — IProviderRegistry contract + family registries + composition root + unit tests",
-      "status": "Ready",
+      "status": "Done",
       "milestone": "M4-C",
       "slice": "M4-C.1",
       "created_at": "2026-07-13T14:00:00Z",
+      "claimed_at": "2026-07-13T15:00:00Z",
+      "started_at": "2026-07-13T15:00:00Z",
+      "started_by_session": "m4-c-1-provider-registry-contract-and-family-registries",
+      "completed_at": "2026-07-13T16:00:00Z",
+      "completed_by_session": "m4-c-1-provider-registry-contract-and-family-registries",
+      "owner": "m4-c-1-provider-registry-contract-and-family-registries session",
       "plan": ".ai/plans/M4-C-provider-registry-foundation.md",
+      "implementation_report": "implementation-report-m4-c-1-provider-registry-contract-and-family-registries.md",
+      "handoff": ".ai/handoffs/2026-07-13-m4-c-1-provider-registry-contract-and-family-registries.md",
+      "evidence": {
+        "branch": "feature/T-028-m4-c-1-provider-registry-contract-and-family-registries",
+        "files_added": [
+          "src/AiEng.Platform.Application/Providers/IProviderRegistry.cs",
+          "src/AiEng.Platform.Application/Providers/ProviderDescriptor.cs",
+          "src/AiEng.Platform.Application/Providers/ProviderFamily.cs",
+          "src/AiEng.Platform.Application/Providers/ProviderStatus.cs",
+          "src/AiEng.Platform.Application/Providers/Families/IProviderFamily.cs",
+          "src/AiEng.Platform.Application/Providers/Families/IGitProviderFamily.cs",
+          "src/AiEng.Platform.Application/Providers/Families/IAgentRuntimeProviderFamily.cs",
+          "src/AiEng.Platform.Application/Providers/Families/IReviewProviderFamily.cs",
+          "src/AiEng.Platform.Application/Providers/Families/IQualityGateProviderFamily.cs",
+          "src/AiEng.Platform.Application/Providers/Families/IAutonomousLoopProviderFamily.cs",
+          "src/AiEng.Platform.Application/Providers/Families/IOrchestrationProviderFamily.cs",
+          "src/AiEng.Platform.Infrastructure/Providers/SystemProviderRegistry.cs",
+          "src/AiEng.Platform.Infrastructure/Providers/Families/GitProviderFamily.cs",
+          "src/AiEng.Platform.Infrastructure/Providers/Families/AgentRuntimeProviderFamily.cs",
+          "src/AiEng.Platform.Infrastructure/Providers/Families/ReviewProviderFamily.cs",
+          "src/AiEng.Platform.Infrastructure/Providers/Families/QualityGateProviderFamily.cs",
+          "src/AiEng.Platform.Infrastructure/Providers/Families/AutonomousLoopProviderFamily.cs",
+          "src/AiEng.Platform.Infrastructure/Providers/Families/OrchestrationProviderFamily.cs",
+          "tests/AiEng.Platform.UnitTests/Providers/FakeGitProviderFamily.cs",
+          "tests/AiEng.Platform.UnitTests/Providers/FakeAgentRuntimeProviderFamily.cs",
+          "tests/AiEng.Platform.UnitTests/Providers/FakeReviewProviderFamily.cs",
+          "tests/AiEng.Platform.UnitTests/Providers/FakeQualityGateProviderFamily.cs",
+          "tests/AiEng.Platform.UnitTests/Providers/FakeAutonomousLoopProviderFamily.cs",
+          "tests/AiEng.Platform.UnitTests/Providers/FakeOrchestrationProviderFamily.cs",
+          "tests/AiEng.Platform.UnitTests/Providers/SystemProviderRegistryTests.cs",
+          "src/AiEng.Platform.App/Composition/Providers/ProviderRegistryServiceCollectionExtensions.cs",
+          ".ai/handoffs/2026-07-13-m4-c-1-provider-registry-contract-and-family-registries.md",
+          "implementation-report-m4-c-1-provider-registry-contract-and-family-registries.md"
+        ],
+        "files_modified": [
+          "src/AiEng.Platform.App/Composition/ServiceCollectionExtensions.cs",
+          ".ai/state/session.json",
+          ".ai/state/tasks.json",
+          ".ai/state/current.md",
+          ".ai/state/task-board.md",
+          ".ai/state/milestones.json",
+          ".ai/state/capabilities.json",
+          ".ai/handoffs/latest.md"
+        ],
+        "files_deleted": [],
+        "tests": {
+          "unit_tests_added": 19,
+          "unit_tests_total": 118,
+          "active_tests_passing": 395,
+          "active_tests_failed": 0,
+          "tests_skipped": 9,
+          "build_warnings": 0,
+          "build_errors": 0
+        },
+        "commit_message": "feat(m4-c.1): add IProviderRegistry contract, family registries, SystemProviderRegistry implementation, family fakes, and AddProviderRegistry composition root",
+        "branch_deleted": "feature/T-028-m4-c-1-provider-registry-contract-and-family-registries",
+        "test_count": "395 passed (376 pre-M4-C.1 + 19 new), 0 failed, 9 skipped (per ADR-016 / M4-D)",
+        "next_step": "The next session approves the M4-C.2 plan and begins the M4-C.2 implementation (T-029) on the user's Approve or Next invocation. The M4-C.1 first session does NOT begin M4-C.2, M4-C closeout, M4-D, or any provider creation (per the brief: 'Do not begin the following task' and the Progressive Coding Rule)."
+      },
+      "notes": "Delivered 2026-07-13. M4-C.1 scope landed per the approved M4-C plan: the IProviderRegistry contract + the ProviderDescriptor + ProviderFamily + ProviderStatus records/enums in src/AiEng.Platform.Application/Providers/; the IProviderFamily base interface + the 6 family-specific subinterfaces in src/AiEng.Platform.Application/Providers/Families/; the SystemProviderRegistry implementation in src/AiEng.Platform.Infrastructure/Providers/ (consumes IHostCapabilitiesService through DI; downgrades Available to Unavailable when the family capability is not available; logs at Information level); the 6 no-op family stub implementations in src/AiEng.Platform.Infrastructure/Providers/Families/; the AddProviderRegistry composition root extension in src/AiEng.Platform.App/Composition/Providers/ (registers the 6 family stubs + IProviderRegistry via TryAddSingleton); the AddProviderRegistry wire-up in AddPlatformServices; the 6 family fakes in tests/AiEng.Platform.UnitTests/Providers/ (each fake records the CallCount + observes the CancellationToken + queues the next IReadOnlyList<ProviderDescriptor>); 19 unit tests in SystemProviderRegistryTests.cs (8 constructor-null tests for the 8 dependencies; 7 happy-path + edge-case tests for ListProvidersAsync behaviour; 1 log test; 2 dispatch tests; 1 capability-call-count test; 1 ArgumentOutOfRangeException test; 1 fake-CallCount test). Cumulative test count: 395 passed, 0 failed, 9 skipped (per ADR-016 / M4-D). The IProviderFamily base interface resolves the switch-expression common-type problem in SystemProviderRegistry (the 6 family-specific subinterfaces share the same ListProvidersAsync signature; the implementation constructor-injects the 6 subinterface types + stores them as IProviderFamily fields + uses a switch expression on ProviderFamily to resolve the family registry). Branch: feature/T-028-m4-c-1-provider-registry-contract-and-family-registries. Commit: feat(m4-c.1): add IProviderRegistry contract, family registries, SystemProviderRegistry implementation, family fakes, and AddProviderRegistry composition root. Push skipped (no remote authorisation). One documented deviation: the AddProviderRegistry composition root registers the Infrastructure no-op family stubs (not the test fakes); the App project cannot reference AiEng.Platform.UnitTests (a layering constraint); the test fakes are passed to SystemProviderRegistry via constructor injection in the unit tests. The session does NOT begin M4-C.2 / M4-C closeout / M4-D / provider creation. The next session is the M4-C.2 first session (T-029) on the user's Approve or Next invocation."
+    },
+    {
+      "id": "T-029",
+      "title": "M4-C.2 second session — AppProviderList component + /providers page + Providers_Resolve_Through_Registry architecture test + docs",
+      "status": "Ready",
+      "milestone": "M4-C",
+      "slice": "M4-C.2",
+      "created_at": "2026-07-13T15:00:00Z",
+      "depends_on_milestone": "M4-C (Active)",
+      "depends_on_task": "T-028 (M4-C.1, InProgress 2026-07-13)",
+      "depends_on_capabilities": [
+        "C-018 (IProviderRegistry)",
+        "C-010 (Git provider)",
+        "C-011 (AgentRuntime provider)"
+      ],
+      "notes": "M4-C.2 second session. M4-C.2 ships the AppProviderList component + the /providers page + the startup provider-registry log + the Providers_Resolve_Through_Registry architecture test + docs/providers.md + docs/design-system.md § 4.5 update. M4-C.2 is the surface slice per the M4-C plan § 2 items 9-15. M4-C.2 is the second M4-C implementation slice per the two-slices-per-milestone pattern. M4-C.2 does NOT begin M4-C closeout, M4-D, or any provider creation. M4-C.2 is staged for the user's Approve / Next invocation after T-028 is Done.",
       "evidence": {}
     }
   ]

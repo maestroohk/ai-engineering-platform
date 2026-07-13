@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
-  "updated_at": "2026-07-13T14:00:00Z",
-  "updated_by_session": "m4-b-closeout",
+  "updated_at": "2026-07-13T16:00:00Z",
+  "updated_by_session": "m4-c-1-provider-registry-contract-and-family-registries",
   "milestones": [
     {
       "id": "M0",
@@ -615,8 +615,8 @@
     {
       "id": "M4-C",
       "name": "Provider Registry Foundation",
-      "status": "Awaiting Approval",
-      "primary_outcome": "IProviderRegistry and the family-scoped registries are introduced with fake providers; the composition root pattern is in place.",
+      "status": "Active",
+      "primary_outcome": "IProviderRegistry and the family-scoped registries are introduced with no-op family stubs; the composition root pattern is in place; the IProviderRegistry is the single allowed seam for provider lookup.",
       "delivers_capabilities": [
         "C-001",
         "C-010",
@@ -640,11 +640,24 @@
       ],
       "evidence": {
         "plan_path": ".ai/plans/M4-C-provider-registry-foundation.md",
-        "plan_status": "Awaiting Approval",
+        "plan_status": "Approved",
         "plan_promoted_at": "2026-07-13",
         "plan_promoted_by_session": "m4-b-closeout",
         "plan_promoted_by_commit": "chore(m4-b.closeout): close M4-B with retrospective, M4-C plan, and m4-b milestone tag",
-        "first_task": "T-028 (M4-C.1 first session; Ready in .ai/state/tasks.json)"
+        "first_task": "T-028 (M4-C.1 first session; Done 2026-07-13)",
+        "second_task": "T-029 (M4-C.2 first session; Ready in .ai/state/tasks.json)",
+        "m4_c_1_first_session": {
+          "task_id": "T-028",
+          "session_id": "m4-c-1-provider-registry-contract-and-family-registries",
+          "delivered_at": "2026-07-13",
+          "commit": "feat(m4-c.1): add IProviderRegistry contract, family registries, SystemProviderRegistry implementation, family fakes, and AddProviderRegistry composition root",
+          "branch": "feature/T-028-m4-c-1-provider-registry-contract-and-family-registries (fast-forwarded into main; deleted per the branching strategy rule 7)",
+          "implementation_report": "implementation-report-m4-c-1-provider-registry-contract-and-family-registries.md",
+          "handoff": ".ai/handoffs/2026-07-13-m4-c-1-provider-registry-contract-and-family-registries.md",
+          "test_count": "395 passed (376 pre-M4-C.1 + 19 new), 0 failed, 9 skipped (per ADR-016 / M4-D)",
+          "delivered_capabilities": ["C-010 (boundary)", "C-011 (boundary)"],
+          "next_session": "T-029 (M4-C.2 first session; AppProviderList component + /providers page + Providers_Resolve_Through_Registry architecture test + docs/providers.md + docs/design-system.md 4.5 update)"
+        }
       }
     },
     {
