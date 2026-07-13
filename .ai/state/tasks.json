@@ -485,7 +485,7 @@
     {
       "id": "T-020",
       "title": "M3 closeout — M3 retrospective (per the Milestone Closeout Standard)",
-      "status": "In Progress",
+      "status": "Done",
       "milestone": "M3",
       "slice": "M3.x",
       "created_at": "2026-07-11T00:00:00Z",
@@ -493,8 +493,42 @@
       "promoted_to_ready_by_session": "m3-2-project-registration-slice-2",
       "claimed_at": "2026-07-11T00:00:00Z",
       "claimed_by_session": "m3-closeout-and-retrospective",
+      "completed_at": "2026-07-11T00:00:00Z",
+      "completed_by_session": "m3-closeout-and-retrospective",
       "plan": ".ai/plans/M3-closeout.md",
-      "notes": "M3 closeout is the M3 retrospective per the Milestone Closeout Standard at .ai/workflows/milestone-closeout.md. M3 has three slices: M3.1 (delivered 2026-07-11), M3.2 (delivered 2026-07-11), M3.x (this task — in progress in the m3-closeout-and-retrospective session, 2026-07-11). M3.x follows M3.2 per the Progressive Coding Rule. M3 closeout ships: retrospective-m3-project-registration.md (13 sections); M4-A plan at .ai/plans/M4-A-infrastructure-process-execution.md (Awaiting Approval); M3 Active → Done in milestones.json; m3 annotated milestone tag at the M3 closeout commit on main; the M3 closeout implementation report at implementation-report-m3-closeout.md; the M3 closeout per-session handoff at .ai/handoffs/2026-07-11-m3-closeout.md. M3 closeout is a docs + workflow + state change — no source code; no M4-A implementation; no provider creation; no push."
+      "implementation_report": "implementation-report-m3-closeout.md",
+      "evidence": {
+        "branch": "feature/T-020-m3-closeout-and-retrospective (created from main at the M3.2 closeout commit ff9010a; fast-forwarded into main; deleted per the branching strategy rule 7)",
+        "commit_message": "chore(m3.closeout): close M3 with retrospective, M4-A plan, and m3 milestone tag",
+        "milestone_tag": "m3 (annotated; at the M3 closeout commit on main per the branching strategy rule 9)",
+        "retrospective": "retrospective-m3-project-registration.md",
+        "m4_a_plan": ".ai/plans/M4-A-infrastructure-process-execution.md",
+        "files_added": [
+          "retrospective-m3-project-registration.md",
+          ".ai/plans/M3-closeout.md",
+          ".ai/plans/M4-A-infrastructure-process-execution.md",
+          "implementation-report-m3-closeout.md",
+          ".ai/handoffs/2026-07-11-m3-closeout.md"
+        ],
+        "files_modified": [
+          ".ai/handoffs/latest.md",
+          ".ai/plans/master-delivery-plan.md",
+          ".ai/state/current.md",
+          ".ai/state/milestones.json",
+          ".ai/state/session.json",
+          ".ai/state/task-board.md",
+          ".ai/state/tasks.json",
+          "ROADMAP.md"
+        ],
+        "tests": {
+          "build_warnings": 0,
+          "build_errors": 0,
+          "active_tests_passing": 273,
+          "active_tests_failed": 0,
+          "tests_skipped": 7
+        }
+      },
+      "notes": "M3 closeout is the M3 retrospective per the Milestone Closeout Standard at .ai/workflows/milestone-closeout.md. M3 has three slices: M3.1 (delivered 2026-07-11), M3.2 (delivered 2026-07-11), M3.x (this task — delivered 2026-07-11 in the m3-closeout-and-retrospective session). M3.x follows M3.2 per the Progressive Coding Rule. M3 closeout ships: retrospective-m3-project-registration.md (13 sections); M4-A plan at .ai/plans/M4-A-infrastructure-process-execution.md (Awaiting Approval); M3 Active → Done in milestones.json (closed_at 2026-07-11); m3 annotated milestone tag at the M3 closeout commit on main; the M3 closeout implementation report at implementation-report-m3-closeout.md; the M3 closeout per-session handoff at .ai/handoffs/2026-07-11-m3-closeout.md (mirrored to latest.md). M3 closeout is a docs + workflow + state change — no source code; no M4-A implementation; no provider creation; no push. Validation: 273 passed, 0 failed, 7 skipped (per ADR-016 / M4-D); 0 warnings, 0 errors; format clean; visual smoke on /projects green. Zero deviations. Push is staged for push (not authorised in this session)."
     },
     {
       "id": "T-021",
