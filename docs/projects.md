@@ -120,20 +120,46 @@ The application-layer facade
 ## 4. The M3 / M4-A Boundary
 
 The M3 in-memory store (`InMemoryProjectStore`)
-**is not durable**: projects do not survive an
-application restart. M3 in-memory store is the
-**smoke test for the contract**. M4-A ships the
-on-disk `IProjectStore` implementation behind the
-**same contract**; the M3 / M4-A boundary is the
+**was the smoke test for the contract**. M4-A.1
+(delivered 2026-07-11) shipped the on-disk
+`IProjectStore` implementation
+(`JsonFileProjectStore`) behind the **same
+contract**; the M3 / M4-A boundary was the
 **contract, not the storage medium**.
 
-The composition root
-(`ProjectsServiceCollectionExtensions.AddProjects`)
-registers `IProjectStore` as the
-`InMemoryProjectStore` singleton today. M4-A
-swaps the `IProjectStore` registration in the
-same composition root; `IProjectService` and the
-UI are unchanged.
+The M4-A.1 slice delivered:
+
+- The new `AiEng.Platform.Infrastructure`
+  csproj (the infrastructure seam every later
+  milestone composes).
+- The `IProcessRunner`, `ICredentialVault`,
+  `IPlatformInfo` contracts in
+  `Application/Infrastructure/`.
+- The `SystemProcessRunner`,
+  `WindowsCredentialVault`, `SystemPlatformInfo`,
+  `JsonFileProjectStore` implementations in the
+  Infrastructure csproj.
+- The `AddInfrastructure` composition root
+  extension; the `IProjectStore` registration
+  moved from `AddProjects` to `AddInfrastructure`
+  (the on-disk store is now the production
+  registration; the in-memory store is preserved
+  as a test fixture in
+  `tests/AiEng.Platform.UnitTests/Infrastructure/InMemoryProjectStore.cs`).
+- 50+ new tests; 2 registered-but-disabled
+  architecture tests
+  (`Infrastructure_Respects_ProcessBoundary`,
+  `Infrastructure_Respects_CredentialBoundary`).
+
+The Open action on `AppProjectCard` remains
+**disabled in M4-A.1** (the Open action is
+M4-A.2's responsibility; per the M3 retrospective
+§ 13 recommendation 6). The on-disk store is
+durable: the project list persists across an
+application restart.
+
+See `docs/infrastructure.md` for the M4-A.1
+architecture documentation.
 
 ---
 

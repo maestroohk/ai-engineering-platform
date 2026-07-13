@@ -21,6 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\AiEng.Platform.Application\AiEng.Platform.Application.csproj" />
     <ProjectReference Include="..\..\src\AiEng.Platform.Domain\AiEng.Platform.Domain.csproj" />
+    <ProjectReference Include="..\..\src\AiEng.Platform.Infrastructure\AiEng.Platform.Infrastructure.csproj" />
     <ProjectReference Include="..\..\src\AiEng.Platform.Providers.Abstractions\AiEng.Platform.Providers.Abstractions.csproj" />
   </ItemGroup>
 

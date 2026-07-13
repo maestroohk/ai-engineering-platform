@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "updated_at": "2026-07-11T00:00:00Z",
-  "updated_by_session": "m3-2-project-registration-slice-2",
+  "updated_by_session": "m4-a-1-infrastructure-project-skeleton",
   "milestones": [
     {
       "id": "M0",
@@ -311,9 +311,8 @@
     {
       "id": "M4-A",
       "name": "Infrastructure / Process Execution",
-      "status": "Awaiting Approval",
-      "primary_outcome": "AiEng.Platform.Infrastructure is created. IProcessRunner, ICredentialVault, IPlatformInfo, and the on-disk IProjectStore land. M3 in-memory store is replaced behind the same IProjectStore contract. The Open action on AppProjectCard is enabled (M4-A.2).",
-      "primary_outcome": "AiEng.Platform.Infrastructure is created. IProcessRunner, ICredentialVault, IClock, and the on-disk IProjectStore land. M3 in-memory store is replaced.",
+      "status": "Active",
+      "primary_outcome": "AiEng.Platform.Infrastructure is created. IProcessRunner, ICredentialVault, IPlatformInfo, and the on-disk IProjectStore land. M3 in-memory store is replaced behind the same IProjectStore contract. The Open action on AppProjectCard is enabled in M4-A.2.",
       "delivers_capabilities": [
         "C-012",
         "C-013",
@@ -333,7 +332,35 @@
         "M7",
         "M8"
       ],
-      "evidence": {}
+      "plan": ".ai/plans/M4-A-infrastructure-process-execution.md",
+      "slices": {
+        "M4-A.1": {
+          "title": "Infrastructure project skeleton (IProcessRunner, ICredentialVault, IPlatformInfo, on-disk IProjectStore)",
+          "status": "delivered",
+          "delivered_at": "2026-07-11",
+          "session": "m4-a-1-infrastructure-project-skeleton",
+          "branch": "feature/T-021-m4-a-1-infrastructure-project-skeleton",
+          "summary": "M4-A.1 ships the infrastructure seam every later milestone composes: the new AiEng.Platform.Infrastructure csproj; the four contracts in Application/Infrastructure/ (IProcessRunner + ProcessResult + ICredentialVault + IPlatformInfo); the four implementations in Infrastructure/ (SystemProcessRunner + WindowsCredentialVault + SystemPlatformInfo + JsonFileProjectStore); the AddInfrastructure composition root extension; the one-line swap in AddProjects (the M3 in-memory IProjectStore registration is removed; the on-disk JsonFileProjectStore is now registered through AddInfrastructure). The InMemoryProjectStore is moved to tests/AiEng.Platform.UnitTests/Infrastructure/InMemoryProjectStore.cs as a test fixture. 45 new unit tests across 4 test files (22 JsonFileProjectStoreTests + 11 IProcessRunnerTests + 10 WindowsCredentialVaultTests + 3 SystemPlatformInfoTests) + 2 new architecture tests (Infrastructure_Respects_ProcessBoundary + Infrastructure_Respects_CredentialBoundary; both registered-but-disabled per ADR-016; activate in M4-D). docs/infrastructure.md (10 sections) and docs/projects.md § 4 boundary section update ship. M4-A.1 does NOT enable the Open action on AppProjectCard (the M4-A.2 slice enables the Open action). Total: 318 passed, 0 failed, 9 skipped (per ADR-016 / M4-D); 0 warnings, 0 errors; format clean; visual smoke on /projects returns 200; the project list persists across an application restart. Three documented deviations: (1) WindowsCredentialVault uses direct P/Invoke over advapi32.dll (no NuGet dependency) per the M4-A plan § 8 risk 4 deferred decision. (2) JsonFileProjectStore uses File.Replace for atomic Windows file replacement. (3) The M4-A.1 ships 45 unit tests (within the M4-A plan's 50+ bound). Branch: feature/T-021-m4-a-1-infrastructure-project-skeleton. Commit: feat(m4-a.1): add infrastructure project skeleton with IProcessRunner, ICredentialVault, IPlatformInfo, and on-disk IProjectStore. Push is staged for push (not authorised in this session).",
+          "implementation_report": "implementation-report-m4-a-1-infrastructure-project-skeleton.md",
+          "handoff": ".ai/handoffs/2026-07-11-m4-a-1-infrastructure-project-skeleton.md",
+          "plan": ".ai/plans/M4-A-infrastructure-process-execution.md",
+          "commit_message": "feat(m4-a.1): add infrastructure project skeleton with IProcessRunner, ICredentialVault, IPlatformInfo, and on-disk IProjectStore"
+        }
+      },
+      "evidence": {
+        "slices": [
+          "M4-A.1"
+        ],
+        "implementation_reports": [
+          "implementation-report-m4-a-1-infrastructure-project-skeleton.md"
+        ],
+        "handoffs": [
+          ".ai/handoffs/2026-07-11-m4-a-1-infrastructure-project-skeleton.md"
+        ],
+        "commits": [
+          "M4-A.1: feat(m4-a.1): add infrastructure project skeleton with IProcessRunner, ICredentialVault, IPlatformInfo, and on-disk IProjectStore on feature/T-021-m4-a-1-infrastructure-project-skeleton (fast-forwarded into main; branch deleted per the branching strategy rule 7)"
+        ]
+      }
     },
     {
       "id": "M4-B",

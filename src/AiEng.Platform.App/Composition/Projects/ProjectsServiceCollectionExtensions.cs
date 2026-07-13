@@ -12,7 +12,6 @@ public static class ProjectsServiceCollectionExtensions
             throw new ArgumentNullException(nameof(services));
         }
 
-        services.AddSingleton<IProjectStore, InMemoryProjectStore>();
         services.AddSingleton<IProjectService, ProjectService>();
         return services;
     }

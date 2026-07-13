@@ -1,5 +1,6 @@
 using AiEng.Platform.Application.Projects;
 using AiEng.Platform.Domain.Projects;
+using AiEng.Platform.UnitTests.Infrastructure;
 using Xunit;
 
 namespace AiEng.Platform.UnitTests.Projects;

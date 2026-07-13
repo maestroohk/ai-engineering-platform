@@ -3,6 +3,7 @@
     <Project Path="src/AiEng.Platform.App/AiEng.Platform.App.csproj" />
     <Project Path="src/AiEng.Platform.Application/AiEng.Platform.Application.csproj" />
     <Project Path="src/AiEng.Platform.Domain/AiEng.Platform.Domain.csproj" />
+    <Project Path="src/AiEng.Platform.Infrastructure/AiEng.Platform.Infrastructure.csproj" />
     <Project Path="src/AiEng.Platform.Providers.Abstractions/AiEng.Platform.Providers.Abstractions.csproj" />
   </Folder>
   <Folder Name="/tests/">

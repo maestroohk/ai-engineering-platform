@@ -1,7 +1,8 @@
 using System.Collections.Concurrent;
+using AiEng.Platform.Application.Projects;
 using AiEng.Platform.Domain.Projects;
 
-namespace AiEng.Platform.Application.Projects;
+namespace AiEng.Platform.UnitTests.Infrastructure;
 
 public sealed class InMemoryProjectStore : IProjectStore
 {

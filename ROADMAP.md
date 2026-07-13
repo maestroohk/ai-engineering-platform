@@ -42,7 +42,7 @@ A milestone is **complete** only when:
 | M2  | Application Shell and Navigation                      | **Done (closed 2026-07-11)** | A navigable app shell on Windows desktop; pages reach an empty state; the layout is responsive and accessible. |
 | M3  | Project Registration                                  | **Done (closed 2026-07-11; M3.1 + M3.2 + M3 closeout Delivered 2026-07-11)** | A user can register, rename, and unregister a project; the platform owns a `Project` entity. M3 is closed; the M3 retrospective is at `retrospective-m3-project-registration.md` (13 sections per the Milestone Closeout Standard); the `m3` annotated milestone tag is at the M3 closeout commit on `main`. M4-A is the next milestone (Status: Awaiting Approval; the M4-A plan is at `.ai/plans/M4-A-infrastructure-process-execution.md`). |
 | M4  | Process Execution, Capability Detection, Provider Registry | Planned | The platform spawns processes safely, detects capabilities, registers providers. Divided into four slices: |
-|     | &nbsp;&nbsp;M4-A: Infrastructure / Process Execution   | **Awaiting Approval (M4-A plan produced by the M3 closeout, 2026-07-11)** | `AiEng.Platform.Infrastructure` lands; `IProcessRunner`, `ICredentialVault`, `IPlatformInfo`, on-disk `IProjectStore` (replaces the M3 in-memory store behind the same contract); the Open action on `AppProjectCard` is enabled. |
+|     | &nbsp;&nbsp;M4-A: Infrastructure / Process Execution   | **Active (M4-A.1 Delivered 2026-07-11; the M4-A plan is at `.ai/plans/M4-A-infrastructure-process-execution.md`; Status: Approved 2026-07-11 via the 'Next' invocation per .ai/commands.md § 4)** | `AiEng.Platform.Infrastructure` lands (M4-A.1 Delivered 2026-07-11: the new csproj + the four contracts in `Application/Infrastructure/` + the four implementations in `Infrastructure/` + the `AddInfrastructure` composition root + the on-disk `IProjectStore` registration; the M3 in-memory `IProjectStore` is moved to `tests/` as a fixture; 45 new unit tests + 2 new architecture tests registered-but-disabled per ADR-016). The Open action on `AppProjectCard` is the M4-A.2 responsibility (T-022 is `Ready`). |
 |     | &nbsp;&nbsp;M4-B: Capability Detection                | Planned    | `IHostCapabilitiesService` detects `git`, `ollama`, `powershell.exe`, `wsl.exe`, `wt.exe`, `bash.exe`. |
 |     | &nbsp;&nbsp;M4-C: Provider Registry Foundation        | Planned    | `IProviderRegistry`, family-scoped registries, fake providers for every family, composition root `App/Composition/`. |
 |     | &nbsp;&nbsp;M4-D: First Concrete Process Providers    | Planned    | `GitProvider`, `OllamaLaunchProvider` smoke, `ProviderContractTests`; composition-root architecture tests activate. |
@@ -623,10 +623,10 @@ slice delivers a row in the matrix in § 4:
 
 **Outcome:** The
 `AiEng.Platform.Infrastructure` project is created.
-`IProcessRunner`, `ICredentialVault`, `IClock`, and the
-on-disk `IProjectStore` implementation land. The M3
-in-memory `IProjectStore` is replaced by the on-disk
-implementation behind the same contract.
+`IProcessRunner`, `ICredentialVault`, `IPlatformInfo`,
+and the on-disk `IProjectStore` implementation land.
+The M3 in-memory `IProjectStore` is replaced by the
+on-disk implementation behind the same contract.
 
 **Prerequisites:** M3 is done (the in-memory
 `IProjectStore` and the `IProjectService` are in
@@ -637,34 +637,61 @@ place).
 - `AiEng.Platform.Infrastructure` is added to the
   solution.
 - `IProcessRunner` is defined in
-  `Infrastructure/Process/`. It exposes
-  `RunAsync(ProcessRequest, CancellationToken)`
-  returning `IAsyncEnumerable<ProcessEvent>` for
-  streaming and a one-shot `RunToCompletionAsync`
-  for non-streaming use. The contract test covers
-  the happy path, the documented failure paths
-  (non-zero exit, cancellation, invalid binary),
-  and the streaming contract.
+  `Application/Infrastructure/`. It exposes
+  `RunAsync(executable, arguments, CancellationToken)`
+  returning `IAsyncEnumerable<string>` for streaming
+  stdout/stderr line-by-line and a one-shot
+  `RunToCompletionAsync(executable, arguments, CancellationToken)`
+  returning a `ProcessResult` record struct
+  (`ExitCode`, `StandardOutput`, `StandardError`,
+  `Succeeded`) for non-streaming use. The contract
+  test covers the happy path, the documented
+  failure paths (non-zero exit, cancellation,
+  non-existent binary), and the streaming contract.
 - `ICredentialVault` is defined in
-  `Infrastructure/Credentials/`. It exposes
-  `GetAsync`, `SetAsync`, and `RemoveAsync`. The
+  `Application/Infrastructure/`. It exposes
+  `GetAsync(name, CancellationToken)` (returns
+  `string?`), `SetAsync(name, secret, CancellationToken)`,
+  and `DeleteAsync(name, CancellationToken)`. The
   contract test covers the happy path and the
   `null` (no-such-secret) case.
-- `IClock` is defined in `Infrastructure/Time/`.
-  It exposes `UtcNow`. The contract test verifies
-  that the value is monotonic.
-- The on-disk `IProjectStore` implementation
+- `IPlatformInfo` is defined in
+  `Application/Infrastructure/`. It exposes
+  `GetDataDirectory()` and `GetConfigDirectory()`
+  for resolving platform-specific paths
+  (`%LOCALAPPDATA%\AiEng\Platform\<data|config>` on
+  Windows). The contract test verifies both
+  methods return non-empty rooted paths and that
+  the two paths are distinct.
+- The on-disk `JsonFileProjectStore` implementation
   replaces the M3 in-memory store behind the same
   contract. The migration is a one-line DI change
-  in `Program.cs`: the M3 in-memory registration
-  is replaced by the M4-A on-disk registration.
-  The `IProjectService` and the UI are unchanged.
+  in `AddInfrastructure` (called after `AddProjects`):
+  the M3 in-memory `IProjectStore` registration
+  is replaced by the M4-A on-disk registration. The
+  `IProjectService` and the UI are unchanged. The
+  M3 `InMemoryProjectStore` is preserved as a test
+  fixture in `tests/AiEng.Platform.UnitTests/Infrastructure/`
+  so the M3 unit tests that depend on it continue
+  to pass.
+- The `WindowsCredentialVault` is a thin direct
+  P/Invoke wrapper over `advapi32.dll`'s
+  `CredReadW` / `CredWriteW` / `CredDeleteW` (no
+  NuGet dependency; minimal binary footprint). On
+  non-Windows hosts every method throws
+  `PlatformNotSupportedException`.
+- The `SystemProcessRunner` wraps
+  `System.Diagnostics.Process` with
+  `RedirectStandardOutput` + `RedirectStandardError`
+  + `UseShellExecute=false` + `CreateNoWindow=true`.
+  It is the **only** `Process.Start` call site in
+  the platform.
 
 **Excluded scope:** capability detection (M4-B),
 the provider registry (M4-C), the first concrete
 providers (M4-D). M4-A does not introduce a single
 `Providers.<X>` project. No `Process.Start` call
-may be made from outside `Infrastructure/Process/`
+may be made from outside `Infrastructure/ProcessRunner/`
 yet, but no such call exists either; the
 `No_DirectProcessStart_OutsideInfrastructure` test
 is registered but disabled and activates in M4-D.
@@ -674,26 +701,83 @@ is registered but disabled and activates in M4-D.
 - `AiEng.Platform.Infrastructure` exists; the
   solution compiles; the M1 / M3 tests remain green.
 - `IProcessRunner` and the on-disk `IProjectStore`
-  are added; the M3 in-memory store is removed.
+  are added; the M3 in-memory store is moved to
+  `tests/` as a fixture (the contract is unchanged).
 - The on-disk `IProjectStore` round-trips a project
-  through a save / load / list cycle.
+  through a save / load / list cycle; the store
+  is thread-safe (`SemaphoreSlim`); writes are
+  atomic (temp file + `File.Replace`); corruption
+  is recovered (empty list + warning log).
 - `ICredentialVault` round-trips a secret through
-  the Windows Credential Manager.
-- `IClock` is in use everywhere a timestamp is
-  produced.
+  the Windows Credential Manager; on non-Windows
+  hosts it throws `PlatformNotSupportedException`.
+- `IPlatformInfo` resolves the data and config
+  directories on the current platform.
+- The `AddInfrastructure` composition root extension
+  is added; it is called after `AddProjects` in
+  `ServiceCollectionExtensions.AddPlatformServices`.
 - The architecture test
   `No_DirectProcessStart_OutsideInfrastructure` is
   **registered but disabled**; the activation
-  milestone is M4-D.
+  milestone is M4-D. The companion
+  `Infrastructure_Respects_CredentialBoundary` test
+  is also registered but disabled and activates
+  in M4-D.
+
+**M4-A.1 slice (Delivered 2026-07-11):** the
+`AiEng.Platform.Infrastructure` csproj + the four
+contracts (`IProcessRunner`, `ProcessResult`,
+`ICredentialVault`, `IPlatformInfo`) in
+`Application/Infrastructure/` + the four
+implementations (`SystemProcessRunner`,
+`WindowsCredentialVault`, `SystemPlatformInfo`,
+`JsonFileProjectStore`) in `Infrastructure/` + the
+`AddInfrastructure` composition root extension + the
+on-disk `IProjectStore` registration (the M3
+in-memory `IProjectStore` is moved to
+`tests/AiEng.Platform.UnitTests/Infrastructure/`
+as a fixture) + 45 new unit tests (in 4 new test
+files: `IProcessRunnerTests`, `WindowsCredentialVaultTests`,
+`SystemPlatformInfoTests`, `JsonFileProjectStoreTests`)
++ 2 new architecture tests registered-but-disabled
+per ADR-016 (`Infrastructure_Respects_ProcessBoundary`,
+`Infrastructure_Respects_CredentialBoundary`) +
+`docs/infrastructure.md` (10 sections) +
+`implementation-report-m4-a-1-infrastructure-project-skeleton.md`.
+The Open action on `AppProjectCard` is the M4-A.2
+slice's responsibility (T-022 is `Ready`).
+Cumulative test count after M4-A.1: 318 passed, 0
+failed, 9 skipped (the 7 from M3 + the 2 new
+architecture tests).
 
 **Tests added:**
 
-- Contract tests for `IProcessRunner`,
-  `ICredentialVault`, `IClock`.
-- Integration tests for the on-disk
-  `IProjectStore` (round-trip a project).
+- Unit tests for `IProcessRunner`
+  (`IProcessRunnerTests`, 11 tests):
+  exit-code propagation, stdout/stderr capture,
+  streaming output, cancellation, non-existent
+  executable failure, argument validation.
+- Unit tests for `WindowsCredentialVault`
+  (`WindowsCredentialVaultTests`, 10 tests):
+  get / set / delete round-trip, missing
+  credential returns null, non-Windows throws
+  `PlatformNotSupportedException`, argument
+  validation.
+- Unit tests for `SystemPlatformInfo`
+  (`SystemPlatformInfoTests`, 3 tests):
+  `GetDataDirectory` and `GetConfigDirectory`
+  return non-empty rooted paths, the two paths
+  are distinct.
+- Unit tests for `JsonFileProjectStore`
+  (`JsonFileProjectStoreTests`, 22 tests):
+  round-trip, missing file, duplicate detection,
+  corrupt file recovery, concurrent adds, atomic
+  writes, cancellation, constructor validation.
+- Architecture tests (registered-but-disabled per
+  ADR-016): `Infrastructure_Respects_ProcessBoundary`
+  + `Infrastructure_Respects_CredentialBoundary`.
 - Regression tests: every M3 unit test that
-  exercised the in-memory store must remain green
+  exercised the in-memory store remains green
   after the migration to the on-disk store (the
   contract is the seam; the tests are blind to
   the storage medium).
@@ -706,7 +790,7 @@ M4-D when the first concrete provider lands.
 **Handoff to M4-B:** the
 `AiEng.Platform.Infrastructure` project is in
 place; `IProcessRunner` is the only way to spawn a
-process; `ICredentialVault` and `IClock` are
+process; `ICredentialVault` and `IPlatformInfo` are
 available. The capability detection in M4-B
 consumes all three.
 

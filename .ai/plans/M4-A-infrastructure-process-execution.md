@@ -17,12 +17,16 @@
 > (Blazor Server) free of process-boundary
 > types.
 >
-> **Status:** Awaiting Approval (2026-07-11;
-> produced by the M3 closeout per
-> `.ai/workflows/milestone-closeout.md` § 8).
-> The plan is a **first draft**; the M4-A first
-> session reviews and revises the plan as
-> needed.
+> **Status:** Approved (2026-07-11; the
+> approval is implicit in the `Next`
+> invocation per `.ai/commands.md` § 4
+> and the Progressive Coding Rule § 7.1;
+> the M4-A.1 implementation follows the
+> plan). M4-A.1 Delivered 2026-07-11
+> (T-021; the infrastructure seam
+> ships); M4-A.2 — the Open action on
+> `AppProjectCard` (T-022) — is the next
+> `Ready` task.
 >
 > **Branch:** (the M4-A.1 branch is created from
 > `main` at the M3 closeout commit when M4-A.1
