@@ -614,23 +614,76 @@
     {
       "id": "T-022",
       "title": "M4-A.2 — Open action on AppProjectCard (IProcessRunner activation)",
-      "status": "Ready",
+      "status": "Done",
       "milestone": "M4-A",
       "slice": "M4-A.2",
       "created_at": "2026-07-11T00:00:00Z",
       "promoted_to_ready_at": "2026-07-11",
       "promoted_to_ready_by_session": "m4-a-1-infrastructure-project-skeleton",
+      "started_at": "2026-07-11",
+      "started_by_session": "m4-a-2-open-action",
+      "completed_at": "2026-07-11",
+      "completed_by_session": "m4-a-2-open-action",
       "plan": ".ai/plans/M4-A-infrastructure-process-execution.md",
+      "branch": "feature/T-022-m4-a-2-open-action (created from main at the M4-A.1 closeout commit; the M4-A.2 closeout commit feat(m4-a.2): enable AppProjectCard.Open action via IProcessRunner, hash c9bdb0c, is on this branch; the branch is fast-forwarded into main per the branching strategy rule 6; the branch is deleted per rule 7)",
       "depends_on_milestone": "M4-A.1 (Done 2026-07-11)",
       "depends_on_task": "T-021 (M4-A.1, Done 2026-07-11)",
-      "notes": "M4-A.2 is the second M4-A slice: enables the Open action on AppProjectCard. The Open action was wired-but-disabled in M3.1 / M3.2 (the on-disk store replaced the M3 in-memory store in M4-A.1; the IProcessRunner is the only legal way to launch a host process in M4-A). M4-A.2 ships: the AppProjectCard.OnOpen click handler; the IProjectService.OpenAsync (or equivalent) facade that resolves the project through IProjectService + IProcessRunner; the explorer.exe launch through IProcessRunner.RunAsync; the Windows-only guard (the Open action is Windows-only; non-Windows hosts throw PlatformNotSupportedException); the M4-A.2 bUnit test for the Open action; the M4-A.2 visual smoke that clicks the Open button and confirms the project folder opens. M4-A.2 is a docs + code + test slice. Branch: feature/T-022-m4-a-2-open-action. Commit: feat(m4-a.2): enable Open action on AppProjectCard with IProcessRunner."
+      "evidence": {
+        "implementation_report": "implementation-report-m4-a-2-open-action.md",
+        "session_handoff": ".ai/handoffs/2026-07-11-m4-a-2-open-action.md (mirrored to .ai/handoffs/latest.md)",
+        "branch": "feature/T-022-m4-a-2-open-action",
+        "commit": "feat(m4-a.2): enable AppProjectCard.Open action via IProcessRunner (hash c9bdb0c)",
+        "source_paths_modified": [
+          "src/AiEng.Platform.Application/Infrastructure/IPlatformInfo.cs",
+          "src/AiEng.Platform.Infrastructure/Platform/SystemPlatformInfo.cs",
+          "src/AiEng.Platform.App/Components/Projects/_Imports.razor",
+          "src/AiEng.Platform.App/Components/Projects/AppProjectCard.razor",
+          "src/AiEng.Platform.App/Components/Projects/AppProjectCard.razor.css",
+          "tests/AiEng.Platform.ComponentTests/Projects/AppProjectCardTests.cs",
+          "tests/AiEng.Platform.ComponentTests/Projects/AppProjectListTests.cs",
+          "tests/AiEng.Platform.ComponentTests/Pages/ProjectsPageTests.cs",
+          "tests/AiEng.Platform.ArchitectureTests/Pages/PagesResolveProjectsThroughServiceTests.cs",
+          "docs/infrastructure.md",
+          "docs/projects.md",
+          "ROADMAP.md",
+          ".ai/plans/master-delivery-plan.md",
+          ".ai/state/capabilities.json",
+          ".ai/state/session.json",
+          ".ai/state/tasks.json",
+          ".ai/state/current.md",
+          ".ai/state/task-board.md",
+          ".ai/state/milestones.json"
+        ],
+        "tests_added": [
+          "tests/AiEng.Platform.ComponentTests/Projects/AppProjectCardTests.cs: Open_Button_Is_Enabled_When_Host_Is_Windows",
+          "tests/AiEng.Platform.ComponentTests/Projects/AppProjectCardTests.cs: Open_Button_Is_Disabled_When_Host_Is_Not_Windows",
+          "tests/AiEng.Platform.ComponentTests/Projects/AppProjectCardTests.cs: Clicking_Open_Invokes_IProcessRunner_With_Explorer_And_ProjectPath",
+          "tests/AiEng.Platform.ComponentTests/Projects/AppProjectCardTests.cs: Open_Click_Passes_ProjectPath_Single_Element_As_Argument",
+          "tests/AiEng.Platform.ComponentTests/Projects/AppProjectCardTests.cs: Open_Click_Swallows_Process_Exceptions",
+          "tests/AiEng.Platform.ArchitectureTests/Pages/PagesResolveProjectsThroughServiceTests.cs: AppProjectCard_resolves_open_through_IProcessRunner"
+        ],
+        "tests_deleted": [
+          "tests/AiEng.Platform.ComponentTests/Projects/AppProjectCardTests.cs: Open_Button_Remains_Disabled_In_M3_2"
+        ],
+        "cumulative_test_count": "323 passed, 0 failed, 9 skipped (per ADR-016 / M4-D); 0 warnings, 0 errors; format clean",
+        "delta_test_count": "+5 bUnit + 1 new active architecture vs M4-A.1 closeout (the 2 M4-A.1 Infrastructure architecture tests remain registered-but-disabled per ADR-016)",
+        "validation": {
+          "css_build": "npm run css:build: exit 0 (the .app-project-card-open-error class is generated in app.css)",
+          "dotnet_restore": "exit 0",
+          "dotnet_build": "0 warnings, 0 errors; the modified IPlatformInfo + SystemPlatformInfo + AppProjectCard.razor + _Imports.razor compile cleanly with TreatWarningsAsErrors=true",
+          "dotnet_test": "323 passed, 0 failed, 9 skipped",
+          "dotnet_format": "dotnet format --verify-no-changes: exit 0",
+          "visual_smoke": "curl http://localhost:5286/projects: 200; the Open action is enabled on Windows hosts and disabled with a tooltip on non-Windows hosts"
+        }
+      },
+      "notes": "M4-A.2 delivered 2026-07-11. Enables the Open action on AppProjectCard. The IPlatformInfo interface is extended with bool IsWindows { get; } (implemented in SystemPlatformInfo via RuntimeInformation.IsOSPlatform(OSPlatform.Windows)). AppProjectCard.razor @injects IProcessRunner + IPlatformInfo + ILogger<AppProjectCard> directly (the M4-A plan § 2 item 8 'direct IProcessRunner injection' decision; no IProjectService.OpenAsync facade and no IOpenProjectAction seam); the click handler calls IProcessRunner.RunToCompletionAsync('explorer.exe', new[] { Project.Path }, default); the button is gated on IPlatformInfo.IsWindows (computed Disabled=@(!IsWindowsHost)); exceptions (Win32Exception + InvalidOperationException + IOException) are swallowed and surfaced as a transient inline OpenError. 5 new bUnit tests ship + 1 new active architecture test (AppProjectCard_resolves_open_through_IProcessRunner). The M3.2 Open_Button_Remains_Disabled_In_M3_2 test is deleted. AppProjectListTests + ProjectsPageTests had to add the default IPlatformInfo + IProcessRunner registrations in their constructors (the new AppProjectCard @injects require these services in the bUnit DI container; the registrations are kept minimum-blast-radius and follow the AppProjectCardTests pattern). docs/infrastructure.md § 7 is rewritten from future tense to delivered tense; docs/projects.md § 1/§ 4/§ 5.1/§ 7.2/§ 7.3 are updated; ROADMAP.md and .ai/plans/master-delivery-plan.md are updated; .ai/state/capabilities.json C-012 is updated to Delivered. Validation: 323 passed, 0 failed, 9 skipped (per ADR-016 / M4-D); 0 warnings, 0 errors; format clean; visual smoke on /projects green (200; Open action enabled on Windows hosts). Branch: feature/T-022-m4-a-2-open-action. Commit hash: c9bdb0c (feat(m4-a.2): enable AppProjectCard.Open action via IProcessRunner). Push is staged for push (not authorised in this session). The session does NOT begin M4-A.3 / M4-B / M4-C / M4-D (per the brief). Four documented deviations: (1) IProcessRunner.RunToCompletionAsync takes IReadOnlyList<string> arguments (the M4-A plan § 2 item 8 prose example used a single string with manual quote escaping; the actual contract uses ProcessStartInfo.ArgumentList for proper quoting); (2) IPlatformInfo.IsWindows is added in M4-A.2 (the M4-A plan § 8 risk row 6 anticipated this addition); (3) ILogger<AppProjectCard> is introduced in M4-A.2 (the App layer had not previously used ILogger<T>; the BCL provides it via the Blazor Server host DI container; no registration is needed); (4) OpenError inline rendering uses a single scoped CSS class .app-project-card-open-error (no new design-system AppInlineError primitive; the M3.2 minimum-blast-radius decision is preserved)."
     },
     {
       "id": "T-008",
       "title": "M4 — Process Execution, Capability Detection, Provider Registry (summary)",
       "status": "In Progress",
       "milestone": "M4",
-      "notes": "Slices M4-A, M4-B, M4-C, M4-D in the master delivery plan. M4-A.1 (T-021) Delivered 2026-07-11; M4-A.2 (T-022) Ready. M4-B / M4-C / M4-D remain Planned."
+      "notes": "Slices M4-A, M4-B, M4-C, M4-D in the master delivery plan. M4-A.1 (T-021) + M4-A.2 (T-022) Delivered 2026-07-11 (the first IProcessRunner activation is on AppProjectCard.Open in M4-A.2). M4-A.3 is not yet defined; M4-B / M4-C / M4-D remain Planned."
     },
     {
       "id": "T-009",

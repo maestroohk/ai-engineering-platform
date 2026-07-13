@@ -24,8 +24,8 @@
 | M0    | Documentation Foundation                                | **Done**                   | This document set.                            |
 | M1    | Design System Core                                      | **Done (closed 2026-07-10)** | `implementation-report-m1-closeout.md`; first commits `1722bd2`, `2ba1fad`. |
 | M2    | Application Shell and Navigation                        | **Done (closed 2026-07-11)** | `implementation-report-m2-6-m2-closeout.md`; retrospective at `retrospective-m2-application-shell-and-navigation.md`; M2 closeout commit `chore(m2.6): close M2 with retrospective, milestone closeout standard, and M3 plan` on `main`; `m2` annotated milestone tag at the M2 closeout commit; per-slice commits `de082fd` and `ef1063c` on `feature/m2-1-application-shell` plus the M2.2 → M2.5 commit chain. |
-| M3    | Project Registration                                    | **Done (closed 2026-07-11; M3.1 + M3.2 + M3 closeout Delivered 2026-07-11)** | `implementation-report-m3-1-project-registration-slice-1.md`; `implementation-report-m3-2-project-registration-slice-2.md`; `implementation-report-m3-closeout.md`; the M3 retrospective at `retrospective-m3-project-registration.md` (13 sections per the Milestone Closeout Standard); the M3 closeout commit `chore(m3.closeout): close M3 with retrospective, M4-A plan, and m3 milestone tag` on `main`; the `m3` annotated milestone tag at the M3 closeout commit on `main` per the branching strategy rule 9; per-slice branches `feature/m3-1-project-registration-slice-1`, `feature/T-019-m3-2-project-registration-slice-2`, `feature/T-020-m3-closeout-and-retrospective` (all fast-forwarded into `main` and deleted per the branching strategy). The M3 plan is at `.ai/plans/M3-project-registration.md`; the M3.2 plan is at `.ai/plans/M3.2-project-registration-slice-2.md`; the M3 closeout plan is at `.ai/plans/M3-closeout.md` (all Delivered). M4-A is the active milestone; the M4-A plan is at `.ai/plans/M4-A-infrastructure-process-execution.md` (Status: Approved 2026-07-11 via the 'Next' invocation per `.ai/commands.md` § 4); the first M4-A task T-021 is `Done` (M4-A.1 Delivered 2026-07-11) and T-022 (M4-A.2) is `Ready` in `.ai/state/tasks.json`. |
-| M4-A  | Infrastructure / Process Execution                      | **Active (M4-A.1 Delivered 2026-07-11; M4-A.2 — Open action — T-022 `Ready`; the M4-A plan is at `.ai/plans/M4-A-infrastructure-process-execution.md` Status: Approved 2026-07-11)** | `implementation-report-m4-a-1-infrastructure-project-skeleton.md`; the M4-A.1 per-session handoff at `.ai/handoffs/2026-07-11-m4-a-1-infrastructure-project-skeleton.md` (mirrored to `.ai/handoffs/latest.md`); the M4-A.1 closeout commit `feat(m4-a.1): add infrastructure project skeleton with IProcessRunner, ICredentialVault, IPlatformInfo, and on-disk IProjectStore` on `main`; the M4-A.1 feature branch `feature/T-021-m4-a-1-infrastructure-project-skeleton` is fast-forwarded into `main` and deleted per the branching strategy rules 6 + 7. |
+| M3    | Project Registration                                    | **Done (closed 2026-07-11; M3.1 + M3.2 + M3 closeout Delivered 2026-07-11)** | `implementation-report-m3-1-project-registration-slice-1.md`; `implementation-report-m3-2-project-registration-slice-2.md`; `implementation-report-m3-closeout.md`; the M3 retrospective at `retrospective-m3-project-registration.md` (13 sections per the Milestone Closeout Standard); the M3 closeout commit `chore(m3.closeout): close M3 with retrospective, M4-A plan, and m3 milestone tag` on `main`; the `m3` annotated milestone tag at the M3 closeout commit on `main` per the branching strategy rule 9; per-slice branches `feature/m3-1-project-registration-slice-1`, `feature/T-019-m3-2-project-registration-slice-2`, `feature/T-020-m3-closeout-and-retrospective` (all fast-forwarded into `main` and deleted per the branching strategy). The M3 plan is at `.ai/plans/M3-project-registration.md`; the M3.2 plan is at `.ai/plans/M3.2-project-registration-slice-2.md`; the M3 closeout plan is at `.ai/plans/M3-closeout.md` (all Delivered). M4-A is the active milestone; the M4-A plan is at `.ai/plans/M4-A-infrastructure-process-execution.md` (Status: Approved 2026-07-11 via the 'Next' invocation per `.ai/commands.md` § 4); the M4-A tasks T-021 (M4-A.1) and T-022 (M4-A.2) are `Done` in `.ai/state/tasks.json`. |
+| M4-A  | Infrastructure / Process Execution                      | **Active (M4-A.1 + M4-A.2 Delivered 2026-07-11; the M4-A plan is at `.ai/plans/M4-A-infrastructure-process-execution.md` Status: Approved 2026-07-11)** | `implementation-report-m4-a-1-infrastructure-project-skeleton.md`; the M4-A.1 per-session handoff at `.ai/handoffs/2026-07-11-m4-a-1-infrastructure-project-skeleton.md` (mirrored to `.ai/handoffs/latest.md`); the M4-A.1 closeout commit `feat(m4-a.1): add infrastructure project skeleton with IProcessRunner, ICredentialVault, IPlatformInfo, and on-disk IProjectStore` on `main`; the M4-A.1 feature branch `feature/T-021-m4-a-1-infrastructure-project-skeleton` is fast-forwarded into `main` and deleted per the branching strategy rules 6 + 7. `implementation-report-m4-a-2-open-action.md`; the M4-A.2 per-session handoff at `.ai/handoffs/2026-07-11-m4-a-2-open-action.md` (mirrored to `.ai/handoffs/latest.md`); the M4-A.2 closeout commit `feat(m4-a.2): enable AppProjectCard.Open action via IProcessRunner` on `main`; the M4-A.2 feature branch `feature/T-022-m4-a-2-open-action` is fast-forwarded into `main` and deleted per the branching strategy rules 6 + 7. |
 | M4-B  | Capability Detection                                    | Planned                    | No evidence yet.                              |
 | M4-C  | Provider Registry Foundation                            | Planned                    | No evidence yet.                              |
 | M4-D  | First Concrete Process Providers                        | Planned                    | No evidence yet.                              |
@@ -438,39 +438,41 @@ Process execution boundary (M4-A)
     M4-D).
 - **Dependencies.** M3.
 - **Completion status.** **Active
-  (M4-A.1 Delivered 2026-07-11;
-  M4-A.2 — Open action — T-022 is
-  `Ready`; the M4-A plan is at
+  (M4-A.1 + M4-A.2 Delivered 2026-07-11;
+  the M4-A plan is at
   `.ai/plans/M4-A-infrastructure-process-execution.md`
   Status: Approved 2026-07-11 via
   the 'Next' invocation per
   `.ai/commands.md` § 4).** The
-  M4-A.1 implementation is
+  M4-A.1 + M4-A.2 implementation is
   complete: the contracts, the
   implementations, the
   composition root, the on-disk
   store, the swap in
-  `AddProjects`, the 45 new unit
-  tests, the 2 new architecture
-  tests, the
+  `AddProjects`, the M4-A.1 unit
+  tests, the M4-A.1 + M4-A.2
+  architecture tests, the
+  M4-A.2 bUnit tests, the
   `docs/infrastructure.md`
-  documentation, and the
+  documentation, the
   `docs/projects.md` M3 / M4-A
-  Boundary section update. The
-  M4-A.1 closeout commit
-  `feat(m4-a.1): add infrastructure
-  project skeleton with
-  IProcessRunner, ICredentialVault,
-  IPlatformInfo, and on-disk
-  IProjectStore` is on `main`. The
-  M4-A.1 feature branch
-  `feature/T-021-m4-a-1-infrastructure-project-skeleton`
-  is fast-forwarded into `main`
-  and deleted per the branching
-  strategy. The first M4-A task
-  T-021 (M4-A.1) is `Done`; the
-  next M4-A task T-022 (M4-A.2 —
-  Open action) is `Ready`.
+  Boundary section update, the
+  Open action on `AppProjectCard`
+  enabled (M4-A.2), the
+  `IPlatformInfo.IsWindows`
+  extension (M4-A.2), and the
+  architecture test
+  `AppProjectCard_resolves_open_through_IProcessRunner`
+  (M4-A.2). The M4-A.1 + M4-A.2
+  closeout commits are on `main`.
+  The M4-A.1 + M4-A.2 feature
+  branches are fast-forwarded
+  into `main` and deleted per the
+  branching strategy. The M4-A
+  tasks T-021 (M4-A.1) + T-022
+  (M4-A.2) are `Done`; the next
+  M4-A task is undefined (M4-A.3
+  is not yet planned).
 - **Evidence.**
   - `implementation-report-m4-a-1-infrastructure-project-skeleton.md`
     (the M4-A.1 closeout report).
@@ -478,23 +480,38 @@ Process execution boundary (M4-A)
     (the M4-A.1 per-session handoff,
     mirrored at
     `.ai/handoffs/latest.md`).
+  - `implementation-report-m4-a-2-open-action.md`
+    (the M4-A.2 closeout report).
+  - `.ai/handoffs/2026-07-11-m4-a-2-open-action.md`
+    (the M4-A.2 per-session handoff,
+    mirrored at
+    `.ai/handoffs/latest.md`).
   - `docs/infrastructure.md` (10
     sections, the M4-A
     documentation).
+  - `docs/projects.md` (M3 / M4-A
+    Boundary section).
   - The M4-A.1 closeout commit
     `feat(m4-a.1): add infrastructure
     project skeleton with
     IProcessRunner, ICredentialVault,
     IPlatformInfo, and on-disk
     IProjectStore` on `main`.
-  - 318 tests pass, 0 failed, 9
+  - The M4-A.2 closeout commit
+    `feat(m4-a.2): enable
+    AppProjectCard.Open action via
+    IProcessRunner` on `main`.
+  - 323 tests pass, 0 failed, 9
     skipped (the 7 from M3 + the
-    2 new architecture tests
-    registered-but-disabled per
-    ADR-016). The M4-A.1 is +45
-    unit + 0 bUnit + 0 active
+    2 M4-A.1 architecture tests
+    remain registered-but-disabled
+    per ADR-016). The M4-A.1 is
+    +45 unit + 0 bUnit + 0 active
     architecture + 2 new skipped
-    vs M3.2 closeout.
+    vs M3.2 closeout. The M4-A.2
+    is +5 bUnit + 1 new active
+    architecture vs M4-A.1
+    closeout.
 - **Next milestone enabled.** M4-B (capability detection
   consumes the infrastructure abstractions).
 - **Three documented deviations.**
@@ -516,7 +533,7 @@ Process execution boundary (M4-A)
 | Slice  | Title                                                  | Status                  |
 | ------ | ------------------------------------------------------ | ----------------------- |
 | M4-A.1 | Infrastructure project skeleton (IProcessRunner, ICredentialVault, IPlatformInfo, on-disk IProjectStore) | Delivered (2026-07-11). |
-| M4-A.2 | Open action on AppProjectCard (IProcessRunner activation) | Ready (T-022).          |
+| M4-A.2 | Open action on AppProjectCard (IProcessRunner activation; `IPlatformInfo.IsWindows` extension) | Delivered (2026-07-11). |
 
 #### M4-B — Capability Detection
 

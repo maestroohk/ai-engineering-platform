@@ -345,20 +345,36 @@
           "handoff": ".ai/handoffs/2026-07-11-m4-a-1-infrastructure-project-skeleton.md",
           "plan": ".ai/plans/M4-A-infrastructure-process-execution.md",
           "commit_message": "feat(m4-a.1): add infrastructure project skeleton with IProcessRunner, ICredentialVault, IPlatformInfo, and on-disk IProjectStore"
+        },
+        "M4-A.2": {
+          "title": "Open action on AppProjectCard (IProcessRunner activation; IPlatformInfo.IsWindows extension)",
+          "status": "delivered",
+          "delivered_at": "2026-07-11",
+          "session": "m4-a-2-open-action",
+          "branch": "feature/T-022-m4-a-2-open-action",
+          "summary": "M4-A.2 ships the Open action on AppProjectCard — the first IProcessRunner activation. IPlatformInfo is extended with bool IsWindows { get; } (implemented in SystemPlatformInfo via RuntimeInformation.IsOSPlatform(OSPlatform.Windows)). AppProjectCard.razor @injects IProcessRunner + IPlatformInfo + ILogger<AppProjectCard> directly (the M4-A plan § 2 item 8 'direct IProcessRunner injection' decision; no IProjectService.OpenAsync facade and no IOpenProjectAction seam). The click handler calls IProcessRunner.RunToCompletionAsync('explorer.exe', new[] { Project.Path }, default). The button is gated on IPlatformInfo.IsWindows (computed Disabled=@(!IsWindowsHost)). Exceptions (Win32Exception + InvalidOperationException + IOException) are swallowed and surfaced as a transient inline OpenError (<div class='app-project-card-open-error' role='alert'>). 5 new bUnit tests (Open_Button_Is_Enabled_When_Host_Is_Windows, Open_Button_Is_Disabled_When_Host_Is_Not_Windows, Clicking_Open_Invokes_IProcessRunner_With_Explorer_And_ProjectPath, Open_Click_Passes_ProjectPath_Single_Element_As_Argument, Open_Click_Swallows_Process_Exceptions) + 1 new active architecture test (AppProjectCard_resolves_open_through_IProcessRunner). The M3.2 Open_Button_Remains_Disabled_In_M3_2 test is deleted. docs/infrastructure.md § 7 is rewritten from future tense to delivered tense; docs/infrastructure.md § 6 documents the new IsWindows property; docs/projects.md § 1/§ 4/§ 5.1/§ 7.2/§ 7.3 are updated; ROADMAP.md and .ai/plans/master-delivery-plan.md are updated; .ai/state/capabilities.json C-012 is updated to Delivered. Total: 323 passed, 0 failed, 9 skipped (per ADR-016 / M4-D); 0 warnings, 0 errors; format clean; visual smoke on /projects returns 200; the Open action is enabled on Windows hosts. M4-A.2 is +5 bUnit + 1 new active architecture vs M4-A.1 closeout (the 2 M4-A.1 architecture tests remain registered-but-disabled per ADR-016). Four documented deviations: (1) IProcessRunner.RunToCompletionAsync takes IReadOnlyList<string> arguments (the M4-A plan § 2 item 8 prose example used a single string with manual quote escaping; the actual contract uses ProcessStartInfo.ArgumentList for proper quoting); (2) IPlatformInfo.IsWindows is added in M4-A.2 (the M4-A plan § 8 risk row 6 anticipated this addition); (3) ILogger<AppProjectCard> is introduced in M4-A.2 (the App layer had not previously used ILogger<T>; the BCL provides it via the Blazor Server host DI container; no registration is needed); (4) OpenError inline rendering uses a single scoped CSS class .app-project-card-open-error (no new design-system AppInlineError primitive; the M3.2 minimum-blast-radius decision is preserved). Branch: feature/T-022-m4-a-2-open-action. Commit: feat(m4-a.2): enable AppProjectCard.Open action via IProcessRunner. Push is staged for push (not authorised in this session).",
+          "implementation_report": "implementation-report-m4-a-2-open-action.md",
+          "handoff": ".ai/handoffs/2026-07-11-m4-a-2-open-action.md",
+          "plan": ".ai/plans/M4-A-infrastructure-process-execution.md",
+          "commit_message": "feat(m4-a.2): enable AppProjectCard.Open action via IProcessRunner (hash c9bdb0c)"
         }
       },
       "evidence": {
         "slices": [
-          "M4-A.1"
+          "M4-A.1",
+          "M4-A.2"
         ],
         "implementation_reports": [
-          "implementation-report-m4-a-1-infrastructure-project-skeleton.md"
+          "implementation-report-m4-a-1-infrastructure-project-skeleton.md",
+          "implementation-report-m4-a-2-open-action.md"
         ],
         "handoffs": [
-          ".ai/handoffs/2026-07-11-m4-a-1-infrastructure-project-skeleton.md"
+          ".ai/handoffs/2026-07-11-m4-a-1-infrastructure-project-skeleton.md",
+          ".ai/handoffs/2026-07-11-m4-a-2-open-action.md"
         ],
         "commits": [
-          "M4-A.1: feat(m4-a.1): add infrastructure project skeleton with IProcessRunner, ICredentialVault, IPlatformInfo, and on-disk IProjectStore on feature/T-021-m4-a-1-infrastructure-project-skeleton (fast-forwarded into main; branch deleted per the branching strategy rule 7)"
+          "M4-A.1: feat(m4-a.1): add infrastructure project skeleton with IProcessRunner, ICredentialVault, IPlatformInfo, and on-disk IProjectStore on feature/T-021-m4-a-1-infrastructure-project-skeleton (fast-forwarded into main; branch deleted per the branching strategy rule 7)",
+          "M4-A.2: feat(m4-a.2): enable AppProjectCard.Open action via IProcessRunner (hash c9bdb0c) on feature/T-022-m4-a-2-open-action (fast-forwarded into main; branch deleted per the branching strategy rule 7)"
         ]
       }
     },

@@ -37,87 +37,53 @@
 
 ## Ready
 
-### M4-A.2 — Open action on AppProjectCard (IProcessRunner activation)
+### M4-A.3 — Undefined (next M4-A slice)
 
-- **Task ID:** `T-022`
+- **Task ID:** (none — M4-A.3 is not
+  yet planned)
 - **Milestone:** M4-A — Infrastructure /
-  Process Execution
-- **Title:** M4-A.2 — the second M4-A
-  implementation slice; the first
-  process-boundary activation; enables
-  the Open button on `AppProjectCard`
-  and uses `IProcessRunner.RunAsync` to
-  launch `explorer.exe` with the
-  project's `path`.
+  Process Execution (Active 2026-07-11;
+  M4-A.1 + M4-A.2 Delivered 2026-07-11)
+- **Title:** M4-A.3 — the third M4-A
+  implementation slice (not yet
+  defined).
 - **Why it matters:** M4-A.1 shipped
   the infrastructure seam
-  (`IProcessRunner` is the only legal
-  caller of `Process.Start` in the
-  platform). M4-A.2 is the first
-  activation: the Open action on
-  `AppProjectCard` is the first user-
-  facing call site that uses the
-  process boundary. The M4-A.1
-  architecture tests
-  (`Infrastructure_Respects_ProcessBoundary`,
-  `Infrastructure_Respects_CredentialBoundary`)
-  remain registered-but-disabled per
-  ADR-016 (they activate in M4-D when
-  the first concrete `Providers.<X>`
-  project lands).
-- **Objective:** Enable the Open
-  button on `AppProjectCard`; wire
-  the Open click handler to
-  `IProcessRunner.RunAsync(explorer.exe, path, ct)`;
-  stream the (irrelevant) stdout/stderr
-  to the host console (the action is
-  fire-and-forget from the UI's
-  perspective); add 5+ bUnit tests
-  for the new `AppProjectCard.OpenAsync`
-  flow.
-- **Acceptance criteria:** see
-  `.ai/plans/M4-A-infrastructure-process-execution.md`
-  § 2 item 8 (the M4-A plan's Open
-  action row). The Open action is
-  Windows-only; the action is disabled
-  on non-Windows hosts. The bUnit
-  tests cover the happy path (the
-  runner is invoked with the right
-  executable + arguments) and the
-  failure path (cancellation, runner
-  error). The architecture test
-  `No_DirectProcessStart_OutsideInfrastructure`
-  remains registered-but-disabled.
-- **Dependencies:** M4-A.1 (Done
-  2026-07-11; the `IProcessRunner`
-  contract + `SystemProcessRunner`
-  implementation are in place);
-  M3.2 (Done; the Open button is
-  rendered on `AppProjectCard` but
-  is disabled).
+  (`IProcessRunner` +
+  `ICredentialVault` + `IPlatformInfo` +
+  on-disk `IProjectStore`).
+  M4-A.2 shipped the first
+  `IProcessRunner` activation (the
+  Open action on `AppProjectCard`).
+  The M4-A plan § 2 enumerates two
+  slices (M4-A.1 + M4-A.2); a third
+  slice is not yet planned. The next
+  milestone after M4-A.2 closes is
+  M4-B (Capability Detection,
+  Planned). The next M4-A task is
+  undefined.
+- **Objective:** (not yet defined).
+- **Acceptance criteria:** (not yet
+  defined).
+- **Dependencies:** M4-A.1 + M4-A.2
+  (Done 2026-07-11).
 - **Expected affected areas:**
-  `src/AiEng.Platform.App/Components/`
-  (`AppProjectCard.razor` — the Open
-  click handler; the Open button is
-  enabled); the M4-A.1 architecture
-  tests remain registered-but-disabled.
-- **Validation:** `dotnet test` — the
-  318 M4-A.1 tests + the new M4-A.2
-  tests all pass; the architecture
-  tests remain skipped per ADR-016.
-  Visual smoke on `/projects` —
-  clicking the Open button launches
-  `explorer.exe` with the project's
-  folder.
+  (not yet defined).
+- **Validation:** (not yet defined).
 - **Approved plan path:**
   `.ai/plans/M4-A-infrastructure-process-execution.md`
   (Approved 2026-07-11 via the
-  'Next' invocation).
-- **Status:** Ready (the M4-A.1
-  closeout promoted T-022 to Ready;
-  the next session starts the M4-A.2
-  implementation per the Progressive
-  Coding Rule).
+  'Next' invocation). The M4-A.3
+  plan is not yet drafted; the M4-A.2
+  closeout does not seed M4-A.3 (per
+  the brief: 'Do not begin the
+  following task').
+- **Status:** Ready (the M4-A.2
+  closeout does not seed a concrete
+  M4-A.3 task; the next concrete
+  step is the M4-B plan promotion;
+  M4-A.3 is undefined; M4-A.3 may
+  be defined in a future session).
 
 ### M1 follow-up — Add `AppToolbar` example to `/design-system`
 
@@ -164,14 +130,17 @@
 
 ## In Progress
 
-(none — M4-A.1 delivered in the
-m4-a-1-infrastructure-project-skeleton
-session, 2026-07-11; M4-A is `Active`;
-M4-A.2 — the Open action on
-`AppProjectCard` (T-022) — is the next
-`Ready` task; the next session starts
-the M4-A.2 implementation per the
-Progressive Coding Rule.)
+(none — M4-A.2 delivered in the
+m4-a-2-open-action session, 2026-07-11;
+M4-A.1 + M4-A.2 are `Done`; the next
+M4-A task is undefined; the next
+milestone is M4-B (Capability Detection,
+Planned). The next session is the
+M4-A.3 implementation (if defined) or
+the M4-B plan promotion. Per the
+Progressive Coding Rule, the M4-A.2
+session does **not** begin M4-A.3,
+M4-B, M4-C, or M4-D.)
 
 ---
 
@@ -215,6 +184,145 @@ Progressive Coding Rule.)
 
 ## Done Recently
 
+### M4-A.2 — Open action on AppProjectCard (IProcessRunner activation) — 2026-07-11
+
+- **Task ID:** `T-022`
+- **Milestone:** M4-A — Infrastructure /
+  Process Execution (Active 2026-07-11;
+  M4-A.1 + M4-A.2 Delivered 2026-07-11)
+- **Title:** Open action on
+  `AppProjectCard` — the second M4-A
+  implementation slice; the first
+  process-boundary activation; the
+  M4-A.1 `IProcessRunner` seam is
+  activated by the Open button on
+  `AppProjectCard` (Windows-only;
+  gated on `IPlatformInfo.IsWindows`;
+  exception-swallowed with inline
+  `OpenError`).
+- **Status:** **Done (delivered
+  2026-07-11).** M4-A.2 ships the
+  Open action on `AppProjectCard`:
+  the card `@inject`s `IProcessRunner` +
+  `IPlatformInfo` + `ILogger<AppProjectCard>`
+  directly; the click handler calls
+  `IProcessRunner.RunToCompletionAsync("explorer.exe",
+  new[] { Project.Path }, default)`;
+  the button is gated on
+  `IPlatformInfo.IsWindows`; the
+  exception path
+  (`Win32Exception` +
+  `InvalidOperationException` +
+  `IOException`) is swallowed and
+  surfaced as a transient inline
+  `OpenError`. The M4-A.2 also
+  extends `IPlatformInfo` with
+  `bool IsWindows { get; }`
+  (implemented in `SystemPlatformInfo`
+  via
+  `RuntimeInformation.IsOSPlatform(OSPlatform.Windows)`).
+- **Outcome:** M4-A.2 ships 6 new
+  files (the implementation report,
+  the per-session handoff, and 4
+  state-file updates are
+  docs/state; the actual code
+  changes are 5 source files
+  modified + 1 source file created
+  for the architecture test): (1)
+  **`IPlatformInfo` extended with
+  `IsWindows`**; (2)
+  **`SystemPlatformInfo` implements
+  `IsWindows`**; (3) **`AppProjectCard.razor`
+  enables the Open button** (the
+  M3.2 `Disabled="true"` is replaced
+  with the computed
+  `Disabled="@(!IsWindowsHost)"`; the
+  click handler calls
+  `IProcessRunner.RunToCompletionAsync("explorer.exe",
+  new[] { Project.Path }, default)`;
+  the `OpenError` is rendered as a
+  transient inline
+  `<div class="app-project-card-open-error"
+  role="alert">`); (4) **The scoped
+  CSS class
+  `.app-project-card-open-error`** in
+  `AppProjectCard.razor.css`; (5)
+  **5 new bUnit tests** in
+  `AppProjectCardTests.cs`
+  (`Open_Button_Is_Enabled_When_Host_Is_Windows`,
+  `Open_Button_Is_Disabled_When_Host_Is_Not_Windows`,
+  `Clicking_Open_Invokes_IProcessRunner_With_Explorer_And_ProjectPath`,
+  `Open_Click_Passes_ProjectPath_Single_Element_As_Argument`,
+  `Open_Click_Swallows_Process_Exceptions`)
+  + `FakeProcessRunner` and
+  `FakePlatformInfo` test doubles;
+  the M3.2
+  `Open_Button_Remains_Disabled_In_M3_2`
+  test is deleted; (6) **1 new
+  active architecture test**
+  `AppProjectCard_resolves_open_through_IProcessRunner`
+  in
+  `PagesResolveProjectsThroughServiceTests.cs`
+  (asserts the card uses
+  `@inject IProcessRunner` and
+  contains no `Process.Start` or
+  `ProcessStartInfo` token). (7)
+  **Documentation**: `docs/infrastructure.md`
+  § 7 rewritten from future tense
+  to delivered tense; `docs/infrastructure.md`
+  § 6 updated to document the
+  `IsWindows` property; § 9 Tests
+  cumulative count updated; § 10
+  Out of Scope updated; `docs/projects.md`
+  § 1/§ 4/§ 5.1/§ 7.2/§ 7.3 updated;
+  `ROADMAP.md` and
+  `.ai/plans/master-delivery-plan.md`
+  updated; `.ai/state/capabilities.json`
+  C-012 updated to `Delivered`.
+- **Validation:** 323 passed, 0
+  failed, 9 skipped (per ADR-016 /
+  M4-D); 0 warnings, 0 errors; format
+  clean; visual smoke on `/projects`
+  returns 200; the Open action is
+  enabled on Windows hosts and
+  disabled with a tooltip on
+  non-Windows hosts. M4-A.2 is +5
+  bUnit + 1 new active architecture
+  vs M4-A.1 closeout (the 2 M4-A.1
+  architecture tests remain
+  registered-but-disabled per
+  ADR-016).
+- **Branch / commit:** branch
+  `feature/T-022-m4-a-2-open-action`
+  (created from `main` at the M4-A.1
+  closeout commit); commit
+  `feat(m4-a.2): enable AppProjectCard.Open action via IProcessRunner`
+  is on this branch; the branch is
+  fast-forwarded into `main` per the
+  branching strategy rule 6; the
+  branch is deleted per rule 7.
+- **Implementation report:**
+  `implementation-report-m4-a-2-open-action.md`
+  (15+ sections, mirrors the
+  M4-A.1 / M3 closeout reports).
+- **Per-session handoff:**
+  `.ai/handoffs/2026-07-11-m4-a-2-open-action.md`
+  (mirrored to
+  `.ai/handoffs/latest.md`).
+- **Push decision:** Staged for push
+  (not authorised in this session;
+  the user may push in a follow-up
+  command per the command protocol).
+- **Next step:** The M4-A.2
+  session does **not** begin
+  M4-A.3 (not yet defined) or
+  M4-B / M4-C / M4-D (per the
+  brief: 'Do not begin the
+  following task'). The next
+  session is the M4-A.3
+  implementation (if defined) or
+  the M4-B plan promotion.
+
 ### M4-A.1 — Infrastructure project skeleton — 2026-07-11
 
 - **Task ID:** `T-021`
@@ -231,7 +339,12 @@ Progressive Coding Rule.)
   infrastructure seam every later
   milestone composes. M4-A.2 — the
   Open action on `AppProjectCard`
-  (T-022) — is the next `Ready` task.
+  (T-022) — is `Done` (delivered
+  2026-07-11; see the M4-A.2 entry
+  in Done Recently). The next M4-A
+  task is undefined; the next
+  milestone is M4-B (Capability
+  Detection, Planned).
 - **Outcome:** M4-A.1 is the
   **boundary**, not the activation.
   The slice ships 21 new files + 16

@@ -1,5 +1,9 @@
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using AiEng.Platform.App.Components.Projects;
+using AiEng.Platform.Application.Infrastructure;
 using AiEng.Platform.Application.Projects;
 using AiEng.Platform.Domain.Projects;
 using Bunit;
@@ -13,6 +17,8 @@ public class AppProjectListTests : BunitContext
     public AppProjectListTests()
     {
         Services.AddSingleton<IProjectService>(new StaticService(new List<Project>(), afterLoadDelay: TimeSpan.Zero));
+        Services.AddSingleton<IPlatformInfo>(new FakePlatformInfo(isWindows: true));
+        Services.AddSingleton<IProcessRunner>(new FakeProcessRunner());
     }
 
     [Fact]
@@ -279,5 +285,34 @@ public class AppProjectListTests : BunitContext
 
         public Task<Result<Project>> UnregisterAsync(Guid id, CancellationToken cancellationToken = default) =>
             throw new NotSupportedException();
+    }
+
+    private sealed class FakeProcessRunner : IProcessRunner
+    {
+        public async IAsyncEnumerable<string> RunAsync(
+            string executable,
+            IReadOnlyList<string> arguments,
+            [EnumeratorCancellation] CancellationToken cancellationToken = default)
+        {
+            await Task.Yield();
+            yield break;
+        }
+
+        public Task<ProcessResult> RunToCompletionAsync(
+            string executable,
+            IReadOnlyList<string> arguments,
+            CancellationToken cancellationToken = default) =>
+            Task.FromResult(ProcessResult.From(0, string.Empty, string.Empty));
+    }
+
+    private sealed class FakePlatformInfo : IPlatformInfo
+    {
+        public FakePlatformInfo(bool isWindows) => IsWindows = isWindows;
+
+        public bool IsWindows { get; }
+
+        public string GetDataDirectory() => Path.Combine(Path.GetTempPath(), "aieng-fake-data");
+
+        public string GetConfigDirectory() => Path.Combine(Path.GetTempPath(), "aieng-fake-config");
     }
 }

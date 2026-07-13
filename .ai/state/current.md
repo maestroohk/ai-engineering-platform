@@ -41,7 +41,7 @@
 
 - **Active milestone:** **M4-A — Infrastructure /
   Process Execution** (Active, 2026-07-11;
-  M4-A.1 Delivered 2026-07-11).
+  M4-A.1 + M4-A.2 Delivered 2026-07-11).
   M4-A.1 ships the infrastructure seam every
   later milestone composes:
   `AiEng.Platform.Infrastructure` csproj; the
@@ -65,14 +65,28 @@
   as a test fixture. M4-A.1 ships 45 new unit
   tests + 2 new architecture tests
   (registered-but-disabled per ADR-016).
-  M4-A.2 (the Open action on `AppProjectCard`)
-  is the next slice; T-022 is `Ready` in
-  `.ai/state/tasks.json`. The M4-A.1
-  documentation is at
+  M4-A.2 ships the Open action on
+  `AppProjectCard`: the
+  `IPlatformInfo.IsWindows` extension +
+  `SystemPlatformInfo` implementation; the
+  card `@inject`s `IProcessRunner` +
+  `IPlatformInfo` + `ILogger<AppProjectCard>`
+  directly; the click handler calls
+  `IProcessRunner.RunToCompletionAsync("explorer.exe",
+  new[] { Project.Path }, default)`; the
+  button is gated on `IPlatformInfo.IsWindows`;
+  exceptions are swallowed and surfaced as a
+  transient inline `OpenError`. M4-A.2 ships 5
+  new bUnit tests + 1 new active architecture
+  test (`AppProjectCard_resolves_open_through_IProcessRunner`).
+  The M3-A.2 documentation is at
   [`docs/infrastructure.md`](../../infrastructure.md)
-  (10 sections per the M4-A plan § 2).
-  See
-  [`implementation-report-m4-a-1-infrastructure-project-skeleton.md`](../../implementation-report-m4-a-1-infrastructure-project-skeleton.md).
+  (10 sections per the M4-A plan § 2) +
+  [`docs/projects.md`](../../projects.md) §
+  1/§ 4/§ 5.1/§ 7.2/§ 7.3. See
+  [`implementation-report-m4-a-1-infrastructure-project-skeleton.md`](../../implementation-report-m4-a-1-infrastructure-project-skeleton.md)
+  and
+  [`implementation-report-m4-a-2-open-action.md`](../../implementation-report-m4-a-2-open-action.md).
 - **M2.1 — Application Shell Foundation:**
   **Delivered (2026-07-11).** The shell
   foundation lands: two layouts
@@ -299,9 +313,22 @@
 
 ## Current Slice
 
-- **Active slice:** **M4-A.1 — Infrastructure
-  project skeleton** (delivered
-  2026-07-11). The branch
+- **Active slice:** **M4-A.2 — Open action on
+  AppProjectCard** (delivered 2026-07-11).
+  The branch
+  `feature/T-022-m4-a-2-open-action` carried
+  the M4-A.2 work; the M4-A.2 closeout commit
+  `feat(m4-a.2): enable AppProjectCard.Open
+  action via IProcessRunner` is on this branch;
+  the branch is fast-forwarded into `main` per
+  the branching strategy rule 6; the branch is
+  deleted per rule 7. The next M4-A task is
+  undefined (M4-A.3 is not yet planned); the
+  next milestone is M4-B (Capability Detection,
+  Planned).
+- **Last completed slice:** **M4-A.1 —
+  Infrastructure project skeleton**
+  (delivered 2026-07-11). The branch
   `feature/T-021-m4-a-1-infrastructure-project-skeleton`
   carried the M4-A.1 work; the M4-A.1
   closeout commit
@@ -309,10 +336,7 @@
   is on this branch; the branch is
   fast-forwarded into `main` per the
   branching strategy rule 6; the branch is
-  deleted per rule 7. The next M4-A slice
-  is M4-A.2 (the Open action on
-  `AppProjectCard`); T-022 is `Ready` in
-  `.ai/state/tasks.json`.
+  deleted per rule 7.
 - **Last completed slice:** **M3.2 —
   Project Registration Slice 2**
   (delivered 2026-07-11). The branch
@@ -393,13 +417,27 @@
   `.ai/plans/M3-project-registration.md`.
   The M3 retrospective is at
   [`retrospective-m3-project-registration.md`](./../../retrospective-m3-project-registration.md).**
-- **M4-A.2:** M4-A.2 (the Open action on
-  `AppProjectCard`) is the next M4-A slice;
-  the M4-A.2 task T-022 is `Ready` in
-  `.ai/state/tasks.json`. The M4-A.2 plan
-  is the M4-A plan's M4-A.2 row, expanded
-  with the per-slice implementation detail
-  when the M4-A.2 session begins.
+- **M4-A.2 — Open action on `AppProjectCard`:** **Delivered (2026-07-11).** The
+  M4-A.2 is the first `IProcessRunner`
+  activation. The card `@inject`s
+  `IProcessRunner` + `IPlatformInfo` +
+  `ILogger<AppProjectCard>` directly; the
+  click handler calls
+  `IProcessRunner.RunToCompletionAsync("explorer.exe",
+  new[] { Project.Path }, default)`; the
+  button is gated on `IPlatformInfo.IsWindows`;
+  exceptions are swallowed and surfaced as a
+  transient inline `OpenError`. 5 new bUnit
+  tests + 1 new active architecture test
+  (`AppProjectCard_resolves_open_through_IProcessRunner`).
+  The M3.2 `Open_Button_Remains_Disabled_In_M3_2`
+  test is deleted. Total: 323 passed, 0
+  failed, 9 skipped (per ADR-016 / M4-D);
+  M4-A.2 is +5 bUnit + 1 new active
+  architecture vs M4-A.1 closeout. Branch:
+  `feature/T-022-m4-a-2-open-action`.
+  See
+  [`implementation-report-m4-a-2-open-action.md`](./../../implementation-report-m4-a-2-open-action.md).
 
 ## Last Completed Milestone
 
@@ -432,35 +470,173 @@
 
 ## Last Completed Task
 
-- The M4-A.1 implementation session
+- The M4-A.2 implementation session
   (2026-07-11) is the most recent
-  completed task; the M3 closeout
-  implementation session (2026-07-11)
-  is the prior task; the M3.2
-  implementation session (2026-07-11)
-  is the prior-prior task; the M3.1
-  implementation session (2026-07-11)
+  completed task; the M4-A.1 implementation
+  session (2026-07-11) is the prior task; the
+  M3 closeout implementation session
+  (2026-07-11) is the prior-prior task; the
+  M3.2 implementation session (2026-07-11)
   is the prior-prior-prior task; the
-  M2.5 implementation session
-  (2026-07-11) is the
-  prior-prior-prior-prior task; the
-  M2.4 implementation session
-  (2026-07-11) is the
-  prior-prior-prior-prior-prior
-  task; the M2.3 implementation
-  session (2026-07-11) is the
-  prior-prior-prior-prior-prior-prior
-  task; the M2.2 implementation
-  session (2026-07-11) is the
-  prior-prior-prior-prior-prior-prior-prior
-  task; the M2.1 implementation
-  session (2026-07-11) is the
-  prior-prior-prior-prior-prior-prior-prior-prior
-  task; the M0.5 architecture
-  refinement session (2026-07-10)
-  is the
-  prior-prior-prior-prior-prior-prior-prior-prior-prior
+  M3.1 implementation session
+  (2026-07-11) is the prior-prior-prior-prior
   task.
+  - Delivered M4-A.2 — Open action on
+    `AppProjectCard` per the approved
+    M4-A plan
+    (`.ai/plans/M4-A-infrastructure-process-execution.md`)
+    § 2 item 8.
+  - Extended the `IPlatformInfo` interface
+    with `bool IsWindows { get; }`; implemented
+    in `SystemPlatformInfo` via
+    `RuntimeInformation.IsOSPlatform(OSPlatform.Windows)`.
+  - Added `@using
+    AiEng.Platform.Application.Infrastructure`
+    to
+    `src/AiEng.Platform.App/Components/Projects/_Imports.razor`.
+  - Rewrote `AppProjectCard.razor`: added
+    `@inject IProcessRunner` + `@inject
+    IPlatformInfo` + `@inject
+    ILogger<AppProjectCard>`; replaced the
+    M3.2 `Disabled="true"` on the Open
+    `AppButton` with the computed
+    `Disabled="@(!IsWindowsHost)"`; wired
+    `@onclick="OnOpenClick"`; added the
+    `OnOpenClick` private method that calls
+    `IProcessRunner.RunToCompletionAsync("explorer.exe",
+    new[] { Project.Path }, default)`; added
+    the `OpenError` transient state; rendered
+    the `OpenError` as a small inline
+    `<div class="app-project-card-open-error"
+    role="alert">` in the card's
+    `ChildContent`; added the `OpenButtonTitle`
+    computed property for the tooltip.
+  - Added the `.app-project-card-open-error`
+    scoped CSS class to
+    `AppProjectCard.razor.css` (uses
+    `--app-error` and `--app-surface-2`;
+    no new design-system component).
+  - Modified
+    `tests/AiEng.Platform.ComponentTests/Projects/AppProjectCardTests.cs`:
+    deleted the M3.2
+    `Open_Button_Remains_Disabled_In_M3_2`
+    test; added 5 new bUnit tests
+    (`Open_Button_Is_Enabled_When_Host_Is_Windows`,
+    `Open_Button_Is_Disabled_When_Host_Is_Not_Windows`,
+    `Clicking_Open_Invokes_IProcessRunner_With_Explorer_And_ProjectPath`,
+    `Open_Click_Passes_ProjectPath_Single_Element_As_Argument`,
+    `Open_Click_Swallows_Process_Exceptions`);
+    added `FakeProcessRunner` and
+    `FakePlatformInfo` test doubles; added a
+    constructor that registers a default
+    `IPlatformInfo` (Windows) + `IProcessRunner`
+    (`FakeProcessRunner`) so the pre-existing
+    tests pass without per-test service
+    registration.
+  - Added the
+    `AppProjectCard_resolves_open_through_IProcessRunner`
+    architecture test in
+    `tests/AiEng.Platform.ArchitectureTests/Pages/PagesResolveProjectsThroughServiceTests.cs`
+    asserting the card uses
+    `@inject IProcessRunner` and contains no
+    `Process.Start` or `ProcessStartInfo`
+    token (the process boundary is the only
+    allowed seam).
+  - Rewrote `docs/infrastructure.md` § 7 from
+    "future tense" to "delivered tense";
+    updated § 6 Platform Info to document the
+    new `IsWindows` property; updated § 9
+    Tests cumulative count to 323 passed;
+    updated § 10 Out of Scope to reflect
+    M4-A.2 delivered.
+  - Updated `docs/projects.md` § 1 (Open
+    status), § 4 (M3 / M4-A Boundary; document
+    the M4-A.2 delivery), § 5.1 (card
+    description; all three action buttons
+    enabled), § 7.2 (component test list),
+    § 7.3 (architecture tests;
+    `AppProjectCard_resolves_open_through_IProcessRunner`).
+  - Updated `ROADMAP.md` (§ 2 M4-A row
+    updated; M4-A.2 marked Delivered in the
+    slice breakdown).
+  - Updated `.ai/plans/master-delivery-plan.md`
+    (§ 1 M4-A row + § 3 M4-A block; mark
+    M4-A.2 Delivered in the slice breakdown;
+    update completion status + evidence
+    block).
+  - Updated `.ai/state/capabilities.json`
+    C-012 (`completion_status: Planned →
+    Delivered`; `delivered_by_tasks: ["T-021",
+    "T-022"]`; `evidence.source_paths` adds
+    `AppProjectCard.razor`; `evidence.tests`
+    adds the 5 new bUnit tests + the new
+    architecture test; `architecture_tests`
+    adds
+    `AppProjectCard_resolves_open_through_IProcessRunner`;
+    `completed_criteria` updated).
+  - Validated the M4-A.2 end-to-end:
+    `npm run css:build` (exit 0),
+    `dotnet restore` (exit 0),
+    `dotnet build` (0 warnings, 0 errors),
+    `dotnet test` (323 passed, 0 failed, 9
+    skipped per ADR-016 / M4-D),
+    `dotnet format --verify-no-changes`
+    (exit 0), visual smoke on `/projects`
+    (200; the Open action is enabled on
+    Windows hosts and disabled with a tooltip
+    on non-Windows hosts).
+  - 323 total tests pass: 79 unit + 233
+    bUnit + 11 architecture, 9 skipped. The
+    M4-A.2 adds +5 bUnit + 1 new active
+    architecture vs M4-A.1 closeout (the 2
+    M4-A.1 architecture tests remain
+    registered-but-disabled per ADR-016).
+  - Four documented deviations: (1)
+    `IProcessRunner.RunToCompletionAsync`
+    takes `IReadOnlyList<string>` arguments
+    (the M4-A plan § 2 item 8 prose example
+    used a single string with manual quote
+    escaping; the actual contract uses
+    `ProcessStartInfo.ArgumentList` for proper
+    quoting); (2) `IPlatformInfo.IsWindows` is
+    added in M4-A.2 (the M4-A plan § 8 risk
+    row 6 anticipated this addition); (3)
+    `ILogger<AppProjectCard>` is introduced
+    in M4-A.2 (the App layer had not
+    previously used `ILogger<T>`; the BCL
+    provides it via the Blazor Server host
+    DI container; no registration is needed);
+    (4) `OpenError` inline rendering uses a
+    single scoped CSS class
+    `.app-project-card-open-error` (no new
+    design-system `AppInlineError` primitive;
+    the M3.2 minimum-blast-radius decision is
+    preserved).
+  - The commit
+    `feat(m4-a.2): enable AppProjectCard.Open action via IProcessRunner`
+    is the closing receipt; the commit
+    is on the feature branch
+    `feature/T-022-m4-a-2-open-action`;
+    the branch is fast-forwarded into
+    `main` per the branching strategy
+    rule 6; the branch is deleted per
+    rule 7. No push (push is not
+    authorised in this session; the
+    user may push in a follow-up
+    command per the command protocol).
+  - The session does **not**
+    implement M4-A.3 (not yet
+    defined) or M4-B / M4-C / M4-D;
+    per the Progressive Coding Rule, the
+    next session is the M4-A.3
+    implementation (if defined) or the
+    M4-B plan promotion.
+- The M4-A.1 implementation session
+  (2026-07-11) is the prior task;
+    the M4-A.1 implementation
+    session (2026-07-11) shipped the
+    infrastructure seam every later
+    milestone composes.
   - Delivered M4-A.1 — Infrastructure
     project skeleton per the approved
     M4-A plan
@@ -647,24 +823,24 @@
 
 ## Active Branch
 
-- **`main`** (the M4-A.1's
-  fast-forwarded branch). The M4-A.1
+- **`main`** (the M4-A.2's
+  fast-forwarded branch). The M4-A.2
   closeout commit
-  `feat(m4-a.1): add infrastructure project skeleton with IProcessRunner, ICredentialVault, IPlatformInfo, and on-disk IProjectStore`
-  is the HEAD of `main`. The M4-A.1
+  `feat(m4-a.2): enable AppProjectCard.Open action via IProcessRunner`
+  is the HEAD of `main`. The M4-A.2
   feature branch
-  `feature/T-021-m4-a-1-infrastructure-project-skeleton`
-  carried the M4-A.1 work; the branch
+  `feature/T-022-m4-a-2-open-action`
+  carried the M4-A.2 work; the branch
   is fast-forwarded into `main` per the
   branching strategy rule 6; the branch
-  is deleted per rule 7. The M3.1 +
-  M3.2 + M3 closeout commit chain
-  lives on the per-slice feature
+  is deleted per rule 7. The M4-A.1 +
+  M3.1 + M3.2 + M3 closeout commit
+  chain lives on the per-slice feature
   branches; the per-slice feature
   branches are deleted per the
   branching strategy rule 7; the
   per-slice commits are recorded in
-  the M3 evidence block of
+  the M3 / M4-A.1 evidence blocks of
   `.ai/state/milestones.json`. The
   `m3` annotated milestone tag is at
   the M3 closeout commit on `main`
@@ -675,30 +851,27 @@
 
 ## Last Stable Commit
 
-- The M4-A.1 closeout commit
-  `feat(m4-a.1): add infrastructure project skeleton with IProcessRunner, ICredentialVault, IPlatformInfo, and on-disk IProjectStore`
+- `178d319` — the M4-A.2 closeout commit
+  `feat(m4-a.2): enable AppProjectCard.Open action via IProcessRunner`
   on `main` (created 2026-07-11). The
-  M4-A.1 closeout commit is the
-  closing receipt for the M4-A.1
-  slice (the new `AiEng.Platform.Infrastructure`
-  csproj + the four contracts + the
-  four implementations + the
-  `AddInfrastructure` composition root
-  + the on-disk `IProjectStore`
-  registration + the documentation +
-  the project-continuity update). The
-  M4-A.1 closeout commit lives on the
+  M4-A.2 closeout commit is the
+  closing receipt for the M4-A.2
+  slice (the Open action on
+  `AppProjectCard` + the
+  `IPlatformInfo.IsWindows` extension +
+  the M4-A.2 documentation + the
+  project-continuity update). The
+  M4-A.2 closeout commit lived on the
   feature branch
-  `feature/T-021-m4-a-1-infrastructure-project-skeleton`,
+  `feature/T-022-m4-a-2-open-action`,
   which is fast-forwarded into `main`
   per the branching strategy rule 6
   and deleted per rule 7. The parent
-  commit is the M3 closeout commit
-  `chore(m3.closeout): close M3 with retrospective, M4-A plan, and m3 milestone tag`
-  on `main`. The `m3` annotated
-  milestone tag is at the parent
-  commit. Working tree is clean at
-  the close of the M4-A.1 session;
+  commit is `958cb4f` — the M4-A.1
+  closeout commit
+  `feat(m4-a.1): add infrastructure project skeleton with IProcessRunner, ICredentialVault, IPlatformInfo, and on-disk IProjectStore`
+  on `main`. Working tree is clean at
+  the close of the M4-A.2 session;
   the remote (`origin`) is configured
   but push is not authorised in this
   session.
@@ -767,33 +940,38 @@
 ## Test Status
 
 - `dotnet test AiEng.Platform.slnx --no-build` →
-  **318 passed, 9 skipped, 0 failed.**
+  **323 passed, 9 skipped, 0 failed.**
   - `AiEng.Platform.UnitTests`: 79 tests
-    (34 pre-M4-A.1 + 45 new M4-A.1
+    (34 pre-M4-A + 45 new M4-A.1
     unit tests: 22 `JsonFileProjectStoreTests`
     + 11 `IProcessRunnerTests` + 10
     `WindowsCredentialVaultTests` + 3
     `SystemPlatformInfoTests`).
-  - `AiEng.Platform.ComponentTests`: 228
+  - `AiEng.Platform.ComponentTests`: 233
     bUnit / integration tests, all passing
-    (no change vs M3 closeout; M4-A.1
-    adds 0 bUnit tests; the M4-A.1
-    boundary is the Infrastructure
-    layer, not the UI layer).
-  - `AiEng.Platform.ArchitectureTests`: 20
-    tests in total — 11 active (passing)
+    (228 pre-M4-A.2 + 5 new M4-A.2 bUnit
+    tests on `AppProjectCard`: the Open
+    action is Windows-gated; the click
+    handler invokes `IProcessRunner`;
+    the argument form is correct; the
+    process invocation exception is
+    swallowed and surfaced as a
+    transient inline `OpenError`).
+  - `AiEng.Platform.ArchitectureTests`: 21
+    tests in total — 12 active (passing)
     and 9 registered-but-disabled
     (skipped) per ADR-016 and the M4-D
-    activation milestone. The 2 new
+    activation milestone. The 1 new
+    `AppProjectCard_resolves_open_through_IProcessRunner`
+    architecture test is the new active
+    test; the 2 M4-A.1
     `Infrastructure_Respects_ProcessBoundary`
     + `Infrastructure_Respects_CredentialBoundary`
-    tests are registered but skipped;
-    they activate in M4-D when the first
-    concrete provider implementation
-    project (`Providers.<X>`) lands.
-    The `Pages_Resolve_Projects_Through_Service`
-    test (M3.1 + M3.2) remains the most
-    recent active architecture test.
+    tests remain registered-but-disabled
+    per ADR-016 / M4-D. The
+    `Pages_Resolve_Projects_Through_Service`
+    test (M3.1 + M3.2) remains active and
+    green.
 
 ## Implemented Capabilities
 
@@ -1168,8 +1346,7 @@ activation):
   at the M3 closeout commit on `main`.
 - [`.ai/plans/M4-A-infrastructure-process-execution.md`](./../../.ai/plans/M4-A-infrastructure-process-execution.md)
   — M4-A plan, **Approved (2026-07-11;
-  M4-A.1 Delivered 2026-07-11;
-  M4-A.2 Ready 2026-07-11;
+  M4-A.1 + M4-A.2 Delivered 2026-07-11;
   the 'Next' invocation that began
   the M4-A.1 session approved the
   plan per .ai/commands.md § 4 + the
@@ -1179,11 +1356,11 @@ activation):
   plan's M4-A.1 row, expanded with
   the per-slice implementation
   detail in the M4-A.1 implementation
-  report; the next M4-A slice
-  (M4-A.2 Open action on
-  `AppProjectCard`) ships when the
-  next session begins T-022; the
-  M4-A plan introduces the
+  report; the M4-A.2 plan is the M4-A
+  plan's M4-A.2 row, expanded with
+  the per-slice implementation
+  detail in the M4-A.2 implementation
+  report; the M4-A plan introduces the
   `AiEng.Platform.Infrastructure`
   csproj, the `IProcessRunner` /
   `ICredentialVault` / `IPlatformInfo`
@@ -1191,16 +1368,23 @@ activation):
   `IProjectStore` (which replaces the
   M3 in-memory store behind the same
   contract), and the Open action on
-  `AppProjectCard`; the M4-A.1
+  `AppProjectCard`; the M4-A
   documentation is at
   [`docs/infrastructure.md`](./../../infrastructure.md);
   the M4-A.1 implementation report
   is at
-  [`implementation-report-m4-a-1-infrastructure-project-skeleton.md`](./../../implementation-report-m4-a-1-infrastructure-project-skeleton.md)).
+  [`implementation-report-m4-a-1-infrastructure-project-skeleton.md`](./../../implementation-report-m4-a-1-infrastructure-project-skeleton.md);
+  the M4-A.2 implementation report
+  is at
+  [`implementation-report-m4-a-2-open-action.md`](./../../implementation-report-m4-a-2-open-action.md)).
   Prepared in the M3 closeout session.
 
 ## Last Implementation Report
 
+- [`implementation-report-m4-a-2-open-action.md`](./../../implementation-report-m4-a-2-open-action.md)
+  — the M4-A.2 implementation report
+  (the closing receipt for the
+  M4-A.2 slice, 2026-07-11).
 - [`implementation-report-m4-a-1-infrastructure-project-skeleton.md`](./../../implementation-report-m4-a-1-infrastructure-project-skeleton.md)
   — the M4-A.1 implementation report
   (the closing receipt for the
@@ -1258,26 +1442,26 @@ activation):
 
 ## Next Recommended Task
 
-> **M4-A.2 — Open action on
-> `AppProjectCard`.** M3 is closed
-> (2026-07-11). M4-A.1 is delivered
+> **M4-A.3 — not yet defined.** M3 is closed
+> (2026-07-11). M4-A.1 + M4-A.2 are delivered
 > (2026-07-11). The M4-A plan is at
 > [`.ai/plans/M4-A-infrastructure-process-execution.md`](./../../.ai/plans/M4-A-infrastructure-process-execution.md)
-> (Status: Approved). The next M4-A
-> task (T-022, M4-A.2 Open action) is
-> `Ready` in `.ai/state/tasks.json`.
-> The next session begins the M4-A.2
-> implementation per the Progressive
-> Coding Rule: one task per session;
-> 13-step lifecycle; stop after the
-> coherent commit. **Do not begin
-> M4-A.2 implementation in this
-> session** — the M4-A.1 brief
-> explicitly stops at the M4-A.1
-> receipt (the M4-A.1 is the boundary
-> between M3 and M4-A's first
-> activation; the Progressive Coding
-> Rule applies).
+> (Status: Approved). The next milestone
+> after M4-A.2 is M4-B (Capability Detection,
+> Planned). The next M4-A task is undefined
+> (M4-A.3 is not yet planned); the M4-A.2
+> session does not seed M4-A.3 (per the
+> brief: 'Do not begin the following
+> task'). The next session is the M4-A.3
+> implementation (if defined) or the
+> M4-B plan promotion. **Do not begin
+> M4-A.3 / M4-B / M4-C / M4-D in this
+> session** — the M4-A.2 brief
+> explicitly stops at the M4-A.2
+> receipt (the M4-A.2 is the first
+> activation of the M4-A infrastructure
+> seam; the Progressive Coding Rule
+> applies).
 
 The detailed breakdown of the M4-A.1
 slice is in
@@ -1307,77 +1491,62 @@ The next actionable item is:
 
 ## Last Updated
 
-- **2026-07-11** (M4-A.1
+- **2026-07-11** (M4-A.2
   session). This version supersedes
-  the M3 closeout version
-  (2026-07-11). The M4-A.1
-  session ships: the new
-  `AiEng.Platform.Infrastructure`
-  csproj with references to
-  Application + Domain; the four
-  contracts in
-  `src/AiEng.Platform.Application/Infrastructure/`
-  (`IProcessRunner` + `ProcessResult`
-  + `ICredentialVault` +
-  `IPlatformInfo`); the four
-  implementations in
-  `src/AiEng.Platform.Infrastructure/`
-  (`SystemProcessRunner` +
-  `WindowsCredentialVault` +
-  `SystemPlatformInfo` +
-  `JsonFileProjectStore`); the
-  `AddInfrastructure` composition
-  root extension; the one-line swap
-  in `AddProjects` (the M3 in-memory
-  `IProjectStore` registration is
-  removed; the on-disk
-  `JsonFileProjectStore` is now
-  registered through
-  `AddInfrastructure`); the M3
-  in-memory `InMemoryProjectStore`
-  is moved to
-  `tests/AiEng.Platform.UnitTests/Infrastructure/`
-  as a test fixture; the 45 new
-  unit tests across 4 test files;
-  the 2 new architecture tests
-  (registered-but-disabled per
-  ADR-016; activate in M4-D); the
-  `docs/infrastructure.md`
-  documentation (10 sections); the
-  `docs/projects.md` § 4 update;
-  the project-continuity state
-  updates (session.json, tasks.json,
+  the M4-A.1 version
+  (2026-07-11). The M4-A.2
+  session ships: the
+  `IPlatformInfo.IsWindows` extension;
+  the `SystemPlatformInfo.IsWindows`
+  implementation; the Open action on
+  `AppProjectCard` enabled (Windows-gated;
+  exception-swallowed with inline
+  `OpenError`); the
+  `AppProjectCard.razor` `@inject`s
+  `IProcessRunner` + `IPlatformInfo` +
+  `ILogger<AppProjectCard>`; the
+  `.app-project-card-open-error` scoped
+  CSS class; 5 new bUnit tests
+  + 1 new active architecture test
+  (`AppProjectCard_resolves_open_through_IProcessRunner`);
+  the M3.2
+  `Open_Button_Remains_Disabled_In_M3_2`
+  test deleted; the
+  `docs/infrastructure.md` § 7 rewrite
+  + § 6 Platform Info update + § 9
+  Tests cumulative count update + § 10
+  Out of Scope update; the
+  `docs/projects.md` § 1/§ 4/§ 5.1/§ 7.2
+  /§ 7.3 updates; the `ROADMAP.md` +
+  `.ai/plans/master-delivery-plan.md`
+  updates; the `.ai/state/capabilities.json`
+  C-012 update; the project-continuity
+  state updates (session.json, tasks.json,
   current.md, task-board.md,
-  milestones.json, ROADMAP.md,
-  master delivery plan); the M4-A.1
+  milestones.json); the M4-A.2
   implementation report at
-  [`implementation-report-m4-a-1-infrastructure-project-skeleton.md`](./../../implementation-report-m4-a-1-infrastructure-project-skeleton.md);
-  the M4-A.1 per-session handoff at
-  [`.ai/handoffs/2026-07-11-m4-a-1-infrastructure-project-skeleton.md`](./../../.ai/handoffs/2026-07-11-m4-a-1-infrastructure-project-skeleton.md)
-  (mirrored to latest.md). M4-A is
-  moved from `Awaiting Approval` to
-  `Active` in
-  `.ai/state/milestones.json` with
-  `status: Active` and the M4-A.1
-  slice block added. The M4-A.1
+  [`implementation-report-m4-a-2-open-action.md`](./../../implementation-report-m4-a-2-open-action.md);
+  the M4-A.2 per-session handoff at
+  [`.ai/handoffs/2026-07-11-m4-a-2-open-action.md`](./../../.ai/handoffs/2026-07-11-m4-a-2-open-action.md)
+  (mirrored to latest.md). The M4-A.2
   closeout commit
-  `feat(m4-a.1): add infrastructure project skeleton with IProcessRunner, ICredentialVault, IPlatformInfo, and on-disk IProjectStore`
-  is the most recent commit on
-  `main`; the M4-A.1 feature branch
+  `feat(m4-a.2): enable AppProjectCard.Open action via IProcessRunner`
+  (hash `178d319`) is the most recent
+  commit on
+  `main`; the M4-A.2 feature branch
   is fast-forwarded into `main` and
   deleted per the branching
   strategy rule 6/7. Validation
-  results: 318 passed, 0 failed,
+  results: 323 passed, 0 failed,
   9 skipped (per ADR-016 / M4-D);
   0 warnings, 0 errors; format
   clean; visual smoke on `/projects`
-  returns 200; the project list
-  persists across an application
-  restart. The remote (`origin`)
-  is configured but push is not
-  authorised in this session. T-022
-  (M4-A.2 Open action) is `Ready`
-  in `.ai/state/tasks.json`.
+  returns 200; the Open action is
+  enabled on Windows hosts. The
+  remote (`origin`) is configured
+  but push is not authorised in this
+  session. T-022 (M4-A.2 Open action)
+  is `Done` in `.ai/state/tasks.json`.
 
 ## Linked Artefacts
 
@@ -1392,9 +1561,13 @@ The next actionable item is:
   `Delivered` (M3.1 + M3.2 + M3
   closeout)).
 - [`.ai/handoffs/latest.md`](./../../.ai/handoffs/latest.md) —
-  the most recent handoff (the M4-A.1
+  the most recent handoff (the M4-A.2
   handoff; mirrored from
-  `.ai/handoffs/2026-07-11-m4-a-1-infrastructure-project-skeleton.md`).
+  `.ai/handoffs/2026-07-11-m4-a-2-open-action.md`).
+- [`.ai/handoffs/2026-07-11-m4-a-2-open-action.md`](./../../.ai/handoffs/2026-07-11-m4-a-2-open-action.md)
+  — the M4-A.2 session handoff
+  (the closing receipt for the
+  M4-A.2 slice, 2026-07-11).
 - [`.ai/handoffs/2026-07-11-m4-a-1-infrastructure-project-skeleton.md`](./../../.ai/handoffs/2026-07-11-m4-a-1-infrastructure-project-skeleton.md)
   — the M4-A.1 session handoff
   (the closing receipt for the
@@ -1570,6 +1743,10 @@ The next actionable item is:
   — the M4-A.1 implementation
   report (the closing receipt for
   the M4-A.1 slice, 2026-07-11).
+- [`implementation-report-m4-a-2-open-action.md`](./../../implementation-report-m4-a-2-open-action.md)
+  — the M4-A.2 implementation
+  report (the closing receipt for
+  the M4-A.2 slice, 2026-07-11).
 - [`docs/infrastructure.md`](./../../infrastructure.md)
   — the M4-A.1 surface
   documentation (10 sections:

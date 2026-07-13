@@ -57,6 +57,34 @@ public sealed class PagesResolveProjectsThroughServiceTests
         AssertSource(path, "ConfirmUnregisterProject.razor");
     }
 
+    [Fact]
+    public void AppProjectCard_resolves_open_through_IProcessRunner()
+    {
+        var cardPath = Path.Combine(LocateAppRoot(), "Components", "Projects", "AppProjectCard.razor");
+        Assert.True(File.Exists(cardPath), $"AppProjectCard.razor not found at {cardPath}");
+
+        var source = File.ReadAllText(cardPath);
+
+        Assert.True(
+            source.Contains("@inject IProcessRunner", StringComparison.Ordinal),
+            "AppProjectCard.razor must @inject IProcessRunner to perform the Open action. " +
+            "The process boundary is the only allowed seam; direct Process.Start is forbidden.");
+
+        var forbidden = new[]
+        {
+            "Process.Start",
+            "ProcessStartInfo",
+        };
+        var hits = forbidden
+            .Where(token => source.Contains(token, StringComparison.Ordinal))
+            .ToArray();
+        Assert.True(
+            hits.Length == 0,
+            "AppProjectCard.razor must not call Process.Start or construct ProcessStartInfo directly. " +
+            "The IProcessRunner abstraction is the only allowed seam. " +
+            "Forbidden tokens found: " + string.Join(", ", hits));
+    }
+
     private static void AssertSource(string path, string label)
     {
         Assert.True(File.Exists(path), $"{label} not found at {path}");

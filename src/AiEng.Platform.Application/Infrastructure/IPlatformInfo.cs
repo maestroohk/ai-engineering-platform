@@ -5,4 +5,6 @@ public interface IPlatformInfo
     string GetDataDirectory();
 
     string GetConfigDirectory();
+
+    bool IsWindows { get; }
 }

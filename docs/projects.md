@@ -44,8 +44,9 @@ The `/projects` surface exists to:
 - **List registered projects.** A user sees every
   project the platform knows about, sorted by
   name. **Enabled in M3.1** via `AppProjectList`.
-- **Open a project** (wired in M3.1; enabled in
-  M4-A when durable storage lands).
+- **Open a project** (wired in M3.1; **enabled in
+  M4-A.2** via the `IProcessRunner` seam; gated on
+  `IPlatformInfo.IsWindows`).
 - **Rename a project** (wired in M3.1; **enabled
   in M3.2** via the `RenameProjectForm` modal).
 - **Unregister a project** (wired in M3.1;
@@ -151,14 +152,42 @@ The M4-A.1 slice delivered:
   (`Infrastructure_Respects_ProcessBoundary`,
   `Infrastructure_Respects_CredentialBoundary`).
 
-The Open action on `AppProjectCard` remains
-**disabled in M4-A.1** (the Open action is
-M4-A.2's responsibility; per the M3 retrospective
-§ 13 recommendation 6). The on-disk store is
-durable: the project list persists across an
-application restart.
+The M4-A.2 slice (delivered 2026-07-11) shipped:
 
-See `docs/infrastructure.md` for the M4-A.1
+- The `IPlatformInfo` interface extended with
+  `bool IsWindows { get; }`
+  (`RuntimeInformation.IsOSPlatform(OSPlatform.Windows)`
+  in `SystemPlatformInfo`).
+- The Open action on `AppProjectCard`
+  **enabled**: the card `@inject`s
+  `IProcessRunner` + `IPlatformInfo` +
+  `ILogger<AppProjectCard>` directly (the M4-A
+  plan § 2 item 8 "direct `IProcessRunner`
+  injection" decision; no
+  `IProjectService.OpenAsync` facade and no
+  `IOpenProjectAction` seam); the click handler
+  calls `IProcessRunner.RunToCompletionAsync("explorer.exe",
+  new[] { Project.Path }, default)`; the
+  `OpenError` transient inline error is surfaced
+  on `Win32Exception` +
+  `InvalidOperationException` + `IOException`.
+- 5 new bUnit tests in
+  `AppProjectCardTests` (Windows gate, runner
+  invocation, argument form, exception swallow)
+  + 1 new architecture test
+  (`AppProjectCard_resolves_open_through_IProcessRunner`)
+  asserting the process boundary is the only
+  allowed seam.
+
+The on-disk store is durable (M4-A.1): the
+project list persists across an application
+restart. The Open action is enabled (M4-A.2):
+clicking Open launches File Explorer pointed at
+the project folder on Windows hosts; on
+non-Windows hosts the button is disabled with a
+tooltip.
+
+See `docs/infrastructure.md` for the M4-A
 architecture documentation.
 
 ---
@@ -177,12 +206,20 @@ and three action buttons: **Open**, **Rename**,
 The card does **not** own state. The card is a
 pure render of the `Project` parameter.
 
-The three action buttons are **disabled** for
-the Open action in M3.2 (lands in M4-A). The
-**Rename** and **Unregister** buttons are
-**enabled in M3.2**; the Open button remains
-disabled (M4-A's responsibility). All three
-buttons are wired to the seam today.
+The three action buttons are **all enabled**:
+**Open** (enabled in M4-A.2 via
+`IProcessRunner.RunToCompletionAsync("explorer.exe",
+...)`; gated on `IPlatformInfo.IsWindows`),
+**Rename** (enabled in M3.2 via the
+`RenameProjectForm` modal), and **Unregister**
+(enabled in M3.2 via the
+`ConfirmUnregisterProject` confirmation). All
+three buttons are wired to the seam. The Open
+action swallows `Win32Exception` +
+`InvalidOperationException` + `IOException` and
+surfaces a transient inline error
+(`.app-project-card-open-error`) when the
+process invocation fails.
 
 The status badge is **New** (`AppBadgeVariant.Neutral`)
 when `LastUsedAt` is `null`; **Active**
@@ -254,9 +291,13 @@ registers:
 
 - `AppProjectCardTests` — primary render, every
   badge variant (New + Active), every action
-  button (Open disabled, Rename + Unregister
-  enabled in M3.2), the click handlers
-  (`OnRename`, `OnUnregister`).
+  button (Open enabled on Windows in M4-A.2,
+  Rename + Unregister enabled in M3.2), the
+  click handlers (`OnOpen` calls
+  `IProcessRunner.RunToCompletionAsync`,
+  `OnRename`, `OnUnregister`), the platform-host
+  gate (Open enabled iff `IsWindows`), and the
+  exception swallow (`OpenError` inline).
 - `AppProjectListTests` — every state slot
   (Loading, Empty, Error, Populated), modal
   openings (Register, Rename, Unregister),
@@ -285,7 +326,13 @@ registers:
   `ConfirmUnregisterProject` modal all consume
   `IProjectService` through the contract, not
   through direct access to `InMemoryProjectStore`
-  or the file system.
+  or the file system. The M4-A.2 slice extends
+  the test family with
+  `AppProjectCard_resolves_open_through_IProcessRunner`
+  — the process boundary is the only allowed
+  seam on the card (no `Process.Start` or
+  `ProcessStartInfo` tokens; the card uses
+  `@inject IProcessRunner`).
 
 ### 7.4 Disabled Tests
 

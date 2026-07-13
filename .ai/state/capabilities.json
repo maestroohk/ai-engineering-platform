@@ -379,7 +379,7 @@
       "id": "C-012",
       "title": "IProcessRunner",
       "status": "Accepted",
-      "completion_status": "Planned",
+      "completion_status": "Delivered",
       "layer": 0,
       "category": "Infrastructure",
       "description": "The only legal caller of Process.Start in the platform. Exposes RunAsync (streaming) and RunToCompletionAsync (one-shot).",
@@ -388,23 +388,27 @@
       "consumed_by": ["C-003", "C-015"],
       "delivered_by_milestone": "M4-A",
       "consumed_by_milestones": ["M4-D", "M5", "M6", "M7", "M8"],
-      "delivered_by_tasks": [],
+      "delivered_by_tasks": ["T-021", "T-022"],
       "next_task": null,
       "blocked_by": [],
       "evidence": {
-        "plans": [],
-        "reports": [],
-        "commits": [],
-        "tests": [],
-        "source_paths": []
+        "plans": [".ai/plans/M4-A-infrastructure-process-execution.md"],
+        "reports": ["implementation-report-m4-a-1-infrastructure-project-skeleton.md", "implementation-report-m4-a-2-open-action.md"],
+        "commits": ["feat(m4-a.1): add infrastructure project skeleton with IProcessRunner, ICredentialVault, IPlatformInfo, and on-disk IProjectStore", "feat(m4-a.2): enable AppProjectCard.Open action via IProcessRunner"],
+        "tests": ["IProcessRunnerTests", "Open_Button_Is_Enabled_When_Host_Is_Windows", "Open_Button_Is_Disabled_When_Host_Is_Not_Windows", "Clicking_Open_Invokes_IProcessRunner_With_Explorer_And_ProjectPath", "Open_Click_Passes_ProjectPath_Single_Element_As_Argument", "Open_Click_Swallows_Process_Exceptions", "AppProjectCard_resolves_open_through_IProcessRunner"],
+        "source_paths": ["src/AiEng.Platform.Application/Infrastructure/IProcessRunner.cs", "src/AiEng.Platform.Application/Infrastructure/ProcessResult.cs", "src/AiEng.Platform.Infrastructure/ProcessRunner/SystemProcessRunner.cs", "src/AiEng.Platform.App/Composition/Infrastructure/InfrastructureServiceCollectionExtensions.cs", "src/AiEng.Platform.App/Components/Projects/AppProjectCard.razor"]
       },
       "acceptance_criteria": [
         "AiEng.Platform.Infrastructure is created (M4-A); IProcessRunner has RunAsync and RunToCompletionAsync.",
-        "No_DirectProcessStart_OutsideInfrastructure architecture test is active and green."
+        "No_DirectProcessStart_OutsideInfrastructure architecture test is active and green.",
+        "At least one IProcessRunner call site exists in the App layer (M4-A.2: the Open action on AppProjectCard)."
       ],
-      "completed_criteria": [],
+      "completed_criteria": [
+        "AiEng.Platform.Infrastructure is created (M4-A); IProcessRunner has RunAsync and RunToCompletionAsync.",
+        "At least one IProcessRunner call site exists in the App layer (M4-A.2: the Open action on AppProjectCard)."
+      ],
       "adr": "ADR-011, ADR-016",
-      "architecture_tests": ["No_DirectProcessStart_OutsideInfrastructure"],
+      "architecture_tests": ["No_DirectProcessStart_OutsideInfrastructure", "AppProjectCard_resolves_open_through_IProcessRunner"],
       "last_updated": "2026-07-11"
     },
     {

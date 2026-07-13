@@ -11,8 +11,12 @@
 > implementations; the `AddInfrastructure`
 > composition root; and the M3 in-memory
 > `IProjectStore` swap for the on-disk store. The
-> Open action on `AppProjectCard` is M4-A.2 (a
-> future slice).
+> M4-A.2 slice (delivered 2026-07-11) ships the
+> Open action on `AppProjectCard` — the first
+> `IProcessRunner` activation. M4-D activates the
+> architecture tests when the first concrete
+> provider implementation project
+> (`Providers.<X>`) lands.
 
 ---
 
@@ -46,11 +50,12 @@ The M4-A infrastructure seam exists to:
   `IPlatformInfo.GetDataDirectory()` for the
   store file path.
 
-The M4-A.1 slice ships the boundary. M4-A.2
-ships the Open action (the first process boundary
-activation). M4-D activates the architecture
-tests when the first concrete provider
-implementation project (`Providers.<X>`) lands.
+The M4-A.1 slice ships the boundary. The
+M4-A.2 slice ships the Open action (the first
+process boundary activation). M4-D activates the
+architecture tests when the first concrete
+provider implementation project (`Providers.<X>`)
+lands.
 
 ---
 
@@ -250,7 +255,8 @@ name.
 
 ## 6. Platform Info
 
-`IPlatformInfo` exposes two methods:
+`IPlatformInfo` exposes two methods and one
+property:
 
 - `string GetDataDirectory()` — the directory
   the platform uses for durable state (the
@@ -258,6 +264,14 @@ name.
 - `string GetConfigDirectory()` — the directory
   the platform uses for configuration (reserved
   for M4-B / later).
+- `bool IsWindows { get; }` — `true` when the
+  process host is Windows (added in M4-A.2). The
+  `SystemPlatformInfo` implementation uses
+  `RuntimeInformation.IsOSPlatform(OSPlatform.Windows)`.
+  Consumers should inject `IPlatformInfo` rather
+  than calling `OperatingSystem.IsWindows()`
+  directly so the abstraction is testable and the
+  platform check can be mocked in bUnit tests.
 
 The `SystemPlatformInfo` implementation
 resolves both directories through
@@ -277,25 +291,44 @@ capability.
 
 ## 7. Open Action
 
-The Open action on `AppProjectCard` is **M4-A.2**,
-not M4-A.1. In M4-A.1 the Open button is wired to
-the seam but **disabled**. The Open action's
-implementation will:
+The Open action on `AppProjectCard` is **M4-A.2
+(delivered 2026-07-11)**. The Open button is
+enabled on Windows hosts (gated on
+`IPlatformInfo.IsWindows`); on non-Windows hosts
+the button is disabled with a tooltip explaining
+the Windows-only constraint.
 
-- Use `IProcessRunner.RunAsync` to launch
-  `explorer.exe` with the project's `path`.
-- Stream stdout/stderr to the console (the
-  Blazor Server host's process console; the user
-  does not see the streaming output — the action
-  is fire-and-forget from the UI's perspective).
-- Handle the case where the platform host is
-  not Windows (the Open action is Windows-only).
+The Open action's implementation:
 
-The M4-A.1 visual smoke asserts the page loads
-200 and the project list persists across an
-application restart; the M4-A.1 visual smoke
-**does not** click the Open button (the button
-is disabled).
+- `@inject`s `IProcessRunner`, `IPlatformInfo`,
+  and `ILogger<AppProjectCard>` directly on the
+  card (the M4-A plan § 2 item 8 "direct
+  `IProcessRunner` injection" decision; no
+  `IProjectService.OpenAsync` facade and no
+  `IOpenProjectAction` seam).
+- The click handler
+  (`OnOpenClick → OpenAsync`) calls
+  `IProcessRunner.RunToCompletionAsync("explorer.exe",
+  new[] { Project.Path }, default)`. The
+  `IReadOnlyList<string>` argument form lets
+  `ProcessStartInfo.ArgumentList` handle quoting
+  for paths with spaces.
+- A `try/catch` wraps the call for
+  `Win32Exception`, `InvalidOperationException`,
+  and `IOException` (the three exceptions a
+  process invocation can raise when the path no
+  longer exists or the executable is not on
+  `PATH`). On catch, the handler logs to
+  `ILogger<AppProjectCard>` and sets a transient
+  `OpenError` string rendered inline in the card
+  (`<div class="app-project-card-open-error"
+  role="alert">`). The next click clears the
+  error.
+
+The M4-A.2 visual smoke clicks the Open button on
+a populated `/projects` route; the project folder
+opens in File Explorer. On non-Windows hosts the
+Open button is disabled with a tooltip.
 
 ---
 
@@ -386,33 +419,52 @@ ADR-016 (`[Fact(Skip = "...")]`); they activate
 in M4-D when the first concrete provider
 implementation project (`Providers.<X>`) lands.
 
-Cumulative test count after M4-A.1: 318 passed, 0
-failed, 9 skipped (the 7 from M3 + the 2 new
-architecture tests).
+The M4-A.2 slice adds 5 new bUnit tests in
+`tests/AiEng.Platform.ComponentTests/Projects/AppProjectCardTests.cs`
+plus 1 new architecture test in
+`tests/AiEng.Platform.ArchitectureTests/Pages/PagesResolveProjectsThroughServiceTests.cs`:
+
+- `Open_Button_Is_Enabled_When_Host_Is_Windows`
+- `Open_Button_Is_Disabled_When_Host_Is_Not_Windows`
+- `Clicking_Open_Invokes_IProcessRunner_With_Explorer_And_ProjectPath`
+- `Open_Click_Passes_ProjectPath_Single_Element_As_Argument`
+- `Open_Click_Swallows_Process_Exceptions`
+- `AppProjectCard_resolves_open_through_IProcessRunner`
+  (architecture test: asserts the card uses
+  `@inject IProcessRunner` and contains no
+  `Process.Start` or `ProcessStartInfo` token —
+  the process boundary is the only allowed seam).
+
+Cumulative test count after M4-A.2: 323 passed, 0
+failed, 9 skipped (the 7 from M3 + the 2 M4-A.1
+architecture tests remain registered-but-disabled
+per ADR-016).
 
 ---
 
 ## 10. Out of Scope
 
 The M4-A plan § 3 enumerates 10 out-of-scope
-items. The M4-A.1 slice respects every item:
+items. The M4-A.1 + M4-A.2 slices respect every
+item:
 
-- **Provider creation.** M4-A.1 does not create
-  any `Providers.<X>` projects. The first
-  concrete providers land in M4-D.
-- **M4-A.2 (Open action).** M4-A.1 does not
-  enable the Open button on `AppProjectCard`.
-  The Open action is M4-A.2's responsibility.
-- **M4-B, M4-C, M4-D work.** M4-A.1 does not
-  begin any work outside the M4-A.1 slice.
+- **Provider creation.** Neither M4-A.1 nor
+  M4-A.2 create any `Providers.<X>` projects. The
+  first concrete providers land in M4-D.
+- **M4-B, M4-C, M4-D work.** Neither slice
+  begins any work outside the M4-A boundary.
 - **Activation of the 4 disabled
-  `CompositionRootBoundaryTests`.** M4-A.1 does
-  not enable these. They activate in M4-D.
+  `CompositionRootBoundaryTests`.** Neither slice
+  enables these. They activate in M4-D.
 - **Design-system `AppDialog` primitive.** The
   Open action's confirmation dialog (if any)
   composes the existing HTML5 native `<dialog>`
   (the M3.2 minimum-blast-radius decision); no
-  new design-system component is added.
+  new design-system component is added. The
+  M4-A.2 Open action does not use a confirmation
+  dialog at all (the action is a single
+  `explorer.exe <path>` invocation; the blast
+  radius is minimal).
 - **macOS / Linux credential vault.** The
   `WindowsCredentialVault` is Windows-only; on
   non-Windows hosts it throws
@@ -421,12 +473,12 @@ items. The M4-A.1 slice respects every item:
 - **Activation of axe-core tests.** The 3
   `AxeCoreAuditTests` remain disabled (the
   axe-core harness is not in the toolchain yet).
-- **Push to remote.** M4-A.1 does not push. The
-  push decision is `Staged for push`; the next
-  user command may push.
+- **Push to remote.** Neither M4-A.1 nor M4-A.2
+  push. The push decision is `Staged for push`;
+  the next user command may push.
 
-The M4-A.1 slice ends after the coherent commit
+The M4-A.2 slice ends after the coherent commit
 on the feature branch
-`feature/T-021-m4-a-1-infrastructure-project-skeleton`.
-The next session is M4-A.2 (the Open action on
-`AppProjectCard`).
+`feature/T-022-m4-a-2-open-action`. The next
+session is M4-A.3 (if defined) or the M4-B plan
+promotion.

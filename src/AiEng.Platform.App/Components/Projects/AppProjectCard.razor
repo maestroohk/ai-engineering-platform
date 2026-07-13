@@ -1,6 +1,9 @@
 @namespace AiEng.Platform.App.Components.Projects
 
 @using AiEng.Platform.Domain.Projects
+@inject IProcessRunner ProcessRunner
+@inject IPlatformInfo PlatformInfo
+@inject ILogger<AppProjectCard> Logger
 
 <AppCard Class="app-project-card" @attributes="AdditionalAttributes">
     <Header>
@@ -27,15 +30,20 @@
                     </div>
                 }
             </dl>
+            @if (OpenError is { } error)
+            {
+                <div class="app-project-card-open-error" role="alert">@error</div>
+            }
         </AppStack>
     </ChildContent>
     <Footer>
         <div class="app-project-card-actions">
             <AppButton Size="AppButtonSize.Small"
                        Variant="AppButtonVariant.Primary"
-                       Disabled="true"
+                       Disabled="@(!IsWindowsHost)"
                        data-testid="open-project"
-                       Title="Project opening lands in M4-A. The card is wired to the seam today.">
+                       Title="@OpenButtonTitle"
+                       @onclick="OnOpenClick">
                 Open
             </AppButton>
             <AppButton Size="AppButtonSize.Small"
@@ -75,7 +83,33 @@
         ? AppBadgeVariant.Neutral
         : AppBadgeVariant.Success;
 
+    private bool IsWindowsHost => PlatformInfo.IsWindows;
+
+    private string OpenButtonTitle => IsWindowsHost
+        ? "Open the project folder in File Explorer."
+        : "The Open action is Windows-only.";
+
+    private string? OpenError { get; set; }
+
+    private async Task OnOpenClick() => await OpenAsync();
+
     private async Task OnRenameClick() => await OnRename.InvokeAsync();
 
     private async Task OnUnregisterClick() => await OnUnregister.InvokeAsync();
+
+    private async Task OpenAsync()
+    {
+        OpenError = null;
+        try
+        {
+            await ProcessRunner.RunToCompletionAsync("explorer.exe", new[] { Project.Path }, default);
+        }
+        catch (Exception ex) when (ex is System.ComponentModel.Win32Exception
+                                       or InvalidOperationException
+                                       or IOException)
+        {
+            Logger.LogError(ex, "Open action failed for project {ProjectId} at {ProjectPath}.", Project.Id, Project.Path);
+            OpenError = "Could not open the project folder. The path may no longer exist.";
+        }
+    }
 }
