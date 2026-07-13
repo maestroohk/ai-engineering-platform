@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1.0",
-  "updated_at": "2026-07-13T00:00:00Z",
-  "updated_by_session": "m4-b-1-host-capabilities-contract-and-service",
+  "updated_at": "2026-07-13T12:00:00Z",
+  "updated_by_session": "m4-b-2-capability-list-components",
   "completion_status_mapping": {
     "NotStarted": "Not in capabilities.json. Reserved for capabilities the product will need but which have not yet been admitted to the graph.",
     "Planned": "status: Accepted; delivered_by_milestone status: Planned; no plan yet, or plan stub is Draft. Sequenced for a milestone, plan not promoted to Ready / Awaiting Approval.",
@@ -823,6 +823,129 @@
       "adr": null,
       "architecture_tests": ["Pages_Resolve_State_Through_Reader"],
       "last_updated": "2026-07-11"
+    },
+    {
+      "id": "C-023",
+      "title": "AppCapabilityList",
+      "status": "Accepted",
+      "completion_status": "Delivered",
+      "layer": 3,
+      "category": "DesignSystem",
+      "description": "The data-owning four-state design-system component that renders an IReadOnlyList<HostCapability> as a list of AppCard entries. Each card shows the Key, an AppStatusDot (Success for Available=true, Error for Available=false), the Version (font-mono, muted), and an AppBadge 'Credential set' when CredentialAvailable is true. Supports the four child-content slots (Loading, Empty, Error, Populated) per docs/design-system.md section 5.4.",
+      "product_outcome": "The /diagnostics page (M4-B.3) renders the host capability report through AppCapabilityList; the user can see at a glance which host tools are installed, their versions, and which credentials are available. The component is also consumed by M5+ worktree and agent launch pages to surface provider dependencies.",
+      "depends_on": ["C-015"],
+      "consumed_by": [],
+      "delivered_by_milestone": "M4-B",
+      "consumed_by_milestones": ["M4-B.3", "M5", "M6", "M7", "M8"],
+      "delivered_by_tasks": ["T-025 (M4-B.2 first session, Done 2026-07-13)"],
+      "next_task": null,
+      "blocked_by": [],
+      "evidence": {
+        "plans": [".ai/plans/M4-B-capability-detection.md"],
+        "reports": ["implementation-report-m4-b-2-capability-list-components.md"],
+        "commits": ["feat(m4-b.2): add AppCapabilityList + AppKeyValueList data-owning design-system components"],
+        "tests": [
+          "Renders_Populated_Slot_With_One_Card_Per_Capability",
+          "Renders_Empty_Slot_When_No_Capabilities",
+          "Renders_Loading_Slot_When_IsLoading_Is_True",
+          "Renders_Error_Slot_When_ErrorMessage_Is_Set",
+          "Renders_Status_Dot_Success_For_Available_True",
+          "Renders_Status_Dot_Error_For_Available_False",
+          "Renders_Credential_Set_Badge_When_CredentialAvailable_Is_True",
+          "Omits_Credential_Set_Badge_When_CredentialAvailable_Is_False",
+          "Custom_Populated_Slot_Overrides_Default_Rendering",
+          "Custom_Loading_Slot_Overrides_Default_Loading",
+          "Custom_Empty_Slot_Overrides_Default_Empty",
+          "Custom_Error_Slot_Overrides_Default_Error",
+          "Populated_List_Has_AriaLive_Polite"
+        ],
+        "source_paths": [
+          "src/AiEng.Platform.App/Components/Diagnostics/AppCapabilityList.razor",
+          "src/AiEng.Platform.App/Components/Diagnostics/AppCapabilityList.razor.cs",
+          "src/AiEng.Platform.App/Components/Diagnostics/AppCapabilityList.razor.css",
+          "src/AiEng.Platform.App/Components/Diagnostics/_Imports.razor",
+          "src/AiEng.Platform.App/Components/Common/Enums.cs"
+        ]
+      },
+      "acceptance_criteria": [
+        "AppCapabilityList renders an IReadOnlyList<HostCapability> as a list of AppCard entries.",
+        "AppCapabilityList supports the four child-content slots (Loading, Empty, Error, Populated) per docs/design-system.md section 5.4.",
+        "AppCapabilityList renders an AppStatusDot Success for Available=true and Error for Available=false.",
+        "AppCapabilityList renders an AppBadge 'Credential set' when CredentialAvailable is true.",
+        "The populated list has aria-live=polite for screen reader announcements.",
+        "The /diagnostics page (M4-B.3) consumes AppCapabilityList through DI of IHostCapabilitiesService."
+      ],
+      "completed_criteria": [
+        "AppCapabilityList renders an IReadOnlyList<HostCapability> as a list of AppCard entries.",
+        "AppCapabilityList supports the four child-content slots (Loading, Empty, Error, Populated) per docs/design-system.md section 5.4.",
+        "AppCapabilityList renders an AppStatusDot Success for Available=true and Error for Available=false.",
+        "AppCapabilityList renders an AppBadge 'Credential set' when CredentialAvailable is true.",
+        "The populated list has aria-live=polite for screen reader announcements.",
+        "M4-B.2 (T-025): 13 bUnit tests for AppCapabilityList are delivered and green; 13 bUnit tests for AppKeyValueList are delivered and green. The new files are CRLF and the format is canonical."
+      ],
+      "adr": null,
+      "architecture_tests": [],
+      "last_updated": "2026-07-13"
+    },
+    {
+      "id": "C-024",
+      "title": "AppKeyValueList",
+      "status": "Accepted",
+      "completion_status": "Delivered",
+      "layer": 3,
+      "category": "DesignSystem",
+      "description": "The data-owning four-state design-system component that renders an IReadOnlyList<KeyValuePair<string, string>> as a definition list (dl) of key-value rows. Supports an AppKeyValueListFormat enum (Plain, Boolean, Code) that controls value rendering: Plain renders literal text, Boolean renders a check/cross icon for true/false, Code renders in a monospaced font. Supports the four child-content slots (Loading, Empty, Error, Populated) per docs/design-system.md section 5.4.",
+      "product_outcome": "The /diagnostics page (M4-B.3) renders host metadata (hostname, OS, architecture, time provider, etc.) through AppKeyValueList. The component is also consumed by M5+ pages that need to surface key-value configuration data (e.g., worktree settings, agent launch parameters).",
+      "depends_on": [],
+      "consumed_by": [],
+      "delivered_by_milestone": "M4-B",
+      "consumed_by_milestones": ["M4-B.3", "M5", "M6", "M7", "M8"],
+      "delivered_by_tasks": ["T-025 (M4-B.2 first session, Done 2026-07-13)"],
+      "next_task": null,
+      "blocked_by": [],
+      "evidence": {
+        "plans": [".ai/plans/M4-B-capability-detection.md"],
+        "reports": ["implementation-report-m4-b-2-capability-list-components.md"],
+        "commits": ["feat(m4-b.2): add AppCapabilityList + AppKeyValueList data-owning design-system components"],
+        "tests": [
+          "Renders_Populated_Slot_With_One_Row_Per_Item",
+          "Renders_Empty_Slot_When_No_Items",
+          "Renders_Loading_Slot_When_IsLoading_Is_True",
+          "Renders_Error_Slot_When_ErrorMessage_Is_Set",
+          "Boolean_Format_Renders_Check_Icon_For_True_Value",
+          "Boolean_Format_Renders_Cross_Icon_For_False_Value",
+          "Boolean_Format_Renders_Literal_Text_For_Non_Boolean_Value",
+          "Code_Format_Renders_Value_In_Code_Element",
+          "Plain_Format_Renders_Literal_Text",
+          "Custom_Populated_Slot_Overrides_Default_Rendering",
+          "Custom_Loading_Slot_Overrides_Default_Loading",
+          "Custom_Empty_Slot_Overrides_Default_Empty",
+          "Custom_Error_Slot_Overrides_Default_Error",
+          "Populated_List_Has_AriaLive_Polite"
+        ],
+        "source_paths": [
+          "src/AiEng.Platform.App/Components/Diagnostics/AppKeyValueList.razor",
+          "src/AiEng.Platform.App/Components/Diagnostics/AppKeyValueList.razor.cs",
+          "src/AiEng.Platform.App/Components/Diagnostics/AppKeyValueList.razor.css",
+          "src/AiEng.Platform.App/Components/Diagnostics/_Imports.razor",
+          "src/AiEng.Platform.App/Components/Common/Enums.cs"
+        ]
+      },
+      "acceptance_criteria": [
+        "AppKeyValueList renders an IReadOnlyList<KeyValuePair<string, string>> as a definition list (dl).",
+        "AppKeyValueList supports an AppKeyValueListFormat enum (Plain, Boolean, Code).",
+        "AppKeyValueList supports the four child-content slots (Loading, Empty, Error, Populated) per docs/design-system.md section 5.4.",
+        "The populated list has aria-live=polite for screen reader announcements."
+      ],
+      "completed_criteria": [
+        "AppKeyValueList renders an IReadOnlyList<KeyValuePair<string, string>> as a definition list (dl).",
+        "AppKeyValueList supports an AppKeyValueListFormat enum (Plain, Boolean, Code).",
+        "AppKeyValueList supports the four child-content slots (Loading, Empty, Error, Populated) per docs/design-system.md section 5.4.",
+        "M4-B.2 (T-025): 15 bUnit tests for AppKeyValueList are delivered and green; the AppKeyValueListFormat enum is added to Enums.cs. The new files are CRLF and the format is canonical."
+      ],
+      "adr": null,
+      "architecture_tests": [],
+      "last_updated": "2026-07-13"
     }
   ]
 }

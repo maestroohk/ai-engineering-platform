@@ -1,0 +1,115 @@
+@namespace AiEng.Platform.App.Components.Diagnostics
+@inherits AppKeyValueListBase
+
+@if (IsLoading)
+{
+    <div class="app-key-value-list" data-state="loading" @attributes="AdditionalAttributes">
+        @if (Loading is not null)
+        {
+            @Loading
+        }
+        else
+        {
+            <AppLoading>
+                <Label>Loading metadata…</Label>
+            </AppLoading>
+        }
+    </div>
+}
+else if (!string.IsNullOrEmpty(ErrorMessage))
+{
+    <div class="app-key-value-list" data-state="error" @attributes="AdditionalAttributes">
+        @if (Error is not null)
+        {
+            @Error
+        }
+        else
+        {
+            <AppErrorState ErrorCode="@ErrorCode" CorrelationId="@CorrelationId">
+                <Title>Cannot load metadata</Title>
+                <Description>@ErrorMessage</Description>
+            </AppErrorState>
+        }
+    </div>
+}
+else if (Items is null || Items.Count == 0)
+{
+    <div class="app-key-value-list" data-state="empty" @attributes="AdditionalAttributes">
+        @if (Empty is not null)
+        {
+            @Empty
+        }
+        else
+        {
+            <AppEmptyState>
+                <Title>No metadata to display</Title>
+                <Description>The key-value list is empty.</Description>
+            </AppEmptyState>
+        }
+    </div>
+}
+else
+{
+    <div class="app-key-value-list" data-state="populated" aria-live="polite" @attributes="AdditionalAttributes">
+        @if (Populated is not null)
+        {
+            @Populated
+        }
+        else
+        {
+            <AppCard>
+                <ChildContent>
+                    <dl class="app-key-value-list-body">
+                        @foreach (var item in Items)
+                        {
+                            <div class="app-key-value-list-row">
+                                <dt class="app-key-value-list-key">@item.Key</dt>
+                                <dd class="app-key-value-list-value">@FormatValue(item.Value)</dd>
+                            </div>
+                        }
+                    </dl>
+                </ChildContent>
+            </AppCard>
+        }
+    </div>
+}
+
+@code {
+    private RenderFragment FormatValue(string value) => builder =>
+    {
+        switch (Format)
+        {
+            case AppKeyValueListFormat.Boolean:
+                if (string.Equals(value, "true", StringComparison.OrdinalIgnoreCase))
+                {
+                    builder.OpenElement(0, "span");
+                    builder.AddAttribute(1, "class", "app-key-value-list-boolean app-key-value-list-boolean-true");
+                    builder.AddAttribute(2, "aria-label", "true");
+                    builder.AddContent(3, "✓");
+                    builder.CloseElement();
+                }
+                else if (string.Equals(value, "false", StringComparison.OrdinalIgnoreCase))
+                {
+                    builder.OpenElement(0, "span");
+                    builder.AddAttribute(1, "class", "app-key-value-list-boolean app-key-value-list-boolean-false");
+                    builder.AddAttribute(2, "aria-label", "false");
+                    builder.AddContent(3, "✗");
+                    builder.CloseElement();
+                }
+                else
+                {
+                    builder.AddContent(0, value);
+                }
+                break;
+            case AppKeyValueListFormat.Code:
+                builder.OpenElement(0, "code");
+                builder.AddAttribute(1, "class", "app-key-value-list-code");
+                builder.AddContent(2, value);
+                builder.CloseElement();
+                break;
+            default:
+                builder.AddContent(0, value);
+                break;
+        }
+    };
+}

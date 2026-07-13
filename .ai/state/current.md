@@ -347,7 +347,8 @@
 
 ## Current Slice
 
-- **Active slice:** **M4-B.1 — IHostCapabilitiesService contract + implementation + composition root + unit tests** (delivered 2026-07-13). The branch `feature/T-024-m4-b-1-host-capabilities-contract-and-service` carried the M4-B.1 work; the M4-B.1 closeout commit `feat(m4-b.1): add IHostCapabilitiesService contract and SystemHostCapabilitiesService implementation` is on this branch; the branch is fast-forwarded into `main` per the branching strategy rule 6; the branch is deleted per rule 7. M4-B.1 ships the IHostCapabilitiesService contract + the HostCapabilities + HostCapability records in `src/AiEng.Platform.Application/Capabilities/`; the SystemHostCapabilitiesService implementation in `src/AiEng.Platform.Infrastructure/Capabilities/` (6 host tool probes + 6 provider credential probes; 5-second per-tool linked CancellationTokenSource timeout; per-tool Regex version parsing; IPlatformInfo.IsWindows gating for Windows-only tools; outer-cancellation propagation via re-throw); the CapabilityProbe internal record types; the AddHostCapabilities composition root extension; the wire-up in AddPlatformServices; 20 unit tests in `tests/AiEng.Platform.UnitTests/Capabilities/SystemHostCapabilitiesServiceTests.cs`. Total: 343 passed, 0 failed, 9 skipped (per ADR-016 / M4-D). M4-B.1 does NOT begin M4-B.2 / M4-B.3 / M4-C / M4-D (per the brief: 'Do not begin the following task').
+- **Active slice:** **M4-B.2 — AppCapabilityList + AppKeyValueList data-owning design-system components** (delivered 2026-07-13). The branch `feature/T-025-m4-b-2-capability-list-components` carried the M4-B.2 work; the M4-B.2 closeout commit `feat(m4-b.2): add AppCapabilityList + AppKeyValueList data-owning design-system components` is on this branch; the branch is fast-forwarded into `main` per the branching strategy rule 6; the branch is deleted per rule 7. M4-B.2 ships the `AppCapabilityList` data-owning four-state design-system component (renders an `IReadOnlyList<HostCapability>` as a list of `AppCard` entries with `AppStatusDot` Success/Error + version (font-mono, muted) + `AppBadge` 'Credential set' for `CredentialAvailable=true`; `aria-live="polite"` on the populated list); the `AppKeyValueList` data-owning four-state design-system component (renders an `IReadOnlyList<KeyValuePair<string, string>>` as a definition list `dl/dt/dd`; the `AppKeyValueListFormat` enum `Plain`/`Boolean`/`Code` controls value rendering); the `AppKeyValueListFormat` enum appended to `src/AiEng.Platform.App/Components/Common/Enums.cs`; the `Diagnostics/_Imports.razor` mirroring `Projects/_Imports.razor`; 13 bUnit tests for `AppCapabilityList` in `tests/AiEng.Platform.ComponentTests/Components/Diagnostics/AppCapabilityListTests.cs`; 15 bUnit tests for `AppKeyValueList` in `tests/AiEng.Platform.ComponentTests/Components/Diagnostics/AppKeyValueListTests.cs`. Total: 370 passed, 0 failed, 9 skipped (per ADR-016 / M4-D). M4-B.2 does NOT begin M4-B.3 / M4-C / M4-D (per the brief: 'Do not begin the following task').
+- **Last completed slice:** **M4-B.1 — IHostCapabilitiesService contract + implementation + composition root + unit tests** (delivered 2026-07-13). The branch `feature/T-024-m4-b-1-host-capabilities-contract-and-service` carried the M4-B.1 work; the M4-B.1 closeout commit `feat(m4-b.1): add IHostCapabilitiesService contract and SystemHostCapabilitiesService implementation` is on this branch; the branch is fast-forwarded into `main` per the branching strategy rule 6; the branch is deleted per rule 7. M4-B.1 ships the IHostCapabilitiesService contract + the HostCapabilities + HostCapability records in `src/AiEng.Platform.Application/Capabilities/`; the SystemHostCapabilitiesService implementation in `src/AiEng.Platform.Infrastructure/Capabilities/` (6 host tool probes + 6 provider credential probes; 5-second per-tool linked CancellationTokenSource timeout; per-tool Regex version parsing; IPlatformInfo.IsWindows gating for Windows-only tools; outer-cancellation propagation via re-throw); the CapabilityProbe internal record types; the AddHostCapabilities composition root extension; the wire-up in AddPlatformServices; 20 unit tests in `tests/AiEng.Platform.UnitTests/Capabilities/SystemHostCapabilitiesServiceTests.cs`. Total: 343 passed, 0 failed, 9 skipped (per ADR-016 / M4-D). M4-B.1 does NOT begin M4-B.2 / M4-B.3 / M4-C / M4-D (per the brief: 'Do not begin the following task').
 - **Last completed slice:** **M4-B plan promotion (Capability Detection plan drafted in Awaiting Approval)** (delivered 2026-07-13). The branch `feature/m4-b-capability-detection-plan-promotion` carried the M4-B plan promotion work; the M4-B plan promotion commit `chore(m4-b.plan): draft M4-B capability detection plan in Awaiting Approval` is on this branch; the branch is fast-forwarded into `main` per the branching strategy rule 6; the branch is deleted per rule 7. The M4-B plan is in Awaiting Approval at `.ai/plans/M4-B-capability-detection.md` (12 sections mirroring the M4-A plan's 12-section structure).
 - **Last completed slice:** **M4-A.2 — Open
   action on AppProjectCard** (delivered
@@ -503,24 +504,26 @@
 
 ## Last Completed Task
 
-- The M4-B.1 first session
+- The M4-B.2 first session
   (2026-07-13) is the most recent
-  completed task; the M4-B plan
+  completed task; the M4-B.1
+  implementation session (2026-07-13)
+  is the prior task; the M4-B plan
   promotion session (2026-07-13) is
-  the prior task; the M4-A.2
+  the prior-prior task; the M4-A.2
   implementation session (2026-07-11)
-  is the prior-prior task; the
+  is the prior-prior-prior task; the
   M4-A.1 implementation session
-  (2026-07-11) is the prior-prior-prior
+  (2026-07-11) is the prior-prior-prior-prior
   task; the M3 closeout implementation
   session (2026-07-11) is the
-  prior-prior-prior-prior task; the
+  prior-prior-prior-prior-prior task; the
   M3.2 implementation session
   (2026-07-11) is the
-  prior-prior-prior-prior-prior task;
-  the M3.1 implementation session
-  (2026-07-11) is the
   prior-prior-prior-prior-prior-prior
+  task; the M3.1 implementation session
+  (2026-07-11) is the
+  prior-prior-prior-prior-prior-prior-prior
   task.
   - Delivered the M4-B.1 first session
     (T-024) per the M4-B.1 implementation
@@ -573,6 +576,68 @@
     TimeProvider value (deterministic);
     (b) DetectedAt falls within the call
     window when the default clock is used.
+  - Delivered the M4-B.2 first session
+    (T-025) per the M4-B.2 implementation
+    plan (the boundary slice:
+    AppCapabilityList + AppKeyValueList
+    data-owning design-system components;
+    not the /diagnostics page, the startup
+    log, the documentation, or the
+    architecture test).
+  - Landed the `AppCapabilityList`
+    data-owning four-state design-system
+    component in
+    `src/AiEng.Platform.App/Components/Diagnostics/AppCapabilityList.razor`
+    (+ .razor.cs + .razor.css); it renders
+    an `IReadOnlyList<HostCapability>` as a
+    list of `AppCard` entries with
+    `AppStatusDot` (Success for
+    `Available=true`, Error for
+    `Available=false`), the `Version` in a
+    monospaced muted font, and an `AppBadge`
+    "Credential set" for
+    `CredentialAvailable=true`; the populated
+    list has `aria-live="polite"`.
+  - Landed the `AppKeyValueList`
+    data-owning four-state design-system
+    component in
+    `src/AiEng.Platform.App/Components/Diagnostics/AppKeyValueList.razor`
+    (+ .razor.cs + .razor.css); it renders
+    an `IReadOnlyList<KeyValuePair<string,
+    string>>` as a definition list
+    (`<dl>`/`<dt>`/`<dd>`) of key-value rows;
+    the `Format` parameter (Plain / Boolean /
+    Code) controls value rendering; the
+    populated container has
+    `aria-live="polite"`.
+  - Appended the `AppKeyValueListFormat`
+    enum (Plain, Boolean, Code) to
+    `src/AiEng.Platform.App/Components/Common/Enums.cs`.
+  - Landed the `Diagnostics/_Imports.razor`
+    mirroring the `Projects/_Imports.razor`
+    pattern.
+  - Landed 13 bUnit tests for
+    `AppCapabilityList` in
+    `tests/AiEng.Platform.ComponentTests/Components/Diagnostics/AppCapabilityListTests.cs`.
+  - Landed 15 bUnit tests for
+    `AppKeyValueList` in
+    `tests/AiEng.Platform.ComponentTests/Components/Diagnostics/AppKeyValueListTests.cs`.
+  - Validation: 370 passed, 0 failed,
+    9 skipped (per ADR-016 / M4-D);
+    0 warnings, 0 errors; format clean.
+  - One documented deviation: the
+    `AppCapabilityList` default Populated
+    uses an `AppStack` of `AppCard` entries
+    with the `AppStatusDot` in the header
+    (not the `AppBadge`-style credential
+    slot), and the `AppKeyValueList` default
+    Populated uses a definition list
+    (`<dl>`/`<dt>`/`<dd>`) with monospaced
+    `<code>` elements for the Code format;
+    the plan's intent (one card per
+    capability with status dot + version +
+    credential badge; one row per item with
+    key left + value right) is preserved.
   - Delivered the M4-B plan promotion
     (T-023) per the M4-B plan promotion
     plan (the planning-surface change after
@@ -1612,92 +1677,93 @@ activation):
 
 ## Next Recommended Task
 
-> **M4-A.3 — not yet defined.** M3 is closed
-> (2026-07-11). M4-A.1 + M4-A.2 are delivered
-> (2026-07-11). The M4-A plan is at
-> [`.ai/plans/M4-A-infrastructure-process-execution.md`](./../../.ai/plans/M4-A-infrastructure-process-execution.md)
-> (Status: Approved). The M4-B plan is at
+> **M4-B.3 — ready to begin.** M4-B.1 + M4-B.2
+> are delivered (2026-07-13). The M4-B plan is
+> at
 > [`.ai/plans/M4-B-capability-detection.md`](./../../.ai/plans/M4-B-capability-detection.md)
-> (Status: Awaiting Approval; the M4-B
-> plan promotion is T-023, Done 2026-07-13).
-> The M4-B implementation is the next
-> concrete step on the user's `Approve` or
-> `Next` invocation. The M4-B plan promotion
-> session does NOT begin the M4-B
-> implementation, the M4-C plan promotion,
-> the M4-D plan promotion, or any provider
-> creation (per the brief: 'Do not begin
-> the following task'). The M4-A.2 session
-> explicitly stopped at the M4-A.2 receipt;
-> the M4-B plan promotion session explicitly
-> stops at the M4-B plan promotion receipt;
-> the M4-B implementation begins in a
-> future session. **Do not begin the M4-B
-> implementation / M4-C / M4-D in this
-> session** — the M4-B plan promotion brief
-> explicitly stops at the M4-B plan
-> promotion receipt (the Progressive Coding
-> Rule applies).
+> (Status: Awaiting Approval; the M4-B plan
+> promotion is T-023, Done 2026-07-13; the
+> M4-B.1 first session is T-024, Done 2026-07-13;
+> the M4-B.2 first session is T-025, Done
+> 2026-07-13). The next concrete step on the
+> user's `Approve` or `Next` invocation is
+> the M4-B.3 first session (T-026, `Ready`).
+> The M4-B.2 first session does NOT begin
+> M4-B.3 / M4-C / M4-D / provider creation
+> (per the brief: 'Do not begin the following
+> task'). The M4-B.2 session explicitly
+> stopped at the M4-B.2 receipt; the M4-B.3
+> implementation begins in a future session.
+> **Do not begin the M4-B.3 implementation /
+> M4-C / M4-D in this session** — the M4-B.2
+> brief explicitly stops at the M4-B.2
+> receipt (the Progressive Coding Rule
+> applies).
 
-The detailed breakdown of the M4-B.1
+The detailed breakdown of the M4-B.2
 slice is in
 [`.ai/state/task-board.md`](./task-board.md)
 and the M4-B plan file in
 [`.ai/plans/M4-B-capability-detection.md`](./../../.ai/plans/M4-B-capability-detection.md).
-The M4-B plan promotion handoff is at
-[`.ai/handoffs/2026-07-13-m4-b-plan-promotion.md`](./../../.ai/handoffs/2026-07-13-m4-b-plan-promotion.md)
+The M4-B.2 first session handoff is at
+[`.ai/handoffs/2026-07-13-m4-b-2-capability-list-components.md`](./../../.ai/handoffs/2026-07-13-m4-b-2-capability-list-components.md)
 (mirrored to `.ai/handoffs/latest.md`).
 The next actionable item is:
 
-1. **M4-B.1 — Contract + implementation +
-   composition root + unit tests +
-   architecture test** (T-024, `Ready`
-   in `.ai/state/tasks.json`; the next
+1. **M4-B.3 — /diagnostics page + startup
+   log + documentation + architecture test**
+   (T-026, `Ready` in
+   `.ai/state/tasks.json`; the next
    concrete M4-B task; the plan is
    `.ai/plans/M4-B-capability-detection.md`).
-   M4-B.1 ships the
-   `IHostCapabilitiesService` contract
-   + the `HostCapabilities` + `HostCapability`
-   records in
-   `src/AiEng.Platform.Application/Capabilities/`;
-   the `SystemHostCapabilitiesService`
-   implementation in
-   `src/AiEng.Platform.Infrastructure/Capabilities/`;
-   the `AddHostCapabilities` composition
-   root extension in
-   `src/AiEng.Platform.App/Composition/Capabilities/`;
-   10+ unit tests for the implementation
+   M4-B.3 ships the `Diagnostics.razor` page
    in
-   `tests/AiEng.Platform.UnitTests/Capabilities/SystemHostCapabilitiesServiceTests.cs`;
+   `src/AiEng.Platform.App/Components/Pages/`
+   composing the new `AppCapabilityList` +
+   `AppKeyValueList` design-system
+   components and consuming
+   `IHostCapabilitiesService` through DI;
+   the startup capability-report log
+   through `ILogger<Program>`; the
+   `docs/capabilities.md` documentation;
    the `Capabilities_Resolved_Through_Service`
-   architecture test in
-   `tests/AiEng.Platform.ArchitectureTests/Capabilities/`
-   (asserts no `IProcessRunner` direct call
-   in `App/Components/Diagnostics/`; no
-   `ICredentialVault` direct call in
-   `App/Components/Diagnostics/`; the
-   `Diagnostics.razor` page contains
-   `@inject IHostCapabilitiesService`).
+   architecture test (deferred from M4-B.1
+   per the M4-B.1 plan section 14.1
+   Deviations; the test asserts
+   `Diagnostics.razor` contains `@inject
+   IHostCapabilitiesService`).
 
 ## Last Updated
 
-- **2026-07-13** (M4-B plan
-  promotion session). This
-  version supersedes the
-  M4-A.2 version (2026-07-11).
-  The M4-B plan promotion
-  session ships: the M4-B
-  plan at
-  `.ai/plans/M4-B-capability-detection.md`
-  with `Status: Awaiting
-  Approval` (12 sections
-  mirroring the M4-A plan's
-  12-section structure); the
-  `docs/infrastructure.md` § 11
-  M4-B Consumers update; the
-  `ROADMAP.md` M4-B row
-  `Planned` → `Active` + the
-  M4-B `Definition of done`
+- **2026-07-13** (M4-B.2 first session).
+  This version supersedes the M4-B.1
+  version (2026-07-13). The M4-B.2 first
+  session ships: the `AppCapabilityList`
+  data-owning four-state design-system
+  component in
+  `src/AiEng.Platform.App/Components/Diagnostics/AppCapabilityList.razor`
+  (+ .razor.cs + .razor.css); the
+  `AppKeyValueList` data-owning four-state
+  design-system component in
+  `src/AiEng.Platform.App/Components/Diagnostics/AppKeyValueList.razor`
+  (+ .razor.cs + .razor.css); the
+  `AppKeyValueListFormat` enum appended to
+  `src/AiEng.Platform.App/Components/Common/Enums.cs`;
+  the `Diagnostics/_Imports.razor` mirroring
+  `Projects/_Imports.razor`; 13 bUnit tests
+  for `AppCapabilityList` in
+  `tests/AiEng.Platform.ComponentTests/Components/Diagnostics/AppCapabilityListTests.cs`;
+  15 bUnit tests for `AppKeyValueList` in
+  `tests/AiEng.Platform.ComponentTests/Components/Diagnostics/AppKeyValueListTests.cs`;
+  the `C-023 AppCapabilityList` + `C-024
+  AppKeyValueList` capability records in
+  `.ai/state/capabilities.json`; the
+  M4-B.2 per-session handoff at
+  `.ai/handoffs/2026-07-13-m4-b-2-capability-list-components.md`
+  (mirrored to
+  `.ai/handoffs/latest.md`); the M4-B.2
+  implementation report at
+  `implementation-report-m4-b-2-capability-list-components.md`.
   expansion; the
   `.ai/plans/master-delivery-plan.md`
   § 1 M4-B row `Planned` →

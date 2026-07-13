@@ -1,0 +1,98 @@
+@namespace AiEng.Platform.App.Components.Diagnostics
+@inherits AppCapabilityListBase
+
+@if (IsLoading)
+{
+    <div class="app-capability-list" data-state="loading" @attributes="AdditionalAttributes">
+        @if (Loading is not null)
+        {
+            @Loading
+        }
+        else
+        {
+            <AppLoading>
+                <Label>Detecting host capabilities…</Label>
+            </AppLoading>
+        }
+    </div>
+}
+else if (!string.IsNullOrEmpty(ErrorMessage))
+{
+    <div class="app-capability-list" data-state="error" @attributes="AdditionalAttributes">
+        @if (Error is not null)
+        {
+            @Error
+        }
+        else
+        {
+            <AppErrorState ErrorCode="@ErrorCode" CorrelationId="@CorrelationId">
+                <Title>Cannot load capabilities</Title>
+                <Description>@ErrorMessage</Description>
+            </AppErrorState>
+        }
+    </div>
+}
+else if (Capabilities is null || Capabilities.Count == 0)
+{
+    <div class="app-capability-list" data-state="empty" @attributes="AdditionalAttributes">
+        @if (Empty is not null)
+        {
+            @Empty
+        }
+        else
+        {
+            <AppEmptyState>
+                <Title>No capabilities detected</Title>
+                <Description>The capability probe did not return any items. The host may not have any of the probed tools installed, or the probe may have been disabled.</Description>
+            </AppEmptyState>
+        }
+    </div>
+}
+else
+{
+    <div class="app-capability-list" data-state="populated" role="list" aria-live="polite" @attributes="AdditionalAttributes">
+        @if (Populated is not null)
+        {
+            @Populated
+        }
+        else
+        {
+            <AppStack Direction="AppStackDirection.Vertical" Gap="AppStackGap.Medium">
+                @foreach (var capability in Capabilities)
+                {
+                    <div class="app-capability-list-item" role="listitem" aria-label="@capability.Key">
+                        <AppCard>
+                            <Header>
+                                <div class="app-capability-list-header">
+                                    <span class="app-capability-list-key">@capability.Key</span>
+                                    <AppStatusDot Variant="@(capability.Available ? AppStatusDotVariant.Success : AppStatusDotVariant.Error)"
+                                                   Label="@(capability.Available ? "Available" : "Unavailable")" />
+                                </div>
+                            </Header>
+                            <ChildContent>
+                                <AppStack Direction="AppStackDirection.Vertical" Gap="AppStackGap.Small">
+                                    <div class="app-capability-list-meta">
+                                        @if (!string.IsNullOrEmpty(capability.Version))
+                                        {
+                                            <span class="app-capability-list-version" title="Detected version">@capability.Version</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="app-capability-list-version app-capability-list-version-muted" title="Version not detected">version unknown</span>
+                                        }
+                                        @if (capability.CredentialAvailable)
+                                        {
+                                            <AppBadge Variant="AppBadgeVariant.Success" Size="AppBadgeSize.Small" Dot="true">
+                                                Credential set
+                                            </AppBadge>
+                                        }
+                                    </div>
+                                </AppStack>
+                            </ChildContent>
+                        </AppCard>
+                    </div>
+                }
+            </AppStack>
+        }
+    </div>
+}

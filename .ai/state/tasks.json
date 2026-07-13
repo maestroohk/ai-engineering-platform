@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
-  "updated_at": "2026-07-13T00:00:00Z",
-  "updated_by_session": "m4-b-plan-promotion",
+  "updated_at": "2026-07-13T12:00:00Z",
+  "updated_by_session": "m4-b-2-capability-list-components",
   "tasks": [
     {
       "id": "T-001",
@@ -683,7 +683,7 @@
       "title": "M4 — Process Execution, Capability Detection, Provider Registry (summary)",
       "status": "In Progress",
       "milestone": "M4",
-      "notes": "Slices M4-A, M4-B, M4-C, M4-D in the master delivery plan. M4-A.1 (T-021) + M4-A.2 (T-022) Delivered 2026-07-11 (the first IProcessRunner activation is on AppProjectCard.Open in M4-A.2). M4-A.3 is not yet defined; M4-B is now Active (the M4-B plan promotion is T-023, Done 2026-07-13; the M4-B plan is in Awaiting Approval at .ai/plans/M4-B-capability-detection.md; the M4-B implementation is the next concrete step on the user's Approve / Next invocation); M4-C / M4-D remain Planned."
+      "notes": "Slices M4-A, M4-B, M4-C, M4-D in the master delivery plan. M4-A.1 (T-021) + M4-A.2 (T-022) Delivered 2026-07-11 (the first IProcessRunner activation is on AppProjectCard.Open in M4-A.2). M4-A.3 is not yet defined; M4-B is now Active (the M4-B plan promotion is T-023, Done 2026-07-13; the M4-B plan is in Awaiting Approval at .ai/plans/M4-B-capability-detection.md; M4-B.1 (T-024) + M4-B.2 (T-025) Delivered 2026-07-13; M4-B.3 (T-026) is the next concrete step on the user's Approve / Next invocation); M4-C / M4-D remain Planned."
     },
     {
       "id": "T-023",
@@ -790,24 +790,89 @@
     {
       "id": "T-025",
       "title": "M4-B.2 first session — AppCapabilityList + AppKeyValueList design-system components",
-      "status": "Ready",
+      "status": "Done",
       "milestone": "M4-B",
       "slice": "M4-B.2",
       "created_at": "2026-07-13T00:00:00Z",
       "promoted_to_ready_at": "2026-07-13",
       "promoted_to_ready_by_session": "m4-b-1-host-capabilities-contract-and-service",
+      "started_at": "2026-07-13",
+      "started_by_session": "m4-b-2-capability-list-components",
+      "completed_at": "2026-07-13T12:00:00Z",
+      "closed_by_session": "m4-b-2-capability-list-components",
+      "branch": "feature/T-025-m4-b-2-capability-list-components (created from main at the M4-B.1 closeout commit c151e90; the M4-B.2 closeout commit feat(m4-b.2): add AppCapabilityList + AppKeyValueList data-owning design-system components is on this branch; the branch is fast-forwarded into main per the branching strategy rule 6; the branch is deleted per rule 7)",
       "depends_on_milestone": "M4-B (Active)",
       "depends_on_task": "T-024 (M4-B.1, Done 2026-07-13)",
       "depends_on_capabilities": [
         "C-015 (IHostCapabilitiesService)"
       ],
-      "links_to_capability": "C-016 (AppCapabilityList data-owning design-system component) + C-017 (AppKeyValueList data-owning design-system component)",
-      "plan": ".ai/plans/M4-B.2-capability-components.md (to be drafted in a later session)",
+      "links_to_capability": "C-023 (AppCapabilityList data-owning design-system component) + C-024 (AppKeyValueList data-owning design-system component)",
+      "plan": ".claude/plans/generic-seeking-oasis.md (M4-B.2 implementation plan; approved via ExitPlanMode)",
+      "implementation_report": "implementation-report-m4-b-2-capability-list-components.md",
+      "evidence": {
+        "implementation_report": "implementation-report-m4-b-2-capability-list-components.md",
+        "session_handoff": ".ai/handoffs/2026-07-13-m4-b-2-capability-list-components.md",
+        "commits": [
+          "feat(m4-b.2): add AppCapabilityList + AppKeyValueList data-owning design-system components"
+        ],
+        "files_added": [
+          "src/AiEng.Platform.App/Components/Diagnostics/AppCapabilityList.razor",
+          "src/AiEng.Platform.App/Components/Diagnostics/AppCapabilityList.razor.cs",
+          "src/AiEng.Platform.App/Components/Diagnostics/AppCapabilityList.razor.css",
+          "src/AiEng.Platform.App/Components/Diagnostics/AppKeyValueList.razor",
+          "src/AiEng.Platform.App/Components/Diagnostics/AppKeyValueList.razor.cs",
+          "src/AiEng.Platform.App/Components/Diagnostics/AppKeyValueList.razor.css",
+          "src/AiEng.Platform.App/Components/Diagnostics/_Imports.razor",
+          "tests/AiEng.Platform.ComponentTests/Components/Diagnostics/AppCapabilityListTests.cs",
+          "tests/AiEng.Platform.ComponentTests/Components/Diagnostics/AppKeyValueListTests.cs",
+          ".ai/handoffs/2026-07-13-m4-b-2-capability-list-components.md",
+          "implementation-report-m4-b-2-capability-list-components.md"
+        ],
+        "files_modified": [
+          "src/AiEng.Platform.App/Components/Common/Enums.cs (AppKeyValueListFormat enum appended)",
+          ".ai/state/session.json (M4-B.2 envelope)",
+          ".ai/state/tasks.json (this file; T-025 Done with full evidence; T-026 remains Ready; T-023 note updated to next recommended task T-026)",
+          ".ai/state/current.md (active slice M4-B.1 to M4-B.2; last completed task T-025; next recommended task T-026)",
+          ".ai/state/task-board.md (M4-B.2 row in Done Recently; T-026 row in Ready)",
+          ".ai/state/milestones.json (M4-B.2 slice block added; C-023 + C-024 evidence block populated)",
+          ".ai/state/capabilities.json (C-023 + C-024 capability records added with full evidence; C-015 next_task set to T-026; C-015 last_updated set to 2026-07-13; top-level updated_at + updated_by_session set)"
+        ],
+        "tests_added": 28,
+        "tests_total_after_m4_b_2": 370,
+        "tests_failed_after_m4_b_2": 0,
+        "tests_skipped_after_m4_b_2": 9,
+        "validation": {
+          "dotnet_format": "clean (verify-no-changes passed)",
+          "dotnet_build": "0 warnings, 0 errors",
+          "dotnet_test": "370 passed, 0 failed, 9 skipped",
+          "crlf": "all new + modified files are CRLF (unix2dos applied)",
+          "json_validation": "capabilities.json valid (24 records; C-023 + C-024 added)"
+        }
+      },
+      "notes": "M4-B.2 first session delivered 2026-07-13. Boundary slice: the AppCapabilityList data-owning four-state design-system component (IReadOnlyList<HostCapability> Capabilities; AppStatusDot Success/Error; AppBadge 'Credential set' for CredentialAvailable=true; aria-live=polite on the populated list) + the AppKeyValueList data-owning four-state design-system component (IReadOnlyList<KeyValuePair<string, string>> Items; AppKeyValueListFormat enum Plain/Boolean/Code; definition-list semantics with <dl>/<dt>/<dd>; aria-live=polite) + the AppKeyValueListFormat enum in Enums.cs + the Diagnostics/_Imports.razor + 13 bUnit tests for AppCapabilityList + 15 bUnit tests for AppKeyValueList + the C-023 + C-024 capability records. Pre-M4-B.2 baseline was 343 passed; M4-B.2 raises the bar to 370 passed (99 unit + 259 component + 12 architecture), 0 failed, 9 skipped. Branch: feature/T-025-m4-b-2-capability-list-components. Commit: feat(m4-b.2): add AppCapabilityList + AppKeyValueList data-owning design-system components. Push is staged for push (not authorised in this session). The session does NOT begin M4-B.3 / M4-C / M4-D / provider creation (per the brief: 'Do not begin the following task'). One documented deviation: AppCapabilityList default Populated uses an AppStack of AppCard entries with the AppStatusDot in the header (not the AppBadge-style credential slot), and the AppKeyValueList default Populated uses a definition list (<dl>/<dt>/<dd>) with monospaced <code> elements for the Code format; the plan's intent (one card per capability with status dot + version + credential badge; one row per item with key left + value right) is preserved."
+    },
+    {
+      "id": "T-026",
+      "title": "M4-B.3 first session — /diagnostics page + startup log + documentation + architecture test",
+      "status": "Ready",
+      "milestone": "M4-B",
+      "slice": "M4-B.3",
+      "created_at": "2026-07-13T00:00:00Z",
+      "promoted_to_ready_at": "2026-07-13",
+      "promoted_to_ready_by_session": "m4-b-2-capability-list-components",
+      "depends_on_milestone": "M4-B (Active)",
+      "depends_on_task": "T-025 (M4-B.2, InProgress 2026-07-13)",
+      "depends_on_capabilities": [
+        "C-015 (IHostCapabilitiesService)",
+        "C-023 (AppCapabilityList)",
+        "C-024 (AppKeyValueList)"
+      ],
+      "plan": ".ai/plans/M4-B.3-diagnostics-page-startup-log-and-architecture-test.md (to be drafted in a later session)",
       "evidence": {
         "implementation_report": null,
         "session_handoff": null
       },
-      "notes": "M4-B.2 is the second M4-B implementation slice. The slice ships the AppCapabilityList + AppKeyValueList data-owning design-system components (the M4-B plan § 2 items 4 + 5). The components consume IHostCapabilitiesService (M4-B.1) and render the capabilities in the design-system voice. The slice does NOT ship the /diagnostics page (M4-B.3), the startup capability-report log (M4-B.3), the documentation (M4-B.3), or the Capabilities_Resolved_Through_Service architecture test (M4-B.3). M4-B.2 is staged for the user's Approve / Next invocation."
+      "notes": "M4-B.3 is the third M4-B implementation slice. The slice ships the /diagnostics page (Diagnostics.razor) + the AppDiagnosticsPage composition in App/Components/Pages/; the startup capability-report log through ILogger<Program>; the docs/capabilities.md documentation; the Capabilities_Resolved_Through_Service architecture test (deferred from M4-B.1 per the M4-B.1 plan section 14.1 Deviations; the test asserts Diagnostics.razor contains @inject IHostCapabilitiesService). The slice does NOT create providers (per the M4-B brief). M4-B.3 is staged for the user's Approve / Next invocation after T-025 is Done."
     },
     {
       "id": "T-009",

@@ -110,3 +110,10 @@ public enum AppCardVariant
     Default,
     Flat
 }
+
+public enum AppKeyValueListFormat
+{
+    Plain,
+    Boolean,
+    Code
+}

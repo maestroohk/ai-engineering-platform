@@ -97,157 +97,148 @@
   session if the M4-B / M4-C / M4-D
   work requires a third M4-A slice).
 
-### M4-B.1 — Contract + implementation + composition root + unit tests + architecture test
+### M4-B.2 — AppCapabilityList + AppKeyValueList data-owning design-system components + bUnit tests
 
-- **Task ID:** T-024.
+- **Task ID:** T-025.
 - **Milestone:** M4-B — Capability
   Detection (Active 2026-07-13; the
   M4-B plan is in Awaiting Approval at
   `.ai/plans/M4-B-capability-detection.md`).
-- **Title:** M4-B.1 — Contract +
-  implementation + composition root +
-  unit tests + architecture test.
-- **Why it matters:** M4-A.1 + M4-A.2
-  shipped the infrastructure seam
-  (`IProcessRunner` +
-  `ICredentialVault` + `IPlatformInfo`)
-  + the first `IProcessRunner`
-  activation (the Open action on
-  `AppProjectCard`). M4-B.1 ships the
-  `IHostCapabilitiesService` contract
-  + the `HostCapabilities` +
+- **Title:** M4-B.2 — AppCapabilityList +
+  AppKeyValueList data-owning design-system
+  components + bUnit tests.
+- **Why it matters:** M4-B.1 shipped the
+  `IHostCapabilitiesService` contract +
+  the `HostCapabilities` +
   `HostCapability` records + the
   `SystemHostCapabilitiesService`
-  implementation (composes
-  `IProcessRunner` +
-  `ICredentialVault` +
-  `IPlatformInfo`; probes six host
-  tools — `git`, `ollama`,
-  `powershell.exe`, `wsl.exe`,
-  `wt.exe`, `bash.exe` — with
-  `--version`; reads six provider
-  credentials from
-  `ICredentialVault.GetAsync`) + the
-  `AddHostCapabilities` composition
-  root extension + 10+ unit tests +
-  the `Capabilities_Resolved_Through_Service`
-  architecture test (scoped to
-  `App/Components/Diagnostics/`). M4-B.1
-  is the smallest M4-B implementation
-  slice; M4-B.2 ships the design-
-  system components + bUnit tests;
-  M4-B.3 ships the `/diagnostics`
-  page + the startup log + the
-  documentation.
+  implementation. M4-B.2 ships the
+  `AppCapabilityList` data-owning
+  four-state design-system component
+  (renders an
+  `IReadOnlyList<HostCapability>` as a
+  list of `AppCard` entries with
+  `AppStatusDot` Success/Error, the
+  `Version` in a monospaced muted font,
+  and an `AppBadge` "Credential set" for
+  `CredentialAvailable=true`; the
+  populated list has `aria-live="polite"`)
+  + the `AppKeyValueList` data-owning
+  four-state design-system component
+  (renders an
+  `IReadOnlyList<KeyValuePair<string,
+  string>>` as a definition list
+  `<dl>`/`<dt>`/`<dd>` of key-value
+  rows; the `Format` parameter (Plain /
+  Boolean / Code) controls value
+  rendering; the populated container has
+  `aria-live="polite"`) + the
+  `AppKeyValueListFormat` enum (Plain,
+  Boolean, Code) in
+  `src/AiEng.Platform.App/Components/Common/Enums.cs`
+  + the
+  `Diagnostics/_Imports.razor` mirroring
+  `Projects/_Imports.razor` + 13 bUnit
+  tests for `AppCapabilityList` + 15 bUnit
+  tests for `AppKeyValueList`. M4-B.2 is
+  the second M4-B implementation slice;
+  M4-B.3 ships the `/diagnostics` page
+  composing the new components, the
+  startup log, the documentation, and
+  the architecture test (deferred from
+  M4-B.1).
 - **Objective:** Land the
-  `IHostCapabilitiesService` contract
-  in
-  `src/AiEng.Platform.Application/Capabilities/IHostCapabilitiesService.cs`;
-  the `HostCapabilities` +
-  `HostCapability` records in
-  `src/AiEng.Platform.Application/Capabilities/HostCapabilities.cs`;
-  the `SystemHostCapabilitiesService`
-  implementation in
-  `src/AiEng.Platform.Infrastructure/Capabilities/SystemHostCapabilitiesService.cs`;
-  the `AddHostCapabilities` composition
-  root extension in
-  `src/AiEng.Platform.App/Composition/Capabilities/CapabilitiesServiceCollectionExtensions.cs`;
-  10+ unit tests in
-  `tests/AiEng.Platform.UnitTests/Capabilities/SystemHostCapabilitiesServiceTests.cs`;
-  the `Capabilities_Resolved_Through_Service`
-  architecture test in
-  `tests/AiEng.Platform.ArchitectureTests/Capabilities/Capabilities_Resolved_Through_Service.cs`
-  (asserts no `RunToCompletionAsync`
-  token in `App/Components/Diagnostics/`,
-  no `ICredentialVault` direct call in
-  `App/Components/Diagnostics/`, the
-  `Diagnostics.razor` page contains
-  `@inject IHostCapabilitiesService`).
+  `AppCapabilityList` component in
+  `src/AiEng.Platform.App/Components/Diagnostics/AppCapabilityList.razor`
+  (+ .razor.cs + .razor.css); land the
+  `AppKeyValueList` component in
+  `src/AiEng.Platform.App/Components/Diagnostics/AppKeyValueList.razor`
+  (+ .razor.cs + .razor.css); land the
+  `Diagnostics/_Imports.razor`; append
+  the `AppKeyValueListFormat` enum to
+  `Enums.cs`; land 13 bUnit tests for
+  `AppCapabilityList` in
+  `tests/AiEng.Platform.ComponentTests/Components/Diagnostics/AppCapabilityListTests.cs`;
+  land 15 bUnit tests for
+  `AppKeyValueList` in
+  `tests/AiEng.Platform.ComponentTests/Components/Diagnostics/AppKeyValueListTests.cs`.
 - **Acceptance criteria:**
-  - `IHostCapabilitiesService.DetectAsync`
-    probes the six host tools + the
-    six provider credentials; the
-    result is a `HostCapabilities`
-    record with the correct
-    `Available` + `Version` +
-    `CredentialAvailable` per item.
-  - The probe timeout is 5 seconds
-    per tool; a timeout returns
-    `Available: false` with a `Failed`
-    `CapabilityProbe`.
-  - Windows-only tools
-    (`powershell.exe`, `wsl.exe`,
-    `wt.exe`) are gated on
-    `IPlatformInfo.IsWindows`; on
-    non-Windows hosts the
-    Windows-only tools return
-    `Available: false`.
-  - The `AddHostCapabilities` extension
-    registers
-    `IHostCapabilitiesService` →
-    `SystemHostCapabilitiesService`
-    via `TryAddSingleton`; the
-    extension is called from
-    `ServiceCollectionExtensions.AddPlatformServices`
-    after `AddInfrastructure`.
-  - The unit tests cover: happy
-    path (all six tools present +
-    all six credentials present);
-    missing tool; timeout; non-zero
-    exit; non-Windows host
-    (Windows-only tools hidden);
-    missing provider credential;
-    cancellation; `DetectedAt`
-    timestamp; aggregation order.
-  - The
-    `Capabilities_Resolved_Through_Service`
-    architecture test is `Active`
-    and green.
-  - The M3 / M4-A.1 / M4-A.2 323
-    tests remain green (regression
-    gate).
-- **Dependencies:** M4-A.1 +
-  M4-A.2 (Done 2026-07-11); the
-  M4-B plan promotion (T-023, Done
-  2026-07-13; the M4-B plan is in
-  Awaiting Approval at
-  `.ai/plans/M4-B-capability-detection.md`).
+  - `AppCapabilityList` renders an
+    `IReadOnlyList<HostCapability>` as
+    a list of `AppCard` entries; one
+    card per capability.
+  - `AppCapabilityList` renders an
+    `AppStatusDot` Success for
+    `Available=true` and Error for
+    `Available=false`.
+  - `AppCapabilityList` renders an
+    `AppBadge` "Credential set" when
+    `CredentialAvailable` is true;
+    omits the badge when
+    `CredentialAvailable` is false.
+  - `AppCapabilityList` supports the
+    four child-content slots (Loading,
+    Empty, Error, Populated) per
+    `docs/design-system.md` § 5.4.
+  - The `AppCapabilityList` populated
+    list has `aria-live="polite"`.
+  - `AppKeyValueList` renders an
+    `IReadOnlyList<KeyValuePair<string,
+    string>>` as a definition list
+    (`<dl>`/`<dt>`/`<dd>`) of key-value
+    rows.
+  - `AppKeyValueList` supports the
+    `AppKeyValueListFormat` enum
+    (Plain, Boolean, Code); Boolean
+    renders a check/cross icon for
+    true/false (case-insensitive; non-
+    boolean values render as literal
+    text); Code renders in a monospaced
+    `<code>` element.
+  - `AppKeyValueList` supports the
+    four child-content slots (Loading,
+    Empty, Error, Populated) per
+    `docs/design-system.md` § 5.4.
+  - The `AppKeyValueList` populated
+    container has `aria-live="polite"`.
+  - The M4-B.1 343 tests remain green
+    (regression gate).
+- **Dependencies:** M4-B.1
+  (T-024, Done 2026-07-13);
+  `IHostCapabilitiesService` (C-015).
 - **Expected affected areas:**
-  `src/AiEng.Platform.Application/Capabilities/`
-  (new directory); `src/AiEng.Platform.Infrastructure/Capabilities/`
-  (new directory);
-  `src/AiEng.Platform.App/Composition/Capabilities/`
-  (new directory);
-  `src/AiEng.Platform.App/Composition/ServiceCollectionExtensions.cs`
-  (one `AddHostCapabilities()` call
-  added after the existing
-  `AddInfrastructure()` call);
-  `src/AiEng.Platform.App/Program.cs`
-  (no change in M4-B.1; the
-  startup log is in M4-B.3);
-  `tests/AiEng.Platform.UnitTests/Capabilities/SystemHostCapabilitiesServiceTests.cs`
-  (new); `tests/AiEng.Platform.ArchitectureTests/Capabilities/Capabilities_Resolved_Through_Service.cs`
-  (new).
-- **Validation:** `npm run css:build`
-  (exit 0; no CSS change in M4-B.1);
-  `dotnet restore` (exit 0);
-  `dotnet build` (0 warnings, 0
-  errors); `dotnet test` (323 + 10+
-  new = 333+ passed, 0 failed, 9
+  `src/AiEng.Platform.App/Components/Diagnostics/`
+  (new directory; 6 new files +
+  `_Imports.razor`);
+  `src/AiEng.Platform.App/Components/Common/Enums.cs`
+  (the `AppKeyValueListFormat` enum
+  appended);
+  `tests/AiEng.Platform.ComponentTests/Components/Diagnostics/`
+  (new directory; 2 new test files).
+- **Validation:** `dotnet restore`
+  (exit 0); `dotnet build` (0 warnings,
+  0 errors); `dotnet test` (343 + 28
+  new = 371+ passed, 0 failed, 9
   skipped per ADR-016 / M4-D);
   `dotnet format --verify-no-changes`
-  (exit 0). The M4-B.1 first session
+  (exit 0). The M4-B.2 first session
   does not run the `App/Components/`
   pages (the page is in M4-B.3); the
   visual smoke is in M4-B.3.
 - **Approved plan path:**
   `.ai/plans/M4-B-capability-detection.md`
-  (Awaiting Approval 2026-07-13).
-- **Status:** **Ready** (the M4-B
-  plan promotion is `Done`; the
-  M4-B.1 first session is the next
-  concrete step on the user's
-  `Approve` or `Next` invocation).
+  (Awaiting Approval 2026-07-13);
+  the M4-B.2 first session plan is
+  at
+  `.claude/plans/generic-seeking-oasis.md`
+  (approved via ExitPlanMode).
+- **Status:** **Ready** (the M4-B.1
+  first session is `Done`; the M4-B.2
+  first session is the next concrete
+  step on the user's `Approve` or
+  `Next` invocation).
+
+### M1 follow-up — Add `AppToolbar` example to `/design-system`
 
 ### M1 follow-up — Add `AppToolbar` example to `/design-system`
 
@@ -355,6 +346,19 @@ promotion, or any provider creation.)
 ---
 
 ## Done Recently
+
+### M4-B.2 — AppCapabilityList + AppKeyValueList design-system components + 28 bUnit tests — 2026-07-13
+
+- **Task ID:** `T-025`
+- **Milestone:** M4-B — Capability Detection (Active 2026-07-13; the M4-B plan is at `.ai/plans/M4-B-capability-detection.md`).
+- **Title:** `AppCapabilityList` + `AppKeyValueList` data-owning four-state design-system components + `AppKeyValueListFormat` enum + 28 bUnit tests — the boundary slice of M4-B.2 (the second M4-B implementation slice).
+- **Why it matters:** M4-B.1 shipped the `IHostCapabilitiesService` contract + the `HostCapabilities` + `HostCapability` records + the `SystemHostCapabilitiesService` implementation + the `AddHostCapabilities` composition root. M4-B.2 ships the `AppCapabilityList` data-owning four-state design-system component (renders an `IReadOnlyList<HostCapability>` as a list of `AppCard` entries with `AppStatusDot` Success/Error, the `Version` in a monospaced muted font, and an `AppBadge` "Credential set" for `CredentialAvailable=true`; `aria-live="polite"` on the populated list) + the `AppKeyValueList` data-owning four-state design-system component (renders an `IReadOnlyList<KeyValuePair<string, string>>` as a definition list `<dl>`/`<dt>`/`<dd>`; the `AppKeyValueListFormat` enum (Plain, Boolean, Code) controls value rendering) + the `AppKeyValueListFormat` enum appended to `Enums.cs` + the `Diagnostics/_Imports.razor` mirroring `Projects/_Imports.razor` + 13 bUnit tests for `AppCapabilityList` + 15 bUnit tests for `AppKeyValueList`.
+- **Branch:** `feature/T-025-m4-b-2-capability-list-components` (created from `main` at the M4-B.1 closeout commit `c151e90`; fast-forwarded into `main`; deleted per the branching strategy rule 7).
+- **Commit:** `feat(m4-b.2): add AppCapabilityList + AppKeyValueList data-owning design-system components` (push is staged for push, not authorised in this session).
+- **Test count:** 370 passed (was 343 pre-M4-B.2; +28 new), 0 failed, 9 skipped (per ADR-016 / M4-D). Breakdown: 99 unit + 259 component + 12 architecture.
+- **Validation:** 0 warnings, 0 errors; format clean; all new + modified files are CRLF; `capabilities.json` valid (24 records; C-023 + C-024 added).
+- **One documented deviation:** the `AppCapabilityList` default Populated uses an `AppStack` of `AppCard` entries with the `AppStatusDot` in the header (not the `AppBadge`-style credential slot), and the `AppKeyValueList` default Populated uses a definition list (`<dl>`/`<dt>`/`<dd>`) with monospaced `<code>` elements for the Code format; the plan's intent (one card per capability with status dot + version + credential badge; one row per item with key left + value right) is preserved.
+- **Session does NOT begin:** M4-B.3 (`/diagnostics` page + startup log + documentation + architecture test) / M4-C / M4-D / provider creation. The next session is M4-B.3 on the user's `Approve` or `Next` invocation.
 
 ### M4-B.1 — IHostCapabilitiesService contract + implementation + composition root + unit tests — 2026-07-13
 
