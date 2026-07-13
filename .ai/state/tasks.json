@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
-  "updated_at": "2026-07-11T00:00:00Z",
-  "updated_by_session": "m4-a-1-infrastructure-project-skeleton",
+  "updated_at": "2026-07-13T00:00:00Z",
+  "updated_by_session": "m4-b-plan-promotion",
   "tasks": [
     {
       "id": "T-001",
@@ -683,7 +683,48 @@
       "title": "M4 — Process Execution, Capability Detection, Provider Registry (summary)",
       "status": "In Progress",
       "milestone": "M4",
-      "notes": "Slices M4-A, M4-B, M4-C, M4-D in the master delivery plan. M4-A.1 (T-021) + M4-A.2 (T-022) Delivered 2026-07-11 (the first IProcessRunner activation is on AppProjectCard.Open in M4-A.2). M4-A.3 is not yet defined; M4-B / M4-C / M4-D remain Planned."
+      "notes": "Slices M4-A, M4-B, M4-C, M4-D in the master delivery plan. M4-A.1 (T-021) + M4-A.2 (T-022) Delivered 2026-07-11 (the first IProcessRunner activation is on AppProjectCard.Open in M4-A.2). M4-A.3 is not yet defined; M4-B is now Active (the M4-B plan promotion is T-023, Done 2026-07-13; the M4-B plan is in Awaiting Approval at .ai/plans/M4-B-capability-detection.md; the M4-B implementation is the next concrete step on the user's Approve / Next invocation); M4-C / M4-D remain Planned."
+    },
+    {
+      "id": "T-023",
+      "title": "M4-B plan promotion (Capability Detection plan drafted in Awaiting Approval)",
+      "status": "Done",
+      "milestone": "M4-B",
+      "slice": "M4-B plan promotion",
+      "created_at": "2026-07-13T00:00:00Z",
+      "promoted_to_ready_at": "2026-07-13",
+      "promoted_to_ready_by_session": "m4-b-plan-promotion",
+      "started_at": "2026-07-13",
+      "started_by_session": "m4-b-plan-promotion",
+      "completed_at": "2026-07-13",
+      "completed_by_session": "m4-b-plan-promotion",
+      "plan": ".ai/plans/M4-B-capability-detection.md",
+      "branch": "feature/m4-b-capability-detection-plan-promotion (created from main at the M4-A.2 closeout commit 5853d41; the M4-B plan promotion commit chore(m4-b.plan): draft M4-B capability detection plan in Awaiting Approval is on this branch; the branch is fast-forwarded into main per the branching strategy rule 6; the branch is deleted per rule 7)",
+      "depends_on_milestone": "M4-A (Active; M4-A.1 + M4-A.2 Delivered 2026-07-11)",
+      "depends_on_task": "T-022 (M4-A.2, Done 2026-07-11)",
+      "evidence": {
+        "implementation_report": null,
+        "session_handoff": ".ai/handoffs/2026-07-13-m4-b-plan-promotion.md (mirrored to .ai/handoffs/latest.md)",
+        "branch": "feature/m4-b-capability-detection-plan-promotion",
+        "commit": "chore(m4-b.plan): draft M4-B capability detection plan in Awaiting Approval",
+        "source_paths_added": [
+          ".ai/plans/M4-B-capability-detection.md",
+          ".ai/handoffs/2026-07-13-m4-b-plan-promotion.md",
+          ".ai/handoffs/latest.md"
+        ],
+        "source_paths_modified": [
+          "docs/infrastructure.md (section 11 M4-B Consumers added)",
+          "ROADMAP.md (M4-B row Planned to Active; M4-B Definition of done expanded)",
+          ".ai/plans/master-delivery-plan.md (section 1 M4-B row updated; section 3 M4-B block updated; M4-B slice breakdown table added)",
+          ".ai/state/capabilities.json (C-015 evidence.plans initialised with .ai/plans/M4-B-capability-detection.md; top-level updated_at + updated_by_session set)",
+          ".ai/state/session.json (M4-B plan promotion envelope)",
+          ".ai/state/tasks.json (T-023 record added; T-008 M4 summary note updated)",
+          ".ai/state/current.md (active milestone M4-A to M4-B; active task T-022 to T-023; next recommended task T-024 M4-B.1)",
+          ".ai/state/task-board.md (M4-B summary row moved from Deferred to Ready; M4-A.3 stub row moved from Ready to Deferred)",
+          ".ai/state/milestones.json (M4-B status Planned to Active; M4-B evidence block initialised; M4-B plan_promotion_at + plan_path set)"
+        ]
+      },
+      "notes": "M4-B plan promotion is a planning-surface change (no C# code, no tests, no M4-B implementation begins). The session does NOT begin the M4-B implementation, the M4-C plan promotion, the M4-D plan promotion, or any provider creation (per the brief: 'Do not begin the following task'). The next session is the M4-B implementation (when the user invokes Approve or Next)."
     },
     {
       "id": "T-009",

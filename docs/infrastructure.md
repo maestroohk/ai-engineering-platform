@@ -477,6 +477,41 @@ item:
   push. The push decision is `Staged for push`;
   the next user command may push.
 
+---
+
+## 11. M4-B Consumers
+
+The M4-B milestone introduces the
+`IHostCapabilitiesService` contract — the first
+consumer of `IProcessRunner` + `ICredentialVault`
+outside the M4-A.2 Open Action on
+`AppProjectCard.razor`. The M4-B
+`SystemHostCapabilitiesService` implementation
+probes six host tools (`git`, `ollama`,
+`powershell.exe`, `wsl.exe`, `wt.exe`, `bash.exe`)
+through `IProcessRunner.RunToCompletionAsync(tool,
+new[] { "--version" }, ct)` and reads six provider
+credentials through
+`ICredentialVault.GetAsync("provider:<key>:token", ct)`.
+The probe results are surfaced through the
+`/diagnostics` page (the
+`AppCapabilityList` + `AppKeyValueList` components)
+and logged at startup (Information level).
+
+The M4-B `Capabilities_Resolved_Through_Service`
+architecture test (introduced in the M4-B plan at
+`.ai/plans/M4-B-capability-detection.md`) asserts
+no direct `IProcessRunner` or `ICredentialVault`
+call in `App/Components/Diagnostics/`. The test is
+scoped to the diagnostics folder to avoid the
+M4-A.2 Open Action false positive. The M4-B
+implementation follows the M4-B plan; the M4-B
+plan promotion introduces the M4-B plan, the
+`IHostCapabilitiesService` capability record
+(C-015) evidence block update, and the M4-B
+project-continuity state transition from
+`Planned` to `Active`.
+
 The M4-A.2 slice ends after the coherent commit
 on the feature branch
 `feature/T-022-m4-a-2-open-action`. The next

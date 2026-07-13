@@ -60,8 +60,14 @@
   slice is not yet planned. The next
   milestone after M4-A.2 closes is
   M4-B (Capability Detection,
-  Planned). The next M4-A task is
-  undefined.
+  Active; the M4-B plan is in
+  Awaiting Approval at
+  `.ai/plans/M4-B-capability-detection.md`).
+  The M4-B implementation is the next
+  concrete step. M4-A.3 is undefined;
+  M4-A.3 may be defined in a future
+  session if the M4-B / M4-C / M4-D
+  work requires a third M4-A slice.
 - **Objective:** (not yet defined).
 - **Acceptance criteria:** (not yet
   defined).
@@ -77,13 +83,171 @@
   plan is not yet drafted; the M4-A.2
   closeout does not seed M4-A.3 (per
   the brief: 'Do not begin the
-  following task').
-- **Status:** Ready (the M4-A.2
+  following task'). The M4-B plan
+  promotion is also documented in
+  the M4-B plan promotion handoff at
+  `.ai/handoffs/2026-07-13-m4-b-plan-promotion.md`.
+- **Status:** **Deferred** (the M4-A.2
   closeout does not seed a concrete
-  M4-A.3 task; the next concrete
-  step is the M4-B plan promotion;
-  M4-A.3 is undefined; M4-A.3 may
-  be defined in a future session).
+  M4-A.3 task; the M4-B plan
+  promotion is `Done` 2026-07-13; the
+  M4-B implementation is the next
+  concrete step; M4-A.3 is undefined;
+  M4-A.3 may be defined in a future
+  session if the M4-B / M4-C / M4-D
+  work requires a third M4-A slice).
+
+### M4-B.1 — Contract + implementation + composition root + unit tests + architecture test
+
+- **Task ID:** T-024.
+- **Milestone:** M4-B — Capability
+  Detection (Active 2026-07-13; the
+  M4-B plan is in Awaiting Approval at
+  `.ai/plans/M4-B-capability-detection.md`).
+- **Title:** M4-B.1 — Contract +
+  implementation + composition root +
+  unit tests + architecture test.
+- **Why it matters:** M4-A.1 + M4-A.2
+  shipped the infrastructure seam
+  (`IProcessRunner` +
+  `ICredentialVault` + `IPlatformInfo`)
+  + the first `IProcessRunner`
+  activation (the Open action on
+  `AppProjectCard`). M4-B.1 ships the
+  `IHostCapabilitiesService` contract
+  + the `HostCapabilities` +
+  `HostCapability` records + the
+  `SystemHostCapabilitiesService`
+  implementation (composes
+  `IProcessRunner` +
+  `ICredentialVault` +
+  `IPlatformInfo`; probes six host
+  tools — `git`, `ollama`,
+  `powershell.exe`, `wsl.exe`,
+  `wt.exe`, `bash.exe` — with
+  `--version`; reads six provider
+  credentials from
+  `ICredentialVault.GetAsync`) + the
+  `AddHostCapabilities` composition
+  root extension + 10+ unit tests +
+  the `Capabilities_Resolved_Through_Service`
+  architecture test (scoped to
+  `App/Components/Diagnostics/`). M4-B.1
+  is the smallest M4-B implementation
+  slice; M4-B.2 ships the design-
+  system components + bUnit tests;
+  M4-B.3 ships the `/diagnostics`
+  page + the startup log + the
+  documentation.
+- **Objective:** Land the
+  `IHostCapabilitiesService` contract
+  in
+  `src/AiEng.Platform.Application/Capabilities/IHostCapabilitiesService.cs`;
+  the `HostCapabilities` +
+  `HostCapability` records in
+  `src/AiEng.Platform.Application/Capabilities/HostCapabilities.cs`;
+  the `SystemHostCapabilitiesService`
+  implementation in
+  `src/AiEng.Platform.Infrastructure/Capabilities/SystemHostCapabilitiesService.cs`;
+  the `AddHostCapabilities` composition
+  root extension in
+  `src/AiEng.Platform.App/Composition/Capabilities/CapabilitiesServiceCollectionExtensions.cs`;
+  10+ unit tests in
+  `tests/AiEng.Platform.UnitTests/Capabilities/SystemHostCapabilitiesServiceTests.cs`;
+  the `Capabilities_Resolved_Through_Service`
+  architecture test in
+  `tests/AiEng.Platform.ArchitectureTests/Capabilities/Capabilities_Resolved_Through_Service.cs`
+  (asserts no `RunToCompletionAsync`
+  token in `App/Components/Diagnostics/`,
+  no `ICredentialVault` direct call in
+  `App/Components/Diagnostics/`, the
+  `Diagnostics.razor` page contains
+  `@inject IHostCapabilitiesService`).
+- **Acceptance criteria:**
+  - `IHostCapabilitiesService.DetectAsync`
+    probes the six host tools + the
+    six provider credentials; the
+    result is a `HostCapabilities`
+    record with the correct
+    `Available` + `Version` +
+    `CredentialAvailable` per item.
+  - The probe timeout is 5 seconds
+    per tool; a timeout returns
+    `Available: false` with a `Failed`
+    `CapabilityProbe`.
+  - Windows-only tools
+    (`powershell.exe`, `wsl.exe`,
+    `wt.exe`) are gated on
+    `IPlatformInfo.IsWindows`; on
+    non-Windows hosts the
+    Windows-only tools return
+    `Available: false`.
+  - The `AddHostCapabilities` extension
+    registers
+    `IHostCapabilitiesService` →
+    `SystemHostCapabilitiesService`
+    via `TryAddSingleton`; the
+    extension is called from
+    `ServiceCollectionExtensions.AddPlatformServices`
+    after `AddInfrastructure`.
+  - The unit tests cover: happy
+    path (all six tools present +
+    all six credentials present);
+    missing tool; timeout; non-zero
+    exit; non-Windows host
+    (Windows-only tools hidden);
+    missing provider credential;
+    cancellation; `DetectedAt`
+    timestamp; aggregation order.
+  - The
+    `Capabilities_Resolved_Through_Service`
+    architecture test is `Active`
+    and green.
+  - The M3 / M4-A.1 / M4-A.2 323
+    tests remain green (regression
+    gate).
+- **Dependencies:** M4-A.1 +
+  M4-A.2 (Done 2026-07-11); the
+  M4-B plan promotion (T-023, Done
+  2026-07-13; the M4-B plan is in
+  Awaiting Approval at
+  `.ai/plans/M4-B-capability-detection.md`).
+- **Expected affected areas:**
+  `src/AiEng.Platform.Application/Capabilities/`
+  (new directory); `src/AiEng.Platform.Infrastructure/Capabilities/`
+  (new directory);
+  `src/AiEng.Platform.App/Composition/Capabilities/`
+  (new directory);
+  `src/AiEng.Platform.App/Composition/ServiceCollectionExtensions.cs`
+  (one `AddHostCapabilities()` call
+  added after the existing
+  `AddInfrastructure()` call);
+  `src/AiEng.Platform.App/Program.cs`
+  (no change in M4-B.1; the
+  startup log is in M4-B.3);
+  `tests/AiEng.Platform.UnitTests/Capabilities/SystemHostCapabilitiesServiceTests.cs`
+  (new); `tests/AiEng.Platform.ArchitectureTests/Capabilities/Capabilities_Resolved_Through_Service.cs`
+  (new).
+- **Validation:** `npm run css:build`
+  (exit 0; no CSS change in M4-B.1);
+  `dotnet restore` (exit 0);
+  `dotnet build` (0 warnings, 0
+  errors); `dotnet test` (323 + 10+
+  new = 333+ passed, 0 failed, 9
+  skipped per ADR-016 / M4-D);
+  `dotnet format --verify-no-changes`
+  (exit 0). The M4-B.1 first session
+  does not run the `App/Components/`
+  pages (the page is in M4-B.3); the
+  visual smoke is in M4-B.3.
+- **Approved plan path:**
+  `.ai/plans/M4-B-capability-detection.md`
+  (Awaiting Approval 2026-07-13).
+- **Status:** **Ready** (the M4-B
+  plan promotion is `Done`; the
+  M4-B.1 first session is the next
+  concrete step on the user's
+  `Approve` or `Next` invocation).
 
 ### M1 follow-up — Add `AppToolbar` example to `/design-system`
 
@@ -130,17 +294,25 @@
 
 ## In Progress
 
-(none — M4-A.2 delivered in the
-m4-a-2-open-action session, 2026-07-11;
-M4-A.1 + M4-A.2 are `Done`; the next
-M4-A task is undefined; the next
-milestone is M4-B (Capability Detection,
-Planned). The next session is the
-M4-A.3 implementation (if defined) or
-the M4-B plan promotion. Per the
-Progressive Coding Rule, the M4-A.2
-session does **not** begin M4-A.3,
-M4-B, M4-C, or M4-D.)
+(none — the M4-B plan promotion
+delivered in the m4-b-plan-promotion
+session, 2026-07-13; T-023 (M4-B plan
+promotion) is `Done` in
+`.ai/state/tasks.json`; the M4-B plan
+is in Awaiting Approval at
+`.ai/plans/M4-B-capability-detection.md`;
+the next milestone work is M4-B.1
+(T-024; contract + implementation +
+composition root + unit tests +
+architecture test) in `Ready`. The
+next session is the M4-B.1 first
+session on the user's `Approve` or
+`Next` invocation. Per the
+Progressive Coding Rule, the M4-B
+plan promotion session does **not**
+begin the M4-B implementation, the
+M4-C plan promotion, the M4-D plan
+promotion, or any provider creation.)
 
 ---
 
@@ -1347,9 +1519,17 @@ detailed tasks when the milestone approaches.
 
 ### M4-B — Capability Detection (summary)
 
-- **Milestone:** M4-B.
-- **First action (later):** draft
-  `.ai/plans/M4-B-capability-detection.md`.
+- **Milestone:** M4-B — Capability
+  Detection (Active 2026-07-13; the
+  M4-B plan is in Awaiting Approval at
+  `.ai/plans/M4-B-capability-detection.md`).
+- **First action (later):** the M4-B
+  plan is drafted (T-023, Done
+  2026-07-13); the M4-B implementation
+  begins in M4-B.1 (T-024, `Ready`;
+  contract + implementation +
+  composition root + unit tests +
+  architecture test).
 
 ### M4-C — Provider Registry Foundation (summary)
 

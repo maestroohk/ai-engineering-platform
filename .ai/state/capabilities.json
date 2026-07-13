@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1.0",
-  "updated_at": "2026-07-11T00:00:00Z",
-  "updated_by_session": "m2-4-project-intelligence-dashboard",
+  "updated_at": "2026-07-13T00:00:00Z",
+  "updated_by_session": "m4-b-plan-promotion",
   "completion_status_mapping": {
     "NotStarted": "Not in capabilities.json. Reserved for capabilities the product will need but which have not yet been admitted to the graph.",
     "Planned": "status: Accepted; delivered_by_milestone status: Planned; no plan yet, or plan stub is Draft. Sequenced for a milestone, plan not promoted to Ready / Awaiting Approval.",
@@ -488,10 +488,10 @@
       "delivered_by_milestone": "M4-B",
       "consumed_by_milestones": ["M4-C", "M4-D", "M5", "M6", "M7", "M8"],
       "delivered_by_tasks": [],
-      "next_task": null,
+      "next_task": "T-023",
       "blocked_by": [],
       "evidence": {
-        "plans": [],
+        "plans": [".ai/plans/M4-B-capability-detection.md"],
         "reports": [],
         "commits": [],
         "tests": [],
@@ -504,7 +504,7 @@
       "completed_criteria": [],
       "adr": null,
       "architecture_tests": ["Capabilities_Resolved_Through_Service"],
-      "last_updated": "2026-07-11"
+      "last_updated": "2026-07-13"
     },
     {
       "id": "C-016",

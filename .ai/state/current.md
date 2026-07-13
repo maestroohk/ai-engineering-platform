@@ -39,19 +39,53 @@
 
 ## Current Milestone
 
-- **Active milestone:** **M4-A — Infrastructure /
-  Process Execution** (Active, 2026-07-11;
-  M4-A.1 + M4-A.2 Delivered 2026-07-11).
-  M4-A.1 ships the infrastructure seam every
-  later milestone composes:
-  `AiEng.Platform.Infrastructure` csproj; the
-  four contracts (`IProcessRunner` +
-  `ProcessResult` + `ICredentialVault` +
-  `IPlatformInfo`) in
-  `src/AiEng.Platform.Application/Infrastructure/`;
-  the four implementations
-  (`SystemProcessRunner` +
-  `WindowsCredentialVault` +
+- **Active milestone:** **M4-B — Capability
+  Detection** (Active, 2026-07-13; the
+  M4-B plan is in Awaiting Approval at
+  `.ai/plans/M4-B-capability-detection.md`).
+  M4-B ships the host capability detection:
+  the `IHostCapabilitiesService` contract
+  + the `HostCapabilities` + `HostCapability`
+  records in
+  `src/AiEng.Platform.Application/Capabilities/`;
+  the `SystemHostCapabilitiesService`
+  implementation in
+  `src/AiEng.Platform.Infrastructure/Capabilities/`
+  (probes six host tools — `git`, `ollama`,
+  `powershell.exe`, `wsl.exe`, `wt.exe`,
+  `bash.exe` — via
+  `IProcessRunner.RunToCompletionAsync(tool,
+  new[] { "--version" }, ct)` with a
+  5-second per-tool timeout and reads six
+  provider credentials via
+  `ICredentialVault.GetAsync("provider:<key>:token",
+  ct)`); the `AddHostCapabilities`
+  composition root extension; the
+  `AppCapabilityList` + `AppKeyValueList`
+  data-owning four-state design-system
+  components composing the M1.2
+  primitives; the `/diagnostics` page
+  registered via `[RouteMetadata]`
+  (Href `/diagnostics`, Order 4,
+  ShowInSidebar = true, Icon `◆`); the
+  startup capability-report log through
+  `ILogger<Program>`; the
+  `Capabilities_Resolved_Through_Service`
+  architecture test (scoped to
+  `App/Components/Diagnostics/` to avoid
+  the M4-A.2 Open Action false positive);
+  the `docs/capabilities.md` documentation.
+  M4-B is the first consumer of
+  `IProcessRunner` + `ICredentialVault`
+  outside the M4-A.2 Open Action on
+  `AppProjectCard.razor`. The M4-B
+  implementation begins in a future
+  session when the user invokes `Approve`
+  or `Next`. See
+  [`implementation-report-m4-a-1-infrastructure-project-skeleton.md`](../../implementation-report-m4-a-1-infrastructure-project-skeleton.md),
+  [`implementation-report-m4-a-2-open-action.md`](../../implementation-report-m4-a-2-open-action.md),
+  and the M4-B plan at
+  [`.ai/plans/M4-B-capability-detection.md`](../../.ai/plans/M4-B-capability-detection.md).
   `SystemPlatformInfo` + `JsonFileProjectStore`)
   in
   `src/AiEng.Platform.Infrastructure/`;
@@ -313,19 +347,40 @@
 
 ## Current Slice
 
-- **Active slice:** **M4-A.2 — Open action on
-  AppProjectCard** (delivered 2026-07-11).
+- **Active slice:** **M4-B plan promotion
+  (Capability Detection plan drafted in
+  Awaiting Approval)** (delivered 2026-07-13).
   The branch
+  `feature/m4-b-capability-detection-plan-promotion`
+  carried the M4-B plan promotion work; the
+  M4-B plan promotion commit
+  `chore(m4-b.plan): draft M4-B capability
+  detection plan in Awaiting Approval` is on
+  this branch; the branch is fast-forwarded
+  into `main` per the branching strategy rule
+  6; the branch is deleted per rule 7. The
+  M4-B plan is in Awaiting Approval at
+  `.ai/plans/M4-B-capability-detection.md`
+  (12 sections mirroring the M4-A plan's
+  12-section structure). The M4-B
+  implementation is the next concrete step on
+  the user's `Approve` or `Next` invocation
+  (M4-B.1: contract + implementation +
+  composition root + unit tests + architecture
+  test; M4-B.2: design-system components +
+  bUnit tests; M4-B.3: `/diagnostics` page +
+  composition-root wiring + startup log +
+  documentation).
+- **Last completed slice:** **M4-A.2 — Open
+  action on AppProjectCard** (delivered
+  2026-07-11). The branch
   `feature/T-022-m4-a-2-open-action` carried
   the M4-A.2 work; the M4-A.2 closeout commit
   `feat(m4-a.2): enable AppProjectCard.Open
   action via IProcessRunner` is on this branch;
   the branch is fast-forwarded into `main` per
   the branching strategy rule 6; the branch is
-  deleted per rule 7. The next M4-A task is
-  undefined (M4-A.3 is not yet planned); the
-  next milestone is M4-B (Capability Detection,
-  Planned).
+  deleted per rule 7.
 - **Last completed slice:** **M4-A.1 —
   Infrastructure project skeleton**
   (delivered 2026-07-11). The branch
@@ -470,17 +525,87 @@
 
 ## Last Completed Task
 
-- The M4-A.2 implementation session
-  (2026-07-11) is the most recent
-  completed task; the M4-A.1 implementation
+- The M4-B plan promotion session
+  (2026-07-13) is the most recent
+  completed task; the M4-A.2 implementation
   session (2026-07-11) is the prior task; the
-  M3 closeout implementation session
+  M4-A.1 implementation session
   (2026-07-11) is the prior-prior task; the
-  M3.2 implementation session (2026-07-11)
-  is the prior-prior-prior task; the
-  M3.1 implementation session
-  (2026-07-11) is the prior-prior-prior-prior
-  task.
+  M3 closeout implementation session
+  (2026-07-11) is the prior-prior-prior task;
+  the M3.2 implementation session
+  (2026-07-11) is the
+  prior-prior-prior-prior task; the M3.1
+  implementation session (2026-07-11) is the
+  prior-prior-prior-prior-prior task.
+  - Delivered the M4-B plan promotion
+    (T-023) per the M4-B plan promotion
+    plan (the planning-surface change after
+    the M4-A.2 closeout).
+  - Drafted the M4-B plan at
+    `.ai/plans/M4-B-capability-detection.md`
+    with `Status: Awaiting Approval` (12
+    sections mirroring the M4-A plan's
+    12-section structure: Why This Milestone
+    Exists; In Scope; Out of Scope; Files to
+    Add; Files to Modify; Coherent Commit;
+    Critical Files to Read; Existing
+    Functions and Utilities to Reuse; Risks
+    and Mitigations; Test Plan; Documentation
+    Plan; Stop Condition). The plan covers
+    `IHostCapabilitiesService` +
+    `HostCapabilities` + `HostCapability`
+    records; `SystemHostCapabilitiesService`
+    implementation probing six host tools
+    (`git`, `ollama`, `powershell.exe`,
+    `wsl.exe`, `wt.exe`, `bash.exe`) via
+    `IProcessRunner.RunToCompletionAsync(tool,
+    new[] { "--version" }, ct)` with a
+    5-second per-tool timeout and reading six
+    provider credentials via
+    `ICredentialVault.GetAsync("provider:<key>:token",
+    ct)`; `AppCapabilityList` + `AppKeyValueList`
+    data-owning four-state design-system
+    components composing the M1.2
+    primitives; `/diagnostics` page
+    registered via `[RouteMetadata]`
+    (Href `/diagnostics`, Order 4,
+    ShowInSidebar = true, Icon `◆`);
+    startup capability-report log through
+    `ILogger<Program>`;
+    `Capabilities_Resolved_Through_Service`
+    architecture test (scoped to
+    `App/Components/Diagnostics/` to avoid
+    the M4-A.2 Open Action false positive);
+    `docs/capabilities.md` documentation.
+  - Updated `docs/infrastructure.md` § 11
+    (M4-B Consumers): one paragraph noting
+    the M4-B `IHostCapabilitiesService` is
+    the first consumer of `IProcessRunner` +
+    `ICredentialVault` outside the M4-A.2
+    Open Action.
+  - Updated `ROADMAP.md`: § 2 M4-B row
+    `Planned` → `Active`; § 3 M4-B
+    `Definition of done` expanded with 9
+    bullets mirroring the M4-A.1 + M4-A.2
+    DoD bullets.
+  - Updated `.ai/plans/master-delivery-plan.md`:
+    § 1 M4-B row `Planned` → `Active` with
+    full evidence narrative; § 3 M4-B block
+    expanded with the full Major capabilities
+    delivered + Completion status + Evidence
+    blocks; M4-B slice breakdown table added
+    with the anticipated M4-B.1 / M4-B.2 /
+    M4-B.3 rows.
+  - Updated `.ai/state/capabilities.json`:
+    C-015 `IHostCapabilitiesService` evidence
+    block initialised with
+    `evidence.plans: [".ai/plans/M4-B-capability-detection.md"]`;
+    C-015 `next_task` set to `T-023`;
+    C-015 `last_updated` set to `2026-07-13`;
+    top-level `updated_at` +
+    `updated_by_session` set to the M4-B plan
+    promotion session.
   - Delivered M4-A.2 — Open action on
     `AppProjectCard` per the approved
     M4-A plan
@@ -851,30 +976,40 @@
 
 ## Last Stable Commit
 
-- `178d319` — the M4-A.2 closeout commit
-  `feat(m4-a.2): enable AppProjectCard.Open action via IProcessRunner`
-  on `main` (created 2026-07-11). The
-  M4-A.2 closeout commit is the
-  closing receipt for the M4-A.2
-  slice (the Open action on
-  `AppProjectCard` + the
-  `IPlatformInfo.IsWindows` extension +
-  the M4-A.2 documentation + the
-  project-continuity update). The
-  M4-A.2 closeout commit lived on the
-  feature branch
-  `feature/T-022-m4-a-2-open-action`,
+- The M4-B plan promotion commit
+  `chore(m4-b.plan): draft M4-B capability
+  detection plan in Awaiting Approval`
+  on `main` (created 2026-07-13). The
+  M4-B plan promotion commit is the
+  closing receipt for the M4-B plan
+  promotion slice (the M4-B plan
+  drafted in Awaiting Approval + the
+  `docs/infrastructure.md` § 11 update +
+  the `ROADMAP.md` updates + the
+  `.ai/plans/master-delivery-plan.md`
+  updates + the `.ai/state/capabilities.json`
+  C-015 evidence update + the project-
+  continuity update). The M4-B plan
+  promotion commit lived on the feature
+  branch
+  `feature/m4-b-capability-detection-plan-promotion`,
   which is fast-forwarded into `main`
   per the branching strategy rule 6
   and deleted per rule 7. The parent
-  commit is `958cb4f` — the M4-A.1
+  commit is `5853d41` — the M4-A.2
   closeout commit
-  `feat(m4-a.1): add infrastructure project skeleton with IProcessRunner, ICredentialVault, IPlatformInfo, and on-disk IProjectStore`
-  on `main`. Working tree is clean at
-  the close of the M4-A.2 session;
-  the remote (`origin`) is configured
-  but push is not authorised in this
-  session.
+  `feat(m4-a.2): enable AppProjectCard.Open action via IProcessRunner`
+  on `main` (the actual hash is `178d319`
+  per the M4-A.2 closeout handoff section
+  13; the M4-A.2 closeout commit hash
+  recorded in `.ai/state/session.json`
+  M4-A.2 envelope was `c9bdb0c` and the
+  fast-forwarded-onto-`main` commit
+  hash is `178d319`). Working tree is
+  clean at the close of the M4-B plan
+  promotion session; the remote
+  (`origin`) is configured but push is
+  not authorised in this session.
 
 ## Application Status
 
@@ -1446,55 +1581,138 @@ activation):
 > (2026-07-11). M4-A.1 + M4-A.2 are delivered
 > (2026-07-11). The M4-A plan is at
 > [`.ai/plans/M4-A-infrastructure-process-execution.md`](./../../.ai/plans/M4-A-infrastructure-process-execution.md)
-> (Status: Approved). The next milestone
-> after M4-A.2 is M4-B (Capability Detection,
-> Planned). The next M4-A task is undefined
-> (M4-A.3 is not yet planned); the M4-A.2
-> session does not seed M4-A.3 (per the
-> brief: 'Do not begin the following
-> task'). The next session is the M4-A.3
-> implementation (if defined) or the
-> M4-B plan promotion. **Do not begin
-> M4-A.3 / M4-B / M4-C / M4-D in this
-> session** — the M4-A.2 brief
-> explicitly stops at the M4-A.2
-> receipt (the M4-A.2 is the first
-> activation of the M4-A infrastructure
-> seam; the Progressive Coding Rule
-> applies).
+> (Status: Approved). The M4-B plan is at
+> [`.ai/plans/M4-B-capability-detection.md`](./../../.ai/plans/M4-B-capability-detection.md)
+> (Status: Awaiting Approval; the M4-B
+> plan promotion is T-023, Done 2026-07-13).
+> The M4-B implementation is the next
+> concrete step on the user's `Approve` or
+> `Next` invocation. The M4-B plan promotion
+> session does NOT begin the M4-B
+> implementation, the M4-C plan promotion,
+> the M4-D plan promotion, or any provider
+> creation (per the brief: 'Do not begin
+> the following task'). The M4-A.2 session
+> explicitly stopped at the M4-A.2 receipt;
+> the M4-B plan promotion session explicitly
+> stops at the M4-B plan promotion receipt;
+> the M4-B implementation begins in a
+> future session. **Do not begin the M4-B
+> implementation / M4-C / M4-D in this
+> session** — the M4-B plan promotion brief
+> explicitly stops at the M4-B plan
+> promotion receipt (the Progressive Coding
+> Rule applies).
 
-The detailed breakdown of the M4-A.1
+The detailed breakdown of the M4-B.1
 slice is in
 [`.ai/state/task-board.md`](./task-board.md)
-and the M4-A plan file in
-[`.ai/plans/M4-A-infrastructure-process-execution.md`](./../../.ai/plans/M4-A-infrastructure-process-execution.md).
-The M4-A.1 implementation report is at
-[`implementation-report-m4-a-1-infrastructure-project-skeleton.md`](./../../implementation-report-m4-a-1-infrastructure-project-skeleton.md).
-The M4-A.1 handoff is at
-[`.ai/handoffs/2026-07-11-m4-a-1-infrastructure-project-skeleton.md`](./../../.ai/handoffs/2026-07-11-m4-a-1-infrastructure-project-skeleton.md).
+and the M4-B plan file in
+[`.ai/plans/M4-B-capability-detection.md`](./../../.ai/plans/M4-B-capability-detection.md).
+The M4-B plan promotion handoff is at
+[`.ai/handoffs/2026-07-13-m4-b-plan-promotion.md`](./../../.ai/handoffs/2026-07-13-m4-b-plan-promotion.md)
+(mirrored to `.ai/handoffs/latest.md`).
 The next actionable item is:
 
-1. **M4-A.2 — Open action on
-   `AppProjectCard`** (T-022, `Ready`
-   in `.ai/state/tasks.json`; the
-   next concrete M4-A task; the
-   plan is
-   `.ai/plans/M4-A-infrastructure-process-execution.md`).
-   M4-A.2 is the first activation of
-   the M4-A infrastructure seam
-   (the `IProcessRunner` is the
-   only legal way to launch a host
-   process in M4-A; the Open action
-   uses `IProcessRunner.RunAsync` to
-   launch `explorer.exe` with the
-   project's `path`).
+1. **M4-B.1 — Contract + implementation +
+   composition root + unit tests +
+   architecture test** (T-024, `Ready`
+   in `.ai/state/tasks.json`; the next
+   concrete M4-B task; the plan is
+   `.ai/plans/M4-B-capability-detection.md`).
+   M4-B.1 ships the
+   `IHostCapabilitiesService` contract
+   + the `HostCapabilities` + `HostCapability`
+   records in
+   `src/AiEng.Platform.Application/Capabilities/`;
+   the `SystemHostCapabilitiesService`
+   implementation in
+   `src/AiEng.Platform.Infrastructure/Capabilities/`;
+   the `AddHostCapabilities` composition
+   root extension in
+   `src/AiEng.Platform.App/Composition/Capabilities/`;
+   10+ unit tests for the implementation
+   in
+   `tests/AiEng.Platform.UnitTests/Capabilities/SystemHostCapabilitiesServiceTests.cs`;
+   the `Capabilities_Resolved_Through_Service`
+   architecture test in
+   `tests/AiEng.Platform.ArchitectureTests/Capabilities/`
+   (asserts no `IProcessRunner` direct call
+   in `App/Components/Diagnostics/`; no
+   `ICredentialVault` direct call in
+   `App/Components/Diagnostics/`; the
+   `Diagnostics.razor` page contains
+   `@inject IHostCapabilitiesService`).
 
 ## Last Updated
 
+- **2026-07-13** (M4-B plan
+  promotion session). This
+  version supersedes the
+  M4-A.2 version (2026-07-11).
+  The M4-B plan promotion
+  session ships: the M4-B
+  plan at
+  `.ai/plans/M4-B-capability-detection.md`
+  with `Status: Awaiting
+  Approval` (12 sections
+  mirroring the M4-A plan's
+  12-section structure); the
+  `docs/infrastructure.md` § 11
+  M4-B Consumers update; the
+  `ROADMAP.md` M4-B row
+  `Planned` → `Active` + the
+  M4-B `Definition of done`
+  expansion; the
+  `.ai/plans/master-delivery-plan.md`
+  § 1 M4-B row `Planned` →
+  `Active` + the § 3 M4-B block
+  expansion + the M4-B slice
+  breakdown table addition;
+  the `.ai/state/capabilities.json`
+  C-015 `IHostCapabilitiesService`
+  evidence block initialisation
+  (C-015 `evidence.plans`
+  initialised with the M4-B
+  plan path; C-015 `next_task`
+  set to `T-023`; C-015
+  `last_updated` set to
+  `2026-07-13`); the project-
+  continuity state update
+  (`.ai/state/session.json`
+  M4-B plan promotion
+  envelope; `.ai/state/tasks.json`
+  T-023 record added with
+  full evidence block + T-008
+  M4 summary note updated;
+  this file; `.ai/state/task-board.md`
+  M4-B summary row moved
+  from `Deferred` to `Ready`
+  + the M4-A.3 stub row moved
+  from `Ready` to `Deferred`;
+  `.ai/state/milestones.json`
+  M4-B status `Planned` →
+  `Active` + M4-B evidence
+  block initialised + M4-B
+  `plan_promotion_at` +
+  `plan_path` set); the M4-B
+  plan promotion per-session
+  handoff at
+  `.ai/handoffs/2026-07-13-m4-b-plan-promotion.md`
+  (mirrored to
+  `.ai/handoffs/latest.md`).
+  The M4-B plan promotion is
+  a planning-surface change
+  (no C# code is touched; no
+  tests are added; no
+  providers are created). The
+  next session is the M4-B
+  implementation (T-024) on
+  the user's `Approve` or
+  `Next` invocation.
+
 - **2026-07-11** (M4-A.2
-  session). This version supersedes
-  the M4-A.1 version
-  (2026-07-11). The M4-A.2
+  session). The M4-A.2
   session ships: the
   `IPlatformInfo.IsWindows` extension;
   the `SystemPlatformInfo.IsWindows`
@@ -1516,6 +1734,16 @@ The next actionable item is:
   + § 6 Platform Info update + § 9
   Tests cumulative count update + § 10
   Out of Scope update; the
+  `docs/projects.md` § 1/§ 4/§ 5.1/§ 7.2
+  /§ 7.3 updates; the `ROADMAP.md` +
+  `.ai/plans/master-delivery-plan.md`
+  updates; the `.ai/state/capabilities.json`
+  C-012 update; the project-continuity
+  state updates (session.json, tasks.json,
+  current.md, task-board.md,
+  milestones.json); the M4-A.2
+  implementation report at
+  [`implementation-report-m4-a-2-open-action.md`](./../../implementation-report-m4-a-2-open-action.md);
   `docs/projects.md` § 1/§ 4/§ 5.1/§ 7.2
   /§ 7.3 updates; the `ROADMAP.md` +
   `.ai/plans/master-delivery-plan.md`
@@ -1561,9 +1789,13 @@ The next actionable item is:
   `Delivered` (M3.1 + M3.2 + M3
   closeout)).
 - [`.ai/handoffs/latest.md`](./../../.ai/handoffs/latest.md) —
-  the most recent handoff (the M4-A.2
-  handoff; mirrored from
-  `.ai/handoffs/2026-07-11-m4-a-2-open-action.md`).
+  the most recent handoff (the M4-B plan
+  promotion handoff; mirrored from
+  `.ai/handoffs/2026-07-13-m4-b-plan-promotion.md`).
+- [`.ai/handoffs/2026-07-13-m4-b-plan-promotion.md`](./../../.ai/handoffs/2026-07-13-m4-b-plan-promotion.md)
+  — the M4-B plan promotion session handoff
+  (the closing receipt for the M4-B plan
+  promotion slice, 2026-07-13).
 - [`.ai/handoffs/2026-07-11-m4-a-2-open-action.md`](./../../.ai/handoffs/2026-07-11-m4-a-2-open-action.md)
   — the M4-A.2 session handoff
   (the closing receipt for the

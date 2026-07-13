@@ -43,7 +43,7 @@ A milestone is **complete** only when:
 | M3  | Project Registration                                  | **Done (closed 2026-07-11; M3.1 + M3.2 + M3 closeout Delivered 2026-07-11)** | A user can register, rename, and unregister a project; the platform owns a `Project` entity. M3 is closed; the M3 retrospective is at `retrospective-m3-project-registration.md` (13 sections per the Milestone Closeout Standard); the `m3` annotated milestone tag is at the M3 closeout commit on `main`. M4-A is the next milestone (Status: Awaiting Approval; the M4-A plan is at `.ai/plans/M4-A-infrastructure-process-execution.md`). |
 | M4  | Process Execution, Capability Detection, Provider Registry | Planned | The platform spawns processes safely, detects capabilities, registers providers. Divided into four slices: |
 |     | &nbsp;&nbsp;M4-A: Infrastructure / Process Execution   | **Active (M4-A.1 + M4-A.2 Delivered 2026-07-11; the M4-A plan is at `.ai/plans/M4-A-infrastructure-process-execution.md`; Status: Approved 2026-07-11 via the 'Next' invocation per .ai/commands.md § 4)** | `AiEng.Platform.Infrastructure` lands (M4-A.1 Delivered 2026-07-11: the new csproj + the four contracts in `Application/Infrastructure/` + the four implementations in `Infrastructure/` + the `AddInfrastructure` composition root + the on-disk `IProjectStore` registration; the M3 in-memory `IProjectStore` is moved to `tests/` as a fixture; 45 new unit tests + 2 new architecture tests registered-but-disabled per ADR-016). The Open action on `AppProjectCard` is **enabled** (M4-A.2 Delivered 2026-07-11: the card `@inject`s `IProcessRunner` + `IPlatformInfo` + `ILogger<AppProjectCard>` directly; the click handler calls `IProcessRunner.RunToCompletionAsync("explorer.exe", new[] { project.Path }, ct)`; the button is gated on `IPlatformInfo.IsWindows`; exceptions are swallowed + surfaced as a transient inline error; 5 new bUnit tests + 1 new architecture test; cumulative test count 323 passed, 0 failed, 9 skipped). The M4-A.3 task is the next slice (if defined) or the M4-B plan promotion. |
-|     | &nbsp;&nbsp;M4-B: Capability Detection                | Planned    | `IHostCapabilitiesService` detects `git`, `ollama`, `powershell.exe`, `wsl.exe`, `wt.exe`, `bash.exe`. |
+|     | &nbsp;&nbsp;M4-B: Capability Detection                | **Active (M4-B plan in Awaiting Approval 2026-07-13; the M4-B plan is at `.ai/plans/M4-B-capability-detection.md`; Status: Awaiting Approval via the M4-A.2 closeout's 'next concrete step')** | The M4-B plan is drafted; the plan covers `IHostCapabilitiesService` + `HostCapabilities` + `HostCapability` records; `SystemHostCapabilitiesService` implementation probing six host tools (`git`, `ollama`, `powershell.exe`, `wsl.exe`, `wt.exe`, `bash.exe`) via `IProcessRunner.RunToCompletionAsync(tool, new[] { "--version" }, ct)` and reading six provider credentials via `ICredentialVault.GetAsync("provider:<key>:token", ct)`; `AppCapabilityList` + `AppKeyValueList` data-owning four-state design-system components; `/diagnostics` page registered via `[RouteMetadata]` (Href `/diagnostics`, Order 4); startup capability-report log; `Capabilities_Resolved_Through_Service` architecture test (scoped to `App/Components/Diagnostics/` to avoid the M4-A.2 Open Action false positive); `docs/capabilities.md` documentation. The M4-B plan promotion is a planning-surface change; the M4-B implementation begins in a future session. |
 |     | &nbsp;&nbsp;M4-C: Provider Registry Foundation        | Planned    | `IProviderRegistry`, family-scoped registries, fake providers for every family, composition root `App/Composition/`. |
 |     | &nbsp;&nbsp;M4-D: First Concrete Process Providers    | Planned    | `GitProvider`, `OllamaLaunchProvider` smoke, `ProviderContractTests`; composition-root architecture tests activate. |
 | M5  | Native Git Worktrees                                   | Planned    | A worktree provider built on `git worktree` consumes `IGitProvider`.       |
@@ -839,13 +839,75 @@ not yet consumed by a registry.
 - `IHostCapabilitiesService` and
   `HostCapabilities` are added; the unit tests
   cover the happy path, the missing binary, the
-  timeout, and the non-zero exit.
-- The diagnostics page renders
-  `AppCapabilityList` and `AppKeyValueList` for
-  the host's capabilities.
+  timeout, the non-zero exit, the non-Windows
+  host (Windows-only tools are gated on
+  `IPlatformInfo.IsWindows`), the missing
+  provider credential (`ICredentialVault.GetAsync`
+  returns `null`), the cancellation, and the
+  `DetectedAt` timestamp.
+- `SystemHostCapabilitiesService` composes
+  `IProcessRunner` + `ICredentialVault` +
+  `IPlatformInfo`; no custom process / credential
+  code lives in the M4-B service. The probe
+  timeout is 5 seconds per tool; a timeout
+  returns `Available: false` with a `Failed`
+  `CapabilityProbe`.
+- The `AppCapabilityList` and `AppKeyValueList`
+  design-system components land (data-owning
+  four-state pattern per `docs/design-system.md`
+  § 5.4; `Loading` / `Empty` / `Error` /
+  `Populated` slots). The components compose
+  the M1.2 primitives (`AppPanel`, `AppCard`,
+  `AppStack`, `AppBadge`, `AppStatusDot`); no
+  new design-system primitive is added.
+- The `/diagnostics` page is registered in the
+  M2.2 navigation registry via
+  `[RouteMetadata("/diagnostics", "Diagnostics",
+  Order = 4, ShowInSidebar = true, Icon = "◆",
+  Description = "Detected host capabilities
+  (tools, versions, provider credentials).")]`.
+  The page injects `IHostCapabilitiesService`;
+  on `OnInitializedAsync` it calls `DetectAsync`
+  and stores the result in a `HostCapabilities?`
+  field. A "Refresh" `AppButton` re-runs
+  `DetectAsync`.
 - The host's capability report is logged at
-  startup (Information level) and is not yet
-  consumed by a registry.
+  startup (Information level) through
+  `ILogger<Program>`. The log is the early
+  signal that the host's toolset is inadequate.
+  The M4-C provider registry consumes the
+  report through DI, not through the log.
+- The `Capabilities_Resolved_Through_Service`
+  architecture test is `Active` (not
+  registered-but-disabled) and asserts no
+  `RunToCompletionAsync` token in
+  `App/Components/Diagnostics/`, no
+  `ICredentialVault` direct call in
+  `App/Components/Diagnostics/`, and
+  `Diagnostics.razor` contains
+  `@inject IHostCapabilitiesService`. The test
+  is scoped to the diagnostics folder to avoid
+  the M4-A.2 Open Action false positive.
+- `docs/capabilities.md` is created (10
+  sections mirroring `docs/infrastructure.md`
+  § 1-10). `docs/design-system.md` § 4.5
+  `AppCapabilityList` + `AppKeyValueList` rows
+  change from `Planned (M4)` to
+  `Implemented (M4-B)`. `docs/infrastructure.md`
+  § 11 M4-B Consumers is added.
+- C-015 (`IHostCapabilitiesService`) capability
+  record's evidence block is populated:
+  `evidence.source_paths` lists the M4-B
+  contract + implementation + composition-root
+  files; `evidence.tests` lists the M4-B unit
+  + bUnit + architecture tests; `evidence.plans`
+  references `.ai/plans/M4-B-capability-detection.md`.
+- M4-B does not create any `Providers.<X>`
+  project. M4-B does not begin the M4-C plan
+  promotion, the M4-D plan promotion, or any
+  provider creation. The M4-B closeout is
+  the next concrete step after the M4-B.3
+  implementation commit.
 
 **Tests added:**
 

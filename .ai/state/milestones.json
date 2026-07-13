@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
-  "updated_at": "2026-07-11T00:00:00Z",
-  "updated_by_session": "m4-a-1-infrastructure-project-skeleton",
+  "updated_at": "2026-07-13T00:00:00Z",
+  "updated_by_session": "m4-b-plan-promotion",
   "milestones": [
     {
       "id": "M0",
@@ -381,8 +381,8 @@
     {
       "id": "M4-B",
       "name": "Capability Detection",
-      "status": "Planned",
-      "primary_outcome": "The host detects git, ollama, powershell.exe, wsl.exe, wt.exe, bash.exe through IProcessRunner and produces a typed HostCapabilities report.",
+      "status": "Active",
+      "primary_outcome": "The host detects git, ollama, powershell.exe, wsl.exe, wt.exe, bash.exe through IProcessRunner and produces a typed HostCapabilities report; the report is surfaced through the /diagnostics page (AppCapabilityList + AppKeyValueList) and is logged at startup (Information level).",
       "delivers_capabilities": [
         "C-015"
       ],
@@ -401,7 +401,38 @@
         "M7",
         "M8"
       ],
-      "evidence": {}
+      "evidence": {
+        "plan_path": ".ai/plans/M4-B-capability-detection.md",
+        "plan_status": "Awaiting Approval",
+        "plan_promotion_at": "2026-07-13",
+        "plan_promotion_by_session": "m4-b-plan-promotion",
+        "plan_promotion_commit": "chore(m4-b.plan): draft M4-B capability detection plan in Awaiting Approval",
+        "first_session_at": null,
+        "slices": [
+          {
+            "id": "M4-B.1",
+            "title": "Contract + implementation + composition root + unit tests + architecture test (Capabilities_Resolved_Through_Service; IHostCapabilitiesService + HostCapabilities + HostCapability + SystemHostCapabilitiesService + AddHostCapabilities + 10+ unit tests)",
+            "status": "Planned"
+          },
+          {
+            "id": "M4-B.2",
+            "title": "Design-system components + bUnit tests (AppCapabilityList + AppKeyValueList data-owning four-state components + 10+ bUnit tests; docs/design-system.md section 4.5 rows updated)",
+            "status": "Planned"
+          },
+          {
+            "id": "M4-B.3",
+            "title": "/diagnostics page + composition-root wiring + startup log + documentation (Diagnostics.razor + Program.cs startup log + docs/capabilities.md + 3+ bUnit tests for the page)",
+            "status": "Planned"
+          }
+        ],
+        "implementation_reports": [],
+        "handoffs": [
+          ".ai/handoffs/2026-07-13-m4-b-plan-promotion.md (mirrored to .ai/handoffs/latest.md)"
+        ],
+        "commits": [
+          "chore(m4-b.plan): draft M4-B capability detection plan in Awaiting Approval (M4-B plan promotion)"
+        ]
+      }
     },
     {
       "id": "M4-C",
