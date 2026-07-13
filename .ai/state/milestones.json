@@ -407,12 +407,36 @@
         "plan_promotion_at": "2026-07-13",
         "plan_promotion_by_session": "m4-b-plan-promotion",
         "plan_promotion_commit": "chore(m4-b.plan): draft M4-B capability detection plan in Awaiting Approval",
-        "first_session_at": null,
+        "first_session_at": "2026-07-13",
         "slices": [
           {
             "id": "M4-B.1",
-            "title": "Contract + implementation + composition root + unit tests + architecture test (Capabilities_Resolved_Through_Service; IHostCapabilitiesService + HostCapabilities + HostCapability + SystemHostCapabilitiesService + AddHostCapabilities + 10+ unit tests)",
-            "status": "Planned"
+            "title": "Contract + implementation + composition root + unit tests (IHostCapabilitiesService + HostCapabilities + HostCapability + SystemHostCapabilitiesService + AddHostCapabilities + 20 unit tests + 3 in-line test doubles; the architecture test is deferred to M4-B.3)",
+            "status": "Delivered",
+            "task_id": "T-024",
+            "delivered_at": "2026-07-13",
+            "delivered_by_session": "m4-b-1-host-capabilities-contract-and-service",
+            "branch": "feature/T-024-m4-b-1-host-capabilities-contract-and-service",
+            "commit": "feat(m4-b.1): add IHostCapabilitiesService contract and SystemHostCapabilitiesService implementation",
+            "source_paths_added": [
+              "src/AiEng.Platform.Application/Capabilities/IHostCapabilitiesService.cs",
+              "src/AiEng.Platform.Application/Capabilities/HostCapabilities.cs",
+              "src/AiEng.Platform.Infrastructure/Capabilities/CapabilityProbe.cs",
+              "src/AiEng.Platform.Infrastructure/Capabilities/SystemHostCapabilitiesService.cs",
+              "src/AiEng.Platform.App/Composition/Capabilities/CapabilitiesServiceCollectionExtensions.cs",
+              "tests/AiEng.Platform.UnitTests/Capabilities/SystemHostCapabilitiesServiceTests.cs"
+            ],
+            "source_paths_modified": [
+              "src/AiEng.Platform.App/Composition/ServiceCollectionExtensions.cs (one using + one AddHostCapabilities() call)"
+            ],
+            "tests_added": 20,
+            "tests_total_after": 343,
+            "tests_failed_after": 0,
+            "tests_skipped_after": 9,
+            "deviations": [
+              "The Capabilities_Resolved_Through_Service architecture test is deferred to M4-B.3 (the test asserts Diagnostics.razor contains @inject IHostCapabilitiesService; Diagnostics.razor does not exist in M4-B.1).",
+              "The DetectedAt test was split into two tests: (a) DetectedAt equals the TimeProvider value (deterministic with FixedTimeProvider); (b) DetectedAt falls within the call window when the default clock is used (non-deterministic but bounded)."
+            ]
           },
           {
             "id": "M4-B.2",
@@ -421,16 +445,20 @@
           },
           {
             "id": "M4-B.3",
-            "title": "/diagnostics page + composition-root wiring + startup log + documentation (Diagnostics.razor + Program.cs startup log + docs/capabilities.md + 3+ bUnit tests for the page)",
+            "title": "/diagnostics page + composition-root wiring + startup log + documentation + Capabilities_Resolved_Through_Service architecture test (Diagnostics.razor + Program.cs startup log + docs/capabilities.md + 3+ bUnit tests for the page + the deferred architecture test from M4-B.1)",
             "status": "Planned"
           }
         ],
-        "implementation_reports": [],
+        "implementation_reports": [
+          "implementation-report-m4-b-1-host-capabilities-contract-and-service.md"
+        ],
         "handoffs": [
-          ".ai/handoffs/2026-07-13-m4-b-plan-promotion.md (mirrored to .ai/handoffs/latest.md)"
+          ".ai/handoffs/2026-07-13-m4-b-plan-promotion.md (mirrored to .ai/handoffs/latest.md)",
+          ".ai/handoffs/2026-07-13-m4-b-1-host-capabilities-contract-and-service.md (mirrored to .ai/handoffs/latest.md)"
         ],
         "commits": [
-          "chore(m4-b.plan): draft M4-B capability detection plan in Awaiting Approval (M4-B plan promotion)"
+          "chore(m4-b.plan): draft M4-B capability detection plan in Awaiting Approval (M4-B plan promotion)",
+          "feat(m4-b.1): add IHostCapabilitiesService contract and SystemHostCapabilitiesService implementation (M4-B.1 first session)"
         ]
       }
     },

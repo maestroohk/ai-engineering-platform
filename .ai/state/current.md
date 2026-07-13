@@ -347,30 +347,8 @@
 
 ## Current Slice
 
-- **Active slice:** **M4-B plan promotion
-  (Capability Detection plan drafted in
-  Awaiting Approval)** (delivered 2026-07-13).
-  The branch
-  `feature/m4-b-capability-detection-plan-promotion`
-  carried the M4-B plan promotion work; the
-  M4-B plan promotion commit
-  `chore(m4-b.plan): draft M4-B capability
-  detection plan in Awaiting Approval` is on
-  this branch; the branch is fast-forwarded
-  into `main` per the branching strategy rule
-  6; the branch is deleted per rule 7. The
-  M4-B plan is in Awaiting Approval at
-  `.ai/plans/M4-B-capability-detection.md`
-  (12 sections mirroring the M4-A plan's
-  12-section structure). The M4-B
-  implementation is the next concrete step on
-  the user's `Approve` or `Next` invocation
-  (M4-B.1: contract + implementation +
-  composition root + unit tests + architecture
-  test; M4-B.2: design-system components +
-  bUnit tests; M4-B.3: `/diagnostics` page +
-  composition-root wiring + startup log +
-  documentation).
+- **Active slice:** **M4-B.1 — IHostCapabilitiesService contract + implementation + composition root + unit tests** (delivered 2026-07-13). The branch `feature/T-024-m4-b-1-host-capabilities-contract-and-service` carried the M4-B.1 work; the M4-B.1 closeout commit `feat(m4-b.1): add IHostCapabilitiesService contract and SystemHostCapabilitiesService implementation` is on this branch; the branch is fast-forwarded into `main` per the branching strategy rule 6; the branch is deleted per rule 7. M4-B.1 ships the IHostCapabilitiesService contract + the HostCapabilities + HostCapability records in `src/AiEng.Platform.Application/Capabilities/`; the SystemHostCapabilitiesService implementation in `src/AiEng.Platform.Infrastructure/Capabilities/` (6 host tool probes + 6 provider credential probes; 5-second per-tool linked CancellationTokenSource timeout; per-tool Regex version parsing; IPlatformInfo.IsWindows gating for Windows-only tools; outer-cancellation propagation via re-throw); the CapabilityProbe internal record types; the AddHostCapabilities composition root extension; the wire-up in AddPlatformServices; 20 unit tests in `tests/AiEng.Platform.UnitTests/Capabilities/SystemHostCapabilitiesServiceTests.cs`. Total: 343 passed, 0 failed, 9 skipped (per ADR-016 / M4-D). M4-B.1 does NOT begin M4-B.2 / M4-B.3 / M4-C / M4-D (per the brief: 'Do not begin the following task').
+- **Last completed slice:** **M4-B plan promotion (Capability Detection plan drafted in Awaiting Approval)** (delivered 2026-07-13). The branch `feature/m4-b-capability-detection-plan-promotion` carried the M4-B plan promotion work; the M4-B plan promotion commit `chore(m4-b.plan): draft M4-B capability detection plan in Awaiting Approval` is on this branch; the branch is fast-forwarded into `main` per the branching strategy rule 6; the branch is deleted per rule 7. The M4-B plan is in Awaiting Approval at `.ai/plans/M4-B-capability-detection.md` (12 sections mirroring the M4-A plan's 12-section structure).
 - **Last completed slice:** **M4-A.2 — Open
   action on AppProjectCard** (delivered
   2026-07-11). The branch
@@ -525,19 +503,76 @@
 
 ## Last Completed Task
 
-- The M4-B plan promotion session
+- The M4-B.1 first session
   (2026-07-13) is the most recent
-  completed task; the M4-A.2 implementation
-  session (2026-07-11) is the prior task; the
+  completed task; the M4-B plan
+  promotion session (2026-07-13) is
+  the prior task; the M4-A.2
+  implementation session (2026-07-11)
+  is the prior-prior task; the
   M4-A.1 implementation session
-  (2026-07-11) is the prior-prior task; the
-  M3 closeout implementation session
-  (2026-07-11) is the prior-prior-prior task;
-  the M3.2 implementation session
+  (2026-07-11) is the prior-prior-prior
+  task; the M3 closeout implementation
+  session (2026-07-11) is the
+  prior-prior-prior-prior task; the
+  M3.2 implementation session
   (2026-07-11) is the
-  prior-prior-prior-prior task; the M3.1
-  implementation session (2026-07-11) is the
-  prior-prior-prior-prior-prior task.
+  prior-prior-prior-prior-prior task;
+  the M3.1 implementation session
+  (2026-07-11) is the
+  prior-prior-prior-prior-prior-prior
+  task.
+  - Delivered the M4-B.1 first session
+    (T-024) per the M4-B.1 implementation
+    plan (the boundary slice: contract +
+    records + implementation + composition
+    root + unit tests; not the
+    components / page / startup log /
+    documentation / architecture test).
+  - Landed the `IHostCapabilitiesService`
+    contract in
+    `src/AiEng.Platform.Application/Capabilities/IHostCapabilitiesService.cs`.
+  - Landed the `HostCapabilities` +
+    `HostCapability` sealed records in
+    `src/AiEng.Platform.Application/Capabilities/HostCapabilities.cs`.
+  - Landed the internal `HostToolProbe` +
+    `ProviderCredentialProbe` record types
+    in
+    `src/AiEng.Platform.Infrastructure/Capabilities/CapabilityProbe.cs`.
+  - Landed the `SystemHostCapabilitiesService`
+    implementation in
+    `src/AiEng.Platform.Infrastructure/Capabilities/SystemHostCapabilitiesService.cs`
+    with 6 host tool probes + 6 provider
+    credential probes, 5-second linked
+    CancellationTokenSource timeout, per-tool
+    Regex version parsing,
+    IPlatformInfo.IsWindows gating for
+    Windows-only tools, and outer-cancellation
+    propagation via re-throw.
+  - Landed the `AddHostCapabilities`
+    composition root extension in
+    `src/AiEng.Platform.App/Composition/Capabilities/CapabilitiesServiceCollectionExtensions.cs`
+    (TryAddSingleton pattern).
+  - Wired `AddHostCapabilities` into
+    `AddPlatformServices` in
+    `src/AiEng.Platform.App/Composition/ServiceCollectionExtensions.cs`.
+  - Landed 20 unit tests + 3 in-line test
+    doubles in
+    `tests/AiEng.Platform.UnitTests/Capabilities/SystemHostCapabilitiesServiceTests.cs`.
+  - Validation: 343 passed, 0 failed,
+    9 skipped (per ADR-016 / M4-D);
+    0 warnings, 0 errors; format clean.
+  - Two documented deviations: (1) The
+    `Capabilities_Resolved_Through_Service`
+    architecture test is deferred to
+    M4-B.3 (the test asserts
+    `Diagnostics.razor` exists; the file
+    does not exist in M4-B.1). (2) The
+    `DetectedAt` test was split into two
+    tests: (a) DetectedAt equals the
+    TimeProvider value (deterministic);
+    (b) DetectedAt falls within the call
+    window when the default clock is used.
   - Delivered the M4-B plan promotion
     (T-023) per the M4-B plan promotion
     plan (the planning-surface change after

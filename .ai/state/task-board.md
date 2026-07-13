@@ -356,6 +356,19 @@ promotion, or any provider creation.)
 
 ## Done Recently
 
+### M4-B.1 — IHostCapabilitiesService contract + implementation + composition root + unit tests — 2026-07-13
+
+- **Task ID:** `T-024`
+- **Milestone:** M4-B — Capability Detection (Active 2026-07-13; the M4-B plan is at `.ai/plans/M4-B-capability-detection.md`).
+- **Title:** IHostCapabilitiesService contract + `SystemHostCapabilitiesService` implementation + `AddHostCapabilities` composition root + 20 unit tests — the boundary slice of M4-B (the first M4-B implementation slice).
+- **Why it matters:** M4-A.1 + M4-A.2 shipped the infrastructure seam (`IProcessRunner` + `ICredentialVault` + `IPlatformInfo`) and the first activation (Open action on `AppProjectCard`). M4-B.1 ships the `IHostCapabilitiesService` contract + the `HostCapabilities` + `HostCapability` records + the `SystemHostCapabilitiesService` implementation (composes the three M4-A contracts; probes six host tools — `git`, `ollama`, `powershell.exe`, `wsl.exe`, `wt.exe`, `bash.exe` — with `--version` via `IProcessRunner.RunToCompletionAsync`; reads six provider credentials via `ICredentialVault.GetAsync("provider:<key>:token", ct)`; 5-second per-tool `CancellationTokenSource` timeout linked with the outer token; `IPlatformInfo.IsWindows` gating for Windows-only tools; outer-cancellation propagation via re-throw) + the `AddHostCapabilities` composition root extension (`TryAddSingleton<IHostCapabilitiesService, SystemHostCapabilitiesService>`) + the wire-up in `AddPlatformServices` + 20 unit tests + 3 in-line test doubles (`FakeProcessRunner`, `FakeCredentialVault`, `FakePlatformInfo`).
+- **Branch:** `feature/T-024-m4-b-1-host-capabilities-contract-and-service` (created from `main` at the M4-B plan promotion commit `131b8bd`; fast-forwarded into `main`; deleted per the branching strategy rule 7).
+- **Commit:** `feat(m4-b.1): add IHostCapabilitiesService contract and SystemHostCapabilitiesService implementation` (push is staged for push, not authorised in this session).
+- **Test count:** 343 passed (was 323 pre-M4-B.1; +20 new), 0 failed, 9 skipped (per ADR-016 / M4-D).
+- **Validation:** 0 warnings, 0 errors; format clean; all new + modified files are CRLF.
+- **Two documented deviations:** (1) The `Capabilities_Resolved_Through_Service` architecture test is deferred to M4-B.3 (the test asserts `Diagnostics.razor` exists; the file does not exist in M4-B.1). (2) The `DetectedAt` test was split into two tests: deterministic TimeProvider assertion + non-deterministic call-window assertion.
+- **Session does NOT begin:** M4-B.2 (design-system components) / M4-B.3 (page + startup log + docs + architecture test) / M4-C / M4-D / provider creation. The next session is M4-B.2 on the user's `Approve` or `Next` invocation.
+
 ### M4-A.2 — Open action on AppProjectCard (IProcessRunner activation) — 2026-07-11
 
 - **Task ID:** `T-022`

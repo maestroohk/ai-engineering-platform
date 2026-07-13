@@ -1,4 +1,5 @@
 using System.Reflection;
+using AiEng.Platform.App.Composition.Capabilities;
 using AiEng.Platform.App.Composition.Infrastructure;
 using AiEng.Platform.App.Composition.Projects;
 using AiEng.Platform.Application.ProjectIntelligence;
@@ -24,6 +25,7 @@ public static class ServiceCollectionExtensions
         services.AddProjectIntelligence();
         services.AddProjects();
         services.AddInfrastructure();
+        services.AddHostCapabilities();
         return services;
     }
 }

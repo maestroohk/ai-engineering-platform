@@ -727,6 +727,89 @@
       "notes": "M4-B plan promotion is a planning-surface change (no C# code, no tests, no M4-B implementation begins). The session does NOT begin the M4-B implementation, the M4-C plan promotion, the M4-D plan promotion, or any provider creation (per the brief: 'Do not begin the following task'). The next session is the M4-B implementation (when the user invokes Approve or Next)."
     },
     {
+      "id": "T-024",
+      "title": "M4-B.1 first session — IHostCapabilitiesService contract + implementation + composition root + unit tests",
+      "status": "Done",
+      "milestone": "M4-B",
+      "slice": "M4-B.1",
+      "created_at": "2026-07-13T00:00:00Z",
+      "promoted_to_ready_at": "2026-07-13",
+      "promoted_to_ready_by_session": "m4-b-1-host-capabilities-contract-and-service",
+      "started_at": "2026-07-13",
+      "started_by_session": "m4-b-1-host-capabilities-contract-and-service",
+      "completed_at": "2026-07-13",
+      "completed_by_session": "m4-b-1-host-capabilities-contract-and-service",
+      "plan": ".claude/plans/generic-seeking-oasis.md (M4-B.1 implementation plan)",
+      "branch": "feature/T-024-m4-b-1-host-capabilities-contract-and-service (created from main at the M4-B plan promotion commit 131b8bd; the M4-B.1 closeout commit feat(m4-b.1): add IHostCapabilitiesService contract and SystemHostCapabilitiesService implementation is on this branch; the branch is fast-forwarded into main per the branching strategy rule 6; the branch is deleted per rule 7)",
+      "depends_on_milestone": "M4-B (Active; M4-B plan Delivered 2026-07-13)",
+      "depends_on_task": "T-023 (M4-B plan promotion, Done 2026-07-13)",
+      "depends_on_capabilities": [
+        "C-009 (IProcessRunner)",
+        "C-010 (ICredentialVault)",
+        "C-011 (IPlatformInfo)"
+      ],
+      "links_to_capability": "C-015 (IHostCapabilitiesService; the contract seam every later capability-detection consumer composes)",
+      "evidence": {
+        "implementation_report": "implementation-report-m4-b-1-host-capabilities-contract-and-service.md",
+        "session_handoff": ".ai/handoffs/2026-07-13-m4-b-1-host-capabilities-contract-and-service.md (mirrored to .ai/handoffs/latest.md)",
+        "branch": "feature/T-024-m4-b-1-host-capabilities-contract-and-service",
+        "commit": "feat(m4-b.1): add IHostCapabilitiesService contract and SystemHostCapabilitiesService implementation",
+        "source_paths_added": [
+          "src/AiEng.Platform.Application/Capabilities/IHostCapabilitiesService.cs",
+          "src/AiEng.Platform.Application/Capabilities/HostCapabilities.cs",
+          "src/AiEng.Platform.Infrastructure/Capabilities/CapabilityProbe.cs",
+          "src/AiEng.Platform.Infrastructure/Capabilities/SystemHostCapabilitiesService.cs",
+          "src/AiEng.Platform.App/Composition/Capabilities/CapabilitiesServiceCollectionExtensions.cs",
+          "tests/AiEng.Platform.UnitTests/Capabilities/SystemHostCapabilitiesServiceTests.cs",
+          ".ai/handoffs/2026-07-13-m4-b-1-host-capabilities-contract-and-service.md",
+          ".ai/handoffs/latest.md",
+          "implementation-report-m4-b-1-host-capabilities-contract-and-service.md"
+        ],
+        "source_paths_modified": [
+          "src/AiEng.Platform.App/Composition/ServiceCollectionExtensions.cs (one using + one AddHostCapabilities() call)",
+          ".ai/state/session.json (M4-B.1 envelope)",
+          ".ai/state/tasks.json (this file; T-024 record added; T-023 note updated to next recommended task T-025)",
+          ".ai/state/current.md (active slice M4-B to M4-B.1; last completed task T-024; next recommended task T-025)",
+          ".ai/state/task-board.md (M4-B.1 in Done Recently; T-025 in Ready)",
+          ".ai/state/milestones.json (M4-B.1 slice block added; M4-B.1 evidence block initialised)",
+          ".ai/state/capabilities.json (C-015 evidence.source_paths + evidence.tests populated; C-015 next_task set to T-025; C-015 last_updated set to 2026-07-13)"
+        ],
+        "tests_added": 20,
+        "tests_total_after_m4_b_1": 343,
+        "tests_failed_after_m4_b_1": 0,
+        "tests_skipped_after_m4_b_1": 9,
+        "validation": {
+          "dotnet_format": "clean (verify-no-changes passed)",
+          "dotnet_build": "0 warnings, 0 errors",
+          "dotnet_test": "343 passed, 0 failed, 9 skipped",
+          "crlf": "all new + modified files are CRLF (unix2dos applied)"
+        }
+      },
+      "notes": "M4-B.1 first session delivered 2026-07-13. Boundary slice: the IHostCapabilitiesService contract + the HostCapabilities + HostCapability sealed records + the SystemHostCapabilitiesService implementation (6 host tool probes + 6 provider credential probes; 5-second per-tool linked CancellationTokenSource timeout; per-tool Regex version parsing; IPlatformInfo.IsWindows gating for Windows-only tools; outer-cancellation propagation via re-throw; exception swallowing with LogWarning for Win32Exception + InvalidOperationException + IOException) + the AddHostCapabilities composition root (TryAddSingleton<IHostCapabilitiesService, SystemHostCapabilitiesService>) + the wire-up in AddPlatformServices + 20 unit tests (18 original + 2 from the DetectedAt TimeProvider split). Pre-M4-B.1 baseline was 323 passed; M4-B.1 raises the bar to 343 passed, 0 failed, 9 skipped. Branch: feature/T-024-m4-b-1-host-capabilities-contract-and-service. Commit: feat(m4-b.1): add IHostCapabilitiesService contract and SystemHostCapabilitiesService implementation. Push is staged for push (not authorised in this session). The session does NOT begin M4-B.2 / M4-B.3 / M4-C / M4-D / provider creation (per the brief: 'Do not begin the following task'). Two documented deviations: (1) The Capabilities_Resolved_Through_Service architecture test is deferred to M4-B.3 (the test asserts Diagnostics.razor contains @inject IHostCapabilitiesService; Diagnostics.razor does not exist in M4-B.1 — creating a fake file to make the test pass would be scope creep). (2) The DetectedAt test was split into two tests: (a) DetectedAt equals the TimeProvider's value (deterministic with FixedTimeProvider); (b) DetectedAt falls within the call window when the default clock is used (non-deterministic but bounded)."
+    },
+    {
+      "id": "T-025",
+      "title": "M4-B.2 first session — AppCapabilityList + AppKeyValueList design-system components",
+      "status": "Ready",
+      "milestone": "M4-B",
+      "slice": "M4-B.2",
+      "created_at": "2026-07-13T00:00:00Z",
+      "promoted_to_ready_at": "2026-07-13",
+      "promoted_to_ready_by_session": "m4-b-1-host-capabilities-contract-and-service",
+      "depends_on_milestone": "M4-B (Active)",
+      "depends_on_task": "T-024 (M4-B.1, Done 2026-07-13)",
+      "depends_on_capabilities": [
+        "C-015 (IHostCapabilitiesService)"
+      ],
+      "links_to_capability": "C-016 (AppCapabilityList data-owning design-system component) + C-017 (AppKeyValueList data-owning design-system component)",
+      "plan": ".ai/plans/M4-B.2-capability-components.md (to be drafted in a later session)",
+      "evidence": {
+        "implementation_report": null,
+        "session_handoff": null
+      },
+      "notes": "M4-B.2 is the second M4-B implementation slice. The slice ships the AppCapabilityList + AppKeyValueList data-owning design-system components (the M4-B plan § 2 items 4 + 5). The components consume IHostCapabilitiesService (M4-B.1) and render the capabilities in the design-system voice. The slice does NOT ship the /diagnostics page (M4-B.3), the startup capability-report log (M4-B.3), the documentation (M4-B.3), or the Capabilities_Resolved_Through_Service architecture test (M4-B.3). M4-B.2 is staged for the user's Approve / Next invocation."
+    },
+    {
       "id": "T-009",
       "title": "M5 — Native Git Worktrees (summary)",
       "status": "Deferred",

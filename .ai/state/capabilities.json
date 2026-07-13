@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1.0",
   "updated_at": "2026-07-13T00:00:00Z",
-  "updated_by_session": "m4-b-plan-promotion",
+  "updated_by_session": "m4-b-1-host-capabilities-contract-and-service",
   "completion_status_mapping": {
     "NotStarted": "Not in capabilities.json. Reserved for capabilities the product will need but which have not yet been admitted to the graph.",
     "Planned": "status: Accepted; delivered_by_milestone status: Planned; no plan yet, or plan stub is Draft. Sequenced for a milestone, plan not promoted to Ready / Awaiting Approval.",
@@ -478,7 +478,7 @@
       "id": "C-015",
       "title": "IHostCapabilitiesService",
       "status": "Accepted",
-      "completion_status": "Planned",
+      "completion_status": "Partial (M4-B.1 delivered; M4-B.2 + M4-B.3 pending)",
       "layer": 0,
       "category": "Infrastructure",
       "description": "The host's capability detection. Detects git, ollama, powershell.exe, wsl.exe, wt.exe, bash.exe. Produces a typed HostCapabilities report at host startup.",
@@ -487,23 +487,52 @@
       "consumed_by": ["C-010"],
       "delivered_by_milestone": "M4-B",
       "consumed_by_milestones": ["M4-C", "M4-D", "M5", "M6", "M7", "M8"],
-      "delivered_by_tasks": [],
-      "next_task": "T-023",
+      "delivered_by_tasks": ["T-024 (M4-B.1 first session, Done 2026-07-13)"],
+      "next_task": "T-025 (M4-B.2 first session — AppCapabilityList + AppKeyValueList design-system components; Ready)",
       "blocked_by": [],
       "evidence": {
         "plans": [".ai/plans/M4-B-capability-detection.md"],
-        "reports": [],
-        "commits": [],
-        "tests": [],
-        "source_paths": []
+        "reports": ["implementation-report-m4-b-1-host-capabilities-contract-and-service.md"],
+        "commits": ["feat(m4-b.1): add IHostCapabilitiesService contract and SystemHostCapabilitiesService implementation"],
+        "tests": [
+          "Constructor_throws_ArgumentNullException_when_processRunner_is_null",
+          "Constructor_throws_ArgumentNullException_when_credentialVault_is_null",
+          "Constructor_throws_ArgumentNullException_when_platformInfo_is_null",
+          "Constructor_throws_ArgumentNullException_when_logger_is_null",
+          "DetectAsync_returns_all_six_host_tools_with_Available_true_when_each_returns_exit_zero",
+          "DetectAsync_returns_Available_false_for_host_tool_with_nonzero_exit_code",
+          "DetectAsync_returns_Available_false_for_host_tool_that_throws_exception",
+          "DetectAsync_returns_Available_false_for_host_tool_that_times_out",
+          "DetectAsync_on_non_Windows_host_returns_Available_false_for_windows_only_tools",
+          "DetectAsync_on_non_Windows_host_still_probes_cross_platform_tools",
+          "DetectAsync_returns_CredentialAvailable_true_when_credential_vault_returns_a_value",
+          "DetectAsync_returns_CredentialAvailable_false_when_credential_vault_returns_null",
+          "DetectAsync_parses_git_version_from_standard_output",
+          "DetectAsync_returns_Version_null_when_version_pattern_does_not_match",
+          "DetectAsync_sets_DetectedAt_to_the_TimeProvider_value",
+          "DetectAsync_sets_DetectedAt_to_a_timestamp_within_the_call_window_when_using_default_clock",
+          "DetectAsync_returns_capabilities_in_deterministic_order",
+          "DetectAsync_throws_OperationCanceledException_when_cancellation_token_is_cancelled_before_call",
+          "DetectAsync_propagates_cancellation_when_cancellation_token_is_cancelled_during_call",
+          "DetectAsync_swallows_timeout_without_propagating_when_cancellation_token_is_not_cancelled"
+        ],
+        "source_paths": [
+          "src/AiEng.Platform.Application/Capabilities/IHostCapabilitiesService.cs",
+          "src/AiEng.Platform.Application/Capabilities/HostCapabilities.cs",
+          "src/AiEng.Platform.Infrastructure/Capabilities/CapabilityProbe.cs",
+          "src/AiEng.Platform.Infrastructure/Capabilities/SystemHostCapabilitiesService.cs",
+          "src/AiEng.Platform.App/Composition/Capabilities/CapabilitiesServiceCollectionExtensions.cs"
+        ]
       },
       "acceptance_criteria": [
         "IHostCapabilitiesService detects git, ollama, powershell.exe, wsl.exe, wt.exe, bash.exe at host startup.",
         "Capabilities_Resolved_Through_Service architecture test is active and green."
       ],
-      "completed_criteria": [],
+      "completed_criteria": [
+        "M4-B.1 (T-024): IHostCapabilitiesService contract + SystemHostCapabilitiesService implementation + AddHostCapabilities composition root + 20 unit tests are delivered. 343 passed, 0 failed, 9 skipped (per ADR-016 / M4-D). Pre-M4-B.1 baseline was 323 passed; +20 new M4-B.1 unit tests."
+      ],
       "adr": null,
-      "architecture_tests": ["Capabilities_Resolved_Through_Service"],
+      "architecture_tests": ["Capabilities_Resolved_Through_Service (deferred to M4-B.3 per the M4-B.1 plan section 14.1 Deviations)"],
       "last_updated": "2026-07-13"
     },
     {
