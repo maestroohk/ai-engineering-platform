@@ -1,5 +1,5 @@
 {
-  "_comment": "Annotated example. Copy to .ai/model-routing.json and replace CONFIGURE_ME for standard and economy with the cloud model names you want. The router does not consume Ollama quota during validation; -DryRun prints the launch command without executing it.",
+  "_comment": "Annotated example. Copy to .ai/model-routing.json and edit as needed. The router does not consume Ollama quota during validation; -DryRun prints the launch command without executing it.",
   "schema_version": "1.0.0",
   "provider": "ollama-cloud",
   "integration": "claude",
@@ -15,14 +15,19 @@
         "security-sensitive work",
         "difficult debugging"
       ],
-      "phase_permissions": ["plan", "review"],
+      "phase_permissions": [
+        "plan",
+        "review"
+      ],
       "max_retries": 1,
       "timeout_seconds": 1200,
-      "non_interactive_flags": ["--yes"]
+      "non_interactive_flags": [
+        "--yes"
+      ]
     },
     "standard": {
-      "_comment": "Standard tier. Used by Implement and Validate. The user picks the cloud model once during -Configure.",
-      "model": "CONFIGURE_ME",
+      "_comment": "Standard tier. Used by Implement and Validate. The example ships with a recommended default; override with the model name you want.",
+      "model": "qwen3-coder-next:cloud",
       "enabled": true,
       "purpose": [
         "implementation from approved plan",
@@ -30,14 +35,21 @@
         "normal refactoring",
         "routine bug fixes"
       ],
-      "phase_permissions": ["implement", "validate", "reconcile", "closeout"],
+      "phase_permissions": [
+        "implement",
+        "validate",
+        "reconcile",
+        "closeout"
+      ],
       "max_retries": 1,
       "timeout_seconds": 900,
-      "non_interactive_flags": ["--yes"]
+      "non_interactive_flags": [
+        "--yes"
+      ]
     },
     "economy": {
-      "_comment": "Economy tier. Used by Document and the closeout-state projection. The user picks the cloud model once during -Configure.",
-      "model": "CONFIGURE_ME",
+      "_comment": "Economy tier. Used by Document and the closeout-state projection. The example ships with a recommended default; override with the model name you want.",
+      "model": "qwen3.5:cloud",
       "enabled": true,
       "purpose": [
         "reports",
@@ -46,10 +58,16 @@
         "JSON receipts",
         "simple documentation"
       ],
-      "phase_permissions": ["document", "reconcile", "closeout"],
+      "phase_permissions": [
+        "document",
+        "reconcile",
+        "closeout"
+      ],
       "max_retries": 1,
       "timeout_seconds": 600,
-      "non_interactive_flags": ["--yes"]
+      "non_interactive_flags": [
+        "--yes"
+      ]
     },
     "review": {
       "_comment": "Review tier. Used by the Review phase when classification requires a deep review.",
@@ -59,10 +77,14 @@
         "architecture review",
         "high-risk diff review"
       ],
-      "phase_permissions": ["review"],
+      "phase_permissions": [
+        "review"
+      ],
       "max_retries": 1,
       "timeout_seconds": 900,
-      "non_interactive_flags": ["--yes"]
+      "non_interactive_flags": [
+        "--yes"
+      ]
     },
     "fallback": {
       "_comment": "Fallback profile. Selected when the active profile fails with usage exhaustion, HTTP 429, or repeated non-zero exit. Default points to the high tier until the user re-tunes.",
@@ -76,7 +98,9 @@
       ],
       "max_retries": 0,
       "timeout_seconds": 600,
-      "non_interactive_flags": ["--yes"]
+      "non_interactive_flags": [
+        "--yes"
+      ]
     }
   },
   "budgets": {

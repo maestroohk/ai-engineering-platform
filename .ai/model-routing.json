@@ -1,11 +1,9 @@
 {
-  "_comment": "Annotated example. Copy to .ai/model-routing.json and replace CONFIGURE_ME for standard and economy with the cloud model names you want. The router does not consume Ollama quota during validation; -DryRun prints the launch command without executing it.",
   "schema_version": "1.0.0",
   "provider": "ollama-cloud",
   "integration": "claude",
   "profiles": {
     "high": {
-      "_comment": "High tier. Used by the Plan phase and the Review phase when classification requires it. Strong reasoning; higher per-call cost.",
       "model": "minimax-m3:cloud",
       "enabled": true,
       "purpose": [
@@ -26,8 +24,7 @@
       ]
     },
     "standard": {
-      "_comment": "Standard tier. Used by Implement and Validate. The user picks the cloud model once during -Configure.",
-      "model": "CONFIGURE_ME",
+      "model": "qwen3-coder-next:cloud",
       "enabled": true,
       "purpose": [
         "implementation from approved plan",
@@ -48,8 +45,7 @@
       ]
     },
     "economy": {
-      "_comment": "Economy tier. Used by Document and the closeout-state projection. The user picks the cloud model once during -Configure.",
-      "model": "CONFIGURE_ME",
+      "model": "qwen3.5:cloud",
       "enabled": true,
       "purpose": [
         "reports",
@@ -70,7 +66,6 @@
       ]
     },
     "review": {
-      "_comment": "Review tier. Used by the Review phase when classification requires a deep review.",
       "model": "minimax-m3:cloud",
       "enabled": true,
       "purpose": [
@@ -87,7 +82,6 @@
       ]
     },
     "fallback": {
-      "_comment": "Fallback profile. Selected when the active profile fails with usage exhaustion, HTTP 429, or repeated non-zero exit. Default points to the high tier until the user re-tunes.",
       "model": "minimax-m3:cloud",
       "enabled": true,
       "purpose": [
