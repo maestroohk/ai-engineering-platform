@@ -65,7 +65,7 @@
 [CmdletBinding()]
 param(
     [Parameter(Mandatory = $true)]
-    [ValidateSet('Next', 'Resume', 'Finish', 'Status', 'Plan', 'Configure', 'DryRun', 'RetryCurrentPhase')]
+    [ValidateSet('Next', 'Resume', 'Finish', 'Status', 'Plan', 'Configure', 'DryRun', 'RetryCurrentPhase', 'Preflight')]
     [string]$Command,
 
     [string]$TaskId,
@@ -544,7 +544,7 @@ function Start-ChildSession {
     if (-not (Test-ArgumentSafe -Value $flatPrompt)) {
         throw "Prompt contains NUL after flattening"
     }
-    $argList = @('launch', 'claude', '--model', $Model, '-y', '--', '--', '-p', $flatPrompt)
+    $argList = @('launch', 'claude', '--model', $Model, '-y', '--', '-p', $flatPrompt)
     # Build a single Arguments string via Format-CommandLine. This works on
     # both PowerShell 5.1 (where ProcessStartInfo.ArgumentList is missing)
     # and PowerShell 7+. No Invoke-Expression. No string concatenation of
@@ -593,10 +593,13 @@ function Start-ChildSession {
         }.GetNewClosure()
         # RegisterHandler uses Add-Type to expose the generic delegate. This
         # works in PS 5.1 (System.Diagnostics.Process.OutputDataReceivedEventHandler
-        # is a generic delegate of type System.DataReceivedEventHandler which
-        # is a non-generic delegate with signature (object, DataReceivedEventArgs)).
-        $stdoutDelegate = [System.DataReceivedEventHandler]$stdoutHandler
-        $stderrDelegate = [System.DataReceivedEventHandler]$stderrHandler
+        # is a generic delegate of type System.Diagnostics.DataReceivedEventHandler
+        # which is a non-generic delegate with signature (object, DataReceivedEventArgs)).
+        # The type lives in System.Diagnostics; the unqualified [System.DataReceivedEventHandler]
+        # name does not resolve under Windows PowerShell 5.1 and would surface as
+        # "Unable to find type [System.DataReceivedEventHandler]" at attach time.
+        $stdoutDelegate = [System.Diagnostics.DataReceivedEventHandler]$stdoutHandler
+        $stderrDelegate = [System.Diagnostics.DataReceivedEventHandler]$stderrHandler
         [void]$proc.add_OutputDataReceived($stdoutDelegate)
         [void]$proc.add_ErrorDataReceived($stderrDelegate)
     }
@@ -647,7 +650,7 @@ function Print-DryRun {
     # the verbatim Arguments form, not a hand-built approximation. CR/LF
     # in the prompt are flattened to spaces (same rule as Start-ChildSession).
     $flatPrompt = ($Prompt -replace "(`r`n|`n|`r)", ' ').Trim()
-    $args = @('launch', 'claude', '--model', $Model, '-y', '--', '--', '-p', $flatPrompt)
+    $args = @('launch', 'claude', '--model', $Model, '-y', '--', '-p', $flatPrompt)
     $argString = Format-CommandLine -Arguments $args
     Write-RouterLine ('ollama ' + $argString)
 }
@@ -687,6 +690,105 @@ $null = Register-EngineEvent -SourceIdentifier 'CtrlC_Router' -Action $cancelHan
 # ---------------------------------------------------------------------------
 # Commands
 # ---------------------------------------------------------------------------
+
+function Invoke-Preflight {
+    Write-RouterLine "Router version: $RouterVersion"
+
+    $edition = 'Unknown'
+    $psVersion = 'Unknown'
+    $clrVersion = 'Unknown'
+    $psv = & {
+        $table = $null
+        try { $table = $PSVersionTable } catch { $table = $null }
+        if ($null -ne $table) { return $table }
+        try {
+            $gv = Get-Variable -Name 'PSVersionTable' -ErrorAction SilentlyContinue
+            if ($null -ne $gv -and $null -ne $gv.Value) { return $gv.Value }
+        } catch { }
+        $h = $Host
+        if ($null -ne $h) {
+            $rebuilt = @{ PSEdition = 'Desktop'; PSVersion = $h.Version; CLRVersion = $null }
+            return $rebuilt
+        }
+        return $null
+    }
+    if ($null -ne $psv) {
+        # $PSVersionTable is a Hashtable in Windows PowerShell 5.1 and a
+        # PSCustomObject in PowerShell 7+. Index by key to support both.
+        $get = {
+            param($obj, $key)
+            if ($null -eq $obj) { return $null }
+            $ht = $obj -as [System.Collections.IDictionary]
+            if ($null -ne $ht -and $ht.Contains($key)) { return $ht[$key] }
+            $prop = $obj.PSObject.Properties[$key]
+            if ($null -ne $prop) { return $prop.Value }
+            return $null
+        }
+        $editionVal  = & $get $psv 'PSEdition'
+        $psVerVal    = & $get $psv 'PSVersion'
+        $clrVal      = & $get $psv 'CLRVersion'
+        if ($null -ne $editionVal) { $edition = [string]$editionVal }
+        if ($null -ne $psVerVal)   { $psVersion = [string]$psVerVal }
+        if ($null -ne $clrVal)     { $clrVersion = [string]$clrVal }
+    }
+    if ([string]::IsNullOrEmpty($edition) -or $edition -eq 'Unknown') { $edition = 'Desktop' }
+
+    Write-RouterLine "PowerShell edition: $edition"
+    Write-RouterLine "PowerShell version: $psVersion"
+    Write-RouterLine "CLR version: $clrVersion"
+
+    $ollama = $null
+    $ollamaCommand = Get-Command -Name 'ollama' -ErrorAction SilentlyContinue
+    if ($null -ne $ollamaCommand -and $null -ne $ollamaCommand.Source) {
+        $ollama = [string]$ollamaCommand.Source
+    } else {
+        $envPath = $env:Path
+        if (-not [string]::IsNullOrEmpty($envPath)) {
+            $sep = [System.IO.Path]::PathSeparator
+            foreach ($dir in $envPath.Split($sep)) {
+                if ([string]::IsNullOrWhiteSpace($dir)) { continue }
+                try {
+                    $candidate = Join-Path -Path $dir -ChildPath ('ollama{0}' -f [System.IO.Path]::GetExtension($dir + '\dummy.exe'))
+                    if (Test-Path -LiteralPath $candidate) {
+                        $ollama = (Resolve-Path -LiteralPath $candidate).Path
+                        break
+                    }
+                } catch { }
+            }
+        }
+    }
+    if ($ollama) {
+        Write-RouterLine "ollama executable: $ollama"
+    } else {
+        Write-RouterLine "ollama executable: not found on PATH (Router will refuse to launch children)" 'warn'
+    }
+
+    $required = @(
+        'System.Diagnostics.Process',
+        'System.Diagnostics.ProcessStartInfo',
+        'System.Diagnostics.DataReceivedEventHandler',
+        'System.Diagnostics.DataReceivedEventArgs'
+    )
+    $missing = @()
+    foreach ($t in $required) {
+        $resolved = $null
+        try { $resolved = [System.Type]::GetType($t) } catch { $resolved = $null }
+        if ($null -eq $resolved) {
+            try { $resolved = [System.Type]$t } catch { $resolved = $null }
+        }
+        if ($null -eq $resolved) {
+            $missing += $t
+            Write-RouterLine ("  type MISSING: {0}" -f $t) 'warn'
+        } else {
+            Write-RouterLine ("  type OK     : {0} -> {1}" -f $t, $resolved.FullName)
+        }
+    }
+    if ($missing.Count -gt 0) {
+        Write-RouterLine ("Preflight FAILED: {0} required type(s) missing: {1}" -f $missing.Count, ($missing -join ', ')) 'error'
+        exit 1
+    }
+    Write-RouterLine "Preflight OK"
+}
 
 function Invoke-Status {
     Write-RouterLine "Router version: $RouterVersion"
@@ -903,6 +1005,7 @@ try {
         'Resume'    { Invoke-Resume }
         'Finish'    { Invoke-Finish }
         'RetryCurrentPhase' { Invoke-RetryCurrentPhase }
+        'Preflight' { Invoke-Preflight }
         'DryRun'    {
             if (-not $ProfileOverride) { $ProfileOverride = 'standard' }
             Invoke-Next
