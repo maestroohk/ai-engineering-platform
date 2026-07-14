@@ -299,3 +299,39 @@ standards in `docs/`:
 The AI does not negotiate the constitution. The AI proposes
 how to honour both the spirit of the request and the letter of
 the rules.
+
+---
+
+## 7. Router-managed startup
+
+When this AI session was launched by the AI session router
+(`tools/ai-session-router.ps1 -Command Next`), the router
+manages the lifecycle. The child session does **not** run
+the full § 2 mandatory sequence. The child session reads
+only:
+
+1. The relevant command section of `.ai/commands.md` for
+   the phase it was launched for.
+2. `.ai/context/active-task.json` (the per-task packet).
+3. `.ai/context/repository-map.json` (canonical paths).
+4. `.ai/prompts/phases/<phase>.md` (the phase prompt).
+5. The approved plan named in the active packet.
+6. The files named in the active packet's
+   `required_context_files` and `optional_context_files`.
+7. `git status` and `git log -1`.
+
+The child session does **not** run the full § 2 sequence
+unless one of the following is true:
+
+- Architecture changes are in scope.
+- The active packet is invalid or contradicts canonical
+  state.
+- The phase requires high-level reasoning that the bounded
+  prompt cannot express (the child writes
+  `fallback_recommended: true` in the phase receipt).
+
+The child session is forbidden from performing another
+phase. The child session writes a phase receipt at
+`.ai/receipts/phases/<task-id>-<phase>.json` and exits.
+The router launches the next phase with a different
+configured cloud model.

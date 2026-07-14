@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
-  "updated_at": "2026-07-13T19:00:00Z",
-  "updated_by_session": "m4-c-2-app-provider-list-and-providers-page",
+  "updated_at": "2026-07-14T00:00:00Z",
+  "updated_by_session": "autonomous-model-routing-optimization",
   "milestones": [
     {
       "id": "M0",
@@ -832,6 +832,53 @@
       ],
       "enables_milestones": [],
       "evidence": {}
+    },
+    {
+      "id": "M-Router",
+      "name": "AI Session Router (operating layer, one-time)",
+      "status": "Done",
+      "primary_outcome": "Operating-layer PowerShell 5.1+ supervisor that drives one bounded Claude Code child session per phase, each on a different configured cloud model. Stops at closeout. Does not begin another task. Does not push.",
+      "delivers_capabilities": [
+        "C-027"
+      ],
+      "consumes_capabilities": [],
+      "enables_milestones": [],
+      "evidence": {
+        "files_added": [
+          "tools/ai-session-router.ps1",
+          "tools/ai-session-router.example.ps1",
+          "tools/ai-session-router.Tests.ps1",
+          "tools/README.md",
+          ".ai/model-routing.json",
+          ".ai/model-routing.example.json",
+          ".ai/model-routing.schema.json",
+          ".ai/model-classification.md",
+          ".ai/model-classification.json",
+          ".ai/prompts/phases/*.md (7 files)",
+          ".ai/receipts/phases/README.md",
+          ".ai/templates/phase-receipt.schema.json",
+          ".ai/templates/implementation-receipt.schema.json",
+          ".ai/context/* (4 files)",
+          ".ai/index/* (3 files)",
+          ".ai/archive/README.md",
+          ".ai/benchmarks/model-routing/* (3 files)",
+          ".ai/backlog/ai-session-router.md"
+        ],
+        "files_modified": [
+          "DECISIONS.md (ADR-017 appended)",
+          "ROADMAP.md (additive note only; matrix unchanged)",
+          ".ai/commands.md (Routed Next section added)",
+          ".ai/session-start.md (Router-managed startup section added)",
+          ".ai/state/* (incremental update only)",
+          "implementation-report-autonomous-model-routing-optimization.md"
+        ],
+        "validation": {
+          "syntax_ok": true,
+          "schema_ok": true,
+          "pester_ok": true,
+          "dry_run_ok": true
+        }
+      }
     }
   ]
 }

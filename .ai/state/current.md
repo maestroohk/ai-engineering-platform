@@ -2418,3 +2418,15 @@ The detailed breakdown of the M4-C.2 slice is in [`.ai/state/task-board.md`](./t
   — the decision log (M0.5).
 - [`.ai/state/capability-mapping.md`](./capability-mapping.md)
   — the capability mapping (M0.5).
+
+> **2026-07-14** — T-031 (autonomous model
+> routing optimisation) is `Done`. The
+> operating-layer AI session router ships
+> (PowerShell 5.1+ supervisor at
+> `tools/ai-session-router.ps1`; five profiles in
+> `.ai/model-routing.json`; per-phase prompts in
+> `.ai/prompts/phases/`; phase receipts in
+> `.ai/receipts/phases/`; ADR-017 in `DECISIONS.md`).
+> The future in-platform Blazor `IAiSessionRouter` is
+> backlog only. The next Ready task remains T-030
+> (M4-C closeout).

@@ -1,0 +1,132 @@
+{
+  "_comment": "Annotated example. Copy to .ai/model-routing.json and replace CONFIGURE_ME for standard and economy with the cloud model names you want. The router does not consume Ollama quota during validation; -DryRun prints the launch command without executing it.",
+  "schema_version": "1.0.0",
+  "provider": "ollama-cloud",
+  "integration": "claude",
+  "profiles": {
+    "high": {
+      "_comment": "High tier. Used by the Plan phase and the Review phase when classification requires it. Strong reasoning; higher per-call cost.",
+      "model": "minimax-m3:cloud",
+      "enabled": true,
+      "purpose": [
+        "architecture",
+        "complex planning",
+        "cross-project reasoning",
+        "security-sensitive work",
+        "difficult debugging"
+      ],
+      "phase_permissions": ["plan", "review"],
+      "max_retries": 1,
+      "timeout_seconds": 1200,
+      "non_interactive_flags": ["--yes"]
+    },
+    "standard": {
+      "_comment": "Standard tier. Used by Implement and Validate. The user picks the cloud model once during -Configure.",
+      "model": "CONFIGURE_ME",
+      "enabled": true,
+      "purpose": [
+        "implementation from approved plan",
+        "tests",
+        "normal refactoring",
+        "routine bug fixes"
+      ],
+      "phase_permissions": ["implement", "validate", "reconcile", "closeout"],
+      "max_retries": 1,
+      "timeout_seconds": 900,
+      "non_interactive_flags": ["--yes"]
+    },
+    "economy": {
+      "_comment": "Economy tier. Used by Document and the closeout-state projection. The user picks the cloud model once during -Configure.",
+      "model": "CONFIGURE_ME",
+      "enabled": true,
+      "purpose": [
+        "reports",
+        "handoffs",
+        "state projections",
+        "JSON receipts",
+        "simple documentation"
+      ],
+      "phase_permissions": ["document", "reconcile", "closeout"],
+      "max_retries": 1,
+      "timeout_seconds": 600,
+      "non_interactive_flags": ["--yes"]
+    },
+    "review": {
+      "_comment": "Review tier. Used by the Review phase when classification requires a deep review.",
+      "model": "minimax-m3:cloud",
+      "enabled": true,
+      "purpose": [
+        "architecture review",
+        "high-risk diff review"
+      ],
+      "phase_permissions": ["review"],
+      "max_retries": 1,
+      "timeout_seconds": 900,
+      "non_interactive_flags": ["--yes"]
+    },
+    "fallback": {
+      "_comment": "Fallback profile. Selected when the active profile fails with usage exhaustion, HTTP 429, or repeated non-zero exit. Default points to the high tier until the user re-tunes.",
+      "model": "minimax-m3:cloud",
+      "enabled": true,
+      "purpose": [
+        "fallback for high",
+        "fallback for standard",
+        "fallback for economy",
+        "fallback for review"
+      ],
+      "max_retries": 0,
+      "timeout_seconds": 600,
+      "non_interactive_flags": ["--yes"]
+    }
+  },
+  "budgets": {
+    "planning": {
+      "preferred_profile": "high",
+      "max_context_files": 14,
+      "max_initial_source_files": 20,
+      "warn_on_exceeded": true
+    },
+    "implementation": {
+      "preferred_profile": "standard",
+      "max_context_files": 10,
+      "max_initial_source_files": 20,
+      "warn_on_exceeded": true
+    },
+    "documentation": {
+      "preferred_profile": "economy",
+      "max_context_files": 8,
+      "max_initial_source_files": 0,
+      "warn_on_exceeded": true
+    },
+    "validation": {
+      "preferred_profile": "standard",
+      "max_context_files": 6,
+      "max_initial_source_files": 0,
+      "warn_on_exceeded": true
+    },
+    "review": {
+      "preferred_profile": "review",
+      "max_context_files": 12,
+      "max_initial_source_files": 0,
+      "warn_on_exceeded": true
+    },
+    "reconcile": {
+      "preferred_profile": "economy",
+      "max_context_files": 6,
+      "max_initial_source_files": 0,
+      "warn_on_exceeded": true
+    },
+    "closeout": {
+      "preferred_profile": "economy",
+      "max_context_files": 6,
+      "max_initial_source_files": 0,
+      "warn_on_exceeded": true
+    }
+  },
+  "execution": {
+    "cloud_only": true,
+    "allow_local_models": false,
+    "fail_open_on_validation_failure": false,
+    "push_authorization_required": true
+  }
+}

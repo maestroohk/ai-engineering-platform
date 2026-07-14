@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0.0",
+  "tasks": [
+    {
+      "key": "plan-creation",
+      "description": "Produce an execution-ready implementation plan for a small Blazor capability slice.",
+      "phase": "plan",
+      "expected_profile_hint": "high",
+      "expected_outputs": [
+        ".ai/plans/<date>-<task-id>-plan-creation.md"
+      ]
+    },
+    {
+      "key": "blazor-component",
+      "description": "Add a small data-owning design-system component and a one-page route.",
+      "phase": "implement",
+      "expected_profile_hint": "standard",
+      "expected_outputs": [
+        "src/.../App<Name>.razor",
+        "src/.../App<Name>.razor.cs",
+        "src/.../<Name>.Tests.cs",
+        "src/.../Pages/<Name>.razor"
+      ]
+    },
+    {
+      "key": "service-and-tests",
+      "description": "Add a small service with a public contract and a focused unit test.",
+      "phase": "implement",
+      "expected_profile_hint": "standard",
+      "expected_outputs": [
+        "src/.../<Name>Service.cs",
+        "src/.../I<Name>Service.cs",
+        "src/.../<Name>Service.Tests.cs"
+      ]
+    },
+    {
+      "key": "bug-fix",
+      "description": "Diagnose a small regression and ship a one-file fix plus a regression test.",
+      "phase": "implement",
+      "expected_profile_hint": "standard",
+      "expected_outputs": [
+        "src/.../<File>.cs",
+        "src/.../<File>.Tests.cs"
+      ]
+    },
+    {
+      "key": "documentation-closeout",
+      "description": "Write the compact implementation receipt, the handoff, the index update, and the state projection.",
+      "phase": "document",
+      "expected_profile_hint": "economy",
+      "expected_outputs": [
+        "implementation-report-<short-slug>.md",
+        ".ai/handoffs/<date>-<short-slug>.md",
+        ".ai/receipts/<task-id>.json"
+      ]
+    }
+  ]
+}

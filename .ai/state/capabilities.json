@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1.0",
-  "updated_at": "2026-07-13T19:00:00Z",
-  "updated_by_session": "m4-c-2-app-provider-list-and-providers-page",
+  "updated_at": "2026-07-14T00:00:00Z",
+  "updated_by_session": "autonomous-model-routing-optimization",
   "completion_status_mapping": {
     "NotStarted": "Not in capabilities.json. Reserved for capabilities the product will need but which have not yet been admitted to the graph.",
     "Planned": "status: Accepted; delivered_by_milestone status: Planned; no plan yet, or plan stub is Draft. Sequenced for a milestone, plan not promoted to Ready / Awaiting Approval.",
@@ -1601,6 +1601,92 @@
         "Providers_Resolve_Through_Registry"
       ],
       "last_updated": "2026-07-13"
+    },
+    {
+      "id": "C-027",
+      "title": "AI Session Router",
+      "status": "Deferred",
+      "completion_status": "Planned",
+      "layer": "Operating",
+      "category": "routing",
+      "description": "In-platform Blazor AI Session Router that consumes the same logical model as the operating-layer PowerShell supervisor. Exposes IAiSessionRouter, IModelRoutingPolicy, IAgentSessionLauncher, ModelRoutingConfiguration, TaskExecutionPipeline. Reads .ai/model-routing.json. Produces phase receipts at .ai/receipts/phases/<task-id>-<phase>.json. Per-phase prompts in .ai/prompts/phases/.",
+      "product_outcome": "A Blazor user can configure cloud models by phase, run a bounded child session per phase, inspect phase receipts, pause/resume routing, approve escalation, and view usage.",
+      "depends_on": [],
+      "consumed_by": [],
+      "delivered_by_milestone": "M-Router (operating layer; Done 2026-07-14); platform layer Deferred",
+      "consumed_by_milestones": [],
+      "delivered_by_tasks": [
+        "T-031 (operating layer)"
+      ],
+      "next_task": null,
+      "blocked_by": [],
+      "evidence": {
+        "files_added": [
+          "tools/ai-session-router.ps1",
+          ".ai/model-routing.json",
+          ".ai/model-routing.example.json",
+          ".ai/model-routing.schema.json",
+          ".ai/model-classification.md",
+          ".ai/model-classification.json",
+          ".ai/prompts/phases/*.md (7 files)",
+          ".ai/receipts/phases/README.md",
+          ".ai/templates/phase-receipt.schema.json",
+          ".ai/templates/implementation-receipt.schema.json",
+          ".ai/context/* (4 files)",
+          ".ai/index/* (3 files)",
+          ".ai/archive/README.md",
+          ".ai/benchmarks/model-routing/* (3 files)",
+          ".ai/backlog/ai-session-router.md"
+        ],
+        "files_modified": [
+          "DECISIONS.md (ADR-017 appended)",
+          "ROADMAP.md (additive note only; matrix unchanged)",
+          ".ai/commands.md (Routed Next section added)",
+          ".ai/session-start.md (Router-managed startup section added)",
+          ".ai/state/* (incremental update only)"
+        ],
+        "validation": {
+          "syntax_ok": true,
+          "schema_ok": true,
+          "pester_ok": true,
+          "dry_run_ok": true
+        }
+      },
+      "acceptance_criteria": [
+        "PowerShell supervisor parses without syntax errors (5.1+)",
+        "Five profiles (high/standard/economy/review/fallback) configured in .ai/model-routing.json",
+        "Per-phase prompts exist in .ai/prompts/phases/ for all 7 phases",
+        "Phase receipts validated by .ai/templates/phase-receipt.schema.json",
+        "Mocked Pester tests pass without invoking paid cloud models",
+        "Dry-run prints the ollama launch form without executing it",
+        "The future in-platform Blazor feature is recorded in .ai/backlog/ai-session-router.md",
+        "ADR-017 is appended to DECISIONS.md"
+      ],
+      "completed_criteria": [
+        "tools/ai-session-router.ps1 ships",
+        ".ai/model-routing.json ships",
+        ".ai/model-routing.example.json ships",
+        ".ai/model-routing.schema.json ships",
+        ".ai/model-classification.md and .ai/model-classification.json ship",
+        ".ai/prompts/phases/{reconcile,plan,implement,validate,document,review,closeout}.md ship",
+        ".ai/receipts/phases/README.md ships",
+        ".ai/templates/phase-receipt.schema.json ships",
+        ".ai/templates/implementation-receipt.schema.json ships",
+        ".ai/context/{README.md, repository-map.json, active-task.json, validation-cache.json} ship",
+        ".ai/index/{reports,plans,handoffs}.json ship",
+        ".ai/archive/README.md ships",
+        ".ai/benchmarks/model-routing/{README.md, benchmark-tasks.json, results.json} ship",
+        ".ai/backlog/ai-session-router.md ships",
+        "DECISIONS.md ADR-017 is appended",
+        "ROADMAP.md has the additive note (matrix unchanged)",
+        ".ai/commands.md Routed Next section is added (existing commands unchanged)",
+        ".ai/session-start.md Router-managed startup section is added (existing sections unchanged)",
+        "state files updated (current.md, tasks.json, session.json, milestones.json, capabilities.json, task-board.md)",
+        "implementation-report-autonomous-model-routing-optimization.md is at the repo root"
+      ],
+      "adr": "ADR-017",
+      "architecture_tests": [],
+      "last_updated": "2026-07-14T00:00:00Z"
     }
   ]
 }

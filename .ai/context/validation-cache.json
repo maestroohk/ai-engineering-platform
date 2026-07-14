@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0.0",
+  "cache_key": {
+    "working_tree_fingerprint": "uninitialized",
+    "head_commit": "uninitialized"
+  },
+  "last_validation": null,
+  "updated_at": null,
+  "ttl_seconds": 86400,
+  "notes": "Populated by the validate phase after the first full closeout validation. Keyed by the working-tree fingerprint (git status --porcelain + head commit hash). When the implement phase does not change source or test files, the router reuses the cached result and skips the full validation re-run."
+}

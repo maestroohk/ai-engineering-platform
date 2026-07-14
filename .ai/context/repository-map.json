@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.0.0",
+  "repo_root": ".",
+  "paths": {
+    "repo_root": ".",
+    "ai_dir": ".ai",
+    "tools_dir": "tools",
+    "handoffs_dir": ".ai/handoffs",
+    "plans_dir": ".ai/plans",
+    "receipts_dir": ".ai/receipts",
+    "receipts_phases_dir": ".ai/receipts/phases",
+    "state_dir": ".ai/state",
+    "prompts_dir": ".ai/prompts",
+    "prompts_phases_dir": ".ai/prompts/phases",
+    "context_dir": ".ai/context",
+    "templates_dir": ".ai/templates",
+    "index_dir": ".ai/index",
+    "archive_dir": ".ai/archive",
+    "backlog_dir": ".ai/backlog",
+    "benchmarks_dir": ".ai/benchmarks",
+    "fixtures_dir": ".ai/fixtures"
+  },
+  "config_files": {
+    "model_routing": ".ai/model-routing.json",
+    "model_routing_schema": ".ai/model-routing.schema.json",
+    "model_classification": ".ai/model-classification.json",
+    "model_classification_md": ".ai/model-classification.md",
+    "phase_receipt_schema": ".ai/templates/phase-receipt.schema.json",
+    "implementation_receipt_schema": ".ai/templates/implementation-receipt.schema.json",
+    "active_task": ".ai/context/active-task.json",
+    "validation_cache": ".ai/context/validation-cache.json",
+    "session_envelope": ".ai/state/session.json",
+    "task_registry": ".ai/state/tasks.json",
+    "task_board": ".ai/state/task-board.md",
+    "current_state": ".ai/state/current.md",
+    "milestones": ".ai/state/milestones.json",
+    "capabilities": ".ai/state/capabilities.json"
+  },
+  "branching": {
+    "main_branch": "main",
+    "feature_branch_prefix": "feature/T-",
+    "milestone_tag_prefix": "m"
+  }
+}

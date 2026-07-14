@@ -1276,3 +1276,117 @@ The rule is operationalised in:
 
 **Supersedes:** None.
 **Superseded by:** None.
+
+---
+
+## ADR-017 — Adopt autonomous cloud-model routing for the AI operating layer
+
+**Status:** Accepted (2026-07-14).
+**Context:** The current command-driven workflow
+(per `.ai/commands.md`) is reliable, but the
+`Next` command consumes too many tokens because one
+powerful model performs every phase: repository
+understanding, planning, implementation, tests,
+reporting, state reconciliation, and Git closeout.
+The developer must not have to close a terminal
+and manually relaunch Claude Code with another
+model during a normal task.
+**Decision:** Adopt an **external PowerShell
+supervisor** that drives one bounded Claude Code
+child session per phase, each on a different
+configured cloud model. The supervisor lives at
+`tools/ai-session-router.ps1` (PowerShell 5.1+;
+Windows-first; runs on `powershell.exe`, not
+`pwsh`). The supervisor reads model names from
+`.ai/model-routing.json`, classifies the work via
+`.ai/model-classification.json`, and launches each
+phase through the non-interactive
+`ollama launch claude --model <model> -y -- -p
+"<prompt>"` form. Each phase writes a
+**phase receipt** at
+`.ai/receipts/phases/<task-id>-<phase>.json` (schema
+at `.ai/templates/phase-receipt.schema.json`).
+The supervisor is the **only** place that decides
+which model performs which phase. The supervisor
+never hot-swaps a running Claude Code process. The
+supervisor never begins a second task. The
+supervisor stops at `closeout`.
+**Alternatives considered:**
+
+- A single multi-phase daemon model. Rejected;
+  token cost is the reason this ADR exists.
+- A custom PowerShell module that re-implements
+  Claude Code internals. Rejected; the supervisor
+  launches the existing Claude Code binary, it
+  does not replace it.
+- Hot-swapping the model of a running Claude Code
+  process. Rejected; the brief is explicit. The
+  supervisor starts a fresh process.
+- A JSON-RPC bridge to a cloud API instead of
+  `ollama launch claude`. Rejected; the brief is
+  explicit. The non-interactive Ollama launch form
+  is the contract.
+- Implementing the future Blazor
+  `IAiSessionRouter` in this task. Rejected; the
+  current roadmap does not schedule it. The
+  PowerShell supervisor is the bridge that exists
+  today.
+- A local-only model fallback. Rejected;
+  cloud-only is the operating mode. Local models
+  are out of scope.
+
+**Consequences:**
+
+- The supervisor is developer tooling, not part of
+  the Blazor platform. The future
+  `AiEng.Platform` AI Session Router (backlog only)
+  consumes the same logical model through a service
+  abstraction (`IAiSessionRouter`,
+  `IModelRoutingPolicy`, `IAgentSessionLauncher`,
+  `ModelRoutingConfiguration`,
+  `TaskExecutionPipeline`) but is **not** implemented
+  in this task.
+- Model names, profile purposes, retry counts,
+  timeouts, and budgets live in
+  `.ai/model-routing.json`. The script reads the
+  configuration; the user changes the configuration.
+- A 429 / usage-exhaustion response from the active
+  profile selects the configured `fallback` profile
+  when allowed; otherwise the supervisor stops
+  cleanly. The supervisor never enters an infinite
+  retry loop.
+- The supervisor respects
+  `execution.push_authorization_required` and never
+  pushes to a remote without an explicit `-NoPush`
+  override.
+- The existing nine commands (`Continue`,
+  `Approve`, `Status`, `Plan`, `Resume`, `Review`,
+  `Validate`, `Finish`, `Next`) and the existing
+  13-step lifecycle are unchanged. The
+  `Routed Next` execution form is added to
+  `.ai/commands.md` § 11 as a cost-aware alternative
+  to the existing interactive `Next` form.
+
+**Back-references:**
+
+- `AGENTS.md` Rule 15 (deliver evidence; do not
+  re-derive) and Rule 17 (prefer the approved
+  plan).
+- `.ai/commands.md` § 11 (Routed Next) and
+  `.ai/session-start.md` § 7 (Router-managed
+  startup).
+- `.ai/workflows/branching-strategy.md` (the
+  closeout phase follows the branching strategy).
+- `.ai/model-routing.json` and
+  `.ai/model-routing.schema.json`.
+- `.ai/model-classification.json` and
+  `.ai/model-classification.md`.
+- `.ai/prompts/phases/*.md` (the seven phase
+  prompts).
+- `.ai/templates/phase-receipt.schema.json` and
+  `.ai/templates/implementation-receipt.schema.json`.
+- `tools/ai-session-router.ps1` and
+  `tools/ai-session-router.Tests.ps1`.
+
+**Supersedes:** None.
+**Superseded by:** None.

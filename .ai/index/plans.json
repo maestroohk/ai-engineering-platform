@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0.0",
+  "entries": [
+    {
+      "path": ".ai/plans/ai-session-efficiency-and-model-routing.md",
+      "task_id": "T-031",
+      "milestone": "M-Router",
+      "status": "approved",
+      "date": "2026-07-14",
+      "sha": null
+    }
+  ]
+}

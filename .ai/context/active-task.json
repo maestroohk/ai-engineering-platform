@@ -1,0 +1,104 @@
+{
+  "schema_version": "1.0.0",
+  "task_id": "T-031",
+  "milestone": "M-Router",
+  "slice": "ai-session-router",
+  "capability_ids": ["C-027"],
+  "task_type": "feature",
+  "complexity_classification": "standard",
+  "current_phase": "closeout",
+  "next_phase": null,
+  "recommended_profile_by_phase": {
+    "reconcile": "economy",
+    "plan": "high",
+    "implement": "standard",
+    "validate": "standard",
+    "document": "economy",
+    "review": "review",
+    "closeout": "economy"
+  },
+  "approved_plan": ".ai/plans/ai-session-efficiency-and-model-routing.md",
+  "objective": "Ship the AI session router operating layer: a Windows-first PowerShell supervisor that drives one bounded Claude Code child per phase, each on a different configured cloud model. Preserve quality. Do not begin T-030 or any product feature work.",
+  "included_scope": [
+    "tools/ai-session-router.ps1",
+    "tools/ai-session-router.example.ps1",
+    "tools/ai-session-router.Tests.ps1",
+    "tools/README.md",
+    ".ai/model-routing.json",
+    ".ai/model-routing.example.json",
+    ".ai/model-routing.schema.json",
+    ".ai/model-classification.md",
+    ".ai/model-classification.json",
+    ".ai/prompts/phases/*.md",
+    ".ai/receipts/phases/README.md",
+    ".ai/templates/phase-receipt.schema.json",
+    ".ai/templates/implementation-receipt.schema.json",
+    ".ai/context/*",
+    ".ai/index/*",
+    ".ai/archive/README.md",
+    ".ai/benchmarks/model-routing/*",
+    ".ai/backlog/ai-session-router.md",
+    "ROADMAP.md (additive note only)",
+    "DECISIONS.md (ADR-017 append only)",
+    ".ai/commands.md (Routed Next section)",
+    ".ai/session-start.md (Router-managed startup section)",
+    ".ai/state/* (incremental update only)",
+    "implementation-report-autonomous-model-routing-optimization.md"
+  ],
+  "excluded_scope": [
+    "src/ application code",
+    "test/ application code",
+    "DOCS.md or PRODUCT.md",
+    "Any milestone reordering",
+    "Any AGENTS.md rule change",
+    "Any new Blazor service",
+    "T-030 (M4-C closeout)",
+    "Any other product task"
+  ],
+  "expected_affected_paths": [
+    "tools/",
+    ".ai/",
+    "ROADMAP.md",
+    "DECISIONS.md"
+  ],
+  "relevant_adrs": [
+    "ADR-012 (capability-oriented provider families)",
+    "ADR-016 (composition root)",
+    "ADR-017 (autonomous cloud-model routing — new in this task)"
+  ],
+  "required_context_files": [
+    ".ai/context/active-task.json",
+    ".ai/context/repository-map.json",
+    ".ai/plans/ai-session-efficiency-and-model-routing.md"
+  ],
+  "optional_context_files": [
+    "AGENTS.md",
+    "DECISIONS.md",
+    "ROADMAP.md",
+    ".ai/commands.md",
+    ".ai/state/tasks.json",
+    ".ai/state/session.json"
+  ],
+  "tests": [
+    "tools/ai-session-router.Tests.ps1 (Pester, mocked, no real cloud invocation)"
+  ],
+  "validation": [
+    "JSON schema validation (every .ai/**/*.json parses)",
+    "PowerShell syntax validation (parse every script in tools/)",
+    "Pester tests (mocked)",
+    "Dry-run end-to-end routing simulation"
+  ],
+  "expected_branch": "feature/T-031-ai-session-router",
+  "expected_commit": "single focused commit on the feature branch; fast-forward merge to main; delete the branch locally; no push",
+  "stop_conditions": [
+    "PowerShell syntax validation fails",
+    "JSON schema validation fails",
+    "Pester tests fail twice on the same assertion",
+    "Dry-run routing produces an unexpected model name or command form",
+    "src/ or test/ application code is modified",
+    "AGENTS.md rules are modified"
+  ],
+  "last_successful_phase": "document",
+  "failure_count": 0,
+  "fallback_count": 0
+}

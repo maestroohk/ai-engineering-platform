@@ -774,3 +774,106 @@ rejected. The constitution is not relaxed by this document.
   are unchanged. The decision table in § 4 still
   governs `Continue` and `Resume`; `Next` is the
   collapsed form that subsumes them.
+
+---
+
+## 11. Routed Next
+
+> **Cost-aware execution form.** The interactive
+> workflow in § 3.1 is unchanged. `Routed Next` is an
+> alternative entry that drives one bounded Claude
+> Code child session per phase, each on a different
+> configured cloud model, by way of an external
+> PowerShell supervisor.
+
+The router is the **only** place that decides which
+model performs which phase. The router never
+hot-swaps a running Claude Code process. The router
+never invokes a model twice for the same phase. The
+router never begins a second task.
+
+### 11.1 Entry
+
+```powershell
+.\tools\ai-session-router.ps1 -Command Next
+```
+
+Optional flags:
+
+| Flag                          | Purpose                                          |
+| ----------------------------- | ------------------------------------------------ |
+| `-TaskId T-NNN`               | Override the active task ID.                     |
+| `-ProfileOverride <profile>`  | Force a profile for the next dispatch.           |
+| `-NoPush`                     | Allow the closeout phase to push when remote.    |
+| `-DryRun`                     | Print the launch command without executing it.   |
+
+### 11.2 Configuration
+
+The router reads model names from
+`.ai/model-routing.json`, validated by
+`.ai/model-routing.schema.json`. The five profiles
+are `high`, `standard`, `economy`, `review`, and
+`fallback`. The standard and economy profiles are
+`CONFIGURE_ME` until the user runs:
+
+```powershell
+.\tools\ai-session-router.ps1 -Command Configure
+```
+
+`-Configure` asks for the standard and economy model
+names once and persists them. The user is never asked
+for model names during every task.
+
+### 11.3 Classification
+
+The router classifies the work to a profile by
+reading `.ai/model-classification.json` and the
+active packet. The default per-phase recommendation
+lives in the active packet's
+`recommended_profile_by_phase` field. The router
+prefers the per-phase recommendation over the
+classification default. The `-ProfileOverride` flag
+takes precedence over both.
+
+### 11.4 Lifecycle
+
+The router runs the phases in this order:
+
+1. `reconcile` (default `economy`; `standard` when
+   the active packet is malformed).
+2. `plan` (default `high`).
+3. `implement` (default `standard`).
+4. `validate` (default `standard`).
+5. `document` (default `economy`).
+6. `review` (default `review`; only when the
+   classification rules require it).
+7. `closeout` (default `economy`).
+
+The router stops after `closeout`. The user must
+invoke `Next` again to begin the next task.
+
+### 11.5 Safety
+
+- Argument list, not string concatenation. No
+  `Invoke-Expression`.
+- Model name and task ID validated against a strict
+  regex.
+- Paths validated against the repository root.
+- Ctrl+C cancels the supervisor and terminates the
+  child process tree.
+- 429 / usage exhaustion selects the configured
+  `fallback` profile when allowed; otherwise the
+  router stops cleanly.
+
+### 11.6 Receipts
+
+The router writes a phase receipt at
+`.ai/receipts/phases/<task-id>-<phase>.json` for
+every phase. The next phase reads the previous
+phase's receipt; the receipt is the contract
+between models. The schema lives at
+`.ai/templates/phase-receipt.schema.json`. The
+document phase writes the compact per-task
+implementation receipt at
+`.ai/receipts/<task-id>.json` (schema at
+`.ai/templates/implementation-receipt.schema.json`).

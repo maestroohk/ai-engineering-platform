@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aieng.local/schemas/implementation-receipt.schema.json",
+  "title": "AI Session Router — Implementation Receipt",
+  "description": "The compact per-task implementation receipt the document phase writes at .ai/receipts/<task-id>.json. The economy model writes this; the standard model never writes it. Lighter than the implementation report; the report remains the human-readable record.",
+  "type": "object",
+  "required": [
+    "task_id",
+    "milestone",
+    "slice",
+    "completed_at",
+    "status",
+    "files_changed",
+    "phases",
+    "test_summary",
+    "validation_summary",
+    "decisions",
+    "next_task_id",
+    "receipt_version"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "task_id": {
+      "type": "string",
+      "pattern": "^T-[0-9]+$"
+    },
+    "milestone": {
+      "type": "string",
+      "pattern": "^M[0-9A-Za-z.-]+$"
+    },
+    "slice": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Capability slice ID, free-form kebab-case."
+    },
+    "completed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["completed", "blocked", "validation_failed"]
+    },
+    "files_changed": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Za-z0-9._:/\\\\-]+$"
+      }
+    },
+    "phases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["phase", "model", "profile", "status", "receipt_path"],
+        "properties": {
+          "phase": {
+            "type": "string",
+            "enum": ["reconcile", "plan", "implement", "validate", "document", "review", "closeout"]
+          },
+          "model": { "type": "string", "pattern": "^[A-Za-z0-9._:-]+$" },
+          "profile": { "type": "string", "enum": ["high", "standard", "economy", "review", "fallback"] },
+          "status": { "type": "string", "enum": ["completed", "blocked", "skipped"] },
+          "receipt_path": { "type": "string", "pattern": "^[A-Za-z0-9._:/\\\\-]+\\.json$" }
+        }
+      }
+    },
+    "test_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "passed": { "type": "integer", "minimum": 0 },
+        "failed": { "type": "integer", "minimum": 0 },
+        "skipped": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "validation_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "syntax_ok": { "type": "boolean" },
+        "schema_ok": { "type": "boolean" },
+        "pester_ok": { "type": "boolean" },
+        "dry_run_ok": { "type": "boolean" }
+      }
+    },
+    "decisions": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "blockers": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "next_task_id": {
+      "type": ["string", "null"],
+      "pattern": "^T-[0-9]+$",
+      "description": "The next Ready task ID after this one closes, or null when the queue is empty."
+    },
+    "receipt_version": {
+      "type": "string",
+      "const": "1.0.0"
+    }
+  }
+}

@@ -1982,3 +1982,21 @@ detailed tasks when the milestone approaches.
 - **Milestone:** M8.
 - **First action (later):** draft
   `.ai/plans/M8-autonomous-loops-orchestration.md`.
+
+### M-Router — AI Session Router (operating layer, one-time)
+
+- **T-031** (Done, 2026-07-14) — Ship the
+  operating-layer AI session router (PowerShell 5.1+
+  supervisor at `tools/ai-session-router.ps1`; five
+  profiles in `.ai/model-routing.json`; per-phase
+  prompts in `.ai/prompts/phases/`; phase receipts in
+  `.ai/receipts/phases/`; ADR-017 in `DECISIONS.md`).
+  The future in-platform Blazor `IAiSessionRouter`
+  (consumed through `IAiSessionRouter`,
+  `IModelRoutingPolicy`, `IAgentSessionLauncher`,
+  `ModelRoutingConfiguration`,
+  `TaskExecutionPipeline`) is **Deferred**; it lands
+  in a future milestone when the platform is ready.
+  See `.ai/backlog/ai-session-router.md`. The
+  operating-layer PowerShell supervisor is the
+  bridge that exists today.

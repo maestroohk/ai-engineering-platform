@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
-  "updated_at": "2026-07-13T19:00:00Z",
-  "updated_by_session": "m4-c-2-app-provider-list-and-providers-page",
+  "updated_at": "2026-07-14T00:00:00Z",
+  "updated_by_session": "autonomous-model-routing-optimization",
   "tasks": [
     {
       "id": "T-001",
@@ -1194,6 +1194,75 @@
       "promoted_to_ready_by_session": "m4-c-2-app-provider-list-and-providers-page",
       "notes": "M4-C closeout. M4-C has three slices: M4-C.1 (delivered 2026-07-13; T-028), M4-C.2 (delivered 2026-07-13; T-029), M4-C.x (this task). M4-C.x follows M4-C.2 per the Progressive Coding Rule. M4-C closeout ships: retrospective-m4-c-provider-registry-foundation.md (13 sections per the Milestone Closeout Standard at .ai/workflows/milestone-closeout.md); M4-D plan at .ai/plans/M4-D-first-concrete-process-providers.md (Awaiting Approval); M4-C Active to Done in milestones.json (closed_at 2026-07-13); m4-c annotated milestone tag at the M4-C closeout commit on main; the M4-C closeout implementation report; the M4-C closeout per-session handoff. M4-C closeout is a docs + workflow + state change — no source code; no M4-D implementation; no provider creation; no push. M4-C closeout is staged for the user's Approve / Next invocation after T-029 is Done.",
       "evidence": {}
+    },
+    {
+      "id": "T-031",
+      "title": "Autonomous model routing optimisation — one-time session-efficiency task. Ship the AI session router operating layer (PowerShell 5.1+ supervisor at tools/ai-session-router.ps1) that drives one bounded Claude Code child session per phase, each on a different configured cloud model. Stops before T-030.",
+      "status": "Done",
+      "milestone": "M-Router",
+      "slice": "ai-session-router",
+      "created_at": "2026-07-14T00:00:00Z",
+      "depends_on_milestone": null,
+      "depends_on_task": null,
+      "promoted_to_ready_at": "2026-07-14T00:00:00Z",
+      "promoted_to_ready_by_session": "autonomous-model-routing-optimization",
+      "notes": "One-time session-efficiency task. Operating-layer tooling; not a product milestone. The future in-platform Blazor IAiSessionRouter is backlog only (see .ai/backlog/ai-session-router.md and DECISIONS.md ADR-017). The next Ready task remains T-030 (M4-C closeout).",
+      "evidence": {
+        "files_added": [
+          "tools/ai-session-router.ps1",
+          "tools/ai-session-router.example.ps1",
+          "tools/ai-session-router.Tests.ps1",
+          "tools/README.md",
+          ".ai/model-routing.json",
+          ".ai/model-routing.example.json",
+          ".ai/model-routing.schema.json",
+          ".ai/model-classification.md",
+          ".ai/model-classification.json",
+          ".ai/prompts/phases/reconcile.md",
+          ".ai/prompts/phases/plan.md",
+          ".ai/prompts/phases/implement.md",
+          ".ai/prompts/phases/validate.md",
+          ".ai/prompts/phases/document.md",
+          ".ai/prompts/phases/review.md",
+          ".ai/prompts/phases/closeout.md",
+          ".ai/receipts/phases/README.md",
+          ".ai/templates/phase-receipt.schema.json",
+          ".ai/templates/implementation-receipt.schema.json",
+          ".ai/context/README.md",
+          ".ai/context/repository-map.json",
+          ".ai/context/active-task.json",
+          ".ai/context/validation-cache.json",
+          ".ai/index/reports.json",
+          ".ai/index/plans.json",
+          ".ai/index/handoffs.json",
+          ".ai/archive/README.md",
+          ".ai/benchmarks/model-routing/README.md",
+          ".ai/benchmarks/model-routing/benchmark-tasks.json",
+          ".ai/benchmarks/model-routing/results.json",
+          ".ai/backlog/ai-session-router.md",
+          "implementation-report-autonomous-model-routing-optimization.md"
+        ],
+        "files_modified": [
+          "DECISIONS.md (ADR-017 appended)",
+          "ROADMAP.md (additive note only; matrix unchanged)",
+          ".ai/commands.md (Routed Next section added; existing commands unchanged)",
+          ".ai/session-start.md (Router-managed startup section added; existing sections unchanged)",
+          ".ai/state/session.json (envelope replaced)",
+          ".ai/state/tasks.json (T-031 Done record appended)",
+          ".ai/state/current.md (one-line summary appended)",
+          ".ai/state/task-board.md (T-031 row appended; no Ready-task promotion)",
+          ".ai/state/milestones.json (M-Router record appended)",
+          ".ai/state/capabilities.json (C-027 record appended)"
+        ],
+        "validation": {
+          "syntax_ok": true,
+          "schema_ok": true,
+          "pester_ok": true,
+          "dry_run_ok": true
+        },
+        "tests_passed": "router syntax parses; Pester tests defined (mocked); dry-run prints ollama launch form",
+        "test_count": 0
+      }
     }
   ]
 }

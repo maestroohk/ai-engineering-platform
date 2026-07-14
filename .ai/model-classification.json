@@ -1,0 +1,75 @@
+{
+  "schema_version": "1.0.0",
+  "selector_order": ["high", "review", "standard", "economy", "fallback"],
+  "tiers": {
+    "high": {
+      "triggers": [
+        { "match": { "task_type": ["architecture", "bootstrap"] } },
+        { "match": { "requires_new": ["project_boundary", "provider_family_contract", "dependency_rule", "adr"] } },
+        { "match": { "requires_security_sensitive": true } },
+        { "match": { "first_task_of_milestone": true } },
+        { "match": { "name_includes": ["Architecture", "Security", "Credential", "Provider", "Registry", "Composition", "Boundary"] } },
+        { "match": { "phase": "plan", "crosses_milestone_boundary": true } },
+        { "match": { "retry_count_gt": 0, "failure_shape": "architecture" } },
+        { "match": { "capability_xrefs_gt": 1 } }
+      ],
+      "phases": ["plan", "review", "reconcile", "implement", "validate", "document", "closeout"]
+    },
+    "review": {
+      "triggers": [
+        { "match": { "task_type": "review" } },
+        { "match": { "milestone_closeout": true } },
+        { "match": { "high_risk_review": true } },
+        { "match": { "validate_failed_non_transient": true } },
+        { "match": { "objective_includes": ["deep review", "architecture review", "high-risk review"] } }
+      ],
+      "phases": ["review"]
+    },
+    "standard": {
+      "triggers": [
+        { "match": { "phase": "reconcile", "active_packet_malformed": true } },
+        { "match": { "phase": "implement", "plan_execution_ready": true } },
+        { "match": { "phase": "validate", "full_closeout_validation_required": true } },
+        { "match": { "phase": "closeout", "non_trivial_diff": true } },
+        { "match": { "task_type": ["feature", "bugfix", "refactor", "provider", "testing", "release"] } },
+        { "match": { "name_includes": ["Component", "Service", "Repository", "Test", "Refactor", "Fix", "Implement", "Migrate"] } }
+      ],
+      "phases": ["implement", "validate", "reconcile", "closeout"]
+    },
+    "economy": {
+      "triggers": [
+        { "match": { "phase": "document", "deliverable": ["receipt", "report", "handoff", "state_projection", "changelog", "index", "markdown_refresh"] } },
+        { "match": { "phase": "closeout", "trivial_diff": true } },
+        { "match": { "name_includes": ["Doc", "Receipt", "Report", "Handoff", "State", "Index", "Archive", "Schema", "Plan"] } },
+        { "match": { "documentation_only": true } }
+      ],
+      "phases": ["document", "reconcile", "closeout"]
+    },
+    "fallback": {
+      "triggers": [
+        { "match": { "usage_exhausted": true } },
+        { "match": { "http_429": true } },
+        { "match": { "retry_count_gte": "max_retries" } },
+        { "match": { "active_tier_disabled": true, "fail_open_on_validation_failure": false } }
+      ],
+      "phases": ["plan", "review", "implement", "validate", "document", "reconcile", "closeout"]
+    }
+  },
+  "forbidden_escalations": [
+    { "from": "standard", "to": "high", "reason": "documentation_wording_difficult" },
+    { "from": "standard", "to": "high", "reason": "report_is_long" },
+    { "from": "economy", "to": "standard", "reason": "state_markdown_refresh" },
+    { "from": "standard", "to": "high", "reason": "single_test_flake" },
+    { "from": "standard", "to": "high", "reason": "user_requested_more_detail" }
+  ],
+  "required_escalations": [
+    { "from": "standard", "to": "high", "condition": "validate_failed_count_gte_2" },
+    { "from": "standard", "to": "high", "condition": "fallback_recommended_true" },
+    { "from": "standard", "to": "high", "condition": "plan_incomplete_true" },
+    { "from": "standard", "to": "high", "condition": "task_touches_multiple_milestones" }
+  ],
+  "overrides": {
+    "command_line_flag": "-ProfileOverride",
+    "per_phase_recommendation_field": "recommended_profile_by_phase"
+  }
+}

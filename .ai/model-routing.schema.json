@@ -1,0 +1,197 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aieng.local/schemas/model-routing.schema.json",
+  "title": "Model Routing Configuration",
+  "description": "The named model profiles the AI session router uses to dispatch bounded phase sessions to configured Ollama cloud models. The schema validates model names, enabled status, phase permissions, fallback profile, retry limits, timeouts, non-interactive launch flags, usage budgets, and execution policy.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "provider",
+    "integration",
+    "profiles",
+    "execution"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "provider": {
+      "type": "string",
+      "enum": [
+        "ollama-cloud"
+      ]
+    },
+    "integration": {
+      "type": "string",
+      "enum": [
+        "claude"
+      ]
+    },
+    "profiles": {
+      "type": "object",
+      "required": [
+        "high",
+        "standard",
+        "economy",
+        "review",
+        "fallback"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "high": { "$ref": "#/$defs/profile" },
+        "standard": { "$ref": "#/$defs/profile" },
+        "economy": { "$ref": "#/$defs/profile" },
+        "review": { "$ref": "#/$defs/profile" },
+        "fallback": { "$ref": "#/$defs/profile" }
+      }
+    },
+    "budgets": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "planning": { "$ref": "#/$defs/budget" },
+        "implementation": { "$ref": "#/$defs/budget" },
+        "documentation": { "$ref": "#/$defs/budget" },
+        "validation": { "$ref": "#/$defs/budget" },
+        "review": { "$ref": "#/$defs/budget" },
+        "reconcile": { "$ref": "#/$defs/budget" },
+        "closeout": { "$ref": "#/$defs/budget" }
+      }
+    },
+    "execution": {
+      "type": "object",
+      "required": [
+        "cloud_only",
+        "allow_local_models",
+        "push_authorization_required"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "cloud_only": {
+          "type": "boolean",
+          "description": "When true, the router rejects local-only model names and refuses to launch a child against a local Ollama server."
+        },
+        "allow_local_models": {
+          "type": "boolean",
+          "description": "When true (and cloud_only is false), the router permits local model names like 'llama3:8b' or 'qwen2.5:7b'."
+        },
+        "fail_open_on_validation_failure": {
+          "type": "boolean",
+          "default": false,
+          "description": "When true, a failed configuration validation does not block the router; the router logs a warning and continues. The default is false (the router stops on configuration validation failure)."
+        },
+        "push_authorization_required": {
+          "type": "boolean",
+          "default": true,
+          "description": "When true (the default), the closeout phase never pushes to a remote without an explicit -NoPush override. When false, the closeout phase may push when a remote is configured."
+        }
+      }
+    }
+  },
+  "$defs": {
+    "profile": {
+      "type": "object",
+      "required": [
+        "model",
+        "enabled",
+        "purpose"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "model": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._:-]+$",
+          "minLength": 1,
+          "maxLength": 128,
+          "description": "The Ollama cloud model name. Allowed characters are letters, digits, dot, underscore, colon, and dash. The literal 'CONFIGURE_ME' is permitted and signals the user has not yet selected a model for this profile."
+        },
+        "enabled": {
+          "type": "boolean",
+          "description": "When false, the router skips this profile and falls back to the configured fallback profile (when allowed)."
+        },
+        "purpose": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "A free-form list of phase kinds or task categories the profile is intended to perform. The router does not enforce this list at runtime; the list is documentation."
+        },
+        "phase_permissions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "reconcile",
+              "plan",
+              "implement",
+              "validate",
+              "document",
+              "review",
+              "closeout"
+            ]
+          },
+          "uniqueItems": true,
+          "description": "The phases the profile is allowed to perform. When absent, the profile is allowed to perform any phase. When present, the router rejects a dispatch that does not match."
+        },
+        "max_retries": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 5,
+          "default": 1,
+          "description": "The number of times the router may retry this profile for the same phase. The default is 1; the absolute maximum is 5."
+        },
+        "timeout_seconds": {
+          "type": "integer",
+          "minimum": 30,
+          "maximum": 3600,
+          "default": 600,
+          "description": "The per-phase wall-clock timeout in seconds. The default is 600 (10 minutes). The minimum is 30; the absolute maximum is 3600 (1 hour)."
+        },
+        "non_interactive_flags": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Extra flags passed before the Claude Code pass-through separator. The default is ['--yes']. The router always appends '--' and the prompt last."
+        }
+      }
+    },
+    "budget": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "preferred_profile": {
+          "type": "string",
+          "enum": [
+            "high",
+            "standard",
+            "economy",
+            "review",
+            "fallback"
+          ]
+        },
+        "max_context_files": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 200,
+          "default": 14
+        },
+        "max_initial_source_files": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 200,
+          "default": 20
+        },
+        "warn_on_exceeded": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    }
+  }
+}

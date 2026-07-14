@@ -1,0 +1,203 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aieng.local/schemas/phase-receipt.schema.json",
+  "title": "AI Session Router — Phase Receipt",
+  "description": "The per-phase handoff the AI session router writes after each bounded child session. The next phase reads this receipt; the receipt is the contract between models.",
+  "type": "object",
+  "required": [
+    "task_id",
+    "phase",
+    "model",
+    "profile",
+    "started_at",
+    "completed_at",
+    "exit_code",
+    "status",
+    "files_read",
+    "files_changed",
+    "commands_run",
+    "targeted_tests",
+    "validation",
+    "decisions",
+    "blockers",
+    "next_phase",
+    "retry_recommended",
+    "fallback_recommended",
+    "usage",
+    "receipt_version"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "task_id": {
+      "type": "string",
+      "pattern": "^T-[0-9]+$",
+      "description": "The active task ID (T-NNN)."
+    },
+    "phase": {
+      "type": "string",
+      "enum": [
+        "reconcile",
+        "plan",
+        "implement",
+        "validate",
+        "document",
+        "review",
+        "closeout"
+      ]
+    },
+    "model": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9._:-]+$",
+      "description": "The Ollama cloud model name (or 'CONFIGURE_ME' when the user has not yet configured this profile)."
+    },
+    "profile": {
+      "type": "string",
+      "enum": ["high", "standard", "economy", "review", "fallback"]
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 UTC timestamp the child session launched."
+    },
+    "completed_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 UTC timestamp the child session exited."
+    },
+    "exit_code": {
+      "type": "integer",
+      "minimum": -1,
+      "maximum": 2147483647,
+      "description": "The child process exit code. -1 means the child was killed by the router (timeout or Ctrl+C)."
+    },
+    "status": {
+      "type": "string",
+      "enum": ["completed", "blocked", "usage_exhausted", "validation_failed", "skipped"]
+    },
+    "files_read": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Za-z0-9._:/\\\\-]+$"
+      },
+      "description": "Repository-relative paths the child session read. Paths outside the repo root are rejected by the router."
+    },
+    "files_changed": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Za-z0-9._:/\\\\-]+$"
+      }
+    },
+    "commands_run": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "targeted_tests": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "syntax_ok": { "type": "boolean" },
+        "schema_ok": { "type": "boolean" },
+        "pester_ok": { "type": "boolean" },
+        "dry_run_ok": { "type": "boolean" },
+        "notes": { "type": "string" }
+      }
+    },
+    "decisions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "Free-form list of small, in-scope decisions taken during the phase."
+    },
+    "blockers": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "Free-form list of out-of-scope blockers discovered during the phase."
+    },
+    "next_phase": {
+      "type": ["string", "null"],
+      "enum": [
+        "reconcile",
+        "plan",
+        "implement",
+        "validate",
+        "document",
+        "review",
+        "closeout",
+        null
+      ],
+      "description": "The phase the router should run next. null means the router stops after this phase (closeout)."
+    },
+    "retry_recommended": {
+      "type": "boolean"
+    },
+    "fallback_recommended": {
+      "type": "boolean",
+      "description": "When true, the router should select the configured fallback profile for the next attempt (or stop if no fallback is allowed)."
+    },
+    "usage": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["unknown"],
+          "properties": {
+            "unknown": { "type": "boolean", "enum": [true] }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "prompt_tokens",
+            "completion_tokens",
+            "elapsed_seconds"
+          ],
+          "properties": {
+            "prompt_tokens": { "type": "integer", "minimum": 0 },
+            "completion_tokens": { "type": "integer", "minimum": 0 },
+            "elapsed_seconds": { "type": "number", "minimum": 0 },
+            "cloud_usage_percentage_before": { "type": "number", "minimum": 0, "maximum": 100 },
+            "cloud_usage_percentage_after": { "type": "number", "minimum": 0, "maximum": 100 }
+          }
+        }
+      ]
+    },
+    "receipt_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "const": "1.0.0"
+    },
+    "plan_path": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9._:/\\\\-]+\\.md$",
+      "description": "Optional. The canonical plan path (only present in plan / implement / validate receipts)."
+    },
+    "commit_sha": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{7,64}$",
+      "description": "Optional. The merge commit SHA on main (only present in closeout receipts)."
+    },
+    "report_path": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9._:/\\\\-]+\\.md$",
+      "description": "Optional. The canonical review / implementation report path (present in review and document receipts)."
+    }
+  }
+}

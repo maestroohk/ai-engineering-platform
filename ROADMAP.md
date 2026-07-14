@@ -1711,6 +1711,13 @@ delivers a new reusable capability adds a row; a
 milestone that needs a capability updates its row's
 "Validation" cell.
 
+> **Operating-layer note (2026-07-14).** The AI
+> session router is a developer-tooling concern
+> outside the Blazor platform. It is recorded in
+> ADR-017 and `.ai/backlog/ai-session-router.md`. It
+> does not add a row to the matrix; the platform
+> self-dogfooding rule is unchanged.
+
 ---
 
 ## 5. What Is Intentionally Deferred
@@ -1744,6 +1751,18 @@ and are tracked separately:
   (autonomous loop, orchestration); the external
   tools are added through the registry when the user
   opts in.
+- The **future `AiEng.Platform` AI Session Router** —
+  the in-platform Blazor feature that consumes the
+  same logical model (`IAiSessionRouter`,
+  `IModelRoutingPolicy`, `IAgentSessionLauncher`,
+  `ModelRoutingConfiguration`,
+  `TaskExecutionPipeline`) as the operating-layer
+  PowerShell supervisor. The PowerShell supervisor
+  ships in T-031 (one-time session-efficiency task);
+  the in-platform router is backlog only and lands
+  in a future milestone. See
+  `.ai/backlog/ai-session-router.md` and
+  `DECISIONS.md` ADR-017.
 
 Adding these later must not require architectural
 change. The provider model and the design system are
