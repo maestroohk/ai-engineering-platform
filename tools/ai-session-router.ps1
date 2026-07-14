@@ -320,6 +320,41 @@ function Read-ReceiptNextPhase {
     return $null
 }
 
+function Test-ArgumentSafe {
+    # Reject any value that would break the quoted form (CR, LF, NUL).
+    # We control all callers; this is a defence-in-depth check.
+    param([Parameter(Mandatory = $true)] [string]$Value)
+    if ($Value -match "[ 
+]") { return $false }
+    return $true
+}
+
+function Format-CommandLine {
+    # PowerShell 5.1-compatible command-line formatter.
+    # Wraps every value in double quotes and escapes embedded double
+    # quotes by doubling them (the Windows command-line convention).
+    # Returns a single string suitable for ProcessStartInfo.Arguments
+    # under .NET Framework (PS 5.1) or pwsh (PS 7+).
+    param(
+        [Parameter(Mandatory = $true)]
+        [AllowEmptyCollection()]
+        [string[]]$Arguments
+    )
+    $sb = New-Object System.Text.StringBuilder
+    for ($i = 0; $i -lt $Arguments.Count; $i++) {
+        $a = [string]$Arguments[$i]
+        if (-not (Test-ArgumentSafe -Value $a)) {
+            throw "Refusing to format an unsafe argument (contains CR/LF/NUL)."
+        }
+        if ($i -gt 0) { [void]$sb.Append(' ') }
+        [void]$sb.Append('"')
+        # Escape embedded double quotes by doubling them.
+        [void]$sb.Append($a.Replace('"', '""'))
+        [void]$sb.Append('"')
+    }
+    return $sb.ToString()
+}
+
 function Start-ChildSession {
     param(
         [Parameter(Mandatory = $true)] [string]$Model,
@@ -329,14 +364,29 @@ function Start-ChildSession {
     if ($Model -notmatch $ModelNameRegex) {
         throw "Model name fails strict regex: $Model"
     }
+    if (-not (Test-ArgumentSafe -Value $Model)) {
+        throw "Model name contains CR/LF/NUL: $Model"
+    }
     $ollama = (Get-Command ollama -ErrorAction SilentlyContinue)
     if ($null -eq $ollama) {
         throw "ollama CLI not found on PATH"
     }
-    $argList = @('launch', 'claude', '--model', $Model, '-y', '--', '--', '-p', $Prompt)
+    # Flatten the prompt to a single line for the Windows command line.
+    # The child session is expected to read the canonical phase prompt
+    # from .ai/prompts/phases/<phase>.md, not from the inline prompt.
+    $flatPrompt = ($Prompt -replace "(`r`n|`n|`r)", ' ').Trim()
+    if (-not (Test-ArgumentSafe -Value $flatPrompt)) {
+        throw "Prompt contains NUL after flattening"
+    }
+    $argList = @('launch', 'claude', '--model', $Model, '-y', '--', '--', '-p', $flatPrompt)
+    # Build a single Arguments string via Format-CommandLine. This works on
+    # both PowerShell 5.1 (where ProcessStartInfo.ArgumentList is missing)
+    # and PowerShell 7+. No Invoke-Expression. No string concatenation of
+    # unescaped values.
+    $argString = Format-CommandLine -Arguments $argList
     $psi = New-Object System.Diagnostics.ProcessStartInfo
     $psi.FileName = $ollama.Source
-    foreach ($a in $argList) { [void]$psi.ArgumentList.Add($a) }
+    $psi.Arguments = $argString
     $psi.RedirectStandardOutput = $true
     $psi.RedirectStandardError = $true
     $psi.UseShellExecute = $false
@@ -364,8 +414,14 @@ function Print-DryRun {
         [Parameter(Mandatory = $true)] [string]$Model,
         [Parameter(Mandatory = $true)] [string]$Prompt
     )
-    $cmd = 'ollama launch claude --model ' + $Model + ' -y -- -p "' + $Prompt + '"'
-    Write-RouterLine $cmd
+    # Build the same Arguments string the real Start-ChildSession would
+    # pass to ProcessStartInfo.Arguments. The dry-run output is therefore
+    # the verbatim Arguments form, not a hand-built approximation. CR/LF
+    # in the prompt are flattened to spaces (same rule as Start-ChildSession).
+    $flatPrompt = ($Prompt -replace "(`r`n|`n|`r)", ' ').Trim()
+    $args = @('launch', 'claude', '--model', $Model, '-y', '--', '--', '-p', $flatPrompt)
+    $argString = Format-CommandLine -Arguments $args
+    Write-RouterLine ('ollama ' + $argString)
 }
 
 function Test-CloudOnly {

@@ -1,13 +1,13 @@
 {
   "schema_version": "1.0.0",
-  "task_id": "T-031",
-  "milestone": "M-Router",
-  "slice": "ai-session-router",
-  "capability_ids": ["C-027"],
-  "task_type": "feature",
+  "task_id": "T-030",
+  "milestone": "M4-C",
+  "slice": "m4-c-closeout",
+  "capability_ids": [],
+  "task_type": "closeout",
   "complexity_classification": "standard",
-  "current_phase": "closeout",
-  "next_phase": null,
+  "current_phase": "reconcile",
+  "next_phase": "reconcile",
   "recommended_profile_by_phase": {
     "reconcile": "economy",
     "plan": "high",
@@ -17,88 +17,69 @@
     "review": "review",
     "closeout": "economy"
   },
-  "approved_plan": ".ai/plans/ai-session-efficiency-and-model-routing.md",
-  "objective": "Ship the AI session router operating layer: a Windows-first PowerShell supervisor that drives one bounded Claude Code child per phase, each on a different configured cloud model. Preserve quality. Do not begin T-030 or any product feature work.",
+  "approved_plan": ".ai/plans/M4-C-provider-registry-foundation.md",
+  "objective": "Close out M4-C (Provider Registry Foundation). Ship the M4-C retrospective (per the Milestone Closeout Standard), the M4-D plan (drafted by the M4-C closeout; promoted to Awaiting Approval), the m4-c annotated milestone tag (at the M4-C closeout commit on main), and the M4-C status Active to Done (in milestones.json and the master delivery plan).",
   "included_scope": [
-    "tools/ai-session-router.ps1",
-    "tools/ai-session-router.example.ps1",
-    "tools/ai-session-router.Tests.ps1",
-    "tools/README.md",
-    ".ai/model-routing.json",
-    ".ai/model-routing.example.json",
-    ".ai/model-routing.schema.json",
-    ".ai/model-classification.md",
-    ".ai/model-classification.json",
-    ".ai/prompts/phases/*.md",
-    ".ai/receipts/phases/README.md",
-    ".ai/templates/phase-receipt.schema.json",
-    ".ai/templates/implementation-receipt.schema.json",
-    ".ai/context/*",
-    ".ai/index/*",
-    ".ai/archive/README.md",
-    ".ai/benchmarks/model-routing/*",
-    ".ai/backlog/ai-session-router.md",
-    "ROADMAP.md (additive note only)",
-    "DECISIONS.md (ADR-017 append only)",
-    ".ai/commands.md (Routed Next section)",
-    ".ai/session-start.md (Router-managed startup section)",
-    ".ai/state/* (incremental update only)",
-    "implementation-report-autonomous-model-routing-optimization.md"
+    "13-section M4-C retrospective",
+    ".ai/plans/M4-D-first-concrete-process-providers.md (draft; promoted to Awaiting Approval)",
+    "m4-c annotated milestone tag at the M4-C closeout commit",
+    "milestones.json M4-C status Active to Done",
+    ".ai/state/{tasks.json, current.md, task-board.md, capabilities.json} incremental update"
   ],
   "excluded_scope": [
-    "src/ application code",
-    "test/ application code",
-    "DOCS.md or PRODUCT.md",
-    "Any milestone reordering",
-    "Any AGENTS.md rule change",
-    "Any new Blazor service",
-    "T-030 (M4-C closeout)",
-    "Any other product task"
+    "M4-D implementation work",
+    "Any concrete provider creation",
+    "T-031 (already Done 2026-07-14)",
+    "Any new Blazor service"
   ],
   "expected_affected_paths": [
-    "tools/",
-    ".ai/",
-    "ROADMAP.md",
-    "DECISIONS.md"
+    ".ai/state/milestones.json",
+    ".ai/state/tasks.json",
+    ".ai/state/current.md",
+    ".ai/state/task-board.md",
+    ".ai/state/capabilities.json",
+    ".ai/state/session.json",
+    ".ai/plans/M4-D-first-concrete-process-providers.md",
+    "retrospective (new file)",
+    "ROADMAP.md"
   ],
   "relevant_adrs": [
     "ADR-012 (capability-oriented provider families)",
+    "ADR-013 (progressive self-dogfooding matrix)",
     "ADR-016 (composition root)",
-    "ADR-017 (autonomous cloud-model routing — new in this task)"
+    "ADR-017 (autonomous cloud-model routing)"
   ],
   "required_context_files": [
     ".ai/context/active-task.json",
     ".ai/context/repository-map.json",
-    ".ai/plans/ai-session-efficiency-and-model-routing.md"
+    ".ai/state/session.json",
+    ".ai/state/tasks.json",
+    ".ai/state/milestones.json",
+    ".ai/state/capabilities.json",
+    ".ai/state/task-board.md"
   ],
   "optional_context_files": [
+    ".ai/plans/M4-C-provider-registry-foundation.md",
+    ".ai/commands.md",
     "AGENTS.md",
     "DECISIONS.md",
-    "ROADMAP.md",
-    ".ai/commands.md",
-    ".ai/state/tasks.json",
-    ".ai/state/session.json"
+    "ROADMAP.md"
   ],
-  "tests": [
-    "tools/ai-session-router.Tests.ps1 (Pester, mocked, no real cloud invocation)"
-  ],
+  "tests": [],
   "validation": [
     "JSON schema validation (every .ai/**/*.json parses)",
-    "PowerShell syntax validation (parse every script in tools/)",
-    "Pester tests (mocked)",
-    "Dry-run end-to-end routing simulation"
+    "Markdown structure check (13 sections in the retrospective)",
+    "milestones.json M4-C status Active to Done"
   ],
-  "expected_branch": "feature/T-031-ai-session-router",
+  "expected_branch": "feature/T-030-m4-c-closeout",
   "expected_commit": "single focused commit on the feature branch; fast-forward merge to main; delete the branch locally; no push",
   "stop_conditions": [
-    "PowerShell syntax validation fails",
     "JSON schema validation fails",
-    "Pester tests fail twice on the same assertion",
-    "Dry-run routing produces an unexpected model name or command form",
-    "src/ or test/ application code is modified",
-    "AGENTS.md rules are modified"
+    "milestones.json M4-C status not flipped Active to Done",
+    "M4-D plan not present at the canonical path",
+    "m4-c annotated tag not present at the closeout commit"
   ],
-  "last_successful_phase": "document",
+  "last_successful_phase": null,
   "failure_count": 0,
   "fallback_count": 0
 }
