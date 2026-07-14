@@ -1,6 +1,7 @@
 using AiEng.Platform.App.Components;
 using AiEng.Platform.App.Composition;
 using AiEng.Platform.Application.Capabilities;
+using AiEng.Platform.Application.Providers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,7 @@ builder.Services.AddPlatformServices(typeof(Program).Assembly);
 var app = builder.Build();
 
 await LogHostCapabilitiesAsync(app);
+await LogProviderRegistryAsync(app);
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -51,5 +53,43 @@ static async Task LogHostCapabilitiesAsync(WebApplication app)
     catch (Exception ex)
     {
         logger.LogWarning(ex, "Failed to detect host capabilities at startup.");
+    }
+}
+
+static async Task LogProviderRegistryAsync(WebApplication app)
+{
+    var logger = app.Services.GetRequiredService<ILogger<Program>>();
+    try
+    {
+        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
+        var service = app.Services.GetRequiredService<IProviderRegistry>();
+        var families = new ProviderFamily[]
+        {
+            ProviderFamily.Git,
+            ProviderFamily.AgentRuntime,
+            ProviderFamily.Review,
+            ProviderFamily.QualityGate,
+            ProviderFamily.AutonomousLoop,
+            ProviderFamily.Orchestration,
+        };
+        var segments = new List<string>(families.Length);
+        foreach (var family in families)
+        {
+            try
+            {
+                var providers = await service.ListProvidersAsync(family, cts.Token);
+                segments.Add($"{family}={providers.Count}");
+            }
+            catch (Exception ex)
+            {
+                segments.Add($"{family}=error");
+                logger.LogWarning(ex, "Failed to list providers for family {Family} at startup.", family);
+            }
+        }
+        logger.LogInformation("Provider registry report: {Report}", string.Join("; ", segments));
+    }
+    catch (Exception ex)
+    {
+        logger.LogWarning(ex, "Failed to list providers at startup.");
     }
 }

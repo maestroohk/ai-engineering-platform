@@ -1,0 +1,206 @@
+@namespace AiEng.Platform.App.Components.Pages
+
+@page "/providers"
+@attribute [RouteMetadata("/providers", "Providers", Order = 5, ShowInSidebar = true, Icon = "◇", Description = "Available providers grouped by family; filtered by host capability.")]
+@layout AppLayout
+@rendermode InteractiveServer
+@using AiEng.Platform.App.Components.Common
+@using AiEng.Platform.App.Components.Layout
+@using AiEng.Platform.App.Components.Primitive
+@using AiEng.Platform.App.Components.Display
+@using AiEng.Platform.App.Components.Feedback
+@using AiEng.Platform.App.Components.Shell
+@using AiEng.Platform.App.Components.Navigation
+@using AiEng.Platform.App.Components.Providers
+@using AiEng.Platform.App.Components.Diagnostics
+@using AiEng.Platform.App.Layouts
+@using AiEng.Platform.Application.Capabilities
+@using AiEng.Platform.Application.Infrastructure
+@using AiEng.Platform.Application.Providers
+@inject IProviderRegistry Service
+@inject IHostCapabilitiesService Capabilities
+@inject IPlatformInfo PlatformInfo
+
+<PageTitle>Providers — AI Engineering Platform</PageTitle>
+
+<AppPageHeader>
+    <Breadcrumbs>
+        <AppBreadcrumb />
+    </Breadcrumbs>
+    <Title>Providers</Title>
+    <Description>Available providers grouped by family; filtered by host capability. The provider registry consumes the host capability report (M4-B) and exposes the eligible providers for each of the six capability families (M4-C.1).</Description>
+    <Actions>
+        <AppButton Variant="AppButtonVariant.Outline"
+                   data-testid="refresh-providers"
+                   Title="Re-run provider registry lookup."
+                   @onclick="OnRefresh"
+                   Disabled="@_isLoading"
+                   Loading="@_isLoading">
+            Refresh
+        </AppButton>
+    </Actions>
+</AppPageHeader>
+
+@if (_isLoading && !HasAnyProviders())
+{
+    <AppCard Class="app-providers-card">
+        <Header>Loading providers</Header>
+        <ChildContent>
+            <AppLoading>
+                <Label>Resolving providers…</Label>
+            </AppLoading>
+        </ChildContent>
+    </AppCard>
+}
+else if (!string.IsNullOrEmpty(_error))
+{
+    <AppCard Class="app-providers-card">
+        <Header>Provider registry error</Header>
+        <ChildContent>
+            <AppErrorState ErrorCode="@_errorCode" CorrelationId="@_correlationId">
+                <Title>Cannot load providers</Title>
+                <Description>@_error</Description>
+            </AppErrorState>
+        </ChildContent>
+    </AppCard>
+}
+else
+{
+    @foreach (var family in _familyOrder)
+    {
+        var providers = GetProviders(family);
+        <AppCard Class="app-providers-card">
+            <Header>@GetFamilyHeader(family)</Header>
+            <ChildContent>
+                <AppProviderList Providers="@providers"
+                                 IsLoading="@false"
+                                 ErrorMessage="@(family == _failedFamily ? _familyError : null)"
+                                 ErrorCode="@(family == _failedFamily ? _familyErrorCode : null)" />
+            </ChildContent>
+        </AppCard>
+    }
+}
+
+@if (_capabilities is not null)
+{
+    <AppCard Class="app-providers-card">
+        <Header>Host metadata</Header>
+        <ChildContent>
+            <AppKeyValueList Items="@_meta" />
+        </ChildContent>
+    </AppCard>
+}
+
+@code {
+    private static readonly IReadOnlyList<ProviderFamily> _familyOrder = new ProviderFamily[]
+    {
+        ProviderFamily.Git,
+        ProviderFamily.AgentRuntime,
+        ProviderFamily.Review,
+        ProviderFamily.QualityGate,
+        ProviderFamily.AutonomousLoop,
+        ProviderFamily.Orchestration,
+    };
+
+    private readonly Dictionary<ProviderFamily, IReadOnlyList<ProviderDescriptor>> _providersByFamily = new();
+    private HostCapabilities? _capabilities;
+    private IReadOnlyList<KeyValuePair<string, string>> _meta = Array.Empty<KeyValuePair<string, string>>();
+    private bool _isLoading = true;
+    private string? _error;
+    private string? _errorCode;
+    private string? _correlationId;
+    private string? _familyError;
+    private string? _familyErrorCode;
+    private ProviderFamily? _failedFamily;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadAsync();
+    }
+
+    private async Task OnRefresh()
+    {
+        await LoadAsync();
+    }
+
+    private async Task LoadAsync()
+    {
+        _isLoading = true;
+        _error = null;
+        _errorCode = null;
+        _correlationId = null;
+        _familyError = null;
+        _familyErrorCode = null;
+        _failedFamily = null;
+        _providersByFamily.Clear();
+        try
+        {
+            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+            var capabilitiesTask = Capabilities.DetectAsync(cts.Token);
+            foreach (var family in _familyOrder)
+            {
+                try
+                {
+                    var providers = await Service.ListProvidersAsync(family, cts.Token);
+                    _providersByFamily[family] = providers;
+                }
+                catch (Exception ex) when (ex is not OperationCanceledException)
+                {
+                    _providersByFamily[family] = Array.Empty<ProviderDescriptor>();
+                    _failedFamily = family;
+                    _familyError = ex.Message;
+                    _familyErrorCode = "PROVIDER_LOOKUP_FAILED";
+                }
+            }
+            _capabilities = await capabilitiesTask;
+            _meta = BuildMetadata(_capabilities);
+        }
+        catch (OperationCanceledException)
+        {
+            _error = "Provider registry lookup timed out.";
+            _errorCode = "PROVIDER_LOOKUP_TIMEOUT";
+        }
+        catch (Exception ex)
+        {
+            _error = ex.Message;
+            _errorCode = "PROVIDER_LOOKUP_FAILED";
+        }
+        finally
+        {
+            _isLoading = false;
+        }
+    }
+
+    private bool HasAnyProviders() => _providersByFamily.Count > 0;
+
+    private IReadOnlyList<ProviderDescriptor> GetProviders(ProviderFamily family)
+    {
+        if (_providersByFamily.TryGetValue(family, out var list))
+        {
+            return list;
+        }
+        return Array.Empty<ProviderDescriptor>();
+    }
+
+    private static string GetFamilyHeader(ProviderFamily family) => family switch
+    {
+        ProviderFamily.Git => "Git providers",
+        ProviderFamily.AgentRuntime => "Agent runtime providers",
+        ProviderFamily.Review => "Review providers",
+        ProviderFamily.QualityGate => "Quality gate providers",
+        ProviderFamily.AutonomousLoop => "Autonomous loop providers",
+        ProviderFamily.Orchestration => "Orchestration providers",
+        _ => family.ToString()
+    };
+
+    private IReadOnlyList<KeyValuePair<string, string>> BuildMetadata(HostCapabilities report)
+    {
+        return new KeyValuePair<string, string>[]
+        {
+            new("Detected at", report.DetectedAt.LocalDateTime.ToString("yyyy-MM-dd HH:mm:ss")),
+            new("Data directory", PlatformInfo.GetDataDirectory()),
+            new("Config directory", PlatformInfo.GetConfigDirectory()),
+            new("Is Windows host", PlatformInfo.IsWindows.ToString())
+        };
+    }
+}

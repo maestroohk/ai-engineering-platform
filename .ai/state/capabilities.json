@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1.0",
-  "updated_at": "2026-07-13T16:00:00Z",
-  "updated_by_session": "m4-c-1-provider-registry-contract-and-family-registries",
+  "updated_at": "2026-07-13T19:00:00Z",
+  "updated_by_session": "m4-c-2-app-provider-list-and-providers-page",
   "completion_status_mapping": {
     "NotStarted": "Not in capabilities.json. Reserved for capabilities the product will need but which have not yet been admitted to the graph.",
     "Planned": "status: Accepted; delivered_by_milestone status: Planned; no plan yet, or plan stub is Draft. Sequenced for a milestone, plan not promoted to Ready / Awaiting Approval.",
@@ -421,7 +421,7 @@
       "id": "C-010",
       "title": "IProviderRegistry and family-scoped registries",
       "status": "Accepted",
-      "completion_status": "Delivered (M4-C.1 boundary slice delivered 2026-07-13; C-010 verification deferred to the M4-C closeout when the AppProviderList page consumes IProviderRegistry end-to-end)",
+      "completion_status": "Delivered (M4-C boundary + surface slices delivered 2026-07-13; C-010 verification deferred to the M4-C closeout)",
       "layer": 1,
       "category": "ProviderModel",
       "description": "The cross-family registry and the six family-scoped registries. Enumerate registered providers, resolve by ProviderFamily, apply host capability filter.",
@@ -442,19 +442,22 @@
         "M8"
       ],
       "delivered_by_tasks": [
-        "T-028 (M4-C.1 first session, Done 2026-07-13)"
+        "T-028 (M4-C.1 first session, Done 2026-07-13)",
+        "T-029 (M4-C.2 first session, Done 2026-07-13)"
       ],
-      "next_task": "T-029 (M4-C.2 first session)",
+      "next_task": null,
       "blocked_by": [],
       "evidence": {
         "plans": [
           ".ai/plans/M4-C-provider-registry-foundation.md"
         ],
         "reports": [
-          "implementation-report-m4-c-1-provider-registry-contract-and-family-registries.md"
+          "implementation-report-m4-c-1-provider-registry-contract-and-family-registries.md",
+          "implementation-report-m4-c-2-app-provider-list-and-providers-page.md"
         ],
         "commits": [
-          "feat(m4-c.1): add IProviderRegistry contract, family registries, SystemProviderRegistry implementation, family fakes, and AddProviderRegistry composition root"
+          "feat(m4-c.1): add IProviderRegistry contract, family registries, SystemProviderRegistry implementation, family fakes, and AddProviderRegistry composition root",
+          "feat(m4-c.2): add AppProviderList data-owning design-system component and /providers page"
         ],
         "tests": [
           "Constructor_throws_ArgumentNullException_when_gitFamily_is_null",
@@ -475,7 +478,14 @@
           "ListProvidersAsync_calls_IReviewProviderFamily_when_family_is_Review",
           "ListProvidersAsync_calls_IHostCapabilitiesService_once_per_invocation",
           "ListProvidersAsync_throws_ArgumentOutOfRangeException_for_unknown_family",
-          "FakeGitProviderFamily_records_CallCount"
+          "FakeGitProviderFamily_records_CallCount",
+          "ProvidersPage_calls_ListProvidersAsync_on_init",
+          "ProvidersPage_renders_AppProviderList_per_family",
+          "ProvidersPage_Refresh_button_reruns_ListProvidersAsync",
+          "ProvidersPage_renders_host_metadata",
+          "ProvidersPage_renders_items_per_family",
+          "Providers_page_resolves_providers_through_IProviderRegistry",
+          "Providers_folder_does_not_reference_process_or_credential_boundary_directly"
         ],
         "source_paths": [
           "src/AiEng.Platform.Application/Providers/IProviderRegistry.cs",
@@ -497,7 +507,18 @@
           "src/AiEng.Platform.Infrastructure/Providers/Families/AutonomousLoopProviderFamily.cs",
           "src/AiEng.Platform.Infrastructure/Providers/Families/OrchestrationProviderFamily.cs",
           "src/AiEng.Platform.App/Composition/Providers/ProviderRegistryServiceCollectionExtensions.cs",
-          "tests/AiEng.Platform.UnitTests/Providers/SystemProviderRegistryTests.cs"
+          "tests/AiEng.Platform.UnitTests/Providers/SystemProviderRegistryTests.cs",
+          "src/AiEng.Platform.App/Components/Providers/AppProviderList.razor",
+          "src/AiEng.Platform.App/Components/Providers/AppProviderList.razor.cs",
+          "src/AiEng.Platform.App/Components/Providers/AppProviderList.razor.css",
+          "src/AiEng.Platform.App/Components/Providers/_Imports.razor",
+          "src/AiEng.Platform.App/Components/Pages/Providers.razor",
+          "src/AiEng.Platform.App/Components/Pages/Providers.razor.css",
+          "src/AiEng.Platform.App/Program.cs",
+          "tests/AiEng.Platform.ArchitectureTests/Providers/Providers_Resolve_Through_Registry.cs",
+          "tests/AiEng.Platform.ComponentTests/Components/Providers/AppProviderListTests.cs",
+          "tests/AiEng.Platform.ComponentTests/Pages/ProvidersPageTests.cs",
+          "docs/providers.md"
         ]
       },
       "acceptance_criteria": [
@@ -506,11 +527,12 @@
         "No-op family stubs are wired in the composition root (M4-C.1); M4-D replaces the stubs with concrete providers."
       ],
       "completed_criteria": [
-        "M4-C.1 (T-028): IProviderRegistry contract + ProviderDescriptor + ProviderFamily + ProviderStatus + 6 family registry contracts + IProviderFamily base + SystemProviderRegistry implementation + 6 no-op family stubs + AddProviderRegistry composition root + 6 family fakes + 19 unit tests are delivered. 395 passed (376 pre-M4-C.1 + 19 new), 0 failed, 9 skipped (per ADR-016 / M4-D). The IProviderRegistry is the single allowed seam for provider lookup; no App/Components/ code may bypass the seam (enforced by the M4-C.2 Providers_Resolve_Through_Registry architecture test)."
+        "M4-C.1 (T-028): IProviderRegistry contract + ProviderDescriptor + ProviderFamily + ProviderStatus + 6 family registry contracts + IProviderFamily base + SystemProviderRegistry implementation + 6 no-op family stubs + AddProviderRegistry composition root + 6 family fakes + 19 unit tests are delivered. 395 passed (376 pre-M4-C.1 + 19 new), 0 failed, 9 skipped (per ADR-016 / M4-D). The IProviderRegistry is the single allowed seam for provider lookup; no App/Components/ code may bypass the seam (enforced by the M4-C.2 Providers_Resolve_Through_Registry architecture test).",
+        "M4-C.2 (T-029): AppProviderList + /providers page + Providers_Resolve_Through_Registry Active architecture test + docs/providers.md + docs/design-system.md 4.5 update are delivered. 416 passed (395 pre-M4-C.2 + 13 bUnit component + 5 bUnit page + 1 new active architecture), 0 failed, 9 skipped (per ADR-016 / M4-D)."
       ],
       "adr": "ADR-012, ADR-016",
       "architecture_tests": [
-        "Providers_Resolve_Through_Registry (deferred to M4-C.2)",
+        "Providers_Resolve_Through_Registry",
         "Only_CompositionRoot_MayReference_ConcreteProviders (registered-but-disabled per ADR-016 / M4-D)",
         "Pages_Resolve_Providers_Through_Registry (registered-but-disabled per ADR-016 / M4-D)",
         "Pages_DoNotReference_ConcreteProviders (registered-but-disabled per ADR-016 / M4-D)",
@@ -1428,6 +1450,156 @@
       ],
       "adr": null,
       "architecture_tests": [],
+      "last_updated": "2026-07-13"
+    },
+    {
+      "id": "C-025",
+      "title": "AppProviderList",
+      "status": "Accepted",
+      "completion_status": "Delivered (M4-C.2 surface slice delivered 2026-07-13; C-025 verification deferred to the M4-C closeout)",
+      "layer": 3,
+      "category": "DesignSystem",
+      "description": "The data-owning four-state design-system component that renders an IReadOnlyList<ProviderDescriptor> from IProviderRegistry.ListProvidersAsync. Maps ProviderStatus to AppStatusDotVariant; renders the Disabled AppBadge for Status=Disabled; renders the Version in a monospaced muted font; renders the Metadata as an AppKeyValueList with the Code format.",
+      "product_outcome": "The /providers page renders one AppCard per ProviderDescriptor with the status dot + DisplayName + Version + Metadata, grouped by ProviderFamily.",
+      "depends_on": [
+        "C-001",
+        "C-010",
+        "C-020"
+      ],
+      "consumed_by": [
+        "C-026"
+      ],
+      "delivered_by_milestone": "M4-C",
+      "consumed_by_milestones": [
+        "M4-C",
+        "M4-D",
+        "M5",
+        "M6",
+        "M7",
+        "M8"
+      ],
+      "delivered_by_tasks": [
+        "T-029 (M4-C.2 first session, Done 2026-07-13)"
+      ],
+      "next_task": null,
+      "blocked_by": [],
+      "evidence": {
+        "plans": [
+          ".ai/plans/M4-C-provider-registry-foundation.md"
+        ],
+        "reports": [
+          "implementation-report-m4-c-2-app-provider-list-and-providers-page.md"
+        ],
+        "commits": [
+          "feat(m4-c.2): add AppProviderList data-owning design-system component and /providers page"
+        ],
+        "tests": [
+          "AppProviderList_Populated_state_renders_provider_items",
+          "AppProviderList_Empty_state_renders_empty_state",
+          "AppProviderList_Loading_state_renders_loading",
+          "AppProviderList_Error_state_renders_error_state",
+          "AppProviderList_renders_DisplayName_per_descriptor",
+          "AppProviderList_renders_StatusDot_Success_for_Available",
+          "AppProviderList_renders_StatusDot_Error_for_Unavailable",
+          "AppProviderList_renders_Disabled_badge_for_Disabled_status",
+          "AppProviderList_renders_Version_per_descriptor",
+          "AppProviderList_renders_muted_version_when_Version_is_null",
+          "AppProviderList_renders_Metadata_per_descriptor",
+          "AppProviderList_renders_empty_metadata_section_when_Metadata_is_empty",
+          "AppProviderList_CustomPopulated_slot_overrides_default",
+          "AppProviderList_populated_list_has_aria_live_polite"
+        ],
+        "source_paths": [
+          "src/AiEng.Platform.App/Components/Providers/AppProviderList.razor",
+          "src/AiEng.Platform.App/Components/Providers/AppProviderList.razor.cs",
+          "src/AiEng.Platform.App/Components/Providers/AppProviderList.razor.css",
+          "src/AiEng.Platform.App/Components/Providers/_Imports.razor",
+          "tests/AiEng.Platform.ComponentTests/Components/Providers/AppProviderListTests.cs"
+        ]
+      },
+      "acceptance_criteria": [
+        "AppProviderList renders the 4 data-owning states: Loading, Empty, Error, Populated.",
+        "AppProviderList maps ProviderStatus to AppStatusDotVariant.",
+        "AppProviderList renders the Disabled AppBadge for Status=Disabled.",
+        "AppProviderList renders the Version in a monospaced muted font.",
+        "AppProviderList renders the Metadata as an AppKeyValueList with the Code format.",
+        "The populated list has role=\"list\" and aria-live=\"polite\".",
+        "The 13 bUnit component tests cover all 4 states + per-item rendering."
+      ],
+      "completed_criteria": [
+        "M4-C.2 (T-029): AppProviderList is delivered in src/AiEng.Platform.App/Components/Providers/ as the data-owning four-state design-system component. 13 bUnit component tests cover all 4 states + per-item rendering + the aria-live attribute."
+      ],
+      "adr": null,
+      "architecture_tests": [],
+      "last_updated": "2026-07-13"
+    },
+    {
+      "id": "C-026",
+      "title": "/providers page",
+      "status": "Accepted",
+      "completion_status": "Delivered (M4-C.2 surface slice delivered 2026-07-13; C-026 verification deferred to the M4-C closeout)",
+      "layer": 3,
+      "category": "Routing",
+      "description": "The /providers page that composes the AppPageHeader + 6 AppProviderList cards (one per ProviderFamily) + a host-metadata AppKeyValueList block. The page is the user-visible surface for the provider registry.",
+      "product_outcome": "The /providers page renders the available providers grouped by family; the sidebar entry surfaces the page in the M2.2 INavigationRegistry; the page is reachable via the AppPageHeader Actions Refresh button.",
+      "depends_on": [
+        "C-001",
+        "C-010",
+        "C-025"
+      ],
+      "consumed_by": [],
+      "delivered_by_milestone": "M4-C",
+      "consumed_by_milestones": [
+        "M4-D",
+        "M5",
+        "M6",
+        "M7",
+        "M8"
+      ],
+      "delivered_by_tasks": [
+        "T-029 (M4-C.2 first session, Done 2026-07-13)"
+      ],
+      "next_task": null,
+      "blocked_by": [],
+      "evidence": {
+        "plans": [
+          ".ai/plans/M4-C-provider-registry-foundation.md"
+        ],
+        "reports": [
+          "implementation-report-m4-c-2-app-provider-list-and-providers-page.md"
+        ],
+        "commits": [
+          "feat(m4-c.2): add AppProviderList data-owning design-system component and /providers page"
+        ],
+        "tests": [
+          "ProvidersPage_calls_ListProvidersAsync_on_init",
+          "ProvidersPage_renders_AppProviderList_per_family",
+          "ProvidersPage_Refresh_button_reruns_ListProvidersAsync",
+          "ProvidersPage_renders_host_metadata",
+          "ProvidersPage_renders_items_per_family"
+        ],
+        "source_paths": [
+          "src/AiEng.Platform.App/Components/Pages/Providers.razor",
+          "src/AiEng.Platform.App/Components/Pages/Providers.razor.css",
+          "tests/AiEng.Platform.ComponentTests/Pages/ProvidersPageTests.cs"
+        ]
+      },
+      "acceptance_criteria": [
+        "Providers.razor is registered as @page \"/providers\" with [RouteMetadata] for the sidebar entry.",
+        "Providers.razor @inject IProviderRegistry for the single-seam provider lookup; the page may inject IHostCapabilitiesService for the host-metadata context.",
+        "Providers.razor renders 6 AppProviderList cards, one per ProviderFamily.",
+        "Providers.razor renders a host-metadata AppKeyValueList block.",
+        "Providers.razor has a Refresh AppButton with data-testid=\"refresh-providers\".",
+        "The 5 bUnit page tests cover init, family rendering, refresh, host metadata, and per-family item count.",
+        "The Providers_Resolve_Through_Registry Active architecture test enforces the single-seam rule for IProviderRegistry on the Providers folder."
+      ],
+      "completed_criteria": [
+        "M4-C.2 (T-029): /providers page is delivered in src/AiEng.Platform.App/Components/Pages/Providers.razor. 5 bUnit page tests cover init, family rendering, refresh, host metadata, and per-family item count. The Providers_Resolve_Through_Registry Active architecture test enforces the single-seam rule for IProviderRegistry on the Providers folder."
+      ],
+      "adr": null,
+      "architecture_tests": [
+        "Providers_Resolve_Through_Registry"
+      ],
       "last_updated": "2026-07-13"
     }
   ]

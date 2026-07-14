@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
-  "updated_at": "2026-07-13T16:00:00Z",
-  "updated_by_session": "m4-c-1-provider-registry-contract-and-family-registries",
+  "updated_at": "2026-07-13T19:00:00Z",
+  "updated_by_session": "m4-c-2-app-provider-list-and-providers-page",
   "tasks": [
     {
       "id": "T-001",
@@ -1127,18 +1127,72 @@
     {
       "id": "T-029",
       "title": "M4-C.2 second session — AppProviderList component + /providers page + Providers_Resolve_Through_Registry architecture test + docs",
-      "status": "Ready",
+      "status": "Done",
       "milestone": "M4-C",
       "slice": "M4-C.2",
       "created_at": "2026-07-13T15:00:00Z",
+      "claimed_at": "2026-07-13T17:00:00Z",
+      "started_at": "2026-07-13T17:00:00Z",
+      "started_by_session": "m4-c-2-app-provider-list-and-providers-page",
+      "completed_at": "2026-07-13T18:00:00Z",
+      "completed_by_session": "m4-c-2-app-provider-list-and-providers-page",
+      "owner": "m4-c-2-app-provider-list-and-providers-page session",
+      "plan": ".ai/plans/M4-C-provider-registry-foundation.md",
+      "implementation_report": "implementation-report-m4-c-2-app-provider-list-and-providers-page.md",
+      "evidence": {
+        "branch": "feature/T-029-m4-c-2-provider-list-component-and-page",
+        "files_added": [
+          "src/AiEng.Platform.App/Components/Providers/AppProviderList.razor",
+          "src/AiEng.Platform.App/Components/Providers/AppProviderList.razor.cs",
+          "src/AiEng.Platform.App/Components/Providers/AppProviderList.razor.css",
+          "src/AiEng.Platform.App/Components/Providers/_Imports.razor",
+          "src/AiEng.Platform.App/Components/Pages/Providers.razor",
+          "src/AiEng.Platform.App/Components/Pages/Providers.razor.css",
+          "tests/AiEng.Platform.ArchitectureTests/Providers/Providers_Resolve_Through_Registry.cs",
+          "tests/AiEng.Platform.ComponentTests/Components/Providers/AppProviderListTests.cs",
+          "tests/AiEng.Platform.ComponentTests/Pages/ProvidersPageTests.cs",
+          "docs/providers.md",
+          ".ai/handoffs/2026-07-13-m4-c-2-app-provider-list-and-providers-page.md",
+          "implementation-report-m4-c-2-app-provider-list-and-providers-page.md"
+        ],
+        "files_modified": [
+          "src/AiEng.Platform.App/Program.cs",
+          "docs/design-system.md",
+          ".ai/state/session.json",
+          ".ai/state/tasks.json",
+          ".ai/state/current.md",
+          ".ai/state/task-board.md",
+          ".ai/state/milestones.json",
+          ".ai/state/capabilities.json",
+          ".ai/handoffs/latest.md"
+        ],
+        "tests": {
+          "component_tests_added": 18,
+          "architecture_tests_added": 2,
+          "unit_tests_total": 118,
+          "component_tests_total": 282,
+          "active_tests_passing": 416,
+          "active_tests_failed": 0,
+          "tests_skipped": 9,
+          "build_warnings": 0,
+          "build_errors": 0
+        },
+        "commit_message": "feat(m4-c.2): add AppProviderList data-owning design-system component and /providers page"
+      },
+      "notes": "Delivered 2026-07-13. M4-C.2 scope landed per the approved M4-C plan: the AppProviderList data-owning four-state design-system component in src/AiEng.Platform.App/Components/Providers/ (mirrors the M4-B.2 AppCapabilityList; renders one .app-provider-list-item per ProviderDescriptor; maps ProviderStatus to AppStatusDotVariant; renders Disabled badge; renders Metadata as a small AppKeyValueList); the /providers page in src/AiEng.Platform.App/Components/Pages/Providers.razor (Order = 5; renders 6 AppProviderList cards, one per ProviderFamily; renders host-metadata AppKeyValueList block; @inject IProviderRegistry + IHostCapabilitiesService + IPlatformInfo); the startup provider-registry log in src/AiEng.Platform.App/Program.cs (LogProviderRegistryAsync after LogHostCapabilitiesAsync; 10-second CTS; iterates the 6 ProviderFamily values; logs at Information level; try/catch with LogWarning on failure); the Providers_Resolve_Through_Registry Active architecture test in tests/AiEng.Platform.ArchitectureTests/Providers/Providers_Resolve_Through_Registry.cs (2 [Fact] methods Active; forbidden tokens: RunToCompletionAsync, ICredentialVault, new SystemProviderRegistry; scoped to App/Components/Providers/); 13 bUnit component tests in AppProviderListTests.cs; 5 bUnit page tests in ProvidersPageTests.cs; docs/providers.md (10 sections); docs/design-system.md § 4.5 update (AppProviderList row added in Implemented (M4-C.2) status). Cumulative test count: 416 passed (118 unit + 282 component + 16 architecture), 0 failed, 9 skipped (per ADR-016 / M4-D). Branch: feature/T-029-m4-c-2-provider-list-component-and-page. Commit: feat(m4-c.2): add AppProviderList data-owning design-system component and /providers page. Push skipped (no remote authorisation). One documented deviation: the M4-C.2 architecture test forbids 'new SystemProviderRegistry' (the direct-instantiation escape hatch) but does not forbid 'Capabilities.DetectAsync(' on the Providers.razor page (the page may inject IHostCapabilitiesService for the host-metadata context, mirroring the M4-B.3 Diagnostics.razor pattern; the test enforces the single-seam rule for IProviderRegistry, not the capability service). The session does NOT begin M4-C closeout, M4-D, or provider creation. The next session is the M4-C closeout (T-030) on the user's Approve or Next invocation."
+    },
+    {
+      "id": "T-030",
+      "title": "M4-C closeout — M4-C retrospective (per the Milestone Closeout Standard) + M4-D plan + m4-c annotated milestone tag",
+      "status": "Ready",
+      "milestone": "M4-C",
+      "slice": "M4-C.x",
+      "created_at": "2026-07-13T18:00:00Z",
       "depends_on_milestone": "M4-C (Active)",
-      "depends_on_task": "T-028 (M4-C.1, InProgress 2026-07-13)",
-      "depends_on_capabilities": [
-        "C-018 (IProviderRegistry)",
-        "C-010 (Git provider)",
-        "C-011 (AgentRuntime provider)"
-      ],
-      "notes": "M4-C.2 second session. M4-C.2 ships the AppProviderList component + the /providers page + the startup provider-registry log + the Providers_Resolve_Through_Registry architecture test + docs/providers.md + docs/design-system.md § 4.5 update. M4-C.2 is the surface slice per the M4-C plan § 2 items 9-15. M4-C.2 is the second M4-C implementation slice per the two-slices-per-milestone pattern. M4-C.2 does NOT begin M4-C closeout, M4-D, or any provider creation. M4-C.2 is staged for the user's Approve / Next invocation after T-028 is Done.",
+      "depends_on_task": "T-029 (M4-C.2, Done 2026-07-13)",
+      "promoted_to_ready_at": "2026-07-13",
+      "promoted_to_ready_by_session": "m4-c-2-app-provider-list-and-providers-page",
+      "notes": "M4-C closeout. M4-C has three slices: M4-C.1 (delivered 2026-07-13; T-028), M4-C.2 (delivered 2026-07-13; T-029), M4-C.x (this task). M4-C.x follows M4-C.2 per the Progressive Coding Rule. M4-C closeout ships: retrospective-m4-c-provider-registry-foundation.md (13 sections per the Milestone Closeout Standard at .ai/workflows/milestone-closeout.md); M4-D plan at .ai/plans/M4-D-first-concrete-process-providers.md (Awaiting Approval); M4-C Active to Done in milestones.json (closed_at 2026-07-13); m4-c annotated milestone tag at the M4-C closeout commit on main; the M4-C closeout implementation report; the M4-C closeout per-session handoff. M4-C closeout is a docs + workflow + state change — no source code; no M4-D implementation; no provider creation; no push. M4-C closeout is staged for the user's Approve / Next invocation after T-029 is Done.",
       "evidence": {}
     }
   ]

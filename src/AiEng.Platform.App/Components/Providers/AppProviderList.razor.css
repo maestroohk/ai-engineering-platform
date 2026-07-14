@@ -1,0 +1,63 @@
+.app-provider-list {
+    display: block;
+    width: 100%;
+}
+
+.app-provider-list-item {
+    display: block;
+    width: 100%;
+}
+
+.app-provider-list-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    width: 100%;
+}
+
+.app-provider-list-header-right {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.app-provider-list-name {
+    font-weight: 500;
+    color: var(--app-fg);
+    font-size: 0.95rem;
+}
+
+.app-provider-list-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.app-provider-list-id {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.8125rem;
+    color: var(--app-fg-muted);
+    background-color: var(--app-surface-2);
+    border-radius: var(--app-radius-sm);
+    padding: 0.125rem 0.375rem;
+}
+
+.app-provider-list-version {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.8125rem;
+    color: var(--app-fg-muted);
+    background-color: var(--app-surface-2);
+    border-radius: var(--app-radius-sm);
+    padding: 0.125rem 0.375rem;
+}
+
+.app-provider-list-version-muted {
+    color: var(--app-fg-subtle);
+    font-style: italic;
+}
+
+.app-provider-list-metadata {
+    width: 100%;
+}

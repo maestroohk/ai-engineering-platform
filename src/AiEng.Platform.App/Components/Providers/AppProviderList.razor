@@ -1,0 +1,135 @@
+@namespace AiEng.Platform.App.Components.Providers
+@inherits AppProviderListBase
+
+@if (IsLoading)
+{
+    <div class="app-provider-list" data-state="loading" @attributes="AdditionalAttributes">
+        @if (Loading is not null)
+        {
+            @Loading
+        }
+        else
+        {
+            <AppLoading>
+                <Label>Loading providers…</Label>
+            </AppLoading>
+        }
+    </div>
+}
+else if (!string.IsNullOrEmpty(ErrorMessage))
+{
+    <div class="app-provider-list" data-state="error" @attributes="AdditionalAttributes">
+        @if (Error is not null)
+        {
+            @Error
+        }
+        else
+        {
+            <AppErrorState ErrorCode="@ErrorCode" CorrelationId="@CorrelationId">
+                <Title>Cannot load providers</Title>
+                <Description>@ErrorMessage</Description>
+            </AppErrorState>
+        }
+    </div>
+}
+else if (Providers is null || Providers.Count == 0)
+{
+    <div class="app-provider-list" data-state="empty" @attributes="AdditionalAttributes">
+        @if (Empty is not null)
+        {
+            @Empty
+        }
+        else
+        {
+            <AppEmptyState>
+                <Title>No providers registered</Title>
+                <Description>The provider registry did not return any items for this family. The family may not be configured, or the host may not satisfy the family capability.</Description>
+            </AppEmptyState>
+        }
+    </div>
+}
+else
+{
+    <div class="app-provider-list" data-state="populated" role="list" aria-live="polite" @attributes="AdditionalAttributes">
+        @if (Populated is not null)
+        {
+            @Populated
+        }
+        else
+        {
+            <AppStack Direction="AppStackDirection.Vertical" Gap="AppStackGap.Medium">
+                @foreach (var provider in Providers)
+                {
+                    <div class="app-provider-list-item" role="listitem" aria-label="@provider.DisplayName">
+                        <AppCard>
+                            <Header>
+                                <div class="app-provider-list-header">
+                                    <span class="app-provider-list-name">@provider.DisplayName</span>
+                                    <div class="app-provider-list-header-right">
+                                        <AppStatusDot Variant="@(GetStatusVariant(provider.Status))"
+                                                       Label="@(GetStatusLabel(provider.Status))" />
+                                        @if (provider.Status == ProviderStatus.Disabled)
+                                        {
+                                            <AppBadge Variant="AppBadgeVariant.Neutral" Size="AppBadgeSize.Small">
+                                                Disabled
+                                            </AppBadge>
+                                        }
+                                    </div>
+                                </div>
+                            </Header>
+                            <ChildContent>
+                                <AppStack Direction="AppStackDirection.Vertical" Gap="AppStackGap.Small">
+                                    <div class="app-provider-list-meta">
+                                        <span class="app-provider-list-id" title="Provider identifier">@provider.Id</span>
+                                        @if (!string.IsNullOrEmpty(provider.Version))
+                                        {
+                                            <span class="app-provider-list-version" title="Provider version">@provider.Version</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="app-provider-list-version app-provider-list-version-muted" title="Version not reported">version unknown</span>
+                                        }
+                                    </div>
+                                    @if (provider.Metadata is not null && provider.Metadata.Count > 0)
+                                    {
+                                        <div class="app-provider-list-metadata">
+                                            <AppKeyValueList Items="@(BuildMetadataItems(provider.Metadata))" Format="AppKeyValueListFormat.Code" />
+                                        </div>
+                                    }
+                                </AppStack>
+                            </ChildContent>
+                        </AppCard>
+                    </div>
+                }
+            </AppStack>
+        }
+    </div>
+}
+
+@code {
+    private static AppStatusDotVariant GetStatusVariant(ProviderStatus status) => status switch
+    {
+        ProviderStatus.Available => AppStatusDotVariant.Success,
+        ProviderStatus.Unavailable => AppStatusDotVariant.Error,
+        ProviderStatus.Disabled => AppStatusDotVariant.Neutral,
+        _ => AppStatusDotVariant.Neutral
+    };
+
+    private static string GetStatusLabel(ProviderStatus status) => status switch
+    {
+        ProviderStatus.Available => "Available",
+        ProviderStatus.Unavailable => "Unavailable",
+        ProviderStatus.Disabled => "Disabled",
+        _ => "Unknown"
+    };
+
+    private static IReadOnlyList<KeyValuePair<string, string>> BuildMetadataItems(IReadOnlyDictionary<string, string> metadata)
+    {
+        var items = new List<KeyValuePair<string, string>>(metadata.Count);
+        foreach (var entry in metadata)
+        {
+            items.Add(new KeyValuePair<string, string>(entry.Key, entry.Value));
+        }
+        return items;
+    }
+}

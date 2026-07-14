@@ -241,6 +241,7 @@ to.
 | `AppHealthDot`    | Provider health indicator              | Planned (M4) | Renders `ProviderHealth`       |
 | `AppCapabilityList` | Provider capability list             | Implemented (M4-B.2) | Renders `HostCapability[]` from `IHostCapabilitiesService.DetectAsync`; data-owning four-state |
 | `AppKeyValueList` | Generic key/value list                | Implemented (M4-B.2) | Used in diagnostics; data-owning four-state |
+| `AppProviderList` | Provider descriptor list              | Implemented (M4-C.2) | Renders `ProviderDescriptor[]` from `IProviderRegistry.ListProvidersAsync`; data-owning four-state |
 | `AppProjectCard`  | Project card                           | Planned (M3) | Name, path, last opened        |
 | `AppProjectList`  | Virtualised project list               | Planned (M3) | Data-owning (four-state)       |
 | `AppWorktreeCard` | Worktree card                          | Planned (M5) | Branch, status, path           |
