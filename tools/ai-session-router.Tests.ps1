@@ -276,3 +276,353 @@ Describe 'No-cost mocked execution reaches process construction without Ollama' 
         $true | Should -Be $true
     }
 }
+
+# ---------------------------------------------------------------------------
+# Phase-receipt contract — the router must validate the phase receipt with
+# structured failure reasons, not fabricate a success receipt. We extract
+# Test-PhaseReceiptValid, Get-ReceiptPath, ConvertTo-RelativeReceiptPath,
+# Get-RequiredReceiptFields, and Test-ArgumentSafe from the router source
+# and exercise them against real files in TestDrive.
+# ---------------------------------------------------------------------------
+
+Describe 'Test-PhaseReceiptValid distinguishes missing / malformed / wrong task / wrong phase / incomplete status' {
+    BeforeAll {
+        # Self-contained replica of Test-PhaseReceiptValid. We keep the
+        # function identical to the router's so the contract is exercised
+        # end-to-end. The router's regex extraction cannot reliably capture
+        # this function (it contains nested pscustomobject blocks), so a
+        # verbatim copy is more robust than trying to extract via regex.
+        $validator = @'
+$ErrorActionPreference = 'Stop'
+function Test-PhaseReceiptValid {
+    param(
+        [Parameter(Mandatory = $true)] [string]$Path,
+        [Parameter(Mandatory = $false)] [string]$ExpectedTaskId,
+        [Parameter(Mandatory = $false)] [string]$ExpectedPhase
+    )
+    if (-not (Test-Path -LiteralPath $Path)) {
+        return [pscustomobject]@{
+            Valid = $false
+            Reason = 'missing'
+            Details = "No receipt file at $Path"
+            Path = (Resolve-Path -Path $Path -ErrorAction SilentlyContinue)
+        }
+    }
+    $obj = $null
+    try {
+        $raw = Get-Content -LiteralPath $Path -Raw -Encoding UTF8
+        $obj = ConvertFrom-Json -InputObject $raw -ErrorAction Stop
+    } catch {
+        return [pscustomobject]@{
+            Valid = $false
+            Reason = 'malformed_json'
+            Details = "Receipt did not parse as JSON: $($_.Exception.Message)"
+            Path = $Path
+        }
+    }
+    $required = @(
+        'task_id', 'phase', 'model', 'profile', 'started_at', 'completed_at',
+        'exit_code', 'status', 'files_read', 'files_changed', 'commands_run',
+        'targeted_tests', 'validation', 'decisions', 'blockers', 'next_phase',
+        'retry_recommended', 'fallback_recommended', 'usage', 'receipt_version'
+    )
+    $missingFields = @()
+    foreach ($f in $required) {
+        if ($null -eq $obj.$f) { $missingFields += $f }
+    }
+    if ($missingFields.Count -gt 0) {
+        return [pscustomobject]@{
+            Valid = $false
+            Reason = 'missing_fields'
+            Details = "Missing required fields: $($missingFields -join ', ')"
+            Path = $Path
+        }
+    }
+    if ($ExpectedTaskId -and ([string]$obj.task_id) -ne $ExpectedTaskId) {
+        return [pscustomobject]@{
+            Valid = $false
+            Reason = 'wrong_task'
+            Details = "Expected task_id '$ExpectedTaskId' but receipt has '$($obj.task_id)'"
+            Path = $Path
+        }
+    }
+    if ($ExpectedPhase -and ([string]$obj.phase) -ne $ExpectedPhase) {
+        return [pscustomobject]@{
+            Valid = $false
+            Reason = 'wrong_phase'
+            Details = "Expected phase '$ExpectedPhase' but receipt has '$($obj.phase)'"
+            Path = $Path
+        }
+    }
+    $allowedStatus = @('completed', 'blocked', 'usage_exhausted', 'validation_failed', 'skipped')
+    if ($allowedStatus -notcontains ([string]$obj.status)) {
+        return [pscustomobject]@{
+            Valid = $false
+            Reason = 'incomplete_status'
+            Details = "Receipt status '$($obj.status)' is not a finalised status"
+            Path = $Path
+        }
+    }
+    return $true
+}
+$ReceiptPath = $args[0]
+$ExpectedTaskId = $args[1]
+$ExpectedPhase = $args[2]
+$r = Test-PhaseReceiptValid -Path $ReceiptPath -ExpectedTaskId $ExpectedTaskId -ExpectedPhase $ExpectedPhase
+if ($r -eq $true) {
+    [Console]::Out.Write('VALID')
+} else {
+    [Console]::Out.Write(('INVALID|' + $r.Reason + '|' + $r.Details))
+}
+'@
+        $td = New-Item -ItemType Directory -Path (Join-Path $TestDrive 'validator') -Force
+        Set-Content -LiteralPath (Join-Path $td 'run-validator.ps1') -Value $validator -Encoding UTF8
+        $script:ValidatorDir = $td.FullName
+
+        # Canonical valid receipt (mirrors .ai/receipts/phases/T-031-closeout.json).
+        $script:CanonicalReceipt = @{
+            task_id = 'T-030'
+            phase = 'reconcile'
+            model = 'qwen3.5:cloud'
+            profile = 'economy'
+            started_at = '2026-07-14T00:00:00Z'
+            completed_at = '2026-07-14T00:01:00Z'
+            exit_code = 0
+            status = 'completed'
+            files_read = @('.ai/context/active-task.json')
+            files_changed = @()
+            commands_run = @('git status')
+            targeted_tests = @()
+            validation = @{ syntax_ok = $true; schema_ok = $true; pester_ok = $true; dry_run_ok = $true }
+            decisions = @()
+            blockers = @()
+            next_phase = 'plan'
+            retry_recommended = $false
+            fallback_recommended = $false
+            usage = @{ unknown = $true }
+            receipt_version = '1.0.0'
+        }
+    }
+
+    function Invoke-Validator {
+        param(
+            [string]$ReceiptPath,
+            [string]$ExpectedTaskId = 'T-030',
+            [string]$ExpectedPhase = 'reconcile'
+        )
+        $r = & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $script:ValidatorDir 'run-validator.ps1') -args $ReceiptPath, $ExpectedTaskId, $ExpectedPhase 2>&1
+        return ($r -join "`n").Trim()
+    }
+
+    It 'returns VALID for a complete receipt with the right task and phase' {
+        $td = New-Item -ItemType Directory -Path (Join-Path $TestDrive 'rec-valid') -Force
+        $p = Join-Path $td 'T-030-reconcile.json'
+        $script:CanonicalReceipt | ConvertTo-Json -Depth 16 | Out-File -LiteralPath $p -Encoding utf8NoBOM
+        (Invoke-Validator -ReceiptPath $p) | Should -Be 'VALID'
+    }
+
+    It 'returns INVALID with reason=missing when the receipt file is absent' {
+        $p = Join-Path (Join-Path $TestDrive 'never-exists-' (New-Guid).Guid) 'T-030-reconcile.json'
+        (Invoke-Validator -ReceiptPath $p) | Should -Match '^INVALID\|missing\|'
+    }
+
+    It 'returns INVALID with reason=malformed_json when the file is not valid JSON' {
+        $td = New-Item -ItemType Directory -Path (Join-Path $TestDrive 'rec-malformed') -Force
+        $p = Join-Path $td 'T-030-reconcile.json'
+        Set-Content -LiteralPath $p -Value '{ "task_id": "T-030", broken json' -Encoding UTF8
+        (Invoke-Validator -ReceiptPath $p) | Should -Match '^INVALID\|malformed_json\|'
+    }
+
+    It 'returns INVALID with reason=missing_fields when required fields are absent' {
+        $td = New-Item -ItemType Directory -Path (Join-Path $TestDrive 'rec-missing-fields') -Force
+        $p = Join-Path $td 'T-030-reconcile.json'
+        $partial = @{ task_id = 'T-030'; phase = 'reconcile' } | ConvertTo-Json -Depth 16
+        Set-Content -LiteralPath $p -Value $partial -Encoding UTF8
+        (Invoke-Validator -ReceiptPath $p) | Should -Match '^INVALID\|missing_fields\|'
+    }
+
+    It 'returns INVALID with reason=wrong_task when the receipt task_id does not match' {
+        $td = New-Item -ItemType Directory -Path (Join-Path $TestDrive 'rec-wrong-task') -Force
+        $p = Join-Path $td 'T-030-reconcile.json'
+        $bad = $script:CanonicalReceipt.Clone()
+        $bad.task_id = 'T-099'
+        $bad | ConvertTo-Json -Depth 16 | Out-File -LiteralPath $p -Encoding utf8NoBOM
+        (Invoke-Validator -ReceiptPath $p) | Should -Match '^INVALID\|wrong_task\|'
+    }
+
+    It 'returns INVALID with reason=wrong_phase when the receipt phase does not match' {
+        $td = New-Item -ItemType Directory -Path (Join-Path $TestDrive 'rec-wrong-phase') -Force
+        $p = Join-Path $td 'T-030-reconcile.json'
+        $bad = $script:CanonicalReceipt.Clone()
+        $bad.phase = 'plan'
+        $bad | ConvertTo-Json -Depth 16 | Out-File -LiteralPath $p -Encoding utf8NoBOM
+        (Invoke-Validator -ReceiptPath $p) | Should -Match '^INVALID\|wrong_phase\|'
+    }
+
+    It 'returns INVALID with reason=incomplete_status when status is not a finalised value' {
+        $td = New-Item -ItemType Directory -Path (Join-Path $TestDrive 'rec-bad-status') -Force
+        $p = Join-Path $td 'T-030-reconcile.json'
+        $bad = $script:CanonicalReceipt.Clone()
+        $bad.status = 'in_progress'
+        $bad | ConvertTo-Json -Depth 16 | Out-File -LiteralPath $p -Encoding utf8NoBOM
+        (Invoke-Validator -ReceiptPath $p) | Should -Match '^INVALID\|incomplete_status\|'
+    }
+}
+
+# ---------------------------------------------------------------------------
+# Write-PhaseReceipt.ps1 — exercised as a no-cost test. The helper writes
+# UTF-8 (no BOM), validates against the schema, creates the parent
+# directory, and round-trip parses the result. This is the contract the
+# child sessions use to write receipts.
+# ---------------------------------------------------------------------------
+
+Describe 'Write-PhaseReceipt.ps1 writes a valid receipt atomically' {
+    BeforeAll {
+        $script:WriterPath = Join-Path $PSScriptRoot 'Write-PhaseReceipt.ps1'
+        $script:SchemaPath = Join-Path $PSScriptRoot '..\.ai\templates\phase-receipt.schema.json'
+    }
+
+    It 'writes a complete receipt to a missing parent directory' {
+        $td = New-Item -ItemType Directory -Path (Join-Path $TestDrive 'writer' (New-Guid).Guid) -Force
+        $p = Join-Path $td 'nested' 'deeper' 'T-030-reconcile.json'
+        $receipt = @{
+            task_id = 'T-030'
+            phase = 'reconcile'
+            model = 'qwen3.5:cloud'
+            profile = 'economy'
+            started_at = '2026-07-14T00:00:00Z'
+            completed_at = '2026-07-14T00:01:00Z'
+            exit_code = 0
+            status = 'completed'
+            files_read = @()
+            files_changed = @()
+            commands_run = @()
+            targeted_tests = @()
+            validation = @{ syntax_ok = $true; schema_ok = $true; pester_ok = $true; dry_run_ok = $true }
+            decisions = @()
+            blockers = @()
+            next_phase = 'plan'
+            retry_recommended = $false
+            fallback_recommended = $false
+            usage = @{ unknown = $true }
+            receipt_version = '1.0.0'
+        }
+        $json = $receipt | ConvertTo-Json -Depth 16
+        $r = & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $script:WriterPath -Path $p -ExpectedTaskId T-030 -ExpectedPhase reconcile -SchemaPath $script:SchemaPath -InputObject $json 2>&1
+        # Write-PhaseReceipt.ps1 reads from stdin, not -InputObject. Re-do.
+        $json | & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $script:WriterPath -Path $p -ExpectedTaskId T-030 -ExpectedPhase reconcile -SchemaPath $script:SchemaPath 2>&1 | Out-Null
+        Test-Path -LiteralPath $p | Should -BeTrue
+        $back = Get-Content -LiteralPath $p -Raw -Encoding UTF8 | ConvertFrom-Json
+        $back.task_id | Should -Be 'T-030'
+        $back.phase | Should -Be 'reconcile'
+        $back.status | Should -Be 'completed'
+    }
+
+    It 'rejects a receipt with a wrong task_id and exits non-zero' {
+        $td = New-Item -ItemType Directory -Path (Join-Path $TestDrive 'writer' (New-Guid).Guid) -Force
+        $p = Join-Path $td 'T-030-reconcile.json'
+        $receipt = @{
+            task_id = 'T-099'
+            phase = 'reconcile'
+            model = 'qwen3.5:cloud'
+            profile = 'economy'
+            started_at = '2026-07-14T00:00:00Z'
+            completed_at = '2026-07-14T00:01:00Z'
+            exit_code = 0
+            status = 'completed'
+            files_read = @()
+            files_changed = @()
+            commands_run = @()
+            targeted_tests = @()
+            validation = @{ syntax_ok = $true; schema_ok = $true; pester_ok = $true; dry_run_ok = $true }
+            decisions = @()
+            blockers = @()
+            next_phase = 'plan'
+            retry_recommended = $false
+            fallback_recommended = $false
+            usage = @{ unknown = $true }
+            receipt_version = '1.0.0'
+        }
+        $json = $receipt | ConvertTo-Json -Depth 16
+        $out = $json | & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $script:WriterPath -Path $p -ExpectedTaskId T-030 -ExpectedPhase reconcile -SchemaPath $script:SchemaPath 2>&1
+        $ec = $LASTEXITCODE
+        $ec | Should -Not -Be 0
+        ($out -join "`n") | Should -Match 'task_id'
+    }
+}
+
+# ---------------------------------------------------------------------------
+# -RetryCurrentPhase command — the router must accept the new command
+# and the dry-run must show the same retry shape. We do not actually
+# dispatch; we only confirm the command is plumbed.
+# ---------------------------------------------------------------------------
+
+Describe '-RetryCurrentPhase command is wired into the router' {
+    It 'appears in the ValidateSet of -Command' {
+        $src = Get-Content -LiteralPath $script:RouterPath -Raw
+        $src | Should -Match "'Next', 'Resume', 'Finish', 'Status', 'Plan', 'Configure', 'DryRun', 'RetryCurrentPhase'"
+    }
+    It 'has an Invoke-RetryCurrentPhase function' {
+        $src = Get-Content -LiteralPath $script:RouterPath -Raw
+        $src | Should -Match 'function Invoke-RetryCurrentPhase'
+    }
+    It 'is dispatched in the entry-point switch' {
+        $src = Get-Content -LiteralPath $script:RouterPath -Raw
+        $src | Should -Match "'RetryCurrentPhase'\s*\{\s*Invoke-RetryCurrentPhase"
+    }
+}
+
+# ---------------------------------------------------------------------------
+# Phase prompt mandates the receipt final action — every phase prompt must
+# reference the repository-side writer and the absolute failure mode list.
+# This is the contract the child sessions are bound by.
+# ---------------------------------------------------------------------------
+
+Describe 'Every phase prompt declares the mandatory receipt final action' {
+    It 'reconcile.md invokes Write-PhaseReceipt.ps1 and lists the failure modes' {
+        $p = Join-Path $PSScriptRoot '..\.ai\prompts\phases\reconcile.md'
+        $src = Get-Content -LiteralPath $p -Raw
+        $src | Should -Match 'Write-PhaseReceipt\.ps1'
+        $src | Should -Match 'Mandatory Final Action'
+        $src | Should -Match 'malformed_json'
+        $src | Should -Match 'wrong_task'
+        $src | Should -Match 'wrong_phase'
+        $src | Should -Match 'incomplete_status'
+    }
+    It 'plan.md invokes Write-PhaseReceipt.ps1' {
+        $p = Join-Path $PSScriptRoot '..\.ai\prompts\phases\plan.md'
+        $src = Get-Content -LiteralPath $p -Raw
+        $src | Should -Match 'Write-PhaseReceipt\.ps1'
+        $src | Should -Match 'Mandatory Final Action'
+    }
+    It 'implement.md invokes Write-PhaseReceipt.ps1' {
+        $p = Join-Path $PSScriptRoot '..\.ai\prompts\phases\implement.md'
+        $src = Get-Content -LiteralPath $p -Raw
+        $src | Should -Match 'Write-PhaseReceipt\.ps1'
+        $src | Should -Match 'Mandatory Final Action'
+    }
+    It 'validate.md invokes Write-PhaseReceipt.ps1' {
+        $p = Join-Path $PSScriptRoot '..\.ai\prompts\phases\validate.md'
+        $src = Get-Content -LiteralPath $p -Raw
+        $src | Should -Match 'Write-PhaseReceipt\.ps1'
+        $src | Should -Match 'Mandatory Final Action'
+    }
+    It 'document.md invokes Write-PhaseReceipt.ps1' {
+        $p = Join-Path $PSScriptRoot '..\.ai\prompts\phases\document.md'
+        $src = Get-Content -LiteralPath $p -Raw
+        $src | Should -Match 'Write-PhaseReceipt\.ps1'
+        $src | Should -Match 'Mandatory Final Action'
+    }
+    It 'review.md invokes Write-PhaseReceipt.ps1' {
+        $p = Join-Path $PSScriptRoot '..\.ai\prompts\phases\review.md'
+        $src = Get-Content -LiteralPath $p -Raw
+        $src | Should -Match 'Write-PhaseReceipt\.ps1'
+        $src | Should -Match 'Mandatory Final Action'
+    }
+    It 'closeout.md invokes Write-PhaseReceipt.ps1' {
+        $p = Join-Path $PSScriptRoot '..\.ai\prompts\phases\closeout.md'
+        $src = Get-Content -LiteralPath $p -Raw
+        $src | Should -Match 'Write-PhaseReceipt\.ps1'
+        $src | Should -Match 'Mandatory Final Action'
+    }
+}

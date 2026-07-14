@@ -65,7 +65,7 @@
 [CmdletBinding()]
 param(
     [Parameter(Mandatory = $true)]
-    [ValidateSet('Next', 'Resume', 'Finish', 'Status', 'Plan', 'Configure', 'DryRun')]
+    [ValidateSet('Next', 'Resume', 'Finish', 'Status', 'Plan', 'Configure', 'DryRun', 'RetryCurrentPhase')]
     [string]$Command,
 
     [string]$TaskId,
@@ -270,22 +270,105 @@ function New-PhasePromptString {
         [Parameter(Mandatory = $true)] [string]$Phase,
         [Parameter(Mandatory = $true)] [string]$Profile,
         [Parameter(Mandatory = $true)] [string]$Model,
-        [Parameter(Mandatory = $true)] [string]$ReceiptPath
+        [Parameter(Mandatory = $true)] [string]$ReceiptRelPath
     )
+    # The router hands the child a repository-relative receipt path and the
+    # full canonical receipt template. The child MUST write the receipt to
+    # this exact path before exiting. The path is repository-relative, not
+    # an absolute Windows path, so the child does not need to manipulate
+    # platform-specific paths.
+    $taskId = [string]$ActiveTask.task_id
+    $relPath = $ReceiptRelPath -replace '\\', '/'
+    $startedAt = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
+    $template = @"
+{
+  "task_id": "$taskId",
+  "phase": "$Phase",
+  "model": "$Model",
+  "profile": "$Profile",
+  "started_at": "$startedAt",
+  "completed_at": "REPLACE_AT_FINISH",
+  "exit_code": 0,
+  "status": "completed",
+  "files_read": [],
+  "files_changed": [],
+  "commands_run": [],
+  "targeted_tests": [],
+  "validation": { "syntax_ok": true, "schema_ok": true, "pester_ok": true, "dry_run_ok": true },
+  "decisions": [],
+  "blockers": [],
+  "next_phase": "REPLACE_WITH_NEXT_PHASE_OR_NULL",
+  "retry_recommended": false,
+  "fallback_recommended": false,
+  "usage": { "unknown": true },
+  "receipt_version": "1.0.0"
+}
+"@
     $prompt = @"
-You are the $Phase phase of task $($ActiveTask.task_id) in milestone $($ActiveTask.milestone).
+You are the $Phase phase of task $taskId in milestone $($ActiveTask.milestone).
 Profile: $Profile
 Model: $Model
-Receipt path: $ReceiptPath
+Receipt path (repository-relative): $relPath
 Active packet: $ActiveTaskPath
 Approved plan: $($ActiveTask.approved_plan)
 Stop conditions: see $PromptsDir\$Phase.md
 
-Read the active packet and the phase prompt. Do not exceed the phase's allowed
-actions. Do not begin another phase. Write the phase receipt to the receipt
-path declared above when you finish.
+MANDATORY FINAL ACTION (do not exit without completing all of these steps):
+
+1. Build the phase receipt by copying the canonical template below and
+   replacing REPLACE_AT_FINISH with the current UTC ISO 8601 timestamp and
+   REPLACE_WITH_NEXT_PHASE_OR_NULL with the next phase name (one of
+   reconcile | plan | implement | validate | document | review | closeout)
+   or null when the closeout phase is complete. Fill files_read /
+   files_changed / commands_run / targeted_tests / decisions / blockers
+   with the values recorded during the phase.
+2. Pipe the completed receipt JSON to the repository-side writer:
+
+   powershell.exe -NoProfile -ExecutionPolicy Bypass -File tools/Write-PhaseReceipt.ps1 -ReceiptPath $relPath -ExpectedTaskId $taskId -ExpectedPhase $Phase
+
+3. The writer creates the parent directory if missing, validates the receipt
+   against .ai/templates/phase-receipt.schema.json, writes the file as
+   UTF-8 (no BOM), and exits non-zero on any validation failure. If it
+   exits non-zero, fix the receipt and re-run the writer. Do not exit
+   the phase until the writer exits 0.
+4. Confirm the writer printed the absolute receipt path on its stdout.
+
+CANONICAL RECEIPT TEMPLATE (must be filled in and passed to the writer):
+
+$template
+
+Read the active packet and the phase prompt. Do not exceed the phase's
+allowed actions. Do not begin another phase. Do not exit before the
+phase receipt has been written and the writer has exited 0.
 "@
     return $prompt
+}
+
+function ConvertTo-RelativeReceiptPath {
+    # Return the repository-relative form of an absolute receipt path,
+    # using forward slashes. The child uses this path verbatim.
+    param([Parameter(Mandatory = $true)] [string]$AbsolutePath)
+    $rootFull = [System.IO.Path]::GetFullPath($RepoRoot).TrimEnd([char][System.IO.Path]::DirectorySeparatorChar) + [char][System.IO.Path]::DirectorySeparatorChar
+    $ap = [System.IO.Path]::GetFullPath($AbsolutePath)
+    if ($ap.StartsWith($rootFull, [System.StringComparison]::OrdinalIgnoreCase)) {
+        $rel = $ap.Substring($rootFull.Length)
+    } else {
+        $rel = $ap
+    }
+    return ($rel -replace '\\', '/')
+}
+
+function Get-ChildLogPath {
+    param(
+        [Parameter(Mandatory = $true)] [string]$TaskId,
+        [Parameter(Mandatory = $true)] [string]$Phase,
+        [Parameter(Mandatory = $true)] [ValidateSet('stdout', 'stderr')] [string]$Stream
+    )
+    $logDir = Join-Path $ReceiptsDir 'logs'
+    if (-not (Test-Path -LiteralPath $logDir)) {
+        [void](New-Item -ItemType Directory -Path $logDir -Force)
+    }
+    return Join-Path $logDir ("{0}-{1}.{2}.log" -f $TaskId, $Phase, $Stream)
 }
 
 function Get-ReceiptPath {
@@ -296,16 +379,97 @@ function Get-ReceiptPath {
     return Join-Path $ReceiptsDir "$TaskId-$Phase.json"
 }
 
-function Test-ReceiptComplete {
-    param([string]$Path)
-    if (-not (Test-Path -LiteralPath $Path)) { return $false }
-    try {
-        $obj = Read-JsonObject -Path $Path
-    } catch {
-        return $false
+function Get-RequiredReceiptFields {
+    # Field names required by .ai/templates/phase-receipt.schema.json
+    # (additionalProperties is not permitted by the schema, so any missing
+    # required field fails validation).
+    return @(
+        'task_id', 'phase', 'model', 'profile', 'started_at', 'completed_at',
+        'exit_code', 'status', 'files_read', 'files_changed', 'commands_run',
+        'targeted_tests', 'validation', 'decisions', 'blockers', 'next_phase',
+        'retry_recommended', 'fallback_recommended', 'usage', 'receipt_version'
+    )
+}
+
+function Test-PhaseReceiptValid {
+    # Returns $true when the receipt is present, parses, has every required
+    # field, matches the expected task + phase, and declares a finalised
+    # status. Otherwise returns an object:
+    #   { Valid=$false; Reason=<one of the reason codes below>;
+    #     Details=<human-readable details>; Path=<absolute path> }
+    #
+    # Reason codes:
+    #   missing            - the file does not exist at the expected path
+    #   malformed_json     - the file exists but does not parse as JSON
+    #   missing_fields     - parsed JSON is missing one or more required fields
+    #   wrong_task         - receipt.task_id does not match ExpectedTaskId
+    #   wrong_phase        - receipt.phase does not match ExpectedPhase
+    #   incomplete_status  - receipt.status is not a known final status
+    #                        (or is missing)
+    param(
+        [Parameter(Mandatory = $true)] [string]$Path,
+        [Parameter(Mandatory = $false)] [string]$ExpectedTaskId,
+        [Parameter(Mandatory = $false)] [string]$ExpectedPhase
+    )
+    $resolved = Assert-PathUnderRoot -Path $Path
+    if (-not (Test-Path -LiteralPath $resolved)) {
+        return [pscustomobject]@{
+            Valid = $false
+            Reason = 'missing'
+            Details = "No receipt file at $resolved"
+            Path = $resolved
+        }
     }
-    if ($null -eq $obj.status) { return $false }
-    if ($null -eq $obj.next_phase) { return $false }
+    $obj = $null
+    try {
+        $raw = Get-Content -LiteralPath $resolved -Raw -Encoding UTF8
+        $obj = ConvertFrom-Json -InputObject $raw -ErrorAction Stop
+    } catch {
+        return [pscustomobject]@{
+            Valid = $false
+            Reason = 'malformed_json'
+            Details = "Receipt did not parse as JSON: $($_.Exception.Message)"
+            Path = $resolved
+        }
+    }
+    $required = Get-RequiredReceiptFields
+    $missingFields = @()
+    foreach ($f in $required) {
+        if ($null -eq $obj.$f) { $missingFields += $f }
+    }
+    if ($missingFields.Count -gt 0) {
+        return [pscustomobject]@{
+            Valid = $false
+            Reason = 'missing_fields'
+            Details = "Missing required fields: $($missingFields -join ', ')"
+            Path = $resolved
+        }
+    }
+    if ($ExpectedTaskId -and ([string]$obj.task_id) -ne $ExpectedTaskId) {
+        return [pscustomobject]@{
+            Valid = $false
+            Reason = 'wrong_task'
+            Details = "Expected task_id '$ExpectedTaskId' but receipt has '$($obj.task_id)'"
+            Path = $resolved
+        }
+    }
+    if ($ExpectedPhase -and ([string]$obj.phase) -ne $ExpectedPhase) {
+        return [pscustomobject]@{
+            Valid = $false
+            Reason = 'wrong_phase'
+            Details = "Expected phase '$ExpectedPhase' but receipt has '$($obj.phase)'"
+            Path = $resolved
+        }
+    }
+    $allowedStatus = @('completed', 'blocked', 'usage_exhausted', 'validation_failed', 'skipped')
+    if ($allowedStatus -notcontains ([string]$obj.status)) {
+        return [pscustomobject]@{
+            Valid = $false
+            Reason = 'incomplete_status'
+            Details = "Receipt status '$($obj.status)' is not a finalised status"
+            Path = $resolved
+        }
+    }
     return $true
 }
 
@@ -359,7 +523,9 @@ function Start-ChildSession {
     param(
         [Parameter(Mandatory = $true)] [string]$Model,
         [Parameter(Mandatory = $true)] [string]$Prompt,
-        [int]$TimeoutSeconds = 900
+        [int]$TimeoutSeconds = 900,
+        [string]$TaskId = '',
+        [string]$Phase = ''
     )
     if ($Model -notmatch $ModelNameRegex) {
         throw "Model name fails strict regex: $Model"
@@ -393,19 +559,81 @@ function Start-ChildSession {
     $psi.CreateNoWindow = $true
     $proc = New-Object System.Diagnostics.Process
     $proc.StartInfo = $psi
-    [void]$proc.Start()
-    $script:TrackedPids.Add($proc.Id) | Out-Null
-    if (-not $proc.WaitForExit($TimeoutSeconds * 1000)) {
-        try { $proc.Kill($true) } catch { }
-        throw "Child timed out after $TimeoutSeconds seconds"
+
+    # Set up stdout/stderr capture to .ai/receipts/logs/<task-id>-<phase>.{stdout,stderr}.log
+    # so the router can report log paths when a phase exits 0 without writing
+    # its receipt. The log files are evidence for diagnosing the failure.
+    $stdoutLog = ''
+    $stderrLog = ''
+    $stdoutWriter = $null
+    $stderrWriter = $null
+    $captureLogs = -not ([string]::IsNullOrWhiteSpace($TaskId) -or [string]::IsNullOrWhiteSpace($Phase))
+    if ($captureLogs) {
+        $stdoutLog = Get-ChildLogPath -TaskId $TaskId -Phase $Phase -Stream 'stdout'
+        $stderrLog = Get-ChildLogPath -TaskId $TaskId -Phase $Phase -Stream 'stderr'
+        $stdoutWriter = New-Object System.IO.StreamWriter($stdoutLog, $false, [System.Text.UTF8Encoding]::new($false))
+        $stderrWriter = New-Object System.IO.StreamWriter($stderrLog, $false, [System.Text.UTF8Encoding]::new($false))
+        $stdoutWriter.AutoFlush = $true
+        $stderrWriter.AutoFlush = $true
+        # Use ScriptBlock event handlers. GetNewClosure() captures the local
+        # $stdoutWriter / $stderrWriter variables so the handlers can write
+        # to the same StreamWriter instance. (PS 5.1 supports GetNewClosure
+        # and add_OutputDataReceived / add_ErrorDataReceived.)
+        $stdoutHandler = {
+            param($sender, $e)
+            if ($null -ne $e -and $null -ne $e.Data) {
+                try { $stdoutWriter.WriteLine($e.Data) } catch { }
+            }
+        }.GetNewClosure()
+        $stderrHandler = {
+            param($sender, $e)
+            if ($null -ne $e -and $null -ne $e.Data) {
+                try { $stderrWriter.WriteLine($e.Data) } catch { }
+            }
+        }.GetNewClosure()
+        # RegisterHandler uses Add-Type to expose the generic delegate. This
+        # works in PS 5.1 (System.Diagnostics.Process.OutputDataReceivedEventHandler
+        # is a generic delegate of type System.DataReceivedEventHandler which
+        # is a non-generic delegate with signature (object, DataReceivedEventArgs)).
+        $stdoutDelegate = [System.DataReceivedEventHandler]$stdoutHandler
+        $stderrDelegate = [System.DataReceivedEventHandler]$stderrHandler
+        [void]$proc.add_OutputDataReceived($stdoutDelegate)
+        [void]$proc.add_ErrorDataReceived($stderrDelegate)
     }
-    $stdout = $proc.StandardOutput.ReadToEnd()
-    $stderr = $proc.StandardError.ReadToEnd()
-    $script:TrackedPids.Remove($proc.Id) | Out-Null
+
+    try {
+        [void]$proc.Start()
+        $script:TrackedPids.Add($proc.Id) | Out-Null
+        if ($captureLogs) {
+            [void]$proc.BeginOutputReadLine()
+            [void]$proc.BeginErrorReadLine()
+        }
+        if (-not $proc.WaitForExit($TimeoutSeconds * 1000)) {
+            try { $proc.Kill($true) } catch { }
+            throw "Child timed out after $TimeoutSeconds seconds"
+        }
+        # Ensure async readers have drained. The Process object will flush on close.
+        if ($captureLogs) {
+            $proc.WaitForExit() | Out-Null
+        }
+    } finally {
+        $script:TrackedPids.Remove($proc.Id) | Out-Null
+        if ($null -ne $stdoutWriter) {
+            try { $stdoutWriter.Flush() } catch { }
+            try { $stdoutWriter.Dispose() } catch { }
+        }
+        if ($null -ne $stderrWriter) {
+            try { $stderrWriter.Flush() } catch { }
+            try { $stderrWriter.Dispose() } catch { }
+        }
+    }
+
     return [pscustomobject]@{
         ExitCode = $proc.ExitCode
-        StdOut   = $stdout
-        StdErr   = $stderr
+        StdOut   = ''
+        StdErr   = ''
+        StdOutLog = $stdoutLog
+        StdErrLog = $stderrLog
     }
 }
 
@@ -505,6 +733,81 @@ function Invoke-Configure {
     Write-RouterLine "Persisted to $ModelRoutingConfigPath"
 }
 
+function Invoke-Phase {
+    # Unified phase runner used by Invoke-Plan / Invoke-Next / Invoke-RetryCurrentPhase.
+    # Resolves profile, builds the prompt, runs the child, captures stdout/stderr
+    # to log files, and validates the phase receipt with structured failure reasons.
+    # On receipt failure: logs specific reason + log paths, does NOT advance, does
+    # NOT fabricate a success receipt.
+    param(
+        [Parameter(Mandatory = $true)] $ActiveTask,
+        [Parameter(Mandatory = $true)] $Config,
+        [Parameter(Mandatory = $true)] [string]$TaskId,
+        [Parameter(Mandatory = $true)] [string]$Phase,
+        [string]$Profile,
+        [string]$Receipt,
+        [switch]$SkipIfReceiptValid
+    )
+    if ($Profile) {
+        $profile = $Profile
+    } else {
+        $profile = Classify-Profile -Config $Config -ActiveTask $ActiveTask -Phase $Phase
+    }
+    $model = Resolve-ProfileModel -Config $Config -ProfileKey $profile
+    Test-CloudOnly -Config $Config -Model $model | Out-Null
+    if (-not $Receipt) {
+        $Receipt = Get-ReceiptPath -TaskId $TaskId -Phase $Phase
+    }
+    Assert-PathUnderRoot -Path $Receipt | Out-Null
+
+    # Retry mode guard: a valid receipt already exists for this phase. Do not
+    # overwrite it. Caller should pass -SkipIfReceiptValid=$false to force a
+    # retry that will overwrite.
+    if ($SkipIfReceiptValid) {
+        $existing = Test-PhaseReceiptValid -Path $Receipt -ExpectedTaskId $TaskId -ExpectedPhase $Phase
+        if ($existing -eq $true) {
+            Write-RouterLine "Receipt already valid at $Receipt. Skipping dispatch."
+            return @{ Skipped = $true; Receipt = $Receipt }
+        }
+    }
+
+    $prompt = New-PhasePromptString -ActiveTask $ActiveTask -Phase $Phase -Profile $profile -Model $model -ReceiptRelPath (ConvertTo-RelativeReceiptPath -AbsolutePath $Receipt)
+    if ($DryRun) {
+        Print-DryRun -Model $model -Prompt $prompt
+        return @{ Skipped = $true; Receipt = $Receipt }
+    }
+
+    Write-RouterLine ("Dispatching phase: {0} profile: {1} model: {2}" -f $Phase, $profile, $model)
+    $timeout = [int]$Config.profiles.$profile.timeout_seconds
+    $result = Start-ChildSession -Model $model -Prompt $prompt -TimeoutSeconds $timeout -TaskId $TaskId -Phase $Phase
+    Write-RouterLine ("Child exited with code {0}" -f $result.ExitCode)
+    if ($result.StdOutLog) {
+        Write-RouterLine ("Child stdout log: {0}" -f $result.StdOutLog)
+    }
+    if ($result.StdErrLog) {
+        Write-RouterLine ("Child stderr log: {0}" -f $result.StdErrLog)
+    }
+
+    $validation = Test-PhaseReceiptValid -Path $Receipt -ExpectedTaskId $TaskId -ExpectedPhase $Phase
+    if ($validation -eq $true) {
+        $next = Read-ReceiptNextPhase -Path $Receipt
+        Write-RouterLine ("Phase receipt valid. Next phase: {0}" -f $next)
+        return @{ Skipped = $false; Receipt = $Receipt; NextPhase = $next; ExitCode = $result.ExitCode }
+    }
+
+    # Receipt is not valid. Report the specific reason + log paths. Do not
+    # advance. Do not fabricate a success receipt.
+    Write-RouterLine ("Phase receipt FAILED validation: {0} ({1})" -f $validation.Reason, $validation.Details) 'error'
+    if ($result.StdOutLog) {
+        Write-RouterLine ("Inspect child stdout: {0}" -f $result.StdOutLog) 'error'
+    }
+    if ($result.StdErrLog) {
+        Write-RouterLine ("Inspect child stderr: {0}" -f $result.StdErrLog) 'error'
+    }
+    Write-RouterLine ("Expected receipt at: {0}" -f $validation.Path) 'error'
+    throw ("Phase '{0}' for task '{1}' did not produce a valid receipt (reason: {2}). Child exit code: {3}." -f $Phase, $TaskId, $validation.Reason, $result.ExitCode)
+}
+
 function Invoke-Plan {
     # Plan command: launch one plan-phase child for the active task.
     $cfg = Read-JsonObject -Path $ModelRoutingConfigPath
@@ -512,20 +815,11 @@ function Invoke-Plan {
     $taskId = if ([string]::IsNullOrWhiteSpace($TaskId)) { [string]$active.task_id } else { $TaskId }
     if ($taskId -notmatch $TaskIdRegex) { throw "TaskId '$taskId' fails regex" }
     $profile = if ($ProfileOverride) { $ProfileOverride } else { 'high' }
-    $model = Resolve-ProfileModel -Config $cfg -ProfileKey $profile
     $receipt = Get-ReceiptPath -TaskId $taskId -Phase 'plan'
-    $prompt = New-PhasePromptString -ActiveTask $active -Phase 'plan' -Profile $profile -Model $model -ReceiptPath $receipt
-    if ($DryRun) {
-        Print-DryRun -Model $model -Prompt $prompt
-        return
+    $r = Invoke-Phase -ActiveTask $active -Config $cfg -TaskId $taskId -Phase 'plan' -Profile $profile -Receipt $receipt
+    if (-not $r.Skipped) {
+        Write-RouterLine ("Plan phase complete. Next: {0}" -f $r.NextPhase)
     }
-    $result = Start-ChildSession -Model $model -Prompt $prompt -TimeoutSeconds ([int]$cfg.profiles.$profile.timeout_seconds)
-    Write-RouterLine ("Plan phase exited with code {0}" -f $result.ExitCode)
-    if (-not (Test-ReceiptComplete -Path $receipt)) {
-        throw "Plan phase did not write a complete receipt at $receipt"
-    }
-    $next = Read-ReceiptNextPhase -Path $receipt
-    Write-RouterLine ("Next phase: {0}" -f $next)
 }
 
 function Invoke-Next {
@@ -535,29 +829,37 @@ function Invoke-Next {
     if ($taskId -notmatch $TaskIdRegex) { throw "TaskId '$taskId' fails regex" }
     $phase = if ($null -ne $active.next_phase -and $active.next_phase -ne '') { [string]$active.next_phase } else { [string]$active.current_phase }
     if ($phase -notmatch $PhaseRegex) { throw "Phase '$phase' fails regex" }
-    $profile = if ($ProfileOverride) { $ProfileOverride } else { Classify-Profile -Config $cfg -ActiveTask $active -Phase $phase }
-    $model = Resolve-ProfileModel -Config $cfg -ProfileKey $profile
-    Test-CloudOnly -Config $cfg -Model $model | Out-Null
-    $receipt = Get-ReceiptPath -TaskId $taskId -Phase $phase
-    $prompt = New-PhasePromptString -ActiveTask $active -Phase $phase -Profile $profile -Model $model -ReceiptPath $receipt
-    if ($DryRun) {
-        Print-DryRun -Model $model -Prompt $prompt
+    $profile = if ($ProfileOverride) { $ProfileOverride } else { $null }
+    $r = Invoke-Phase -ActiveTask $active -Config $cfg -TaskId $taskId -Phase $phase -Profile $profile
+    if ($r.Skipped) {
         return
     }
-    Write-RouterLine ("Dispatching phase: {0} profile: {1} model: {2}" -f $phase, $profile, $model)
-    $timeout = [int]$cfg.profiles.$profile.timeout_seconds
-    $result = Start-ChildSession -Model $model -Prompt $prompt -TimeoutSeconds $timeout
-    Write-RouterLine ("Child exited with code {0}" -f $result.ExitCode)
-    if (-not (Test-ReceiptComplete -Path $receipt)) {
-        throw "Phase '$phase' did not write a complete receipt at $receipt"
-    }
-    $next = Read-ReceiptNextPhase -Path $receipt
-    Write-RouterLine ("Next phase from receipt: {0}" -f $next)
-    if ($null -eq $next -or $next -eq '') {
+    if ($null -eq $r.NextPhase -or $r.NextPhase -eq '') {
         Write-RouterLine "Closeout reached. Stopping."
     } else {
         Write-RouterLine "Run -Command Next again to dispatch the next phase."
     }
+}
+
+function Invoke-RetryCurrentPhase {
+    # Retry ONLY the current phase for the active task. Does not select
+    # another task. Does not restart. Overwrites an existing valid receipt
+    # for the current phase (the caller asked for the retry; the existing
+    # receipt is presumed incomplete or missing).
+    $cfg = Read-JsonObject -Path $ModelRoutingConfigPath
+    $active = Read-JsonObject -Path $ActiveTaskPath
+    $taskId = if ([string]::IsNullOrWhiteSpace($TaskId)) { [string]$active.task_id } else { $TaskId }
+    if ($taskId -notmatch $TaskIdRegex) { throw "TaskId '$taskId' fails regex" }
+    $phase = if ($null -ne $active.next_phase -and $active.next_phase -ne '') { [string]$active.next_phase } else { [string]$active.current_phase }
+    if ($phase -notmatch $PhaseRegex) { throw "Phase '$phase' fails regex" }
+    Write-RouterLine ("Retrying current phase: task={0} phase={1}" -f $taskId, $phase)
+    $profile = if ($ProfileOverride) { $ProfileOverride } else { $null }
+    $receipt = Get-ReceiptPath -TaskId $taskId -Phase $phase
+    $r = Invoke-Phase -ActiveTask $active -Config $cfg -TaskId $taskId -Phase $phase -Profile $profile -Receipt $receipt
+    if ($r.Skipped) {
+        return
+    }
+    Write-RouterLine ("Retry complete. Next: {0}" -f $r.NextPhase)
 }
 
 function Invoke-Resume {
@@ -600,6 +902,7 @@ try {
         'Next'      { Invoke-Next }
         'Resume'    { Invoke-Resume }
         'Finish'    { Invoke-Finish }
+        'RetryCurrentPhase' { Invoke-RetryCurrentPhase }
         'DryRun'    {
             if (-not $ProfileOverride) { $ProfileOverride = 'standard' }
             Invoke-Next
