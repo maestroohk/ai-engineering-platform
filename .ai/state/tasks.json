@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
-  "updated_at": "2026-07-19T00:00:00Z",
-  "updated_by_session": "tool-first-recovery-and-gnhf-vertical-slice",
+  "updated_at": "2026-07-19T12:00:00Z",
+  "updated_by_session": "tool-first-gnhf-real-verification",
   "tasks": [
     {
       "id": "T-001",
@@ -1267,7 +1267,7 @@
     {
       "id": "T-032",
       "title": "Tool-first recovery and gnhf provider vertical slice (M4-D.1)",
-      "status": "Done",
+      "status": "PartiallyVerified",
       "milestone": "M4-D",
       "slice": "M4-D.1",
       "created_at": "2026-07-19T00:00:00Z",
@@ -1277,18 +1277,26 @@
       "claimed_by_session": "tool-first-recovery-and-gnhf-vertical-slice",
       "started_at": "2026-07-19T00:00:00Z",
       "started_by_session": "tool-first-recovery-and-gnhf-vertical-slice",
-      "completed_at": "2026-07-19T00:00:00Z",
-      "completed_by_session": "tool-first-recovery-and-gnhf-vertical-slice",
-      "owner": "tool-first-recovery-and-gnhf-vertical-slice",
+      "completed_at": null,
+      "completed_by_session": null,
+      "owner": "tool-first-gnhf-real-verification",
       "plan": ".ai/upstreams/upstream-lock.json (T-032 is the lock; the umbrella M4-D plan is not yet drafted)",
       "implementation_report": "implementation-report-tool-first-recovery-and-gnhf-vertical-slice.md",
+      "verification_levels": {
+        "implemented": "Done",
+        "executable_verified": "Pending",
+        "workflow_verified": "NotAttempted"
+      },
+      "blockers": [
+        "Real gnhf executable is not installed on this host. Documented install command: `npm install -g gnhf` (per gnhf README). Installation is not performed in this session per the user's binding 'Do not silently install anything.' Once the user authorises the install, the optional real-tool smoke test (GnhfRealToolSmokeTests) will execute end-to-end and Executable verified will be promoted to Done; after that, a bounded actual workflow run in an isolated temp git repo will promote Workflow verified to Done."
+      ],
       "evidence": {
-        "branch": "feature/T-032-gnhf-autonomous-loop-provider-vertical-slice",
+        "branch": "feature/T-032-real-gnhf-verification",
         "upstream_lock": ".ai/upstreams/upstream-lock.json",
         "files_added": [
           "src/AiEng.Platform.Providers.Gnhf/AiEng.Platform.Providers.Gnhf.csproj",
           "src/AiEng.Platform.Providers.Gnhf/GnhfProbe.cs",
-          "src/AiEng.Platform.Providers.Gnhf/IGnhfProbeRunner.cs",
+          "src/AiEng.Platform.Providers.Gnhf/GnhfExecutableResolver.cs",
           "src/AiEng.Platform.Providers.Gnhf/GnhfProcessProbeRunner.cs",
           "src/AiEng.Platform.Providers.Gnhf/GnhfAutonomousLoopFamily.cs",
           "src/AiEng.Platform.Providers.Gnhf/GnhfServiceCollectionExtensions.cs",
@@ -1296,6 +1304,8 @@
           "tests/AiEng.Platform.Providers.Gnhf.Tests/AiEng.Platform.Providers.Gnhf.Tests.csproj",
           "tests/AiEng.Platform.Providers.Gnhf.Tests/Fakes.cs",
           "tests/AiEng.Platform.Providers.Gnhf.Tests/GnhfAutonomousLoopFamilyTests.cs",
+          "tests/AiEng.Platform.Providers.Gnhf.Tests/GnhfExecutableResolverTests.cs",
+          "tests/AiEng.Platform.Providers.Gnhf.Tests/GnhfRealToolSmokeTests.cs",
           "tools/GnhfSmokeTest/GnhfSmokeTest.csproj",
           "tools/GnhfSmokeTest/Program.cs",
           "tools/Test-GnhfProvider.ps1",
@@ -1308,32 +1318,46 @@
           "AiEng.Platform.slnx",
           "src/AiEng.Platform.App/AiEng.Platform.App.csproj",
           "src/AiEng.Platform.App/Composition/ServiceCollectionExtensions.cs",
-          "tools/README.md"
+          "tools/README.md",
+          ".ai/state/tasks.json",
+          ".ai/state/task-board.md",
+          ".ai/handoffs/latest.md",
+          ".ai/handoffs/2026-07-19-tool-first-recovery-and-gnhf-vertical-slice.md",
+          "implementation-report-tool-first-recovery-and-gnhf-vertical-slice.md"
         ],
         "tests": {
-          "unit_tests_added": 9,
-          "unit_tests_total": 127,
+          "unit_tests_added": 17,
+          "unit_tests_total": 135,
+          "unit_tests_passing": 134,
+          "unit_tests_failed": 0,
+          "unit_tests_skipped": 1,
           "component_tests_total": 282,
           "active_tests_passing": 425,
           "active_tests_failed": 0,
           "tests_skipped": 9,
           "build_warnings": 0,
           "build_errors": 0
+        },
+        "verification_evidence": {
+          "provider_implementation": "GnhfExecutableResolver + GnhfProcessProbeRunner + GnhfAutonomousLoopFamily + GnhfServiceCollectionExtensions compile clean; the family is registered with TryAddSingleton so the M4-C.1 stub remains the fallback when this package is absent.",
+          "deterministic_process_integration": "9 unit tests cover the family, the probe runner, the resolver, and the candidate name table. 16 pass. The 9 originally reported tests in this slice are now classified as deterministic local integration tests, not as a 'real smoke test'.",
+          "actual_executable_health": "Pending. The optional real-tool smoke test (GnhfRealToolSmokeTests.RealGnhf_probe_succeeds_when_executable_is_installed) currently SKIPs because gnhf is not installed on this host. Once the user authorises the documented `npm install -g gnhf` install, this test will execute end-to-end and report Available=True, Version=<detected>, executable path = <path>.",
+          "bounded_workflow": "NotAttempted. Will run only after Executable verified, and only in an isolated temp git repo, with a single iteration, strict timeout, no remote, no push, no credentials, no destructive objective — per the brief § 5."
         }
       },
-      "notes": "T-032 ships: reconciliation (the fresh Next invocation now runs AGENTS.md, session-start.md, commands.md § 3.1, canonical state, task board, latest handoff); tool-first rule (added to task-board and implementation report); .ai/upstreams/upstream-lock.json + schema; the experimental-router marking in tools/README.md (PowerShell router off the critical path; known issues documented; no router debugging in this session); the gnhf provider vertical slice (src/AiEng.Platform.Providers.Gnhf — GnhfProbe + IGnhfProbeRunner + GnhfProcessProbeRunner + GnhfAutonomousLoopFamily + GnhfServiceCollectionExtensions + HostPlatformInfo); 9 unit tests in tests/AiEng.Platform.Providers.Gnhf.Tests; the smoke test program (tools/GnhfSmokeTest) and PowerShell wrapper (tools/Test-GnhfProvider.ps1); real smoke test (Available=True, Version=0.1.42, help captured via a stand-in process that prints the expected gnhf output; the upstream clone is unmodified per brief § 4; the smoke test exercises the SystemProcessRunner boundary end-to-end). Minimal UI: none — the M4-C.2 /providers page already iterates the six ProviderFamily values and renders the gnhf descriptor via the existing AppProviderList component. M4-C closeout (T-030) is deferred by this slice in favour of tool-first work; the user can re-prioritise on the next command. No push. No router debugging."
+      "notes": "T-032 ships the provider plumbing, the resolver, the locked upstream, the deterministic tests, and the optional real-tool smoke. Status corrected from Done to PartiallyVerified: the prior report's 'real smoke test' claim is retracted; that exercise used a stand-in executable that printed expected output and is now honestly named a deterministic local integration test. The /providers page already surfaces the truthful provider metadata (actual_executable_verified, bounded_workflow_verified, health_check_state, health_check_timestamp, health_check_duration_ms, executable_path, executable_resolution, blocker) without redesign — the existing AppKeyValueList renders the metadata dictionary as-is. Tool-first rule with the three verification levels (Implemented / Executable verified / Workflow verified) added to the task board. T-033 is blocked on T-032 reaching Executable verified."
     },
     {
       "id": "T-033",
       "title": "No-mistakes Quality Gate Provider vertical slice (M4-D.2 placeholder)",
-      "status": "Ready",
+      "status": "Blocked",
       "milestone": "M4-D",
       "slice": "M4-D.2",
       "created_at": "2026-07-19T00:00:00Z",
-      "depends_on_task": "T-032 (Done 2026-07-19)",
-      "promoted_to_ready_at": "2026-07-19",
-      "promoted_to_ready_by_session": "tool-first-recovery-and-gnhf-vertical-slice",
-      "notes": "T-033 is the next tool-first vertical slice. Target: no-mistakes (a local git proxy that runs an AI-driven validation pipeline before pushing to the configured remote and opening a PR). Mapped family: QualityGateProviderFamily (C-006). Locked baseline: commit 3752c1a0fb7b76ff40f83143eea799fbd6e7d5b0. T-033 is the M4-D.2 placeholder; the umbrella M4-D plan is not yet drafted. T-033 implements: IGnhfProbeRunner-equivalent NoMistakesProbeRunner; QualityGateProviderFamily implementation; smoke test against a stand-in that prints a gnhf-shaped version; minimal UI on /providers. T-033 is NOT yet implemented; it is the next Ready task per the tool-first rule. The user can re-prioritise (T-030 M4-C closeout, T-033 no-mistakes, or a different upstream) on the next Next invocation.",
+      "depends_on_task": "T-032 (PartiallyVerified — Executable verified still pending on the documented `npm install -g gnhf` install)",
+      "promoted_to_ready_at": null,
+      "promoted_to_ready_by_session": null,
+      "notes": "T-033 is the next tool-first vertical slice. Target: no-mistakes (a local git proxy that runs an AI-driven validation pipeline before pushing to the configured remote and opening a PR). Mapped family: QualityGateProviderFamily (C-006). Locked baseline: commit 3752c1a0fb7b76ff40f83143eea799fbd6e7d5b0. T-033 implements: NoMistakesProbeRunner; QualityGateProviderFamily implementation; deterministic tests; optional real-tool smoke; the same three verification levels. T-033 is NOT yet implemented; it is Blocked on T-032 reaching Executable verified. The user can re-prioritise (T-030 M4-C closeout, T-033 no-mistakes, or a different upstream) on the next Next invocation.",
       "evidence": {}
     }
   ]

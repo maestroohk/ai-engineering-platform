@@ -1,9 +1,14 @@
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 using AiEng.Platform.Application.Infrastructure;
-using AiEng.Platform.Application.Providers;
 using Microsoft.Extensions.Logging;
 
 namespace AiEng.Platform.Providers.Gnhf;
+
+public interface IGnhfProbeRunner
+{
+    Task<GnhfProbe> ProbeAsync(string? configuredPath = null, CancellationToken cancellationToken = default);
+}
 
 public sealed class GnhfProcessProbeRunner : IGnhfProbeRunner
 {
@@ -12,29 +17,48 @@ public sealed class GnhfProcessProbeRunner : IGnhfProbeRunner
         RegexOptions.Compiled);
 
     private readonly IProcessRunner _processRunner;
-    private readonly IPlatformInfo _platformInfo;
+    private readonly IGnhfExecutableResolver _resolver;
+    private readonly TimeProvider _time;
     private readonly ILogger<GnhfProcessProbeRunner> _logger;
-    private readonly string _executable;
     private readonly TimeSpan _timeout;
 
     public GnhfProcessProbeRunner(
         IProcessRunner processRunner,
-        IPlatformInfo platformInfo,
+        IGnhfExecutableResolver resolver,
+        TimeProvider time,
         ILogger<GnhfProcessProbeRunner> logger,
-        string? executable = null,
         TimeSpan? timeout = null)
     {
         _processRunner = processRunner;
-        _platformInfo = platformInfo;
+        _resolver = resolver;
+        _time = time;
         _logger = logger;
-        _executable = executable ?? DefaultExecutable(platformInfo);
         _timeout = timeout ?? TimeSpan.FromSeconds(5);
     }
 
-    public string Executable => _executable;
+    public TimeSpan Timeout => _timeout;
 
-    public async Task<GnhfProbe> ProbeAsync(CancellationToken cancellationToken = default)
+    public async Task<GnhfProbe> ProbeAsync(
+        string? configuredPath = null,
+        CancellationToken cancellationToken = default)
     {
+        var resolution = _resolver.Resolve(configuredPath);
+        if (resolution.ResolvedPath is null)
+        {
+            var snapshot = new GnhfHealthSnapshot(
+                DetectedAt: _time.GetUtcNow(),
+                DurationMs: 0,
+                State: GnhfHealthState.NotInstalled,
+                Version: null,
+                HelpSummary: null,
+                StandardOutput: null,
+                StandardError: null,
+                ExitCode: null,
+                FailureReason: resolution.FailureReason);
+            return new GnhfProbe(resolution, snapshot);
+        }
+
+        var start = _time.GetTimestamp();
         using var timeoutCts = new CancellationTokenSource(_timeout);
         using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(
             cancellationToken, timeoutCts.Token);
@@ -42,24 +66,31 @@ public sealed class GnhfProcessProbeRunner : IGnhfProbeRunner
         try
         {
             var versionResult = await _processRunner.RunToCompletionAsync(
-                _executable,
+                resolution.ResolvedPath,
                 new[] { "--version" },
                 linkedCts.Token).ConfigureAwait(false);
 
             if (!versionResult.Succeeded)
             {
-                return new GnhfProbe(
-                    Available: false,
+                var unhealthyDuration = ElapsedMs(start);
+                var unhealthySnapshot = new GnhfHealthSnapshot(
+                    DetectedAt: _time.GetUtcNow(),
+                    DurationMs: unhealthyDuration,
+                    State: GnhfHealthState.InstalledButUnhealthy,
                     Version: null,
                     HelpSummary: null,
-                    FailureReason: versionResult.StandardError.Trim());
+                    StandardOutput: versionResult.StandardOutput,
+                    StandardError: versionResult.StandardError,
+                    ExitCode: versionResult.ExitCode,
+                    FailureReason: $"gnhf --version exited {versionResult.ExitCode}");
+                return new GnhfProbe(resolution, unhealthySnapshot);
             }
 
             var version = ExtractFirstVersion(versionResult.StandardOutput)
                 ?? ExtractFirstVersion(versionResult.StandardError);
 
             var helpResult = await _processRunner.RunToCompletionAsync(
-                _executable,
+                resolution.ResolvedPath,
                 new[] { "--help" },
                 linkedCts.Token).ConfigureAwait(false);
 
@@ -67,26 +98,73 @@ public sealed class GnhfProcessProbeRunner : IGnhfProbeRunner
                 ? SummariseHelp(helpResult.StandardOutput)
                 : null;
 
-            return new GnhfProbe(
-                Available: true,
+            var duration = ElapsedMs(start);
+            var state = version is null
+                ? GnhfHealthState.VersionUnknown
+                : GnhfHealthState.InstalledAndHealthy;
+
+            var snapshot = new GnhfHealthSnapshot(
+                DetectedAt: _time.GetUtcNow(),
+                DurationMs: duration,
+                State: state,
                 Version: version,
                 HelpSummary: help,
+                StandardOutput: versionResult.StandardOutput,
+                StandardError: versionResult.StandardError,
+                ExitCode: versionResult.ExitCode,
                 FailureReason: null);
+            return new GnhfProbe(resolution, snapshot);
         }
-        catch (OperationCanceledException) when (timeoutCts.IsCancellationRequested)
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         {
-            _logger.LogWarning("gnhf probe timed out after {Timeout}", _timeout);
-            return new GnhfProbe(false, null, null, $"timeout after {_timeout.TotalSeconds:0.#}s");
+            var duration = ElapsedMs(start);
+            var snapshot = new GnhfHealthSnapshot(
+                DetectedAt: _time.GetUtcNow(),
+                DurationMs: duration,
+                State: GnhfHealthState.Cancelled,
+                Version: null,
+                HelpSummary: null,
+                StandardOutput: null,
+                StandardError: null,
+                ExitCode: null,
+                FailureReason: "caller cancelled");
+            return new GnhfProbe(resolution, snapshot);
+        }
+        catch (OperationCanceledException)
+        {
+            var duration = ElapsedMs(start);
+            var snapshot = new GnhfHealthSnapshot(
+                DetectedAt: _time.GetUtcNow(),
+                DurationMs: duration,
+                State: GnhfHealthState.TimedOut,
+                Version: null,
+                HelpSummary: null,
+                StandardOutput: null,
+                StandardError: null,
+                ExitCode: null,
+                FailureReason: $"timeout after {_timeout.TotalSeconds:0.#}s");
+            return new GnhfProbe(resolution, snapshot);
         }
         catch (Exception ex)
         {
             _logger.LogWarning(ex, "gnhf probe failed");
-            return new GnhfProbe(false, null, null, ex.GetType().Name);
+            var duration = ElapsedMs(start);
+            var snapshot = new GnhfHealthSnapshot(
+                DetectedAt: _time.GetUtcNow(),
+                DurationMs: duration,
+                State: GnhfHealthState.InstalledButUnhealthy,
+                Version: null,
+                HelpSummary: null,
+                StandardOutput: null,
+                StandardError: null,
+                ExitCode: null,
+                FailureReason: ex.GetType().Name + ": " + ex.Message);
+            return new GnhfProbe(resolution, snapshot);
         }
     }
 
-    private static string DefaultExecutable(IPlatformInfo platformInfo)
-        => platformInfo.IsWindows ? "gnhf.cmd" : "gnhf";
+    private long ElapsedMs(long startTimestamp) =>
+        (long)((_time.GetTimestamp() - startTimestamp) * 1000.0 / _time.TimestampFrequency);
 
     private static string? ExtractFirstVersion(string? text)
     {

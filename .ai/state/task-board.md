@@ -2024,9 +2024,54 @@ Every external-tool onboarding task follows the
 9. add only minimal UI required to observe it,
 10. close the task and select the next tool.
 
+### Three verification levels (recorded 2026-07-19)
+
+A provider is not "working" merely because its parser
+works against mocked output. It is working only after
+the platform invokes the real upstream executable and
+consumes its actual result. Every tool-first task
+tracks three verification levels:
+
+- **Implemented** — contracts, wrapper code, and
+  unit / deterministic tests exist; the platform
+  can compose the provider; nothing has been
+  executed against the real upstream yet.
+- **Executable verified** — the actual installed
+  upstream executable (resolved by PATH, npm-
+  global, pnpm-global, or configured absolute
+  path) responds successfully to `--version`
+  and/or `--help`; the truthful provider data
+  (`actual_executable_verified`,
+  `executable_path`, `health_check_state`,
+  `health_check_timestamp`,
+  `health_check_duration_ms`, `version`) is
+  populated by the real process invocation.
+- **Workflow verified** — a bounded real
+  operation succeeds end-to-end in an isolated
+  environment (temp git repo; one iteration;
+  strict timeout; no remote; no push; no
+  credentials; no destructive objective).
+
+A task may move from `Implemented` to
+`PartiallyVerified` once the **Executable
+verified** level is reached. A task may move
+from `PartiallyVerified` to `Done` once
+**Workflow verified** is reached. A task that
+is **Implemented** but blocked on user
+authorisation for the install is held at
+`PartiallyVerified` with the install command
+and the blocker recorded in
+`.ai/state/tasks.json` `blockers`.
+
+The `GnhfRealToolSmokeTests` class is the
+executable-verified-tier proof mechanism: a
+`[SkippableFact]` that locates the actual gnhf
+executable at test time and SKIPs when not
+installed rather than failing.
+
 ## Done Recently
 
-### T-032 — Tool-first recovery and gnhf provider vertical slice (M4-D.1)
+### T-032 — Tool-first recovery and gnhf provider vertical slice (M4-D.1) — PartiallyVerified
 
 - **Task ID:** T-032.
 - **Milestone:** M4-D (precedes the umbrella M4-D
@@ -2034,38 +2079,138 @@ Every external-tool onboarding task follows the
 - **Title:** tool-first recovery + gnhf provider
   vertical slice — the first real external-tool
   end-to-end proof.
-- **Owner:** `tool-first-recovery-and-gnhf-vertical-slice`
+- **Owner:** `tool-first-gnhf-real-verification`
   session.
 - **Implementation report:**
   `implementation-report-tool-first-recovery-and-gnhf-vertical-slice.md`.
-- **Branch:** `feature/T-032-gnhf-autonomous-loop-provider-vertical-slice`
+- **Branch:** `feature/T-032-real-gnhf-verification`
   (fast-forwarded into `main`; deleted per rule 7).
-- **Commit:** `feat(gnhf): ship AutonomousLoopProviderFamily vertical slice with upstream lock`.
-- **Validation:** 9 new unit tests (all passing);
-  118 existing unit tests still pass (no
-  regression); `dotnet format --verify-no-changes`
-  clean on the new projects + App; real smoke
-  test against a stand-in `gnhf` process
-  (`Available=True`, `Version=0.1.42`, help
-  captured); unavailable smoke test path
-  (`Available=False`, failure reason captured);
-  upstream clone integrity preserved
-  (commit `fe202c4c` unchanged).
-- **Files added:** 17 (8 in
-  `src/AiEng.Platform.Providers.Gnhf/`, 3 in
-  `tests/AiEng.Platform.Providers.Gnhf.Tests/`,
-  2 in `tools/`, 2 in `.ai/upstreams/`, plus
-  the implementation report and the per-session
-  handoff).
-- **Files modified:** 4 (`AiEng.Platform.slnx`,
-  `src/AiEng.Platform.App/AiEng.Platform.App.csproj`,
-  `src/AiEng.Platform.App/Composition/ServiceCollectionExtensions.cs`,
-  `tools/README.md`).
-- **Status:** **Done (2026-07-19)**.
+- **Commit:** `fix(gnhf): verify actual upstream
+  executable and correct integration evidence`.
+- **Verification levels (3-tier policy):**
+  - **Implemented:** Done — the
+    `GnhfExecutableResolver` +
+    `GnhfProcessProbeRunner` +
+    `GnhfAutonomousLoopFamily` +
+    `GnhfServiceCollectionExtensions` ship
+    clean; the family is registered with
+    `TryAddSingleton` so the M4-C.1 stub
+    remains the fallback when this package
+    is absent; 6 health states
+    (`InstalledAndHealthy`,
+    `InstalledButUnhealthy`, `NotInstalled`,
+    `TimedOut`, `Cancelled`, `VersionUnknown`)
+    are distinguished; the descriptor's
+    metadata exposes
+    `actual_executable_verified`,
+    `bounded_workflow_verified`,
+    `health_check_state`,
+    `health_check_timestamp`,
+    `health_check_duration_ms`,
+    `executable_path`, `executable_resolution`,
+    `failure_reason`, `exit_code`, `help`,
+    `entry_command`, `locked_commit`,
+    `execution_mode`.
+  - **Executable verified:** Pending. The
+    optional real-tool smoke test
+    (`GnhfRealToolSmokeTests.RealGnhf_probe_succeeds_when_executable_is_installed`)
+    currently **SKIPs** because gnhf is not
+    installed on this host. The host's PATH
+    has no `gnhf` / `gnhf.cmd`; the npm
+    global directory contains no `gnhf`;
+    the locked upstream clone at
+    `code-kunchenguid/gnhf` is unmodified
+    (HEAD = `fe202c4c` per the lock). The
+    documented install command — `npm
+    install -g gnhf` (per the gnhf README)
+    — is recorded as the blocker in
+    `.ai/state/tasks.json` and is not
+    performed in this session per the user's
+    binding "Do not silently install
+    anything."
+  - **Workflow verified:** NotAttempted.
+    Will run only after Executable verified
+    is reached, in an isolated temp git repo
+    (one iteration; strict timeout; no
+    remote; no push; no credentials; no
+    destructive objective), per the brief § 5
+    and the three-verification-level policy
+    above.
+- **Truthful provider data surfaced on
+  `/providers`:** no UI redesign — the
+  existing `AppProviderList` renders the
+  metadata dictionary through
+  `AppKeyValueList`, so the truthful fields
+  (including the `NotInstalled` state with
+  `actual_executable_verified = false`,
+  `executable_resolution = not-found`,
+  `executable_path = (none)`,
+  `health_check_state = NotInstalled`,
+  `failure_reason = not found on PATH,
+  npm-global, or pnpm-global; tried:
+  gnhf.cmd, gnhf.exe, gnhf`) are
+  observable to the user.
+- **Tests:** 17 tests total in
+  `tests/AiEng.Platform.Providers.Gnhf.Tests`
+  (3 test classes):
+  - 4 family tests
+    (`ListProvidersAsync_returns_available_descriptor_when_probe_reports_healthy`,
+    `…_returns_unavailable_descriptor_when_not_installed`,
+    `…_throws_when_token_is_cancelled`,
+    `…_invokes_probe_each_call`).
+  - 8 process-probe-runner tests
+    (`…_returns_not_installed_when_resolver_finds_nothing`,
+    `…_parses_version_and_help_when_executable_returns_zero`,
+    `…_uses_resolved_executable_path_from_resolver`,
+    `…_returns_unhealthy_when_version_exit_code_is_non_zero`,
+    `…_returns_version_unknown_when_no_version_regex_match`,
+    `…_returns_timed_out_when_process_hangs`,
+    `…_returns_cancelled_when_caller_cancels`,
+    `…_records_resolution_and_health_timestamp`).
+  - 4 resolver tests
+    (`Resolve_returns_configured_path_when_file_exists`,
+    `…_returns_not_installed_when_configured_path_missing`,
+    `…_windows_candidate_names_includes_cmd_and_exe`,
+    `…_non_windows_candidate_names_is_only_gnhf`).
+  - 1 optional real-tool smoke
+    (`RealGnhf_probe_succeeds_when_executable_is_installed`),
+    `[SkippableFact]`, currently SKIPs.
+  - All 16 deterministic tests pass; the 1
+    real-tool test skips. Regression gate:
+    118 existing unit tests still pass
+    (134 unit total).
+- **Files added:** 3
+  (`tests/AiEng.Platform.Providers.Gnhf.Tests/GnhfExecutableResolverTests.cs`,
+  `tests/AiEng.Platform.Providers.Gnhf.Tests/GnhfRealToolSmokeTests.cs`,
+  `src/AiEng.Platform.Providers.Gnhf/GnhfExecutableResolver.cs`).
+- **Files modified:** 4 in the Gnhf package
+  (`GnhfProbe.cs`, `GnhfProcessProbeRunner.cs`,
+  `GnhfAutonomousLoopFamily.cs`,
+  `GnhfServiceCollectionExtensions.cs`) +
+  4 test files (`Fakes.cs`,
+  `GnhfAutonomousLoopFamilyTests.cs`,
+  `AiEng.Platform.Providers.Gnhf.Tests.csproj`)
+  + 4 state files (`.ai/state/tasks.json`,
+  `.ai/state/task-board.md`,
+  `.ai/handoffs/latest.md`,
+  `.ai/handoffs/2026-07-19-tool-first-recovery-and-gnhf-vertical-slice.md`)
+  + 1 report
+  (`implementation-report-tool-first-recovery-and-gnhf-vertical-slice.md`).
+  The legacy `IGnhfProbeRunner.cs` file is
+  removed; the interface is now co-located
+  with its implementation in
+  `GnhfProcessProbeRunner.cs` to keep the
+  public surface of the package in one place.
+- **Status:** **PartiallyVerified (2026-07-19).
+  Executable verified is blocked on the user's
+  authorisation of the documented `npm install
+  -g gnhf` install. The task is intentionally
+  not `Done` until Workflow verified is also
+  reached.**
 
 ## Ready
 
-### T-033 — No-mistakes Quality Gate Provider vertical slice (M4-D.2 placeholder)
+### T-033 — No-mistakes Quality Gate Provider vertical slice (M4-D.2 placeholder) — Blocked
 
 - **Task ID:** T-033.
 - **Milestone:** M4-D.
@@ -2074,7 +2219,7 @@ Every external-tool onboarding task follows the
   git proxy that runs an AI-driven validation
   pipeline before pushing to the configured remote
   and opening a PR.
-- **Why it matters:** the gnhf slice proved the
+- **Why it matters:** the gnhf slice proves the
   AutonomousLoop family. The no-mistakes slice
   proves the QualityGate family (C-006) — the
   same M4-D pattern, one family at a time. The
@@ -2087,19 +2232,24 @@ Every external-tool onboarding task follows the
   (C-006).
 - **Objective:** implement
   `INoMistakesProbeRunner`,
-  `QualityGateProviderFamily`, smoke test, and
-  minimal UI on `/providers`; the smoke test
-  exercises the local git-proxy path against a
-  stand-in that prints the expected version.
+  `QualityGateProviderFamily`, deterministic
+  tests, optional real-tool smoke, and minimal
+  UI on `/providers`; the smoke test exercises
+  the local git-proxy path against the
+  installed no-mistakes binary (skips when not
+  installed).
 - **Acceptance criteria:** (not yet defined;
-  T-033 plan lands when T-032 is committed).
-- **Dependencies:** T-032 (Done 2026-07-19).
-- **Status:** **Ready** (the umbrella M4-D
-  plan is not yet drafted; T-033 is the
-  M4-D.2 placeholder; the user can re-prioritise
-  on the next `Next` invocation).
-- **Alternative:** **T-030 — M4-C closeout**
-  remains `Ready` and dependency-satisfied; the
-  user can pivot to T-030 to close M4-C and
-  draft the M4-D umbrella plan in a single
-  session before T-033.
+  T-033 plan lands when T-032 reaches
+  Executable verified).
+- **Dependencies:** T-032 (PartiallyVerified
+  2026-07-19; Executable verified still
+  pending on the documented `npm install -g
+  gnhf` install).
+- **Status:** **Blocked.** T-033 is blocked on
+  T-032 reaching Executable verified. The
+  user can re-prioritise on the next `Next`
+  invocation (e.g. pivot to T-030 — M4-C
+  closeout — to draft the M4-D umbrella plan
+  in a single session, or directly authorise
+  the gnhf install to unblock both T-032 and
+  T-033).

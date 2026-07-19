@@ -1,7 +1,19 @@
 # Handoff — 2026-07-19 — tool-first-recovery-and-gnhf-vertical-slice
 
+> **⚠️ SUPERSEDED.** This handoff's claim that a
+> "real smoke test" was performed is retracted. The
+> test described in § 4 / § 6 / § 10 used a stand-in
+> executable that printed expected output — that is
+> a deterministic local integration test, not a real
+> smoke test. T-032 is **PartiallyVerified** (not
+> **Done**). The corrected handoff is
+> `.ai/handoffs/latest.md`
+> (`tool-first-gnhf-real-verification`,
+> 2026-07-19). This file is preserved for
+> traceability.
+
 > **Session:** `tool-first-recovery-and-gnhf-vertical-slice`
-> **Task:** T-032 (Done, 2026-07-19)
+> **Task:** T-032 (PartiallyVerified, 2026-07-19)
 > **Milestone:** M4-D.1 (the first M4-D slice; the
 > M4-D umbrella plan is not yet drafted; T-032 lands
 > ahead of the plan so the platform can begin

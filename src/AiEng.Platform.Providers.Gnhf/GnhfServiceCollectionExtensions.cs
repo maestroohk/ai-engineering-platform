@@ -9,14 +9,16 @@ public static class GnhfServiceCollectionExtensions
 {
     public static IServiceCollection AddGnhfProvider(
         this IServiceCollection services,
-        string? executable = null,
+        string? configuredExecutable = null,
         TimeSpan? timeout = null)
     {
-        services.AddSingleton<IGnhfProbeRunner>(sp => new GnhfProcessProbeRunner(
+        services.TryAddSingleton(TimeProvider.System);
+        services.TryAddSingleton<IGnhfExecutableResolver, GnhfExecutableResolver>();
+        services.TryAddSingleton<IGnhfProbeRunner>(sp => new GnhfProcessProbeRunner(
             sp.GetRequiredService<IProcessRunner>(),
-            sp.GetRequiredService<IPlatformInfo>(),
+            sp.GetRequiredService<IGnhfExecutableResolver>(),
+            sp.GetRequiredService<TimeProvider>(),
             sp.GetRequiredService<Microsoft.Extensions.Logging.ILogger<GnhfProcessProbeRunner>>(),
-            executable,
             timeout));
         services.TryAddSingleton<IAutonomousLoopProviderFamily, GnhfAutonomousLoopFamily>();
         return services;

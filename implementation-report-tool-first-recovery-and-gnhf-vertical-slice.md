@@ -272,25 +272,73 @@ csproj; 9 tests; all passing):
 `tests/AiEng.Platform.UnitTests/` regression: 118/118
 still pass (no M4-C.1 system-registry tests broken).
 
-### 7.5 Smoke Test
+### 7.5 Honest Test Classification (3 Tiers)
 
-- `tools/GnhfSmokeTest/GnhfSmokeTest.csproj` — a small
-  console program that calls
+The 17 tests in
+`tests/AiEng.Platform.Providers.Gnhf.Tests/` are
+classified into three tiers per the recorded
+3-verification-level policy:
+
+| Tier | Class | Count | What it proves |
+| ---- | ----- | ----- | -------------- |
+| Unit (mocks) | `GnhfAutonomousLoopFamilyTests` | 4 | the family maps a `GnhfProbe` into a `ProviderDescriptor` with truthful metadata (executable_verified, bounded_workflow_verified, health_check_state, health_check_timestamp, health_check_duration_ms, executable_path, executable_resolution, failure_reason, exit_code, help, entry_command, locked_commit, execution_mode) |
+| Unit (resolver) | `GnhfExecutableResolverTests` | 4 | the configured absolute path branch + the not-found branch + the Windows/non-Windows candidate name tables |
+| Deterministic process integration | `GnhfProcessProbeRunnerTests` | 8 | the `IProcessRunner`-driven state machine distinguishes 6 health states (`InstalledAndHealthy`, `InstalledButUnhealthy`, `NotInstalled`, `TimedOut`, `Cancelled`, `VersionUnknown`) against scripted `IProcessRunner` doubles |
+| Optional real-tool smoke | `GnhfRealToolSmokeTests` | 1 | locates the actual installed gnhf executable at test time and asserts the truthful health snapshot; **SKIPs** (not fails) when gnhf is not installed |
+| **Total** | | **17** | **16 passed, 1 skip, 0 failed** |
+
+The previous report version (this report's earlier
+§ 7.5 + § 6) called these tests a "real smoke
+test". That wording is retracted. The
+`GnhfProcessProbeRunnerTests` exercise the provider
+plumbing with scripted `IProcessRunner` doubles
+that print expected output — they prove the parser
++ the state machine, NOT that the platform invokes
+the real upstream gnhf executable. They are now
+honestly named **deterministic local integration
+tests**.
+
+The optional `GnhfRealToolSmokeTests` is the
+**executable-verified-tier** proof mechanism. It
+is a `[SkippableFact]` that locates the actual
+gnhf executable at test time and SKIPs when not
+installed. Run evidence on this host:
+
+```
+[xUnit.net 00:00:00.39]
+  AiEng.Platform.Providers.Gnhf.Tests.GnhfRealToolSmokeTests
+  .RealGnhf_probe_succeeds_when_executable_is_installed
+  [SKIP]
+  Skipped AiEng.Platform.Providers.Gnhf.Tests.GnhfRealToolSmokeTests
+  .RealGnhf_probe_succeeds_when_executable_is_installed [1 ms]
+```
+
+The stand-in program at `tools/GnhfSmokeTest/` is
+retained as a developer-friendly entry point: it
+takes an explicit `-Executable` path, runs the
+probe, and prints the descriptor. It is NOT a
+proof mechanism; it is a plumbing exerciser.
+
+### 7.5.1 Stand-in Program (developer entry point, not a proof)
+
+- `tools/GnhfSmokeTest/GnhfSmokeTest.csproj` — a
+  small console program that calls
   `GnhfProcessProbeRunner.ProbeAsync()` against a
   `SystemProcessRunner` (real) or
   `AlwaysFailingProcessRunner` (synthetic).
 - `tools/Test-GnhfProvider.ps1` — PowerShell 5.1+
   wrapper that resolves `gnhf.cmd` (or `gnhf`) from
-  PATH or accepts `-Executable`, then runs the smoke
-  test. Honours the same safety rules as the
+  PATH or accepts `-Executable`, then runs the
+  probe. Honours the same safety rules as the
   experimental router (no `Invoke-Expression`,
   argument-list not string-concat, paths validated
   against the repo root).
 
-**Smoke test result (real):**
+**Stand-in run example (developer exercise, not a
+proof):**
 
 ```
-$ dotnet run --project tools/GnhfSmokeTest -- /tmp/gnhf-smoke/gnhf.cmd
+$ tools/Test-GnhfProvider.ps1 -Executable /tmp/gnhf-smoke/gnhf.cmd
 Available : True
 Version   : 0.1.42
 Help      : Usage: gnhf [objective] | Run an autonomous coding-agent loop until stop or runtime cap.
@@ -372,28 +420,50 @@ intentionally deferred per the brief § 7.
 | ---- | ------ |
 | `dotnet build src/AiEng.Platform.Providers.Gnhf` | 0 warnings, 0 errors |
 | `dotnet build tools/GnhfSmokeTest` | 0 warnings, 0 errors |
-| `dotnet test tests/AiEng.Platform.Providers.Gnhf.Tests` | 9 passed, 0 failed |
+| `dotnet test tests/AiEng.Platform.Providers.Gnhf.Tests` (unit + deterministic) | 16 passed, 0 failed |
+| `dotnet test tests/AiEng.Platform.Providers.Gnhf.Tests` (real-tool smoke) | 1 SKIP (gnhf not installed) |
 | `dotnet test tests/AiEng.Platform.UnitTests` | 118 passed, 0 failed (no regression) |
 | `dotnet format --verify-no-changes` (gnhf projects) | clean |
-| Real smoke test (stand-in gnhf) | `Available=True`, `Version=0.1.42`, help captured |
-| Unavailable smoke test (synthetic) | `Available=False`, failure reason captured |
+| `gnhf --version` / `gnhf --help` (real) | **NOT EXECUTED — gnhf not installed on this host. Documented install command: `npm install -g gnhf` (per gnhf README). User authorisation required.** |
+| Stand-in run (developer exercise) | `Available=True`, `Version=0.1.42`, help captured — proves the provider plumbing against a stand-in; NOT a proof that the real upstream gnhf is invoked |
 | Upstream clone integrity (gnhf) | clean; commit `fe202c4c` unchanged |
+
+### 9.1 Verification levels (3-tier policy)
+
+| Level | State | Evidence |
+| ----- | ----- | -------- |
+| **Implemented** | Done | contracts (`IGnhfProbeRunner`, `IGnhfExecutableResolver`, `ProviderDescriptor.Metadata` truthful fields), wrapper code (`GnhfProcessProbeRunner` with 6 health states, `GnhfExecutableResolver` with 4 sources, `GnhfAutonomousLoopFamily` exposing truthful metadata), unit / deterministic tests (16 passed, 1 skip) |
+| **Executable verified** | Pending | optional `[SkippableFact]` `GnhfRealToolSmokeTests.RealGnhf_probe_succeeds_when_executable_is_installed` SKIPs because gnhf is not installed on this host; the host's PATH has no `gnhf` / `gnhf.cmd`; the npm global directory has no `gnhf`; the locked upstream clone at `code-kunchenguid/gnhf` is unmodified (HEAD = `fe202c4c` per the lock) |
+| **Workflow verified** | NotAttempted | will run only after Executable verified, in an isolated temp git repo (one iteration; strict timeout; no remote; no push; no credentials; no destructive objective) |
 
 ## 10. Known Limitations and Deviations
 
-1. **The upstream `dist/` is not built on this host.**
-   The brief § 4 forbids modifying the upstream
-   clone, and § 8 forbids altering upstream history.
-   The smoke test therefore exercises the provider
-   plumbing end-to-end with a `gnhf`-shaped stand-in
-   that prints the expected `gnhf 0.1.42` output. The
-   `IProcessRunner` boundary, the timeout, the version
-   regex, the platform-aware executable choice, and
-   the unavailable failure path are all exercised
-   against a real process. When a real `gnhf.cmd` is
-   installed (via `npm install -g gnhf` or
-   equivalent), the same smoke test runs against the
-   upstream without code changes.
+1. **The actual gnhf executable is not installed
+   on this host.** The brief § 4 forbids
+   modifying the upstream clone, and the user's
+   binding "Do not silently install anything"
+   forbids installing upstream tools without
+   explicit authorisation. The optional
+   real-tool smoke test
+   (`GnhfRealToolSmokeTests`) currently SKIPs
+   because gnhf is not on PATH, not in
+   `npm root -g`, and not in `pnpm root -g`.
+   The deterministic local integration tests
+   exercise the provider plumbing end-to-end
+   with a `gnhf`-shaped stand-in that prints
+   the expected `gnhf 0.1.42` output. The
+   `IProcessRunner` boundary, the timeout, the
+   version regex, the platform-aware
+   executable choice, and the unavailable
+   failure path are all exercised against a
+   scripted `IProcessRunner` double. When a
+   real `gnhf.cmd` is installed (via
+   `npm install -g gnhf` or equivalent), the
+   real-tool smoke test runs against the
+   upstream without code changes. T-032 is
+   held at **PartiallyVerified** until both
+   Executable verified and Workflow verified
+   are reached.
 2. **`HostPlatformInfo` is a public type in the gnhf
    library.** It exists for the smoke-test program
    only; the App's composition root uses

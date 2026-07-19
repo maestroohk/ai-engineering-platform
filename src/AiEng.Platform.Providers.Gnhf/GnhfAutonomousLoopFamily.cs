@@ -19,36 +19,56 @@ public sealed class GnhfAutonomousLoopFamily : IAutonomousLoopProviderFamily
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        var probe = await _probeRunner.ProbeAsync(cancellationToken).ConfigureAwait(false);
+        var probe = await _probeRunner.ProbeAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
 
         var metadata = new Dictionary<string, string>(StringComparer.Ordinal)
         {
-            ["executable"] = _probeRunner is GnhfProcessProbeRunner process
-                ? process.Executable
-                : "gnhf",
             ["entry_command"] = "gnhf <objective>",
-            ["locked_commit"] = "fe202c4c92de3bc82b6319ed13bb35023d88410a"
+            ["locked_commit"] = "fe202c4c92de3bc82b6319ed13bb35023d88410a",
+            ["actual_executable_verified"] = probe.Health.State switch
+            {
+                GnhfHealthState.InstalledAndHealthy => "true",
+                GnhfHealthState.VersionUnknown => "true",
+                _ => "false"
+            },
+            ["bounded_workflow_verified"] = "false",
+            ["execution_mode"] = probe.Resolution.Mode.ToString(),
+            ["executable_resolution"] = probe.Resolution.ResolutionSource ?? "not-found",
+            ["health_check_state"] = probe.Health.State.ToString(),
+            ["health_check_timestamp"] = probe.Health.DetectedAt.ToString("O"),
+            ["health_check_duration_ms"] = probe.Health.DurationMs.ToString()
         };
 
-        if (!probe.Available)
+        if (probe.Resolution.ResolvedPath is not null)
         {
-            metadata["failure_reason"] = probe.FailureReason ?? "unknown";
-            return new[]
-            {
-                new ProviderDescriptor(
-                    Id: ProviderId,
-                    DisplayName: DisplayName,
-                    Family: ProviderFamily.AutonomousLoop,
-                    Status: ProviderStatus.Unavailable,
-                    Version: null,
-                    Metadata: metadata)
-            };
+            metadata["executable_path"] = probe.Resolution.ResolvedPath;
+        }
+        else
+        {
+            metadata["executable_path"] = "(none)";
         }
 
-        if (!string.IsNullOrWhiteSpace(probe.HelpSummary))
+        if (!string.IsNullOrWhiteSpace(probe.Health.HelpSummary))
         {
-            metadata["help"] = probe.HelpSummary!;
+            metadata["help"] = probe.Health.HelpSummary!;
         }
+
+        if (probe.Health.FailureReason is not null)
+        {
+            metadata["failure_reason"] = probe.Health.FailureReason;
+        }
+
+        if (probe.Health.ExitCode is int code)
+        {
+            metadata["exit_code"] = code.ToString();
+        }
+
+        var status = probe.Health.State switch
+        {
+            GnhfHealthState.InstalledAndHealthy => ProviderStatus.Available,
+            GnhfHealthState.VersionUnknown => ProviderStatus.Available,
+            _ => ProviderStatus.Unavailable
+        };
 
         return new[]
         {
@@ -56,8 +76,8 @@ public sealed class GnhfAutonomousLoopFamily : IAutonomousLoopProviderFamily
                 Id: ProviderId,
                 DisplayName: DisplayName,
                 Family: ProviderFamily.AutonomousLoop,
-                Status: ProviderStatus.Available,
-                Version: probe.Version,
+                Status: status,
+                Version: probe.Health.Version,
                 Metadata: metadata)
         };
     }
