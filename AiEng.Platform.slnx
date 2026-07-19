@@ -5,10 +5,12 @@
     <Project Path="src/AiEng.Platform.Domain/AiEng.Platform.Domain.csproj" />
     <Project Path="src/AiEng.Platform.Infrastructure/AiEng.Platform.Infrastructure.csproj" />
     <Project Path="src/AiEng.Platform.Providers.Abstractions/AiEng.Platform.Providers.Abstractions.csproj" />
+    <Project Path="src/AiEng.Platform.Providers.Gnhf/AiEng.Platform.Providers.Gnhf.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/AiEng.Platform.ArchitectureTests/AiEng.Platform.ArchitectureTests.csproj" />
     <Project Path="tests/AiEng.Platform.ComponentTests/AiEng.Platform.ComponentTests.csproj" />
+    <Project Path="tests/AiEng.Platform.Providers.Gnhf.Tests/AiEng.Platform.Providers.Gnhf.Tests.csproj" />
     <Project Path="tests/AiEng.Platform.UnitTests/AiEng.Platform.UnitTests.csproj" />
   </Folder>
 </Solution>

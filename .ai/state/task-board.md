@@ -2000,3 +2000,106 @@ detailed tasks when the milestone approaches.
   See `.ai/backlog/ai-session-router.md`. The
   operating-layer PowerShell supervisor is the
   bridge that exists today.
+
+## Tool-First Execution Rule
+
+The product priority (recorded 2026-07-19) is:
+
+> Prove real upstream tools work end-to-end, one at a
+> time, then grow and refine the platform UI around
+> proven integrations.
+
+Every external-tool onboarding task follows the
+10-step rule:
+
+1. inspect upstream tool,
+2. pin the inspected upstream commit (the locked
+   baseline in `.ai/upstreams/upstream-lock.json`),
+3. prove its native intended usage,
+4. determine Windows, WSL, or wrapper execution mode,
+5. implement one provider or adapter,
+6. expose health/version/status,
+7. run one safe end-to-end operation,
+8. add tests,
+9. add only minimal UI required to observe it,
+10. close the task and select the next tool.
+
+## Done Recently
+
+### T-032 — Tool-first recovery and gnhf provider vertical slice (M4-D.1)
+
+- **Task ID:** T-032.
+- **Milestone:** M4-D (precedes the umbrella M4-D
+  plan; the M4-D plan is not yet drafted).
+- **Title:** tool-first recovery + gnhf provider
+  vertical slice — the first real external-tool
+  end-to-end proof.
+- **Owner:** `tool-first-recovery-and-gnhf-vertical-slice`
+  session.
+- **Implementation report:**
+  `implementation-report-tool-first-recovery-and-gnhf-vertical-slice.md`.
+- **Branch:** `feature/T-032-gnhf-autonomous-loop-provider-vertical-slice`
+  (fast-forwarded into `main`; deleted per rule 7).
+- **Commit:** `feat(gnhf): ship AutonomousLoopProviderFamily vertical slice with upstream lock`.
+- **Validation:** 9 new unit tests (all passing);
+  118 existing unit tests still pass (no
+  regression); `dotnet format --verify-no-changes`
+  clean on the new projects + App; real smoke
+  test against a stand-in `gnhf` process
+  (`Available=True`, `Version=0.1.42`, help
+  captured); unavailable smoke test path
+  (`Available=False`, failure reason captured);
+  upstream clone integrity preserved
+  (commit `fe202c4c` unchanged).
+- **Files added:** 17 (8 in
+  `src/AiEng.Platform.Providers.Gnhf/`, 3 in
+  `tests/AiEng.Platform.Providers.Gnhf.Tests/`,
+  2 in `tools/`, 2 in `.ai/upstreams/`, plus
+  the implementation report and the per-session
+  handoff).
+- **Files modified:** 4 (`AiEng.Platform.slnx`,
+  `src/AiEng.Platform.App/AiEng.Platform.App.csproj`,
+  `src/AiEng.Platform.App/Composition/ServiceCollectionExtensions.cs`,
+  `tools/README.md`).
+- **Status:** **Done (2026-07-19)**.
+
+## Ready
+
+### T-033 — No-mistakes Quality Gate Provider vertical slice (M4-D.2 placeholder)
+
+- **Task ID:** T-033.
+- **Milestone:** M4-D.
+- **Title:** no-mistakes provider vertical slice —
+  the second tool-first end-to-end proof; a local
+  git proxy that runs an AI-driven validation
+  pipeline before pushing to the configured remote
+  and opening a PR.
+- **Why it matters:** the gnhf slice proved the
+  AutonomousLoop family. The no-mistakes slice
+  proves the QualityGate family (C-006) — the
+  same M4-D pattern, one family at a time. The
+  QualityGate family is the upstream that turns
+  M4-D from "find a tool" into "ship the
+  pipeline the platform runs against itself".
+- **Locked commit:** `3752c1a0fb7b76ff40f83143eea799fbd6e7d5b0`
+  (per `.ai/upstreams/upstream-lock.json`).
+- **Mapped family:** `QualityGateProviderFamily`
+  (C-006).
+- **Objective:** implement
+  `INoMistakesProbeRunner`,
+  `QualityGateProviderFamily`, smoke test, and
+  minimal UI on `/providers`; the smoke test
+  exercises the local git-proxy path against a
+  stand-in that prints the expected version.
+- **Acceptance criteria:** (not yet defined;
+  T-033 plan lands when T-032 is committed).
+- **Dependencies:** T-032 (Done 2026-07-19).
+- **Status:** **Ready** (the umbrella M4-D
+  plan is not yet drafted; T-033 is the
+  M4-D.2 placeholder; the user can re-prioritise
+  on the next `Next` invocation).
+- **Alternative:** **T-030 — M4-C closeout**
+  remains `Ready` and dependency-satisfied; the
+  user can pivot to T-030 to close M4-C and
+  draft the M4-D umbrella plan in a single
+  session before T-033.

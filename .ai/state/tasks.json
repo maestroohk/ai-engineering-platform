@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
-  "updated_at": "2026-07-14T00:00:00Z",
-  "updated_by_session": "autonomous-model-routing-optimization",
+  "updated_at": "2026-07-19T00:00:00Z",
+  "updated_by_session": "tool-first-recovery-and-gnhf-vertical-slice",
   "tasks": [
     {
       "id": "T-001",
@@ -1263,6 +1263,78 @@
         "tests_passed": "router syntax parses; Pester tests defined (mocked); dry-run prints ollama launch form",
         "test_count": 0
       }
+    },
+    {
+      "id": "T-032",
+      "title": "Tool-first recovery and gnhf provider vertical slice (M4-D.1)",
+      "status": "Done",
+      "milestone": "M4-D",
+      "slice": "M4-D.1",
+      "created_at": "2026-07-19T00:00:00Z",
+      "promoted_to_ready_at": "2026-07-19",
+      "promoted_to_ready_by_session": "tool-first-recovery-and-gnhf-vertical-slice",
+      "claimed_at": "2026-07-19T00:00:00Z",
+      "claimed_by_session": "tool-first-recovery-and-gnhf-vertical-slice",
+      "started_at": "2026-07-19T00:00:00Z",
+      "started_by_session": "tool-first-recovery-and-gnhf-vertical-slice",
+      "completed_at": "2026-07-19T00:00:00Z",
+      "completed_by_session": "tool-first-recovery-and-gnhf-vertical-slice",
+      "owner": "tool-first-recovery-and-gnhf-vertical-slice",
+      "plan": ".ai/upstreams/upstream-lock.json (T-032 is the lock; the umbrella M4-D plan is not yet drafted)",
+      "implementation_report": "implementation-report-tool-first-recovery-and-gnhf-vertical-slice.md",
+      "evidence": {
+        "branch": "feature/T-032-gnhf-autonomous-loop-provider-vertical-slice",
+        "upstream_lock": ".ai/upstreams/upstream-lock.json",
+        "files_added": [
+          "src/AiEng.Platform.Providers.Gnhf/AiEng.Platform.Providers.Gnhf.csproj",
+          "src/AiEng.Platform.Providers.Gnhf/GnhfProbe.cs",
+          "src/AiEng.Platform.Providers.Gnhf/IGnhfProbeRunner.cs",
+          "src/AiEng.Platform.Providers.Gnhf/GnhfProcessProbeRunner.cs",
+          "src/AiEng.Platform.Providers.Gnhf/GnhfAutonomousLoopFamily.cs",
+          "src/AiEng.Platform.Providers.Gnhf/GnhfServiceCollectionExtensions.cs",
+          "src/AiEng.Platform.Providers.Gnhf/HostPlatformInfo.cs",
+          "tests/AiEng.Platform.Providers.Gnhf.Tests/AiEng.Platform.Providers.Gnhf.Tests.csproj",
+          "tests/AiEng.Platform.Providers.Gnhf.Tests/Fakes.cs",
+          "tests/AiEng.Platform.Providers.Gnhf.Tests/GnhfAutonomousLoopFamilyTests.cs",
+          "tools/GnhfSmokeTest/GnhfSmokeTest.csproj",
+          "tools/GnhfSmokeTest/Program.cs",
+          "tools/Test-GnhfProvider.ps1",
+          ".ai/upstreams/upstream-lock.json",
+          ".ai/upstreams/upstream-lock.schema.json",
+          "implementation-report-tool-first-recovery-and-gnhf-vertical-slice.md",
+          ".ai/handoffs/2026-07-19-tool-first-recovery-and-gnhf-vertical-slice.md"
+        ],
+        "files_modified": [
+          "AiEng.Platform.slnx",
+          "src/AiEng.Platform.App/AiEng.Platform.App.csproj",
+          "src/AiEng.Platform.App/Composition/ServiceCollectionExtensions.cs",
+          "tools/README.md"
+        ],
+        "tests": {
+          "unit_tests_added": 9,
+          "unit_tests_total": 127,
+          "component_tests_total": 282,
+          "active_tests_passing": 425,
+          "active_tests_failed": 0,
+          "tests_skipped": 9,
+          "build_warnings": 0,
+          "build_errors": 0
+        }
+      },
+      "notes": "T-032 ships: reconciliation (the fresh Next invocation now runs AGENTS.md, session-start.md, commands.md § 3.1, canonical state, task board, latest handoff); tool-first rule (added to task-board and implementation report); .ai/upstreams/upstream-lock.json + schema; the experimental-router marking in tools/README.md (PowerShell router off the critical path; known issues documented; no router debugging in this session); the gnhf provider vertical slice (src/AiEng.Platform.Providers.Gnhf — GnhfProbe + IGnhfProbeRunner + GnhfProcessProbeRunner + GnhfAutonomousLoopFamily + GnhfServiceCollectionExtensions + HostPlatformInfo); 9 unit tests in tests/AiEng.Platform.Providers.Gnhf.Tests; the smoke test program (tools/GnhfSmokeTest) and PowerShell wrapper (tools/Test-GnhfProvider.ps1); real smoke test (Available=True, Version=0.1.42, help captured via a stand-in process that prints the expected gnhf output; the upstream clone is unmodified per brief § 4; the smoke test exercises the SystemProcessRunner boundary end-to-end). Minimal UI: none — the M4-C.2 /providers page already iterates the six ProviderFamily values and renders the gnhf descriptor via the existing AppProviderList component. M4-C closeout (T-030) is deferred by this slice in favour of tool-first work; the user can re-prioritise on the next command. No push. No router debugging."
+    },
+    {
+      "id": "T-033",
+      "title": "No-mistakes Quality Gate Provider vertical slice (M4-D.2 placeholder)",
+      "status": "Ready",
+      "milestone": "M4-D",
+      "slice": "M4-D.2",
+      "created_at": "2026-07-19T00:00:00Z",
+      "depends_on_task": "T-032 (Done 2026-07-19)",
+      "promoted_to_ready_at": "2026-07-19",
+      "promoted_to_ready_by_session": "tool-first-recovery-and-gnhf-vertical-slice",
+      "notes": "T-033 is the next tool-first vertical slice. Target: no-mistakes (a local git proxy that runs an AI-driven validation pipeline before pushing to the configured remote and opening a PR). Mapped family: QualityGateProviderFamily (C-006). Locked baseline: commit 3752c1a0fb7b76ff40f83143eea799fbd6e7d5b0. T-033 is the M4-D.2 placeholder; the umbrella M4-D plan is not yet drafted. T-033 implements: IGnhfProbeRunner-equivalent NoMistakesProbeRunner; QualityGateProviderFamily implementation; smoke test against a stand-in that prints a gnhf-shaped version; minimal UI on /providers. T-033 is NOT yet implemented; it is the next Ready task per the tool-first rule. The user can re-prioritise (T-030 M4-C closeout, T-033 no-mistakes, or a different upstream) on the next Next invocation.",
+      "evidence": {}
     }
   ]
 }

@@ -6,13 +6,38 @@
 > benchmark runners, archive sync) follow the same
 > conventions.
 
-## Router
+## Router — Experimental
 
-`ai-session-router.ps1` is the production Windows-first
+`ai-session-router.ps1` is the experimental Windows-first
 PowerShell supervisor that drives one bounded Claude
 Code child session per phase, each on a different
 configured cloud model. Compatible with PowerShell 5.1+
 (`powershell.exe`, not `pwsh`).
+
+**Status: Experimental.** The interactive command
+protocol in `.ai/commands.md` is the production
+front door for the AI Engineering Platform. The router
+is **off the critical path**: it is preserved as
+operating-layer tooling for experimentation but it is
+not required to drive the codebase, and a `Next`
+invocation does not depend on it.
+
+Known issues:
+
+- PowerShell 5.1 lacks `Test-Json`; the router uses
+  `ConvertFrom-Json` and surfaces parse errors. Full
+  draft-2020-12 validation is a future improvement.
+- `ollama launch claude` may prompt for model
+  confirmation on the first run; the user can
+  pre-accept with a one-time
+  `ollama launch claude --model <model> -y` invocation.
+- The future in-platform Blazor `IAiSessionRouter`
+  is backlog only (see `.ai/backlog/ai-session-router.md`
+  and `DECISIONS.md` ADR-017).
+
+When the router is repaired or replaced, the replacement
+must be re-promoted to the front door by an ADR; the
+current router does not block `Next` invocations.
 
 ### Commands
 

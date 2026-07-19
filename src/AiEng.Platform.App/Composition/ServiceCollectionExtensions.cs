@@ -4,6 +4,7 @@ using AiEng.Platform.App.Composition.Infrastructure;
 using AiEng.Platform.App.Composition.Projects;
 using AiEng.Platform.App.Composition.Providers;
 using AiEng.Platform.Application.ProjectIntelligence;
+using AiEng.Platform.Providers.Gnhf;
 
 namespace AiEng.Platform.App.Composition;
 
@@ -27,6 +28,7 @@ public static class ServiceCollectionExtensions
         services.AddProjects();
         services.AddInfrastructure();
         services.AddHostCapabilities();
+        services.AddGnhfProvider();
         services.AddProviderRegistry();
         return services;
     }

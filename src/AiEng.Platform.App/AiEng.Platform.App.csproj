@@ -4,6 +4,7 @@
     <ProjectReference Include="..\AiEng.Platform.Application\AiEng.Platform.Application.csproj" />
     <ProjectReference Include="..\AiEng.Platform.Infrastructure\AiEng.Platform.Infrastructure.csproj" />
     <ProjectReference Include="..\AiEng.Platform.Providers.Abstractions\AiEng.Platform.Providers.Abstractions.csproj" />
+    <ProjectReference Include="..\AiEng.Platform.Providers.Gnhf\AiEng.Platform.Providers.Gnhf.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

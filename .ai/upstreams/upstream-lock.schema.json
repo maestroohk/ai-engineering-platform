@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aieng.local/schemas/upstream-lock.schema.json",
+  "title": "AiEng.Platform upstream tool lock",
+  "description": "Inspected baseline (commit SHA) for every locally cloned upstream tool that AiEng.Platform integrates. Future upstream changes must not silently invalidate an integration. Each entry records the local path, the remote URL, the inspected commit SHA (the locked baseline), the commit date, dirty/clean status, primary technologies, the documented entry command, the native platform expectation, and the AiEng.Platform provider family the upstream maps to. SHA is canonical; no entry is updated without explicit approval and a paired implementation report.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "updated_at",
+    "updated_by_session",
+    "upstreams"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_by_session": {
+      "type": "string",
+      "minLength": 1
+    },
+    "upstreams": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/upstream" }
+    }
+  },
+  "$defs": {
+    "upstream": {
+      "type": "object",
+      "required": [
+        "id",
+        "display_name",
+        "local_path",
+        "upstream_url",
+        "branch",
+        "commit_sha",
+        "commit_date",
+        "status",
+        "primary_technologies",
+        "entry_command",
+        "platform_expectation",
+        "ai_eng_provider_family"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Stable slug matching the AiEng.Platform providers.json id."
+        },
+        "display_name": {
+          "type": "string"
+        },
+        "local_path": {
+          "type": "string",
+          "description": "Filesystem path on the host; do not modify the clone."
+        },
+        "upstream_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "branch": {
+          "type": "string"
+        },
+        "commit_sha": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$",
+          "description": "Inspected commit SHA; the locked baseline."
+        },
+        "commit_date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["clean", "dirty"]
+        },
+        "primary_technologies": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "entry_command": {
+          "type": "string",
+          "description": "The documented command that runs the tool (e.g. 'gnhf <objective>', 'treehouse')."
+        },
+        "platform_expectation": {
+          "type": "string",
+          "enum": ["linux", "macos", "windows", "wsl", "cross-platform"]
+        },
+        "ai_eng_provider_family": {
+          "type": "string",
+          "enum": [
+            "GitProviderFamily",
+            "AgentRuntimeProviderFamily",
+            "ReviewProviderFamily",
+            "QualityGateProviderFamily",
+            "AutonomousLoopProviderFamily",
+            "OrchestrationProviderFamily"
+          ]
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
